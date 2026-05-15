@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop · Shenova</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div class="loader">
+
+  <div class="loader-logo">
+    SHENOVA
+  </div>
+
+  <div class="loader-line"></div>
+
+</div>
+<div class="progress"></div>
+
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+    <div class="nav-icons"><a href="wishlist.html"><button>♡</button></a><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div>
+  </div>
+</nav>
+<div class="mobile-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="wishlist.html">Wishlist</a></div>
+
+<!-- SHOP HERO -->
+
+<section class="product-hero">
+
+  <picture>
+
+    <!-- MOBILE IMAGE -->
+
+    <source
+    media="(max-width:768px)"
+    srcset="/bg2.png">
+
+    <!-- DESKTOP IMAGE -->
+
+    <img
+    class="product-hero-img"
+    src="/bg1.png">
+
+  </picture>
+
+  <div class="product-hero-overlay"></div>
+
+  <div class="product-hero-content">
+
+    <p>
+      SHENOVA COLLECTION 2026
+    </p>
+
+    <h1>
+      Quiet Luxury<br>
+      For The Modern Muse
+    </h1>
+
+  </div>
+
+</section>
+
+<!-- SHOP SECTION -->
+
+<div class="container">
+
+  <div class="shop-head">
+
+    <div>
+
+      <div class="eyebrow">
+        Collection
+      </div>
+
+      <h1 class="serif reveal shop-title">
+        All Pieces
+      </h1>
+
+    </div>
+
+    <select id="sort">
+      <option value="new">Newest</option>
+      <option value="price-asc">
+        Price: Low → High
+      </option>
+      <option value="price-desc">
+        Price: High → Low
+      </option>
+    </select>
+
+  </div>
+
+  <div class="filters" style="margin-bottom:50px">
+
+  <button class="chip active"
+  data-cat="all">
+    All
+  </button>
+
+  <button class="chip"
+  data-cat="dress">
+    Dresses
+  </button>
+
+  <button class="chip"
+  data-cat="tops">
+    Tops
+  </button>
+
+  <button class="chip"
+  data-cat="kurti">
+    Kurti
+  </button>
+
+  <button class="chip"
+  data-cat="co-ord set">
+    Co-ord Sets
+  </button>
+
+</div>
+
+  <div class="products-grid" id="shop-grid"></div>
+
+</div>
+
+<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
+
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
+<!-- QUICK VIEW MODAL -->
+
+<div class="quick-modal" id="quick-modal">
+
+  <div class="quick-overlay"
+  onclick="closeQuickView()"></div>
+
+  <div class="quick-box">
+
+    <button class="quick-close"
+    onclick="closeQuickView()">
+      ×
+    </button>
+
+    <div class="quick-grid">
+
+      <div class="quick-image-wrap">
+
+        <img id="quick-image">
+
+      </div>
+
+      <div class="quick-content">
+
+        <p class="quick-label">
+          SHENOVA COLLECTION
+        </p>
+
+        <h2 id="quick-title"></h2>
+
+        <div class="quick-price"
+        id="quick-price"></div>
+
+        <p class="quick-desc"
+        id="quick-desc"></p>
+
+        <div class="quick-sizes">
+
+          <p>SELECT SIZE</p>
+
+          <div id="quick-size-wrap"></div>
+
+        </div>
+
+        <button class="quick-cart-btn"
+        id="quick-cart-btn">
+          ADD TO BAG
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script src="js/shop.js"></script>
+</body></html>

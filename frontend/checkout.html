@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checkout · Shenova</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div class="loader">
+
+  <div class="loader-logo">
+    SHENOVA
+  </div>
+
+  <div class="loader-line"></div>
+
+</div>
+<nav class="nav scrolled"><div class="container nav-inner"><a class="nav-logo" href="index.html">SHENOVA</a><div class="nav-menu"><a href="shop.html">Shop</a></div><div class="nav-icons"><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div></div></nav>
+<div class="mobile-menu"><a href="shop.html">Shop</a><a href="about.html">About</a></div>
+
+<div class="container">
+  <div class="checkout">
+    <form id="checkout-form">
+      <div class="eyebrow">Step 01</div>
+      <h2 class="serif" style="font-size:36px;margin:8px 0 24px">Shipping Address</h2>
+      <div class="form-row two"><div><label>Full Name</label><input name="fullName" required></div><div><label>Email</label><input name="email" type="email" required></div></div>
+      <div class="form-row two"><div><label>Phone</label><input name="phone" required></div><div><label>Country</label><input name="country" value="India" required></div></div>
+      <div class="form-row"><label>Address</label><input name="address" required></div>
+      <div class="form-row two"><div><label>City</label><input name="city" required></div><div><label>State</label><input name="state" required></div></div>
+      <div class="form-row"><label>ZIP / Postal Code</label><input name="zip" required></div>
+
+      <div class="eyebrow" style="margin-top:30px">Step 02</div>
+      <h2 class="serif" style="font-size:36px;margin:8px 0 24px">Payment</h2>
+      <div class="form-row"><label>Method</label><select name="payment"><option>Cash on Delivery</option><option>UPI</option><option>Credit / Debit Card</option></select></div>
+      <div class="form-row"><label>Coupon Code (optional)</label><input name="coupon" placeholder="SHENOVA10"></div>
+      <button class="btn" type="submit" style="margin-top:20px">Place Order</button>
+    </form>
+    <aside class="summary">
+      <h3 class="serif" style="font-size:24px;margin-bottom:20px">Order Summary</h3>
+      <div id="summary-items"></div>
+      <div style="border-top:1px solid var(--line);padding-top:18px;margin-top:18px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Subtotal</span><span id="sub">₹0</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Shipping</span><span id="ship">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--serif);font-size:22px;margin-top:14px"><span>Total</span><span id="tot">₹0</span></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer"><div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div><div class="drawer-body"></div><div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div></aside>
+<!-- ORDER MODAL -->
+<div class="modal">
+  <div class="modal-card">
+    <h3></h3>
+    <p></p>
+    <button onclick="this.closest('.modal').classList.remove('show')">
+      OK
+    </button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script><script src="js/main.js"></script><script src="js/checkout.js"></script>
+</body></html>

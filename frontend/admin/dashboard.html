@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shenova Admin</title>
+
+<link rel="stylesheet" href="../css/admin.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="admin">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side">
+    <h2>SHENOVA</h2>
+
+    <a class="active">Dashboard</a>
+    <a href="#products">Products</a>
+    <a href="#orders">Orders</a>
+    <a onclick="logout()">Logout</a>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+
+    <!-- ===== TOPBAR ===== -->
+    <div class="topbar">
+
+      <div>
+        <p class="mini">Luxury Fashion Admin</p>
+        <h1>Dashboard Overview</h1>
+      </div>
+
+      <div class="admin-user">
+        <div class="dot"></div>
+        Admin Panel
+      </div>
+
+    </div>
+
+    <!-- ===== KPI CARDS ===== -->
+    <div class="cards">
+
+      <div class="kpi">
+        <span>Total Products</span>
+        <div class="v" id="kpi-products">0</div>
+      </div>
+
+      <div class="kpi">
+        <span>Total Orders</span>
+        <div class="v" id="kpi-orders">0</div>
+      </div>
+
+      <div class="kpi">
+        <span>Total Revenue</span>
+        <div class="v" id="kpi-revenue">₹0</div>
+      </div>
+
+      <div class="kpi">
+        <span>Pending Orders</span>
+        <div class="v" id="kpi-pending">0</div>
+      </div>
+
+    </div>
+
+    <!-- ===== ADD PRODUCT ===== -->
+    <section id="products" class="panel">
+
+      <div class="section-head">
+        <div>
+          <p class="mini">Inventory</p>
+          <h3>Add Product</h3>
+        </div>
+      </div>
+
+      <form onsubmit="addProduct(event)" enctype="multipart/form-data">
+
+        <div class="row2">
+          <input name="name" placeholder="Product Name" required>
+          <input name="category" placeholder="Category">
+        </div>
+
+        <div class="row2">
+          <input name="price" type="number" placeholder="Price" required>
+          <input name="stock" type="number" placeholder="Stock" value="10">
+        </div>
+
+        <div class="row2">
+          <input name="sizes" placeholder="Sizes (XS,S,M,L)">
+          <input name="colors" placeholder="Colors (#000,#fff)">
+        </div>
+
+        <textarea name="description" placeholder="Product Description"></textarea>
+
+        <input type="file" name="images" multiple accept="image/*">
+
+        <button class="btn-primary">Add Product</button>
+
+      </form>
+
+    </section>
+
+    <!-- ===== PRODUCTS TABLE ===== -->
+    <section class="panel">
+
+      <div class="section-head">
+        <div>
+          <p class="mini">Inventory</p>
+          <h3>Products</h3>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="products-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ===== ORDERS ===== -->
+    <section id="orders" class="panel orders-panel">
+
+      <div class="orders-top">
+
+        <div>
+          <p class="mini">Order Management</p>
+          <h3>Customer Orders</h3>
+        </div>
+
+        <div class="orders-actions">
+          <input type="text" placeholder="Search orders">
+
+          <select>
+            <option>All Orders</option>
+            <option>Pending</option>
+            <option>Processing</option>
+            <option>Shipped</option>
+            <option>Delivered</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="orders-grid" id="orders-grid"></div>
+
+    </section>
+
+    <!-- ===== CONTACT MESSAGES ===== -->
+    <section class="panel">
+
+      <div class="section-head">
+        <div>
+          <p class="mini">Customer Queries</p>
+          <h3>Contact Messages</h3>
+        </div>
+      </div>
+
+      <div id="messages-grid" class="messages-grid"></div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== DRAWER ===== -->
+<div class="drawer" id="order-drawer">
+
+  <div class="drawer-overlay" onclick="closeDrawer()"></div>
+
+  <div class="drawer-content">
+
+    <div class="drawer-head">
+      <div>
+        <p class="mini">Order Details</p>
+        <h2 id="drawer-order-id">#SHN</h2>
+      </div>
+
+      <button class="close-btn" onclick="closeDrawer()">×</button>
+    </div>
+
+    <div class="drawer-body" id="drawer-body"></div>
+
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+
+<div class="edit-modal" id="edit-modal">
+
+  <div class="edit-box">
+
+    <div class="edit-top">
+
+      <h2>Edit Product</h2>
+
+      <button type="button"
+      onclick="closeEditModal()">
+        ×
+      </button>
+
+    </div>
+
+    <form id="edit-form">
+
+      <input type="hidden" name="id">
+
+      <input
+        type="text"
+        name="name"
+        placeholder="Product Name">
+
+      <input
+        type="text"
+        name="category"
+        placeholder="Category">
+
+      <input
+        type="number"
+        name="price"
+        placeholder="Price">
+
+      <input
+        type="number"
+        name="stock"
+        placeholder="Stock">
+
+      <input
+        type="text"
+        name="sizes"
+        placeholder="Sizes">
+
+      <textarea
+        name="description"
+        placeholder="Description"></textarea>
+
+      <input
+        type="file"
+        name="images"
+        multiple>
+
+      <button type="submit">
+        Save Changes
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+
+</body>
+</html>

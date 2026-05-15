@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wishlist · Shenova</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div class="loader"><div class="logo">SHENOVA</div></div>
+<nav class="nav scrolled"><div class="container nav-inner"><a class="nav-logo" href="index.html">SHENOVA</a><div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><div class="nav-icons"><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div></div></nav>
+<div class="mobile-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+<div class="container" style="padding-top:140px">
+  <div class="eyebrow">Saved</div>
+  <h1 class="serif" style="font-size:clamp(40px,6vw,72px);margin-bottom:40px">Wishlist</h1>
+  <div class="grid" id="wish-grid"></div>
+</div>
+<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer"><div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div><div class="drawer-body"></div><div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div></aside>
+<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="js/config.js"></script><script src="js/main.js"></script><script src="js/wishlist.js"></script>
+</body></html>

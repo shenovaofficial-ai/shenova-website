@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact · Shenova</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="loader">
+
+  <div class="loader-logo">
+    SHENOVA
+  </div>
+
+  <div class="loader-line"></div>
+
+</div>
+
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="nav-icons">
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="hamburger">≡</button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu">
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="container" style="padding-top:140px">
+
+  <div class="eyebrow reveal">Get in touch</div>
+
+  <h1 class="serif reveal" style="font-size:clamp(48px,7vw,90px);margin-bottom:50px">
+    Let's talk.
+  </h1>
+
+  <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:60px">
+
+    <!-- ✅ FINAL WORKING FORM -->
+    <form id="contact-form" class="reveal">
+
+      <div class="form-row two">
+        <div>
+          <label>Name</label>
+          <input name="name" required>
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input name="email" type="email" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Subject</label>
+        <input name="subject">
+      </div>
+
+      <div class="form-row">
+        <label>Message</label>
+        <textarea name="message" rows="6" required></textarea>
+      </div>
+
+      <button type="submit" class="btn">Send Message</button>
+
+    </form>
+
+    <div class="reveal">
+      <h3 class="serif" style="font-size:28px;margin-bottom:14px">Studio</h3>
+
+      <p style="color:var(--muted);margin-bottom:24px">
+       Sarigam,Gujarat<br>
+        396155<br>
+        India
+      </p>
+
+      <p style="color:var(--muted);margin-bottom:30px">
+        shenovaofficial@gmail.com<br>
+        +917041702391
+      </p>
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27092.209996141166!2d72.83482393687524!3d20.29060724836419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0d3078e3a43cd%3A0x6eb0adc6577f3441!2sSarigam%2C%20Gujarat!5e1!3m2!1sen!2sin!4v1778068588539!5m2!1sen!2sin" width="100%" height="280" style="border:0;border-radius:14px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+  </div>
+</div>
+
+<style>
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr !important}
+}
+</style>
+
+<footer>
+  <div class="container">
+    <div class="foot-bottom" style="border:none;margin-top:80px">
+      © 2026 SHENOVA
+    </div>
+  </div>
+</footer>
+
+<div class="drawer-overlay" onclick="closeCart()"></div>
+
+<aside class="drawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:22px">×</button>
+  </div>
+
+  <div class="drawer-body"></div>
+
+  <div class="drawer-foot">
+    <div class="total">
+      <span>Total</span>
+      <span>₹0</span>
+    </div>
+
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
+</aside>
+
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <h3></h3>
+    <p></p>
+    <button class="btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

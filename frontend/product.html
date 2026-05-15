@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product · Shenova</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<div class="loader">
+
+  <div class="loader-logo">
+    SHENOVA
+  </div>
+
+  <div class="loader-line"></div>
+
+</div>
+<div class="progress"></div>
+
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+    <div class="nav-icons"><a href="wishlist.html"><button>♡</button></a><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div>
+  </div>
+</nav>
+<div class="mobile-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+
+<div class="container">
+  <div class="pdp">
+    <div class="pdp-gallery">
+      <div class="pdp-main"><img id="pdp-main-img" src=""><div class="pdp-arrows"><button onclick="prevImg()">‹</button><button onclick="nextImg()">›</button></div></div>
+      <div class="pdp-thumbs" id="pdp-thumbs"></div>
+    </div>
+    <div class="pdp-info">
+      <div class="eyebrow">Shenova</div>
+      <h1 id="pdp-name"></h1>
+      <div class="price" id="pdp-price"></div>
+      <p class="desc" id="pdp-desc"></p>
+      <div class="size-row"><label>Select Size</label><div class="sizes" id="pdp-sizes"></div></div>
+      <div class="color-row" id="pdp-colors-wrap"><label>Color</label><div class="colors" id="pdp-colors"></div></div>
+      <div style="display:flex;gap:10px"><button class="btn" onclick="addToCart()">Add to Bag</button><button id="pdp-wish" class="btn btn-outline" style="width:60px;flex:none" onclick="toggleWish()">♡</button></div>
+      <div style="margin-top:30px;padding-top:30px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.8">
+        <div>✦ Free shipping on orders over ₹2000</div>
+        <div>✦ 14-day easy returns</div>
+        <div>✦ Crafted in limited editions</div>
+      </div>
+    </div>
+  </div>
+
+  <section style="padding:100px 0 60px">
+    <div class="sec-head"><div class="eyebrow">You may also like</div><h2 class="serif" style="font-size:clamp(32px,4vw,52px);margin-top:10px">Recommended</h2></div>
+    <div class="grid" id="related"></div>
+  </section>
+</div>
+
+<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
+
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script src="js/product.js"></script>
+</body></html>
