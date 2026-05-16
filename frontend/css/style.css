@@ -101,7 +101,7 @@ section{padding:100px 0}
 
 /* Insta gallery */
 .insta{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.insta img{aspect-ratio:1;object-fit:cover;transition:opacity .3s}
+.insta img{aspect-ratio:1;object-fit:fill;transition:opacity .3s}
 .insta img:hover{opacity:.75}
 
 /* Footer */
