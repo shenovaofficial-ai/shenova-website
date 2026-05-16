@@ -1491,7 +1491,7 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
 
   height:100%;
 
-  object-fit:fill;
+  object-fit:cover;
 
   z-index:0;
 }
