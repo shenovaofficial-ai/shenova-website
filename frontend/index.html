@@ -72,7 +72,8 @@
 
 <!-- HERO -->
 <section class="hero reveal">
-  <video autoplay muted loop playsinline class="hero-img" poster="images/hero1.png">
+  <video autoplay muted loop playsinline class="hero-img" poster="images/hero1.png" media="(max-width:768px)"
+    srcset="images/hero1a.png">> 
     <source src="https://cdn.coverr.co/videos/coverr-a-fashion-model-poses-in-a-studio-1080p.mp4" type="video/mp4">
   </video>
   <div class="hero-content">
@@ -109,7 +110,9 @@
 <!-- LOOKBOOK BANNER -->
 <section style="padding:0">
   <div style="position:relative;height:80vh;min-height:520px;overflow:hidden">
-    <img src="images/hero2.png" style="width:100%;height:100%;object-fit:fill">
+        <source
+    media="(max-width:768px)"
+    srcset="images/hero2a.png"><img src="images/hero2.png" style="width:100%;height:100%;object-fit:fill">
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.5));display:flex;align-items:flex-end;padding:60px;color:#fff">
       <div>
         <div class="eyebrow" style="color:rgba(255,255,255,.85)">The Lookbook</div>
