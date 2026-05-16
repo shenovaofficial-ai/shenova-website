@@ -72,15 +72,63 @@
 
 <!-- HERO -->
 <section class="hero reveal">
-  <video autoplay muted loop playsinline class="hero-img" poster="images/hero1.png" media="(max-width:768px)"
-    srcset="images/hero1a.png">> 
-    <source src="https://cdn.coverr.co/videos/coverr-a-fashion-model-poses-in-a-studio-1080p.mp4" type="video/mp4">
-  </video>
+
+  <!-- DESKTOP IMAGE -->
+  <img 
+    src="images/hero1.png"
+    alt="Desktop Hero"
+    class="desktop-hero"
+    style="
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      top:0;
+      left:0;
+      z-index:-1;
+    "
+  >
+
+  <!-- MOBILE IMAGE -->
+  <img 
+    src="images/hero1a.png"
+    alt="Mobile Hero"
+    class="mobile-hero"
+    style="
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      top:0;
+      left:0;
+      z-index:-1;
+    "
+  >
+
+  <style>
+    .mobile-hero{
+      display:none;
+    }
+
+    @media(max-width:768px){
+
+      .desktop-hero{
+        display:none;
+      }
+
+      .mobile-hero{
+        display:block;
+      }
+
+    }
+  </style>
+
   <div class="hero-content">
     <div class="eyebrow gsap-reveal">Autumn Edit · 2026</div>
     <h1>Quiet<br>Luxury.</h1>
     <a class="hero-cta" href="shop.html">Discover Collection →</a>
   </div>
+
 </section>
 
 <!-- SPLIT EDITORIAL -->
@@ -109,18 +157,79 @@
 
 <!-- LOOKBOOK BANNER -->
 <section style="padding:0">
+
   <div style="position:relative;height:80vh;min-height:520px;overflow:hidden">
-        <source
-    media="(max-width:768px)"
-    srcset="images/hero2a.png"><img src="images/hero2.png" style="width:100%;height:100%;object-fit:fill">
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.5));display:flex;align-items:flex-end;padding:60px;color:#fff">
+
+    <!-- DESKTOP IMAGE -->
+    <img 
+      src="images/hero2.png"
+      class="desktop-lookbook"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:fill;
+      "
+    >
+
+    <!-- MOBILE IMAGE -->
+    <img 
+      src="images/hero2a.png"
+      class="mobile-lookbook"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:none;
+      "
+    >
+
+    <style>
+      @media(max-width:768px){
+
+        .desktop-lookbook{
+          display:none;
+        }
+
+        .mobile-lookbook{
+          display:block !important;
+        }
+
+      }
+    </style>
+
+    <div style="
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,transparent,rgba(0,0,0,.5));
+      display:flex;
+      align-items:flex-end;
+      padding:60px;
+      color:#fff
+    ">
+
       <div>
-        <div class="eyebrow" style="color:rgba(255,255,255,.85)">The Lookbook</div>
-        <h2 class="serif" style="font-size:clamp(40px,6vw,80px);margin:14px 0 24px">Shadow & Silk</h2>
-        <a href="shop.html" class="hero-cta">View Lookbook →</a>
+
+        <div class="eyebrow" style="color:rgba(255,255,255,.85)">
+          The Lookbook
+        </div>
+
+        <h2 class="serif" style="
+          font-size:clamp(40px,6vw,80px);
+          margin:14px 0 24px
+        ">
+          Shadow & Silk
+        </h2>
+
+        <a href="shop.html" class="hero-cta">
+          View Lookbook →
+        </a>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
 <!-- REVIEWS -->
