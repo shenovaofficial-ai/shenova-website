@@ -1,67 +1,528 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Checkout · Shenova</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-</head><body>
-<div class="loader">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout · Shenova</title>
 
-  <div class="loader-logo">
-    SHENOVA
+  <!-- Fonts: Cormorant (editorial serif) + DM Sans (refined sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Global site styles (nav, drawer, modal, utilities) -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Luxury checkout overrides — NEW FILE -->
+  <link rel="stylesheet" href="css/checkout-luxury.css">
+</head>
+<body class="checkout-page">
+
+  <!-- ═══════════════════════════════
+       LOADER (existing structure intact)
+  ═══════════════════════════════ -->
+  <div class="loader">
+    <div class="loader-logo">SHENOVA</div>
+    <div class="loader-line"></div>
   </div>
 
-  <div class="loader-line"></div>
-
-</div>
-<nav class="nav scrolled"><div class="container nav-inner"><a class="nav-logo" href="index.html">SHENOVA</a><div class="nav-menu"><a href="shop.html">Shop</a></div><div class="nav-icons"><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div></div></nav>
-<div class="mobile-menu">  <a href="index.html">
-    Home
-  </a><a href="shop.html">Shop</a><a href="about.html">About</a></div>
-
-<div class="container">
-  <div class="checkout">
-    <form id="checkout-form">
-      <div class="eyebrow">Step 01</div>
-      <h2 class="serif" style="font-size:36px;margin:8px 0 24px">Shipping Address</h2>
-      <div class="form-row two"><div><label>Full Name</label><input name="fullName" required></div><div><label>Email</label><input name="email" type="email" required></div></div>
-      <div class="form-row two"><div><label>Phone</label><input name="phone" required></div><div><label>Country</label><input name="country" value="India" required></div></div>
-      <div class="form-row"><label>Address</label><input name="address" required></div>
-      <div class="form-row two"><div><label>City</label><input name="city" required></div><div><label>State</label><input name="state" required></div></div>
-      <div class="form-row"><label>ZIP / Postal Code</label><input name="zip" required></div>
-
-      <div class="eyebrow" style="margin-top:30px">Step 02</div>
-      <h2 class="serif" style="font-size:36px;margin:8px 0 24px">Payment</h2>
-      <div class="form-row"><label>Method</label><select name="payment"><option>Cash on Delivery</option><option>UPI</option><option>Credit / Debit Card</option></select></div>
-      <div class="form-row"><label>Coupon Code (optional)</label><input name="coupon" placeholder="SHENOVA10"></div>
-      <button class="btn" type="submit" style="margin-top:20px">Place Order</button>
-    </form>
-    <aside class="summary">
-      <h3 class="serif" style="font-size:24px;margin-bottom:20px">Order Summary</h3>
-      <div id="summary-items"></div>
-      <div style="border-top:1px solid var(--line);padding-top:18px;margin-top:18px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Subtotal</span><span id="sub">₹0</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Shipping</span><span id="ship">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-family:var(--serif);font-size:22px;margin-top:14px"><span>Total</span><span id="tot">₹0</span></div>
+  <!-- ═══════════════════════════════
+       NAV (all classes intact for main.js)
+  ═══════════════════════════════ -->
+  <nav class="nav scrolled">
+    <div class="container nav-inner">
+      <a class="nav-logo" href="index.html">SHENOVA</a>
+      <div class="nav-menu">
+        <a href="shop.html">Shop</a>
       </div>
-    </aside>
-  </div>
-</div>
+      <div class="nav-icons">
+        <button class="cart-btn" aria-label="Open bag">
+          🛍 <span class="cart-count">0</span>
+        </button>
+        <button class="hamburger">≡</button>
+      </div>
+    </div>
+  </nav>
 
-<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
-<div class="drawer-overlay" onclick="closeCart()"></div>
-<aside class="drawer"><div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div><div class="drawer-body"></div><div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div></aside>
-<!-- ORDER MODAL -->
-<div class="modal">
-  <div class="modal-card">
-    <h3></h3>
-    <p></p>
-    <button onclick="this.closest('.modal').classList.remove('show')">
-      OK
-    </button>
+  <!-- MOBILE MENU (existing structure) -->
+  <div class="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
   </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="js/config.js"></script><script src="js/main.js"></script><script src="js/checkout.js"></script>
-</body></html>
+  <!-- ═══════════════════════════════
+       CHECKOUT HERO STRIP
+  ═══════════════════════════════ -->
+  <div class="co-hero">
+    <div class="co-hero-inner">
+      <p class="co-hero-eyebrow">Shenova · Secure Checkout</p>
+      <h1 class="co-hero-title">Complete Your Order</h1>
+    </div>
+    <div class="co-hero-trust">
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Secure &amp; Encrypted</span>
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg> Free Returns · 14 Days</span>
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Free Delivery Above ₹2,000</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       MAIN CHECKOUT LAYOUT
+  ═══════════════════════════════ -->
+  <main class="co-wrap">
+    <div class="co-inner">
+
+      <!-- ── LEFT: FORM COLUMN ── -->
+      <div class="co-form-col">
+
+        <!-- ── STEP PROGRESS ── -->
+        <div class="co-steps">
+          <div class="co-step active" data-step="1">
+            <span class="co-step-num">01</span>
+            <span class="co-step-label">Delivery</span>
+          </div>
+          <div class="co-step-line"></div>
+          <div class="co-step" data-step="2">
+            <span class="co-step-num">02</span>
+            <span class="co-step-label">Payment</span>
+          </div>
+          <div class="co-step-line"></div>
+          <div class="co-step" data-step="3">
+            <span class="co-step-num">03</span>
+            <span class="co-step-label">Review</span>
+          </div>
+        </div>
+
+        <!-- ── CHECKOUT FORM (all name attrs identical to original) ── -->
+        <form id="checkout-form" novalidate>
+
+          <!-- ── SECTION 1: SHIPPING ADDRESS ── -->
+          <div class="co-section" id="co-section-1">
+
+            <div class="co-section-head">
+              <span class="co-section-num">01</span>
+              <div>
+                <h2 class="co-section-title">Shipping Address</h2>
+                <p class="co-section-sub">Where should we deliver your order?</p>
+              </div>
+            </div>
+
+            <div class="co-fields">
+
+              <div class="co-field-row two">
+                <!-- Full Name -->
+                <div class="co-field">
+                  <input
+                    type="text"
+                    name="fullName"
+                    id="f-fullName"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="name"
+                  >
+                  <label class="co-label" for="f-fullName">Full Name</label>
+                  <span class="co-field-line"></span>
+                </div>
+                <!-- Email -->
+                <div class="co-field">
+                  <input
+                    type="email"
+                    name="email"
+                    id="f-email"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="email"
+                  >
+                  <label class="co-label" for="f-email">Email Address</label>
+                  <span class="co-field-line"></span>
+                </div>
+              </div>
+
+              <div class="co-field-row two">
+                <!-- Phone -->
+                <div class="co-field">
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="f-phone"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="tel"
+                  >
+                  <label class="co-label" for="f-phone">Phone Number</label>
+                  <span class="co-field-line"></span>
+                </div>
+                <!-- Country -->
+                <div class="co-field">
+                  <input
+                    type="text"
+                    name="country"
+                    id="f-country"
+                    class="co-input"
+                    placeholder=" "
+                    value="India"
+                    required
+                    autocomplete="country-name"
+                  >
+                  <label class="co-label" for="f-country">Country</label>
+                  <span class="co-field-line"></span>
+                </div>
+              </div>
+
+              <!-- Address (full width) -->
+              <div class="co-field-row">
+                <div class="co-field">
+                  <input
+                    type="text"
+                    name="address"
+                    id="f-address"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="street-address"
+                  >
+                  <label class="co-label" for="f-address">Street Address</label>
+                  <span class="co-field-line"></span>
+                </div>
+              </div>
+
+              <div class="co-field-row two">
+                <!-- City -->
+                <div class="co-field">
+                  <input
+                    type="text"
+                    name="city"
+                    id="f-city"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="address-level2"
+                  >
+                  <label class="co-label" for="f-city">City</label>
+                  <span class="co-field-line"></span>
+                </div>
+                <!-- State -->
+                <div class="co-field">
+                  <input
+                    type="text"
+                    name="state"
+                    id="f-state"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="address-level1"
+                  >
+                  <label class="co-label" for="f-state">State</label>
+                  <span class="co-field-line"></span>
+                </div>
+              </div>
+
+              <!-- ZIP (full width) -->
+              <div class="co-field-row">
+                <div class="co-field co-field--half">
+                  <input
+                    type="text"
+                    name="zip"
+                    id="f-zip"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="postal-code"
+                  >
+                  <label class="co-label" for="f-zip">ZIP / Postal Code</label>
+                  <span class="co-field-line"></span>
+                </div>
+              </div>
+
+            </div>
+            <!-- end .co-fields -->
+
+          </div>
+          <!-- end co-section-1 -->
+
+          <!-- ── SECTION 2: PAYMENT ── -->
+          <div class="co-section" id="co-section-2">
+
+            <div class="co-section-head">
+              <span class="co-section-num">02</span>
+              <div>
+                <h2 class="co-section-title">Payment Method</h2>
+                <p class="co-section-sub">All transactions are secure and encrypted</p>
+              </div>
+            </div>
+
+            <!-- Payment method cards -->
+            <div class="co-pay-options">
+
+              <label class="co-pay-card active" id="pay-cod">
+                <input type="radio" name="payment" value="Cash on Delivery" checked>
+                <div class="co-pay-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <div class="co-pay-info">
+                  <span class="co-pay-name">Cash on Delivery</span>
+                  <span class="co-pay-desc">Pay when your order arrives</span>
+                </div>
+                <div class="co-pay-radio"></div>
+              </label>
+
+              <label class="co-pay-card" id="pay-upi">
+                <input type="radio" name="payment" value="UPI">
+                <div class="co-pay-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="co-pay-info">
+                  <span class="co-pay-name">UPI</span>
+                  <span class="co-pay-desc">Pay via any UPI app instantly</span>
+                </div>
+                <div class="co-pay-radio"></div>
+              </label>
+
+              <label class="co-pay-card" id="pay-card">
+                <input type="radio" name="payment" value="Credit / Debit Card">
+                <div class="co-pay-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>
+                </div>
+                <div class="co-pay-info">
+                  <span class="co-pay-name">Credit / Debit Card</span>
+                  <span class="co-pay-desc">Visa, Mastercard, RuPay accepted</span>
+                </div>
+                <div class="co-pay-radio"></div>
+              </label>
+
+            </div>
+
+            <!-- Coupon -->
+            <div class="co-coupon">
+              <p class="co-coupon-label">Have a coupon code?</p>
+              <div class="co-coupon-row">
+                <div class="co-field co-coupon-field">
+                  <input
+                    type="text"
+                    name="coupon"
+                    id="f-coupon"
+                    class="co-input"
+                    placeholder=" "
+                    autocomplete="off"
+                    style="text-transform:uppercase"
+                  >
+                  <label class="co-label" for="f-coupon">Enter Coupon Code</label>
+                  <span class="co-field-line"></span>
+                </div>
+                <div class="co-coupon-tag">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  Optional
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- end co-section-2 -->
+
+          <!-- ── PLACE ORDER CTA ── -->
+          <div class="co-submit-wrap">
+            <button class="co-submit-btn" type="submit" id="place-order-btn">
+              <span class="co-submit-text">Place Order</span>
+              <span class="co-submit-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+              <span class="co-submit-loader" aria-hidden="true"></span>
+            </button>
+            <p class="co-submit-note">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Your personal data is secured with SSL encryption
+            </p>
+          </div>
+
+        </form>
+        <!-- end #checkout-form -->
+
+      </div>
+      <!-- end .co-form-col -->
+
+      <!-- ── RIGHT: ORDER SUMMARY COLUMN ── -->
+      <aside class="co-summary-col">
+
+        <div class="co-summary-sticky">
+
+          <!-- Summary header -->
+          <div class="co-summary-head">
+            <h3 class="co-summary-title">Your Order</h3>
+            <a href="shop.html" class="co-summary-edit">Edit bag</a>
+          </div>
+
+          <!-- Cart items (rendered by checkout.js → renderSummary) -->
+          <div class="co-items" id="summary-items">
+            <!-- Injected dynamically -->
+          </div>
+
+          <!-- Divider -->
+          <div class="co-summary-rule"></div>
+
+          <!-- Coupon applied state (shown via JS) -->
+          <div class="co-discount-row" id="co-discount-row" style="display:none">
+            <span class="co-discount-label">Discount Applied</span>
+            <span class="co-discount-val" id="co-discount-val">—</span>
+          </div>
+
+          <!-- Totals -->
+          <div class="co-totals">
+            <div class="co-total-row">
+              <span>Subtotal</span>
+              <span id="sub">₹0</span>
+            </div>
+            <div class="co-total-row">
+              <span>Shipping</span>
+              <span id="ship">—</span>
+            </div>
+            <div class="co-total-row co-total-row--grand">
+              <span>Total</span>
+              <span id="tot">₹0</span>
+            </div>
+          </div>
+
+          <!-- Trust badges -->
+          <div class="co-trust-badges">
+            <div class="co-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Safe &amp; Secure</span>
+            </div>
+            <div class="co-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.73"/></svg>
+              <span>Free Returns</span>
+            </div>
+            <div class="co-badge">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Free Delivery ₹2k+</span>
+            </div>
+          </div>
+
+        </div>
+        <!-- end .co-summary-sticky -->
+
+      </aside>
+      <!-- end .co-summary-col -->
+
+    </div>
+    <!-- end .co-inner -->
+  </main>
+
+  <!-- ═══════════════════════════════
+       FOOTER
+  ═══════════════════════════════ -->
+  <footer class="co-footer">
+    <div class="container">
+      <div class="co-footer-inner">
+        <span class="co-footer-logo">SHENOVA</span>
+        <span class="co-footer-copy">© 2026 — All rights reserved</span>
+        <div class="co-footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Returns</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════
+       CART DRAWER (all classes intact for main.js)
+  ═══════════════════════════════ -->
+  <div class="drawer-overlay" onclick="closeCart()"></div>
+  <aside class="drawer" role="dialog" aria-label="Shopping bag">
+    <div class="drawer-head">
+      <h3>Your Bag</h3>
+      <button onclick="closeCart()" style="font-size:22px" aria-label="Close">×</button>
+    </div>
+    <div class="drawer-body"></div>
+    <div class="drawer-foot">
+      <div class="total">
+        <span>Total</span>
+        <span>₹0</span>
+      </div>
+      <a class="btn" href="checkout.html">Checkout</a>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════
+       ORDER SUCCESS / ERROR MODAL
+       (class structure preserved — modal / modal-card)
+  ═══════════════════════════════ -->
+  <div class="modal co-modal">
+    <div class="modal-card co-modal-card">
+      <div class="co-modal-icon" id="co-modal-icon">
+        <!-- JS injects success or error icon -->
+      </div>
+      <h3></h3>
+      <p></p>
+      <button class="co-modal-btn" onclick="this.closest('.modal').classList.remove('show', 'open')">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+       SCRIPTS (load order preserved)
+  ═══════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/checkout.js"></script>
+
+  <!-- Inline enhancement: payment card toggle + page animations -->
+  <script>
+    /* ── Payment method card toggle ── */
+    document.querySelectorAll('.co-pay-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    /* ── Input floating label support for pre-filled values ── */
+    document.querySelectorAll('.co-input').forEach(inp => {
+      const check = () => {
+        if (inp.value) inp.classList.add('has-value');
+        else inp.classList.remove('has-value');
+      };
+      inp.addEventListener('input', check);
+      inp.addEventListener('change', check);
+      check(); /* fire on load for pre-filled country */
+    });
+
+    /* ── Stagger in form sections on load ── */
+    window.addEventListener('load', () => {
+      const els = document.querySelectorAll('.co-section, .co-submit-wrap');
+      els.forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(24px)';
+        el.style.transition = `opacity 0.7s ease ${0.15 + i * 0.12}s, transform 0.7s ease ${0.15 + i * 0.12}s`;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }));
+      });
+    });
+
+    /* ── Step indicator update when scrolling sections ── */
+    const updateStep = () => {
+      const s1 = document.getElementById('co-section-1');
+      const s2 = document.getElementById('co-section-2');
+      if (!s1 || !s2) return;
+      const r1 = s1.getBoundingClientRect();
+      const r2 = s2.getBoundingClientRect();
+      const steps = document.querySelectorAll('.co-step');
+      if (r2.top <= window.innerHeight * 0.5) {
+        steps[0].classList.add('done');
+        steps[1].classList.add('active');
+      } else {
+        steps[0].classList.remove('done');
+        steps[1].classList.remove('active');
+      }
+    };
+    window.addEventListener('scroll', updateStep, { passive: true });
+  </script>
+
+</body>
+</html>
