@@ -1,129 +1,559 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>About · Shenova</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <div class="loader">
-      <div class="loader-logo">SHENOVA</div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · Shenova</title>
+  <meta name="description" content="Shenova — the story behind quiet luxury. Thoughtful craft, timeless silhouettes, designed for the modern woman.">
 
-      <div class="loader-line"></div>
-    </div>
-    <nav class="nav scrolled">
-      <div class="container nav-inner">
-        <a class="nav-logo" href="index.html">SHENOVA</a>
-        <div class="nav-menu">
-          <a href="shop.html">Shop</a><a href="about.html">About</a
-          ><a href="contact.html">Contact</a>
-        </div>
-        <div class="nav-icons">
-          <button class="cart-btn">🛍 <span class="cart-count">0</span></button
-          ><button class="hamburger">≡</button>
-        </div>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Global styles (unchanged) -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- About luxury overrides -->
+  <link rel="stylesheet" href="css/about-luxury.css">
+</head>
+<body class="about-page">
+
+  <!-- ══════════════════════════════════════
+       LOADER  (intact — main.js handles it)
+  ══════════════════════════════════════ -->
+  <div class="loader">
+    <div class="loader-logo">SHENOVA</div>
+    <div class="loader-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAV  (all classes intact — main.js)
+  ══════════════════════════════════════ -->
+  <nav class="nav scrolled">
+    <div class="container nav-inner">
+      <a class="nav-logo" href="index.html">SHENOVA</a>
+      <div class="nav-menu">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </div>
-    </nav>
-    <div class="mobile-menu">
-        <a href="index.html">
-    Home
-  </a><a href="shop.html">Shop</a><a href="about.html">About</a
-      ><a href="contact.html">Contact</a>
+      <div class="nav-icons">
+        <a href="wishlist.html"><button aria-label="Wishlist">♡</button></a>
+        <button class="cart-btn" aria-label="Open bag">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-count">0</span>
+        </button>
+        <button class="hamburger" aria-label="Menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="wishlist.html">Wishlist</a>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       §01 · CINEMATIC HERO
+  ══════════════════════════════════════ -->
+  <section class="ab-hero">
+
+    <div class="ab-hero-img-wrap">
+      <picture>
+        <source media="(max-width:768px)" srcset="images/bg2.png">
+        <img src="images/bg1.png" alt="Shenova — Quiet Luxury" class="ab-hero-img">
+      </picture>
+      <div class="ab-hero-overlay"></div>
+      <div class="ab-grain" aria-hidden="true"></div>
     </div>
 
-    <section style="padding-top: 160px">
-      <div class="container" style="max-width: 900px; text-align: center">
-        <div class="eyebrow reveal">Est. 2026</div>
-        <h1
-          class="serif reveal"
-          style="
-            font-size: clamp(48px, 8vw, 110px);
-            line-height: 1;
-            margin: 14px 0 30px;
-          "
-        >
-          Quiet luxury, <br /><em>made effortless.</em>
-        </h1>
-        <p
-          class="reveal"
-          style="font-size: 19px; color: var(--muted); line-height: 1.8"
-        >
-          At Shenova, we believe elegance doesn’t need to be loud. — Our
-          collections are designed with thoughtful details, breathable fabrics,
-          and timeless silhouettes that feel beautiful beyond seasons.
+    <!-- Vertical side label — desktop only -->
+    <div class="ab-hero-side-label" aria-hidden="true">
+      <span>S H E N O V A &nbsp;·&nbsp; 2 0 2 6</span>
+    </div>
+
+    <!-- Right index — desktop only -->
+    <div class="ab-hero-index" aria-hidden="true">
+      <span>01 / 05</span>
+    </div>
+
+    <div class="ab-hero-content">
+
+      <!-- Meta row -->
+      <div class="ab-hero-meta">
+        <span class="ab-eyebrow">Est. 2026</span>
+        <span class="ab-hero-dash"></span>
+        <span class="ab-eyebrow">Crafted in India</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="ab-hero-headline">
+        <span class="ab-hl-word">Quiet</span>
+        <span class="ab-hl-word ab-hl-italic"><em>Luxury.</em></span>
+      </h1>
+
+      <p class="ab-hero-sub">
+        For women who know that elegance<br class="ab-br-desktop">
+        never needs to announce itself.
+      </p>
+
+      <!-- Scroll cue -->
+      <div class="ab-hero-scroll" aria-hidden="true">
+        <div class="ab-scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+
+    </div>
+
+    <!-- Bottom horizontal strip -->
+    <div class="ab-hero-strip" aria-hidden="true">
+      <div class="ab-strip-inner">
+        <span>SHENOVA</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Limited Editions</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Crafted in India</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Worn Daily</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>SHENOVA</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Limited Editions</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Crafted in India</span>
+        <span class="ab-strip-dot">✦</span>
+        <span>Worn Daily</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §02 · OPENING STATEMENT
+  ══════════════════════════════════════ -->
+  <section class="ab-statement">
+    <div class="ab-statement-inner">
+
+      <div class="ab-statement-left reveal">
+        <span class="ab-section-num">01</span>
+        <div class="ab-vert-rule"></div>
+      </div>
+
+      <div class="ab-statement-right reveal">
+        <p class="ab-pull-quote">
+          "We don't design clothing.<br>
+          We design the feeling<br>
+          of arriving in a room."
+        </p>
+        <div class="ab-rule"></div>
+        <p class="ab-body-text">
+          Shenova was built on a single belief — that true luxury is felt, not seen. It lives in the weight of a fabric, the ease of a silhouette, the quiet confidence of something perfectly made.
         </p>
       </div>
-    </section>
 
-    <section>
-      <div class="container split">
-        <img
-          class="reveal"
-          src="images/front21.jpeg"
-        />
-        <div class="reveal">
-          <div class="eyebrow">OUR STORY</div>
-          <h2>A quiet kind of elegance.</h2>
-          <p>
-            Shenova was created for women who love simplicity with presence.
-            Pieces that feel soft, effortless, and timeless — designed for
-            everyday moments that still deserve to feel beautiful.
-          </p>
-        </div>
-      </div>
-    </section>
-    <section style="background: #f1ede6">
-      <div class="container split">
-        <div class="reveal">
-          <div class="eyebrow">OUR PROMISE</div>
-          <h2>Comfort, always comes first.</h2>
-          <p>
-            Every Shenova piece is thoughtfully designed to feel as good as it
-            looks. From soft textures to easy fits, we create clothing meant to
-            move with your day — calmly, comfortably, and confidently.
-          </p>
-        </div>
-        <img
-          class="reveal"
-          src="images/front5.jpg"
-        />
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <footer>
-      <div class="container">
-        <div class="foot-bottom" style="border: none">© 2026 SHENOVA</div>
+  <!-- ══════════════════════════════════════
+       §03 · EDITORIAL SPLIT — OUR STORY
+  ══════════════════════════════════════ -->
+  <section class="ab-split ab-split--story">
+
+    <div class="ab-split-image reveal">
+      <div class="ab-img-frame">
+        <img src="images/front13.jpg" alt="Our Story — Shenova">
+        <div class="ab-img-frame-border"></div>
       </div>
-    </footer>
-    <div class="drawer-overlay" onclick="closeCart()"></div>
-    <aside class="drawer">
-      <div class="drawer-head">
-        <h3>Your Bag</h3>
-        <button onclick="closeCart()" style="font-size: 22px">×</button>
-      </div>
-      <div class="drawer-body"></div>
-      <div class="drawer-foot">
-        <div class="total"><span>Total</span><span>₹0</span></div>
-        <a class="btn" href="checkout.html">Checkout</a>
-      </div>
-    </aside>
-    <div class="modal" onclick="if (event.target === this) closeModal();">
-      <div class="modal-card">
-        <h3></h3>
-        <p></p>
-        <button class="btn" onclick="closeModal()">OK</button>
+      <div class="ab-split-caption">
+        <span class="ab-eyebrow">SS 2026</span>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+    <div class="ab-split-content reveal">
+      <span class="ab-section-num ab-gold">02</span>
+      <div class="ab-section-label">Our Story</div>
+      <h2 class="ab-section-title">A quiet kind<br>of elegance.</h2>
+      <div class="ab-content-rule"></div>
+      <p class="ab-body-text">
+        Shenova was created for women who love simplicity with presence. Pieces that feel soft, effortless, and timeless — designed for everyday moments that still deserve to feel beautiful.
+      </p>
+      <p class="ab-body-text">
+        We started with a single question: why should dressing beautifully feel difficult? Everything we make flows from that answer — clothing that moves with your day, calm and graceful.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §04 · FULL-BLEED MARQUEE QUOTE
+  ══════════════════════════════════════ -->
+  <div class="ab-marq-section" aria-hidden="true">
+    <div class="ab-marq-wrap">
+      <div class="ab-marq-inner">
+        <span>Timeless silhouettes</span>
+        <span class="ab-marq-dot">—</span>
+        <span><em>for the modern muse</em></span>
+        <span class="ab-marq-dot">—</span>
+        <span>Quiet Confidence</span>
+        <span class="ab-marq-dot">—</span>
+        <span><em>crafted in India</em></span>
+        <span class="ab-marq-dot">—</span>
+        <span>Timeless silhouettes</span>
+        <span class="ab-marq-dot">—</span>
+        <span><em>for the modern muse</em></span>
+        <span class="ab-marq-dot">—</span>
+        <span>Quiet Confidence</span>
+        <span class="ab-marq-dot">—</span>
+        <span><em>crafted in India</em></span>
+        <span class="ab-marq-dot">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       §05 · EDITORIAL SPLIT — OUR PROMISE
+  ══════════════════════════════════════ -->
+  <section class="ab-split ab-split--promise ab-split--reverse">
+
+    <div class="ab-split-content reveal">
+      <span class="ab-section-num ab-gold">03</span>
+      <div class="ab-section-label">Our Promise</div>
+      <h2 class="ab-section-title">Comfort,<br>always comes<br>first.</h2>
+      <div class="ab-content-rule"></div>
+      <p class="ab-body-text">
+        Every Shenova piece is thoughtfully designed to feel as good as it looks. From soft textures to easy fits, we create clothing meant to move with your day — calmly, comfortably, confidently.
+      </p>
+      <p class="ab-body-text">
+        We source only fabrics that we ourselves would want to wear. No compromise on hand-feel, no compromise on finish.
+      </p>
+    </div>
+
+    <div class="ab-split-image reveal">
+      <div class="ab-img-frame">
+        <img src="images/front5.jpg" alt="Our Promise — Shenova">
+        <div class="ab-img-frame-border"></div>
+      </div>
+      <div class="ab-split-caption ab-split-caption--right">
+        <span class="ab-eyebrow">Crafted</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §06 · FULL-BLEED CINEMATIC QUOTE BLOCK
+  ══════════════════════════════════════ -->
+  <section class="ab-cineblock">
+    <div class="ab-cineblock-bg">
+      <img src="images/front14.jpg" alt="" aria-hidden="true" class="ab-cineblock-img">
+      <div class="ab-cineblock-veil"></div>
+    </div>
+    <div class="ab-cineblock-inner reveal">
+      <div class="ab-cine-rule"></div>
+      <blockquote class="ab-cine-quote">
+        Wear the<br><em>silence.</em>
+      </blockquote>
+      <div class="ab-cine-rule"></div>
+      <p class="ab-cine-sub">— Shenova, SS 2026</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §07 · VALUES GRID
+  ══════════════════════════════════════ -->
+  <section class="ab-values">
+    <div class="container">
+
+      <div class="ab-values-head reveal">
+        <span class="ab-section-num ab-gold">04</span>
+        <h2 class="ab-section-title" style="margin-top:16px">What we stand for.</h2>
+        <p class="ab-values-intro">Four principles. One unwavering standard.</p>
+      </div>
+
+      <div class="ab-values-grid">
+
+        <div class="ab-value-item">
+          <div class="ab-value-num">I</div>
+          <div class="ab-value-icon" aria-hidden="true">✦</div>
+          <h3 class="ab-value-title">Considered Craft</h3>
+          <p>Every stitch is deliberate. We work with skilled makers who share our obsession with quiet perfection — invisible details that you feel before you see.</p>
+        </div>
+
+        <div class="ab-value-item">
+          <div class="ab-value-num">II</div>
+          <div class="ab-value-icon" aria-hidden="true">✦</div>
+          <h3 class="ab-value-title">Limited by Design</h3>
+          <p>We produce in small runs intentionally. Not to create urgency, but to ensure each piece receives the attention and care it deserves from start to finish.</p>
+        </div>
+
+        <div class="ab-value-item">
+          <div class="ab-value-num">III</div>
+          <div class="ab-value-icon" aria-hidden="true">✦</div>
+          <h3 class="ab-value-title">Timeless Over Trend</h3>
+          <p>We don't chase seasons. We design silhouettes that earn their place in a wardrobe for years — pieces that work harder and feel better with time.</p>
+        </div>
+
+        <div class="ab-value-item">
+          <div class="ab-value-num">IV</div>
+          <div class="ab-value-icon" aria-hidden="true">✦</div>
+          <h3 class="ab-value-title">Effortless Elegance</h3>
+          <p>Luxury should never be exhausting. We design for the ease of getting dressed beautifully — no ceremony, no effort, just instinctive, quiet confidence.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §08 · HORIZONTAL PHOTO BAND
+  ══════════════════════════════════════ -->
+  <section class="ab-photoband" aria-label="Editorial imagery">
+    <div class="ab-photoband-track">
+      <div class="ab-photo-item"><img src="images/front1.jpg" alt=""></div>
+      <div class="ab-photo-item"><img src="images/front13.jpg" alt=""></div>
+      <div class="ab-photo-item"><img src="images/front14.jpg" alt=""></div>
+      <div class="ab-photo-item"><img src="images/front21.jpeg" alt=""></div>
+      <div class="ab-photo-item"><img src="images/front5.jpg" alt=""></div>
+      <div class="ab-photo-item"><img src="images/front6.jpg" alt=""></div>
+      <!-- Duplicated for seamless loop -->
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front1.jpg" alt=""></div>
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front13.jpg" alt=""></div>
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front14.jpg" alt=""></div>
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front21.jpeg" alt=""></div>
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front5.jpg" alt=""></div>
+      <div class="ab-photo-item" aria-hidden="true"><img src="images/front6.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §09 · DESIGN LANGUAGE
+  ══════════════════════════════════════ -->
+  <section class="ab-design">
+    <div class="container ab-design-inner">
+
+      <div class="ab-design-left reveal">
+        <span class="ab-section-num ab-gold">05</span>
+        <div class="ab-section-label" style="margin-top:14px">Design Language</div>
+        <h2 class="ab-section-title">The details<br>you notice later.</h2>
+        <p class="ab-body-text">
+          Our aesthetic is a study in restraint. We subtract until nothing can be removed — then we stop. The result is clothing that looks understated and feels extraordinary.
+        </p>
+
+        <ul class="ab-pillars">
+          <li class="reveal">
+            <span class="ab-pillar-line"></span>
+            <span>Natural, breathable fabrics</span>
+          </li>
+          <li class="reveal">
+            <span class="ab-pillar-line"></span>
+            <span>Atelier-grade finishing</span>
+          </li>
+          <li class="reveal">
+            <span class="ab-pillar-line"></span>
+            <span>Considered colour palette</span>
+          </li>
+          <li class="reveal">
+            <span class="ab-pillar-line"></span>
+            <span>Silhouettes for every body</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="ab-design-right reveal">
+        <div class="ab-img-stack">
+          <img src="images/front6.jpg"  alt="" class="ab-stack-back">
+          <img src="images/front14.jpg" alt="" class="ab-stack-front">
+          <!-- Floating number badge -->
+          <div class="ab-stack-badge" aria-hidden="true">
+            <span class="ab-stack-badge-num">2026</span>
+            <span class="ab-stack-badge-label">Collection</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §10 · STAT ROW
+  ══════════════════════════════════════ -->
+  <section class="ab-stats">
+    <div class="container ab-stats-inner">
+
+      <div class="ab-stat">
+        <span class="ab-stat-num" data-target="500">0</span><span class="ab-stat-plus">+</span>
+        <p class="ab-stat-label">Happy Customers</p>
+      </div>
+
+      <div class="ab-stat-divider" aria-hidden="true"></div>
+
+      <div class="ab-stat">
+        <span class="ab-stat-num" data-target="40">0</span><span class="ab-stat-plus">+</span>
+        <p class="ab-stat-label">Curated Pieces</p>
+      </div>
+
+      <div class="ab-stat-divider" aria-hidden="true"></div>
+
+      <div class="ab-stat">
+        <span class="ab-stat-num" data-target="100">0</span><span class="ab-stat-plus">%</span>
+        <p class="ab-stat-label">Made in India</p>
+      </div>
+
+      <div class="ab-stat-divider" aria-hidden="true"></div>
+
+      <div class="ab-stat">
+        <span class="ab-stat-num" data-target="14">0</span><span class="ab-stat-plus">-day</span>
+        <p class="ab-stat-label">Easy Returns</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       §11 · CLOSING CTA
+  ══════════════════════════════════════ -->
+  <section class="ab-cta reveal">
+    <div class="ab-cta-inner">
+
+      <!-- Background texture lines -->
+      <div class="ab-cta-lines" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+
+      <span class="ab-eyebrow" style="color:var(--muted)">The Collection</span>
+      <h2 class="ab-cta-headline">Wear the<br><em>silence.</em></h2>
+      <p class="ab-cta-sub">Every piece. One intention. Yours to carry.</p>
+
+      <a href="shop.html" class="ab-cta-btn">
+        <span>Explore Collection</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">SHENOVA</span>
+        <span class="footer-copy">© 2026 — All rights reserved</span>
+        <div class="footer-links">
+          <a href="shop.html">Shop</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       CART DRAWER  (intact — main.js)
+  ══════════════════════════════════════ -->
+  <div class="drawer-overlay" onclick="closeCart()"></div>
+  <aside class="drawer" role="dialog" aria-label="Shopping bag">
+    <div class="drawer-head">
+      <h3>Your Bag</h3>
+      <button onclick="closeCart()" class="drawer-close" aria-label="Close">×</button>
+    </div>
+    <div class="drawer-body"></div>
+    <div class="drawer-foot">
+      <div class="total"><span>Total</span><span>₹0</span></div>
+      <a class="btn" href="checkout.html">Checkout</a>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════
+       MODAL  (intact — main.js)
+  ══════════════════════════════════════ -->
+  <div class="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCRIPTS  (load order preserved)
+  ══════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <!-- About-page specific enhancements -->
+  <script src="js/about.js"></script>
+
+  <script>
+  /* ── About-page inline enhancements ─────────────────────────── */
+
+  /* Hamburger morph */
+  document.querySelector('.hamburger')?.addEventListener('click', function() {
+    this.classList.toggle('open');
+  });
+
+  /* Scroll progress */
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    const bar = document.querySelector('.progress');
+    if (bar) bar.style.width = (pct * 100) + '%';
+  }, { passive: true });
+
+  /* Stat counter animation */
+  (function() {
+    const statEls = document.querySelectorAll('.ab-stat-num[data-target]');
+    if (!statEls.length) return;
+
+    const ease = (t) => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+
+    const animateStat = (el) => {
+      const target = parseInt(el.dataset.target, 10);
+      const duration = 1800;
+      const start = performance.now();
+
+      const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        el.textContent = Math.round(ease(progress) * target);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateStat(e.target);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .5 });
+
+    statEls.forEach(el => obs.observe(el));
+  })();
+
+  /* Parallax hero image on scroll (desktop only) */
+  (function() {
+    const img = document.querySelector('.ab-hero-img');
+    if (!img || !window.matchMedia('(min-width:769px)').matches) return;
+    let raf = false;
+    window.addEventListener('scroll', () => {
+      if (!raf) {
+        requestAnimationFrame(() => {
+          img.style.transform = `scale(1.06) translateY(${Math.min(window.scrollY * 0.18, 100)}px)`;
+          raf = false;
+        });
+        raf = true;
+      }
+    }, { passive: true });
+  })();
+  </script>
+
+</body>
 </html>
