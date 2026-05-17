@@ -1,74 +1,1030 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Product · Shenova</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-</head><body>
-<div class="loader">
 
-  <div class="loader-logo">
-    SHENOVA
-  </div>
+<style>
+/* =====================================================================
+   SHENOVA — Ultra Luxury PDP  |  product.html inline styles
+   ===================================================================== */
 
-  <div class="loader-line"></div>
+/* ── Design tokens ───────────────────────────────────────────────── */
+:root {
+  --cream:     #f5f2ed;
+  --parchment: #ece6db;
+  --warm-white:#faf8f5;
+  --ink:       #0d0d0b;
+  --ink2:      #1c1b18;
+  --muted:     #857f76;
+  --lighter:   #b8b0a5;
+  --gold:      #a8865a;
+  --gold-light:#c9a97a;
+  --line:      rgba(13,13,11,.07);
+  --line-mid:  rgba(13,13,11,.12);
 
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans:  "DM Sans", "Helvetica Neue", sans-serif;
+  --ease:      cubic-bezier(.25,.46,.45,.94);
+  --ease-out:  cubic-bezier(.16,1,.3,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--cream); scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+img  { display: block; max-width: 100%; }
+a    { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* ── Helpers ─────────────────────────────────────────────────────── */
+.serif   { font-family: var(--serif); }
+.eyebrow { font-size: 9.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+.container { max-width: 1440px; margin: 0 auto; padding: 0 48px; }
+
+/* ── Scroll progress ─────────────────────────────────────────────── */
+.s-prog {
+  position: fixed; top: 0; left: 0; width: 0; height: 1.5px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  z-index: 600; transition: width .08s linear;
+}
+
+/* ── Page loader ─────────────────────────────────────────────────── */
+#pdp-loader {
+  position: fixed; inset: 0; background: var(--cream);
+  z-index: 9000; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 28px;
+  transition: opacity .9s var(--ease), visibility .9s;
+}
+#pdp-loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.ldr-logo {
+  font-family: var(--serif); font-size: 34px; letter-spacing: .6em;
+  font-weight: 300; color: var(--ink);
+  opacity: 0; animation: riseIn .9s var(--ease-out) .25s forwards;
+}
+.ldr-bar {
+  width: 100px; height: 1px; background: var(--line-mid); overflow: hidden;
+}
+.ldr-bar::after {
+  content: ''; display: block; height: 100%;
+  background: var(--gold); width: 0;
+  animation: barFill 1.4s var(--ease-out) .4s forwards;
+}
+@keyframes riseIn  { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform: none; } }
+@keyframes barFill { to   { width: 100%; } }
+
+/* ── Navigation ──────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+  transition: all .5s var(--ease);
+}
+.nav.scrolled {
+  background: rgba(245,242,237,.94);
+  backdrop-filter: blur(28px) saturate(160%);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+  max-width: 1440px; margin: 0 auto; padding: 0 48px;
+  height: 74px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--serif); font-size: 21px;
+  letter-spacing: .45em; font-weight: 400; color: var(--ink);
+}
+.nav-menu { display: flex; gap: 44px; }
+.nav-menu a {
+  font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--muted); position: relative; padding-bottom: 2px; transition: color .25s;
+}
+.nav-menu a::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: .5px; background: var(--ink); transition: width .4s var(--ease);
+}
+.nav-menu a:hover { color: var(--ink); }
+.nav-menu a:hover::after { width: 100%; }
+.nav-icons { display: flex; align-items: center; gap: 22px; }
+.nav-icons button { font-size: 17px; opacity: .7; transition: opacity .2s, transform .2s; }
+.nav-icons button:hover { opacity: 1; transform: translateY(-1px); }
+.cart-btn { position: relative; }
+.cart-count {
+  position: absolute; top: -7px; right: -9px;
+  background: var(--ink); color: #fff; font-size: 8.5px;
+  width: 15px; height: 15px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans);
+}
+.hamburger { display: none; font-size: 22px; line-height: 1; }
+.mobile-menu {
+  position: fixed; inset: 0; background: var(--cream); z-index: 390;
+  transform: translateX(100%); transition: transform .65s var(--ease-out);
+  padding: 108px 44px 60px; display: flex; flex-direction: column;
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu a {
+  font-family: var(--serif); font-size: 46px; font-weight: 300;
+  border-bottom: 1px solid var(--line); padding: 14px 0;
+  opacity: 0; transform: translateX(32px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease), color .2s;
+}
+.mobile-menu.open a { opacity: 1; transform: none; }
+.mobile-menu.open a:nth-child(1) { transition-delay: .08s; }
+.mobile-menu.open a:nth-child(2) { transition-delay: .15s; }
+.mobile-menu.open a:nth-child(3) { transition-delay: .22s; }
+.mobile-menu.open a:nth-child(4) { transition-delay: .29s; }
+
+/* ── Breadcrumb ──────────────────────────────────────────────────── */
+.pdp-crumb {
+  padding-top: 106px; padding-bottom: 18px;
+  display: flex; align-items: center; gap: 11px;
+  font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+}
+.pdp-crumb a { transition: color .2s; }
+.pdp-crumb a:hover { color: var(--ink); }
+.pdp-crumb-sep { opacity: .3; }
+
+/* ── Main PDP wrapper ────────────────────────────────────────────── */
+.pdp-wrap {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 72px;
+  align-items: start;
+  padding-bottom: 130px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GALLERY — left column
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-gallery {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  align-items: start;
+  animation: galleryIn 1s var(--ease-out) .06s both;
+}
+@keyframes galleryIn {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Thumbnail strip */
+.pdp-thumbs-col {
+  position: sticky; top: 92px;
+  display: flex; flex-direction: column; gap: 11px;
+  max-height: calc(100vh - 112px);
+  overflow-y: auto; scrollbar-width: none;
+}
+.pdp-thumbs-col::-webkit-scrollbar { display: none; }
+.pdp-thumbs-col img {
+  width: 80px; height: 106px; object-fit: cover;
+  border-radius: 4px; cursor: pointer;
+  border: 1.5px solid transparent;
+  opacity: .48; flex-shrink: 0;
+  background: var(--parchment);
+  transition: opacity .32s, border-color .32s, transform .32s;
+}
+.pdp-thumbs-col img:hover { opacity: .76; transform: scale(1.025); }
+.pdp-thumbs-col img.active { opacity: 1; border-color: var(--ink); }
+
+/* Main frame */
+.pdp-main-sticky { position: sticky; top: 92px; }
+.pdp-main-frame {
+  position: relative; overflow: hidden;
+  border-radius: 3px; background: var(--parchment);
+  aspect-ratio: 2 / 3;
+}
+.pdp-main-frame img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 2s var(--ease-out), opacity .22s ease;
+  cursor: zoom-in;
+}
+.pdp-main-frame:hover img { transform: scale(1.04); }
+
+/* Badge — top left, ultra-minimal */
+.pdp-badge {
+  position: absolute; top: 18px; left: 18px;
+  background: transparent;
+  border: .5px solid rgba(13,13,11,.22);
+  padding: 5px 14px; border-radius: 0;
+  font-size: 7.5px; letter-spacing: .36em; text-transform: uppercase;
+  color: rgba(13,13,11,.5);
+}
+
+/* Arrow controls — slim editorial lines, bottom-center */
+.pdp-arrows {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0;
+  pointer-events: none;
+  top: 50%; transform: translateY(-50%);
+  height: 0;
+}
+.pdp-arrow {
+  pointer-events: all;
+  width: 36px; height: 80px;
+  background: rgba(245,242,237,.62); backdrop-filter: blur(14px) saturate(140%);
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--ink); line-height: 1;
+  transition: background .28s var(--ease), opacity .28s;
+  opacity: 0; border-radius: 0;
+  letter-spacing: 0;
+}
+.pdp-arrow:first-child { border-radius: 0 3px 3px 0; }
+.pdp-arrow:last-child  { border-radius: 3px 0 0 3px; }
+.pdp-main-frame:hover .pdp-arrow { opacity: 1; }
+.pdp-arrow:hover { background: rgba(245,242,237,.88); }
+
+/* Image counter — bottom center, minimal */
+.pdp-img-count {
+  position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 5px;
+  font-size: 9px; letter-spacing: .2em; color: rgba(13,13,11,.36);
+  pointer-events: none; white-space: nowrap;
+}
+#pdp-img-cur  { font-family: var(--serif); font-size: 11px; color: rgba(13,13,11,.55); }
+#pdp-img-total{ font-family: var(--serif); font-size: 11px; }
+
+/* Mobile dots */
+.pdp-dots {
+  display: none; justify-content: center; gap: 6px; margin-top: 14px;
+}
+.pdp-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  border: 1px solid var(--muted); background: transparent;
+  cursor: pointer; transition: all .28s;
+}
+.pdp-dot.active { background: var(--ink); border-color: var(--ink); transform: scale(1.4); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   INFO PANEL — right column
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-info {
+  position: sticky; top: 92px; align-self: start;
+  animation: infoIn 1s var(--ease-out) .18s both;
+}
+@keyframes infoIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Eyebrow brand line */
+.pdp-eyebrow {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+}
+.pdp-eyebrow-brand {
+  font-size: 9px; letter-spacing: .34em; text-transform: uppercase; color: var(--muted);
+}
+.pdp-eyebrow-dot {
+  width: 3px; height: 3px; border-radius: 50%; background: var(--gold); flex-shrink: 0;
+}
+
+/* Title */
+.pdp-title {
+  font-family: var(--serif);
+  font-weight: 300; font-style: italic;
+  font-size: clamp(38px, 3.8vw, 58px);
+  line-height: 1.02; letter-spacing: -.02em;
+  color: var(--ink); margin-bottom: 20px;
+}
+
+/* Price */
+.pdp-price-row {
+  display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px;
+}
+.pdp-price {
+  font-family: var(--serif); font-size: 28px; font-weight: 300; color: var(--ink);
+}
+.pdp-tax {
+  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+
+/* Rating */
+.pdp-rating {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 26px;
+}
+.pdp-stars { color: var(--gold); font-size: 11px; letter-spacing: 2.5px; }
+.pdp-rev {
+  font-size: 10.5px; color: var(--muted);
+  border-bottom: 1px solid var(--muted); padding-bottom: 1px;
+  cursor: pointer; transition: color .2s;
+}
+.pdp-rev:hover { color: var(--ink); }
+
+/* Divider */
+.pdp-rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+
+/* Description */
+.pdp-desc {
+  font-size: 13.5px; line-height: 1.88; color: var(--muted);
+  margin-bottom: 32px; max-width: 390px;
+}
+
+/* Option group */
+.pdp-opt { margin-bottom: 28px; }
+.pdp-opt-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.pdp-opt-label {
+  font-size: 9.5px; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--ink); font-weight: 500;
+}
+.pdp-opt-aux {
+  font-size: 9.5px; letter-spacing: .14em; color: var(--muted);
+  border-bottom: 1px solid var(--muted); padding-bottom: 1px;
+  cursor: pointer; transition: color .2s;
+}
+.pdp-opt-aux:hover { color: var(--ink); }
+
+/* Size buttons */
+.pdp-sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+.size {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  min-width: 52px; height: 52px; border-radius: 50%;
+  border: 1px solid var(--line); padding: 0 4px;
+  font-size: 10.5px; letter-spacing: .08em; color: var(--ink);
+  transition: border-color .28s var(--ease), color .28s;
+  overflow: hidden; background: transparent;
+}
+.size::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--ink); transform: scale(0);
+  transition: transform .32s var(--ease-out);
+}
+.size span { position: relative; z-index: 1; }
+.size:hover { border-color: var(--ink); }
+.size.active { border-color: var(--ink); color: #fff; }
+.size.active::before { transform: scale(1); }
+
+/* Color swatches */
+
+.pdp-colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.color {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid transparent; outline: 2px solid transparent;
+  outline-offset: 3px; cursor: pointer;
+  transition: outline-color .25s, transform .28s var(--ease-spring);
+}
+.color:hover { transform: scale(1.12); }
+.color.active { outline-color: var(--ink); }
+.pdp-color-name {
+  font-size: 9.5px; letter-spacing: .14em; color: var(--muted);
+}
+
+/* CTA row */
+.pdp-cta { display: flex; gap: 10px; margin-bottom: 32px; }
+
+.pdp-add-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+  height: 58px; border-radius: 50px;
+  background: var(--ink); color: #fff;
+  font-size: 9.5px; letter-spacing: .3em; text-transform: uppercase;
+  font-family: var(--sans); font-weight: 400;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: transform .28s var(--ease), background .32s;
+}
+.pdp-add-btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.1) 50%, transparent 70%);
+  transform: translateX(-100%); transition: transform .65s;
+}
+.pdp-add-btn:hover::after { transform: translateX(100%); }
+.pdp-add-btn:hover { transform: translateY(-2px); }
+.pdp-add-btn:active { transform: translateY(0); }
+
+/* Wish button */
+#pdp-wish {
+  width: 58px; height: 58px; border-radius: 50%;
+  border: 1px solid var(--line); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 19px;
+  transition: all .32s var(--ease); background: transparent; cursor: pointer;
+}
+#pdp-wish:hover { border-color: #b0242b; color: #b0242b; transform: scale(1.06); }
+#pdp-wish.active { background: #fdf0ef; border-color: #b0242b; color: #b0242b; }
+
+/* Trust badges */
+.pdp-trust { display: flex; flex-direction: column; gap: 11px; margin-bottom: 6px; }
+.pdp-trust-row {
+  display: flex; align-items: center; gap: 11px;
+  font-size: 11.5px; color: var(--muted); letter-spacing: .02em;
+}
+.pdp-trust-row svg { flex-shrink: 0; color: var(--gold); }
+
+/* Accordion */
+.pdp-acc { border-top: 1px solid var(--line); margin-top: 32px; }
+.pdp-acc-item { border-bottom: 1px solid var(--line); }
+.pdp-acc-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0; font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--ink); background: none; border: none;
+  font-family: var(--sans); cursor: pointer;
+}
+.pdp-acc-icon {
+  transition: transform .38s var(--ease); color: var(--muted);
+  font-size: 15px; line-height: 1; flex-shrink: 0;
+}
+.pdp-acc-item.open .pdp-acc-icon { transform: rotate(45deg); }
+.pdp-acc-body { max-height: 0; overflow: hidden; transition: max-height .44s var(--ease); }
+.pdp-acc-item.open .pdp-acc-body { max-height: 320px; }
+.pdp-acc-inner { padding-bottom: 20px; }
+.pdp-acc-inner li {
+  font-size: 13px; line-height: 1.9; color: var(--muted);
+  padding: 3px 0 3px 18px; list-style: none; position: relative;
+}
+.pdp-acc-inner li::before {
+  content: ''; position: absolute; left: 0; top: 11px;
+  width: 5px; height: .5px; background: var(--gold);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RELATED PRODUCTS
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-related {
+  padding: 96px 0 116px; border-top: 1px solid var(--line);
+}
+.pdp-related-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 60px;
+}
+.pdp-related-head h2 {
+  font-family: var(--serif); font-weight: 300; font-style: italic;
+  font-size: clamp(34px, 4.5vw, 60px); letter-spacing: -.02em; margin-top: 10px;
+}
+.pdp-related-link {
+  font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--muted);
+  padding-bottom: 1px; transition: color .2s; flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.pdp-related-link:hover { color: var(--ink); }
+.rel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+/* Product cards (used by productCard helper in main.js) */
+.product-card { cursor: pointer; }
+.product-image {
+  position: relative; aspect-ratio: 2 / 3; overflow: hidden;
+  background: var(--parchment); border-radius: 3px;
+}
+.product-image .main-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1.8s cubic-bezier(.2,.8,.2,1);
+}
+.product-image .hover-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity .6s var(--ease);
+}
+.product-card:hover .main-img { transform: scale(1.06); }
+.product-card:hover .hover-img { opacity: 1; }
+.quick-btn {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(13,13,11,.76); backdrop-filter: blur(8px);
+  color: #fff; font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+  padding: 14px; text-align: center;
+  transform: translateY(100%); transition: transform .38s var(--ease);
+  cursor: pointer; border: none; font-family: var(--sans);
+}
+.product-card:hover .quick-btn { transform: translateY(0); }
+.product-info { padding: 14px 2px 4px; }
+.product-title { font-size: 13px; font-weight: 400; margin-bottom: 5px; color: var(--ink); }
+.product-price { font-size: 13px; color: var(--muted); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CART DRAWER
+   ═══════════════════════════════════════════════════════════════════ */
+.drawer {
+  position: fixed; top: 0; right: 0; width: 448px; max-width: 100%; height: 100vh;
+  background: var(--warm-white); z-index: 500;
+  display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform .58s var(--ease-out);
+  border-left: 1px solid var(--line);
+}
+.drawer.open { transform: translateX(0); }
+.drawer-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.42);
+  opacity: 0; visibility: hidden; z-index: 499; transition: .4s;
+}
+.drawer-overlay.open { opacity: 1; visibility: visible; }
+.drawer-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 30px; border-bottom: 1px solid var(--line);
+}
+.drawer-head h3 {
+  font-family: var(--serif); font-size: 26px; font-weight: 300; font-style: italic;
+}
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px 30px; }
+.cart-item {
+  display: grid; grid-template-columns: 84px 1fr auto;
+  gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line);
+}
+.cart-item img {
+  width: 84px; height: 112px; object-fit: cover;
+  border-radius: 3px; background: var(--parchment);
+}
+.cart-item h4 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.cart-item .meta { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+.qty { display: inline-flex; border: 1px solid var(--line); border-radius: 50px; }
+.qty button { width: 28px; height: 28px; font-size: 13px; }
+.qty span { padding: 0 12px; font-size: 11.5px; display: flex; align-items: center; }
+.drawer-foot { padding: 22px 30px; border-top: 1px solid var(--line); }
+.drawer-foot .total {
+  display: flex; justify-content: space-between;
+  font-family: var(--serif); font-size: 22px; font-weight: 300; margin-bottom: 16px;
+}
+.btn-checkout {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 56px; background: var(--ink); color: #fff;
+  border-radius: 50px; font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase;
+  transition: transform .22s, background .2s;
+}
+.btn-checkout:hover { transform: translateY(-2px); background: #222; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════════════ */
+.modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,.46);
+  z-index: 600; display: none; align-items: center;
+  justify-content: center; padding: 24px;
+}
+.modal.open { display: flex; animation: fadeUp .3s; }
+.modal-card {
+  background: var(--warm-white); border-radius: 12px;
+  padding: 46px 44px; max-width: 420px; text-align: center;
+}
+.modal-card h3 {
+  font-family: var(--serif); font-size: 28px;
+  font-weight: 300; margin-bottom: 12px;
+}
+.modal-card p { color: var(--muted); font-size: 13px; margin-bottom: 28px; line-height: 1.75; }
+.modal-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 38px; background: var(--ink); color: #fff;
+  border-radius: 50px; font-size: 9.5px; letter-spacing: .26em; text-transform: uppercase;
+  transition: transform .2s; cursor: pointer; border: none; font-family: var(--sans);
+}
+.modal-btn:hover { transform: translateY(-2px); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ZOOM OVERLAY
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-zoom-overlay {
+  position: fixed; inset: 0; background: rgba(8,8,6,.95);
+  z-index: 700; display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; cursor: zoom-out;
+}
+.pdp-zoom-overlay.open { opacity: 1; visibility: visible; }
+.pdp-zoom-overlay img {
+  max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px;
+}
+.pdp-zoom-x {
+  position: absolute; top: 26px; right: 30px;
+  font-size: 28px; color: rgba(255,255,255,.55);
+  cursor: pointer; font-family: var(--serif); line-height: 1; transition: color .2s;
+}
+.pdp-zoom-x:hover { color: #fff; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════════ */
+footer {
+  background: var(--ink2); color: rgba(255,255,255,.32);
+  padding: 54px 0;
+}
+.foot-inner {
+  max-width: 1440px; margin: 0 auto; padding: 0 48px;
+  text-align: center; font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase;
+}
+.foot-logo {
+  font-family: var(--serif); font-size: 22px; letter-spacing: .5em;
+  color: rgba(255,255,255,.78); margin-bottom: 16px;
+  font-style: italic; font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pdpShake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-7px); }
+  40%     { transform: translateX(7px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1280px) {
+  .pdp-wrap { grid-template-columns: 1fr 460px; gap: 56px; }
+}
+@media (max-width: 1080px) {
+  .pdp-wrap { grid-template-columns: 1fr 400px; gap: 44px; }
+}
+@media (max-width: 940px) {
+  .pdp-wrap { grid-template-columns: 1fr; gap: 36px; padding-bottom: 80px; }
+  .pdp-gallery { grid-template-columns: 1fr; }
+  .pdp-thumbs-col { display: none; }
+  .pdp-dots { display: flex; }
+  .pdp-main-sticky, .pdp-info { position: static; }
+  .container, .nav-inner { padding-left: 22px; padding-right: 22px; }
+  .pdp-crumb { padding-top: 86px; }
+  .rel-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .pdp-related-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .pdp-gallery { animation: none; }
+  .pdp-info { animation: none; }
+}
+@media (max-width: 680px) {
+  .hamburger { display: block; }
+  .nav-menu { display: none; }
+  .pdp-title { font-size: 36px; }
+  .pdp-price { font-size: 26px; }
+  .pdp-cta { gap: 8px; }
+  .pdp-add-btn { height: 54px; font-size: 8.5px; }
+  #pdp-wish { width: 54px; height: 54px; font-size: 17px; }
+  .rel-grid { grid-template-columns: repeat(2, 1fr); gap: 13px; }
+  .drawer { width: 100%; }
+}
+@media (max-width: 440px) {
+  .pdp-related-head h2 { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div class="s-prog" id="s-prog"></div>
+
+<!-- Loader -->
+<div id="pdp-loader">
+  <div class="ldr-logo">SHENOVA</div>
+  <div class="ldr-bar"></div>
 </div>
-<div class="progress"></div>
 
+<!-- NAV -->
 <nav class="nav scrolled">
-  <div class="container nav-inner">
+  <div class="nav-inner">
     <a class="nav-logo" href="index.html">SHENOVA</a>
-    <div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-    <div class="nav-icons"><a href="wishlist.html"><button>♡</button></a><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <a href="wishlist.html"><button title="Wishlist" aria-label="Wishlist">♡</button></a>
+      <button class="cart-btn" title="Bag" aria-label="Open bag">
+        🛍
+        <span class="cart-count">0</span>
+      </button>
+      <button class="hamburger" aria-label="Menu">≡</button>
+    </div>
   </div>
 </nav>
-<div class="mobile-menu">  <a href="index.html">
-    Home
-  </a><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
 
-<div class="container">
-  <div class="pdp">
-    <div class="pdp-gallery">
-      <div class="pdp-main"><img id="pdp-main-img" src=""><div class="pdp-arrows"><button onclick="prevImg()">‹</button><button onclick="nextImg()">›</button></div></div>
-      <div class="pdp-thumbs" id="pdp-thumbs"></div>
-    </div>
-    <div class="pdp-info">
-      <div class="eyebrow">Shenova</div>
-      <h1 id="pdp-name"></h1>
-      <div class="price" id="pdp-price"></div>
-      <p class="desc" id="pdp-desc"></p>
-      <div class="size-row"><label>Select Size</label><div class="sizes" id="pdp-sizes"></div></div>
-      <div class="color-row" id="pdp-colors-wrap"><label>Color</label><div class="colors" id="pdp-colors"></div></div>
-      <div style="display:flex;gap:10px"><button class="btn" onclick="addToCart()">Add to Bag</button><button id="pdp-wish" class="btn btn-outline" style="width:60px;flex:none" onclick="toggleWish()">♡</button></div>
-      <div style="margin-top:30px;padding-top:30px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.8">
-        <div>✦ Free shipping on orders over ₹2000</div>
-        <div>✦ 14-day easy returns</div>
-        <div>✦ Crafted in limited editions</div>
-      </div>
-    </div>
-  </div>
-
-  <section style="padding:100px 0 60px">
-    <div class="sec-head"><div class="eyebrow">You may also like</div><h2 class="serif" style="font-size:clamp(32px,4vw,52px);margin-top:10px">Recommended</h2></div>
-    <div class="grid" id="related"></div>
-  </section>
+<!-- Mobile menu -->
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
 </div>
 
-<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
+<!-- BREADCRUMB -->
+<div class="pdp-crumb container">
+  <a href="index.html">Home</a>
+  <span class="pdp-crumb-sep">—</span>
+  <a href="shop.html">Shop</a>
+  <span class="pdp-crumb-sep">—</span>
+  <span id="pdp-bc-name" style="color:var(--ink)">Product</span>
+</div>
 
+<!-- ═══════════ PDP ═══════════ -->
+<div class="container">
+<div class="pdp-wrap">
+
+  <!-- GALLERY — left -->
+  <div class="pdp-gallery">
+
+    <!-- Thumbnail strip -->
+    <div class="pdp-thumbs-col" id="pdp-thumbs"></div>
+
+    <!-- Main image -->
+    <div class="pdp-main-sticky">
+      <div class="pdp-main-frame" id="pdp-main-frame">
+        <img id="pdp-main-img" src="" alt="Product">
+        <div class="pdp-badge">New Arrival</div>
+        <div class="pdp-arrows">
+          <button class="pdp-arrow" onclick="prevImg()" aria-label="Previous image">&#8592;</button>
+          <button class="pdp-arrow" onclick="nextImg()" aria-label="Next image">&#8594;</button>
+        </div>
+        <div class="pdp-img-count">
+          <span id="pdp-img-cur">1</span>
+          <span style="opacity:.4;margin:0 4px">/</span>
+          <span id="pdp-img-total">1</span>
+        </div>
+      </div>
+      <!-- Mobile dots -->
+      <div class="pdp-dots" id="pdp-dots"></div>
+    </div>
+
+  </div><!-- /gallery -->
+
+  <!-- INFO — right -->
+  <div class="pdp-info">
+
+    <!-- Eyebrow -->
+    <div class="pdp-eyebrow">
+      <span class="pdp-eyebrow-brand">Shenova</span>
+      <span class="pdp-eyebrow-dot"></span>
+      <span class="pdp-eyebrow-brand" id="pdp-category">Womenswear</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="pdp-title" id="pdp-name"></h1>
+
+    <!-- Price -->
+    <div class="pdp-price-row">
+      <span class="pdp-price" id="pdp-price"></span>
+      <span class="pdp-tax">Incl. of all taxes</span>
+    </div>
+
+    <!-- Rating -->
+    <div class="pdp-rating">
+      <span class="pdp-stars">★★★★★</span>
+      <span class="pdp-rev">48 reviews</span>
+    </div>
+
+    <hr class="pdp-rule">
+
+    <!-- Description -->
+    <p class="pdp-desc" id="pdp-desc"></p>
+
+    <!-- Size selector -->
+    <div class="pdp-opt">
+      <div class="pdp-opt-head">
+        <span class="pdp-opt-label">Size</span>
+        <a class="pdp-opt-aux" href="#">Size guide</a>
+      </div>
+      <div class="pdp-sizes" id="pdp-sizes"></div>
+    </div>
+
+    <!-- Colour selector -->
+    <div class="pdp-opt pdp-colors-wrap" id="pdp-colors-wrap">
+      <div class="pdp-opt-head">
+        <span class="pdp-opt-label">Colour</span>
+        <span class="pdp-color-name" id="pdp-color-name"></span>
+      </div>
+      <div class="pdp-colors" id="pdp-colors"></div>
+    </div>
+
+    <!-- CTA row -->
+    <div class="pdp-cta">
+      <button class="pdp-add-btn" id="pdp-bag-btn" onclick="addToCart()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span>Add to Bag</span>
+      </button>
+      <button id="pdp-wish" onclick="toggleWish()" aria-label="Add to wishlist">♡</button>
+    </div>
+
+    <!-- Trust badges -->
+    <div class="pdp-trust">
+      <div class="pdp-trust-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13" rx="1"/>
+          <path d="M16 8h4l3 5v3h-7V8z"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        Free delivery on orders above ₹2,000
+      </div>
+      <div class="pdp-trust-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+        </svg>
+        14-day easy returns &amp; exchanges
+      </div>
+      <div class="pdp-trust-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Crafted in limited edition runs
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="pdp-acc">
+      <div class="pdp-acc-item" id="acc-details">
+        <button class="pdp-acc-btn" onclick="toggleAcc('acc-details')">
+          <span>Product Details</span>
+          <span class="pdp-acc-icon">+</span>
+        </button>
+        <div class="pdp-acc-body">
+          <div class="pdp-acc-inner">
+            <ul>
+              <li>Premium quality fabric, ethically sourced</li>
+              <li>Relaxed silhouette with structured finish</li>
+              <li>Crafted in a limited run of 200 pieces</li>
+              <li>Model is 5′9″ wearing size S</li>
+              <li>Country of origin: India</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-acc-item" id="acc-care">
+        <button class="pdp-acc-btn" onclick="toggleAcc('acc-care')">
+          <span>Care Instructions</span>
+          <span class="pdp-acc-icon">+</span>
+        </button>
+        <div class="pdp-acc-body">
+          <div class="pdp-acc-inner">
+            <ul>
+              <li>Dry clean recommended</li>
+              <li>Hand wash in cold water if needed</li>
+              <li>Do not tumble dry</li>
+              <li>Iron on low heat with cloth barrier</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-acc-item" id="acc-ship">
+        <button class="pdp-acc-btn" onclick="toggleAcc('acc-ship')">
+          <span>Shipping &amp; Returns</span>
+          <span class="pdp-acc-icon">+</span>
+        </button>
+        <div class="pdp-acc-body">
+          <div class="pdp-acc-inner">
+            <ul>
+              <li>Standard delivery: 4–6 business days</li>
+              <li>Express delivery available at checkout</li>
+              <li>Free returns within 14 days</li>
+              <li>Original packaging must be intact</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /info -->
+</div><!-- /pdp-wrap -->
+
+<!-- RELATED PRODUCTS -->
+<div class="pdp-related">
+  <div class="pdp-related-head">
+    <div>
+      <div class="eyebrow">You may also like</div>
+      <h2>Complete the Look</h2>
+    </div>
+    <a href="shop.html" class="pdp-related-link">View All</a>
+  </div>
+  <div class="rel-grid" id="related"></div>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-logo">Shenova</div>
+    © 2026 SHENOVA — All rights reserved
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
 <div class="drawer-overlay" onclick="closeCart()"></div>
-<aside class="drawer">
-  <div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div>
+<aside class="drawer" role="dialog" aria-label="Shopping bag">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:26px;color:var(--muted)" aria-label="Close">×</button>
+  </div>
   <div class="drawer-body"></div>
-  <div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div>
+  <div class="drawer-foot">
+    <div class="total">
+      <span>Total</span>
+      <span>₹0</span>
+    </div>
+    <a class="btn-checkout" href="checkout.html">Proceed to Checkout</a>
+  </div>
 </aside>
-<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
+<!-- MODAL -->
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <h3></h3>
+    <p></p>
+    <button class="modal-btn" onclick="closeModal()">Continue</button>
+  </div>
+</div>
+
+<!-- ZOOM OVERLAY -->
+<div class="pdp-zoom-overlay" id="pdp-zoom-overlay" onclick="closeZoom()">
+  <span class="pdp-zoom-x" onclick="closeZoom()" aria-label="Close zoom">×</span>
+  <img id="pdp-zoom-img" src="" alt="Zoomed product">
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
 <script src="js/product.js"></script>
-</body></html>
+
+<script>
+/* ── Scroll progress ──────────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  document.getElementById('s-prog').style.width = (pct * 100) + '%';
+});
+
+/* ── Loader ───────────────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('pdp-loader')?.classList.add('hide'), 1800);
+});
+
+/* ── Nav scroll ───────────────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ── Mobile hamburger ─────────────────────────────────────────── */
+document.querySelector('.hamburger')?.addEventListener('click', () => {
+  document.querySelector('.hamburger').classList.toggle('active');
+  document.querySelector('.mobile-menu').classList.toggle('open');
+});
+
+/* ── Accordion ────────────────────────────────────────────────── */
+window.toggleAcc = function(id) {
+  const item = document.getElementById(id);
+  if (!item) return;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.pdp-acc-item').forEach(a => a.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+};
+
+/* ── Zoom ─────────────────────────────────────────────────────── */
+document.getElementById('pdp-main-img')?.addEventListener('click', function() {
+  const overlay = document.getElementById('pdp-zoom-overlay');
+  document.getElementById('pdp-zoom-img').src = this.src;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+window.closeZoom = function() {
+  document.getElementById('pdp-zoom-overlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+/* ── Modal helpers (used by product.js) ───────────────────────── */
+window.showModal = function(title, msg) {
+  const m = document.querySelector('.modal');
+  m.querySelector('h3').textContent = title;
+  m.querySelector('p').textContent  = msg;
+  m.classList.add('open');
+};
+window.closeModal = function() {
+  document.querySelector('.modal').classList.remove('open');
+};
+
+/* ── Keyboard navigation ──────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') window.nextImg?.();
+  if (e.key === 'ArrowLeft')  window.prevImg?.();
+  if (e.key === 'Escape')   { window.closeZoom?.(); window.closeModal?.(); }
+});
+
+/* ── GSAP scroll reveals for related grid ─────────────────────── */
+if (window.gsap && window.ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.rel-grid .product-card').forEach((el, i) => {
+    gsap.from(el, {
+      opacity: 0, y: 32, duration: 1.1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 90%' },
+      delay: i * 0.08
+    });
+  });
+}
+</script>
+</body>
+</html>
