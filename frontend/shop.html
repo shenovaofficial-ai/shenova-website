@@ -1,202 +1,362 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shop · Shenova</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-</head><body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop · Shenova</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Base global styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Luxury shop overrides (new file) -->
+  <link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     LOADER
+═══════════════════════════════ -->
 <div class="loader">
-
-  <div class="loader-logo">
-    SHENOVA
-  </div>
-
+  <div class="loader-logo">SHENOVA</div>
   <div class="loader-line"></div>
-
 </div>
 <div class="progress"></div>
 
+<!-- ═══════════════════════════════
+     NAV  (all classes intact for main.js)
+═══════════════════════════════ -->
 <nav class="nav scrolled">
   <div class="container nav-inner">
     <a class="nav-logo" href="index.html">SHENOVA</a>
-    <div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-    <div class="nav-icons"><a href="wishlist.html"><button>♡</button></a><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <a href="wishlist.html"><button aria-label="Wishlist">♡</button></a>
+      <button class="cart-btn" aria-label="Open bag">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
   </div>
 </nav>
-<div class="mobile-menu">  <a href="index.html">
-    Home
-  </a><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="wishlist.html">Wishlist</a></div>
 
-<!-- SHOP HERO -->
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="wishlist.html">Wishlist</a>
+</div>
 
-<section class="product-hero">
+<!-- ═══════════════════════════════
+     HERO — Full-screen editorial
+     .product-hero / .product-hero-img /
+     .product-hero-overlay / .product-hero-content
+     kept for CSS hook; completely restyled in shop.css
+═══════════════════════════════ -->
+<section class="product-hero" id="hero-top">
 
   <picture>
-
-    <!-- MOBILE IMAGE -->
-
-    <source
-    media="(max-width:768px)"
-    srcset="images/bg2.png">
-
-    <!-- DESKTOP IMAGE -->
-
-    <img
-    class="product-hero-img"
-    src="images/bg1.png">
-
+    <source media="(max-width:768px)" srcset="images/bg2.png">
+    <img class="product-hero-img" src="images/bg1.png"
+         alt="Shenova Collection 2026" fetchpriority="high">
   </picture>
 
   <div class="product-hero-overlay"></div>
 
+  <!-- Grain texture layer -->
+  <div class="hero-grain" aria-hidden="true"></div>
+
   <div class="product-hero-content">
 
-    <p>
-      SHENOVA COLLECTION 2026
-    </p>
+    <!-- Top label -->
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span>SS 2026 · Limited Edition</span>
+    </div>
 
-    <h1>
-      Quiet Luxury<br>
-      For The Modern Muse
+    <!-- Big editorial headline -->
+    <h1 class="hero-headline">
+      <span class="hl-1">Quiet</span>
+      <span class="hl-2">Luxury</span>
     </h1>
 
+    <!-- Sub line -->
+    <p class="hero-sub">For the Modern Muse</p>
+
+    <!-- Scroll CTA -->
+    <a class="hero-cta-wrap" href="#shop-anchor">
+      <span class="hero-cta-text">Explore Collection</span>
+      <span class="hero-cta-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <polyline points="19 12 12 19 5 12"/>
+        </svg>
+      </span>
+    </a>
+
+  </div>
+
+  <!-- Scroll indicator bar at bottom -->
+  <div class="hero-bottom-bar" aria-hidden="true">
+    <span>SHENOVA</span>
+    <div class="hero-scroll-track"><div class="hero-scroll-thumb"></div></div>
+    <span>2026</span>
   </div>
 
 </section>
 
-<!-- SHOP SECTION -->
+<!-- ═══════════════════════════════
+     TICKER / MARQUEE
+═══════════════════════════════ -->
+<div class="shop-ticker" aria-hidden="true">
+  <div class="shop-ticker-inner">
+    <span>New Arrivals</span><i>✦</i>
+    <span>Quiet Luxury</span><i>✦</i>
+    <span>Crafted in India</span><i>✦</i>
+    <span>Limited Edition Runs</span><i>✦</i>
+    <span>Free Returns · 14 Days</span><i>✦</i>
+    <span>Free Delivery Above ₹2,000</span><i>✦</i>
+    <span>New Arrivals</span><i>✦</i>
+    <span>Quiet Luxury</span><i>✦</i>
+    <span>Crafted in India</span><i>✦</i>
+    <span>Limited Edition Runs</span><i>✦</i>
+    <span>Free Returns · 14 Days</span><i>✦</i>
+    <span>Free Delivery Above ₹2,000</span><i>✦</i>
+  </div>
+</div>
 
-<div class="container">
+<!-- ═══════════════════════════════
+     SHOP SECTION
+     All IDs / classes wired to shop.js:
+       .shop-head  #sort  .filters  .chip[data-cat]
+       .products-grid  #shop-grid
+═══════════════════════════════ -->
+<div id="shop-anchor" class="shop-wrap">
+  <div class="container">
 
-  <div class="shop-head">
+    <!-- ── Controls row ── -->
+    <div class="shop-controls">
 
-    <div>
-
-      <div class="eyebrow">
-        Collection
+      <!-- Left: title -->
+      <div class="shop-title-block">
+        <p class="shop-eyebrow">The Collection</p>
+        <h2 class="shop-main-title">All Pieces</h2>
+        <p class="shop-piece-count" id="shop-count"></p>
       </div>
 
-      <h1 class="serif reveal shop-title">
-        All Pieces
-      </h1>
+      <!-- Right: sort -->
+      <div class="shop-sort-wrap">
+        <label class="sort-label" for="sort">Sort by</label>
+        <select id="sort" aria-label="Sort products">
+          <option value="new">Newest</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+      </div>
 
     </div>
 
-    <select id="sort">
-      <option value="new">Newest</option>
-      <option value="price-asc">
-        Price: Low → High
-      </option>
-      <option value="price-desc">
-        Price: High → Low
-      </option>
-    </select>
+    <!-- ── Filter tabs ── -->
+    <div class="filters" role="group" aria-label="Filter by category">
+      <button class="chip active" data-cat="all">All</button>
+      <button class="chip" data-cat="dress">Dresses</button>
+      <button class="chip" data-cat="tops">Tops</button>
+      <button class="chip" data-cat="kurti">Kurti</button>
+      <button class="chip" data-cat="co-ord set">Co-ord Sets</button>
+    </div>
+
+    <!-- ── Product grid (filled by shop.js + main.js) ── -->
+    <div class="products-grid" id="shop-grid">
+      <!-- productCard() output injected here -->
+    </div>
+
+    <!-- Empty state -->
+    <div class="shop-empty" id="shop-empty" style="display:none">
+      <p>No pieces found in this category.</p>
+    </div>
 
   </div>
-
-  <div class="filters" style="margin-bottom:50px">
-
-  <button class="chip active"
-  data-cat="all">
-    All
-  </button>
-
-  <button class="chip"
-  data-cat="dress">
-    Dresses
-  </button>
-
-  <button class="chip"
-  data-cat="tops">
-    Tops
-  </button>
-
-  <button class="chip"
-  data-cat="kurti">
-    Kurti
-  </button>
-
-  <button class="chip"
-  data-cat="co-ord set">
-    Co-ord Sets
-  </button>
-
 </div>
 
-  <div class="products-grid" id="shop-grid"></div>
+<!-- ═══════════════════════════════
+     FOOTER
+═══════════════════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-logo">SHENOVA</span>
+      <span class="footer-copy">© 2026 — All rights reserved</span>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-</div>
-
-<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
-
+<!-- ═══════════════════════════════
+     CART DRAWER  (all classes used by main.js intact)
+═══════════════════════════════ -->
 <div class="drawer-overlay" onclick="closeCart()"></div>
-<aside class="drawer">
-  <div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div>
+<aside class="drawer" role="dialog" aria-label="Shopping bag">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" class="drawer-close" aria-label="Close">×</button>
+  </div>
   <div class="drawer-body"></div>
-  <div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div>
+  <div class="drawer-foot">
+    <div class="total">
+      <span>Total</span>
+      <span>₹0</span>
+    </div>
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
 </aside>
-<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
-<!-- QUICK VIEW MODAL -->
 
-<div class="quick-modal" id="quick-modal">
+<!-- ═══════════════════════════════
+     MODAL  (used by main.js)
+═══════════════════════════════ -->
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <h3></h3>
+    <p></p>
+    <button class="btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
 
-  <div class="quick-overlay"
-  onclick="closeQuickView()"></div>
+<!-- ═══════════════════════════════
+     QUICK VIEW MODAL
+     All IDs exactly as main.js requires:
+       #quick-modal  .quick-modal  .quick-overlay
+       .quick-box  .quick-grid  .quick-image-wrap
+       #quick-image  .quick-content  .quick-label
+       #quick-title  #quick-price  #quick-desc
+       .quick-sizes  #quick-size-wrap
+       #quick-cart-btn  .quick-close
+═══════════════════════════════ -->
+<div class="quick-modal" id="quick-modal" role="dialog" aria-label="Quick product view">
+
+  <div class="quick-overlay" onclick="closeQuickView()"></div>
 
   <div class="quick-box">
-
-    <button class="quick-close"
-    onclick="closeQuickView()">
-      ×
-    </button>
+    <button class="quick-close" onclick="closeQuickView()" aria-label="Close">×</button>
 
     <div class="quick-grid">
 
+      <!-- Image -->
       <div class="quick-image-wrap">
-
-        <img id="quick-image">
-
+        <img id="quick-image" src="" alt="Product image">
       </div>
 
+      <!-- Info -->
       <div class="quick-content">
-
-        <p class="quick-label">
-          SHENOVA COLLECTION
-        </p>
-
+        <p class="quick-label">SHENOVA COLLECTION</p>
         <h2 id="quick-title"></h2>
-
-        <div class="quick-price"
-        id="quick-price"></div>
-
-        <p class="quick-desc"
-        id="quick-desc"></p>
+        <div class="quick-price" id="quick-price"></div>
+        <p class="quick-desc" id="quick-desc"></p>
 
         <div class="quick-sizes">
-
           <p>SELECT SIZE</p>
-
           <div id="quick-size-wrap"></div>
-
         </div>
 
-        <button class="quick-cart-btn"
-        id="quick-cart-btn">
+        <button class="quick-cart-btn" id="quick-cart-btn">
           ADD TO BAG
         </button>
 
+        <div class="quick-trust">
+          <span>✦ Free delivery above ₹2,000</span>
+          <span>✦ 14-day easy returns</span>
+        </div>
       </div>
 
     </div>
-
   </div>
-
 </div>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
+<!-- ═══════════════════════════════
+     SCRIPTS — load order preserved
+═══════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
 <script src="js/shop.js"></script>
-</body></html>
+
+<script>
+/* ── Modal helpers (required by main.js quick view) ────────── */
+window.showModal = function(title, msg) {
+  const m = document.querySelector('.modal');
+  if (!m) return;
+  m.querySelector('h3').textContent = title;
+  m.querySelector('p').textContent  = msg;
+  m.classList.add('open');
+};
+window.closeModal = function() {
+  document.querySelector('.modal')?.classList.remove('open');
+};
+
+/* ── Live piece count ────────────────────────────────────────── */
+(function() {
+  const grid    = document.getElementById('shop-grid');
+  const countEl = document.getElementById('shop-count');
+  if (!grid || !countEl) return;
+  const obs = new MutationObserver(() => {
+    const n = grid.querySelectorAll('.product-card').length;
+    countEl.textContent = n > 0 ? n + (n === 1 ? ' Piece' : ' Pieces') : '';
+    countEl.style.opacity = n > 0 ? '1' : '0';
+  });
+  obs.observe(grid, { childList: true });
+})();
+
+/* ── Hamburger icon morph ───────────────────────────────────── */
+document.querySelector('.hamburger')?.addEventListener('click', function() {
+  this.classList.toggle('open');
+});
+
+/* ── Subtle hero parallax (desktop only, passive) ───────────── */
+(function() {
+  const img = document.querySelector('.product-hero-img');
+  if (!img || !window.matchMedia('(min-width: 769px)').matches) return;
+  let raf = false;
+  window.addEventListener('scroll', () => {
+    if (!raf) {
+      requestAnimationFrame(() => {
+        const y = Math.min(window.scrollY * 0.22, 120);
+        img.style.transform = `scale(1.06) translateY(${y}px)`;
+        raf = false;
+      });
+      raf = true;
+    }
+  }, { passive: true });
+})();
+
+/* ── Scroll anchor smooth offset ───────────────────────────── */
+document.querySelector('.hero-cta-wrap')?.addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('shop-anchor')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+/* ── Scroll progress bar ─────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  const bar = document.querySelector('.progress');
+  if (bar) bar.style.width = (pct * 100) + '%';
+}, { passive: true });
+</script>
+
+</body>
+</html>
