@@ -7,17 +7,17 @@ if(typeof API_BASE === "undefined"){
 // ================= LOADER =================
 /* ================= LOADER ================= */
 
-window.onload = function () {
+window.addEventListener('load', ()=>{
 
-  const loader = document.querySelector('.lux-loader');
+const loader = document.querySelector('.lux-loader'); 
 
-  if (loader) {
+  setTimeout(()=>{
 
-    loader.style.display = 'none';
+loader?.classList.add('hide');
 
-  }
+  }, 1800);
 
-};
+});
 
 // ================= NAV =================
 const nav = document.querySelector('.nav');
