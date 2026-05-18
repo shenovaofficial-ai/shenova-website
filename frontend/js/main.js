@@ -7,15 +7,23 @@ if(typeof API_BASE === "undefined"){
 // ================= LOADER =================
 /* ================= LOADER ================= */
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', () => {
 
-const loader = document.querySelector('.lux-loader'); 
+  const loader = document.querySelector('.lux-loader');
 
-  setTimeout(()=>{
+  if(loader){
 
-loader?.classList.add('hide');
+    setTimeout(() => {
 
-  }, 1800);
+      loader.classList.add('hide');
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+      }, 1000);
+
+    }, 1200);
+
+  }
 
 });
 
