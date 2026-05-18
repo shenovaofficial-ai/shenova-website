@@ -9,12 +9,11 @@ if(typeof API_BASE === "undefined"){
 
 window.addEventListener('load', ()=>{
 
-  const loader =
-    document.querySelector('.loader');
+const loader = document.querySelector('.lux-loader'); 
 
   setTimeout(()=>{
 
-    loader.classList.add('hide');
+loader?.classList.add('hide');
 
   }, 1800);
 

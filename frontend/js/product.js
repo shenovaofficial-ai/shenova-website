@@ -294,3 +294,18 @@ document.addEventListener('keydown', e => {
 
 /* ──── Init ──── */
 loadProduct();
+window.openSizeGuide = function(){
+
+  document
+  .getElementById('sizeGuide')
+  .classList.add('active');
+
+}
+
+window.closeSizeGuide = function(){
+
+  document
+  .getElementById('sizeGuide')
+  .classList.remove('active');
+
+}

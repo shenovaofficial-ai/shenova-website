@@ -779,7 +779,9 @@ footer {
     <div class="pdp-opt">
       <div class="pdp-opt-head">
         <span class="pdp-opt-label">Size</span>
-        <a class="pdp-opt-aux" href="#">Size guide</a>
+        <a class="pdp-opt-aux" href="javascript:void(0)" onclick="openSizeGuide()">
+  Size guide
+</a>
       </div>
       <div class="pdp-sizes" id="pdp-sizes"></div>
     </div>
@@ -1026,5 +1028,29 @@ if (window.gsap && window.ScrollTrigger) {
   });
 }
 </script>
+<!-- SIZE GUIDE MODAL -->
+
+<div class="size-guide-overlay" id="sizeGuide">
+
+  <div class="size-guide-modal">
+
+    <button class="size-close" onclick="closeSizeGuide()">
+      ×
+    </button>
+
+    <div class="size-guide-head">
+      <h2>Size Guide</h2>
+      <p>Find your perfect Shenova fit</p>
+    </div>
+
+    <img
+      src="images/sizechart.png"
+      alt="Size Guide"
+      class="size-guide-img"
+    >
+
+  </div>
+
+</div>
 </body>
 </html>
