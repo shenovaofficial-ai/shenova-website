@@ -3,64 +3,567 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Shenova · Quiet Luxury for the Modern Woman</title>
-<meta name="description" content="Shenova — premium ready-to-wear. Timeless silhouettes, refined fabrics, designed in limited editions.">
+<title>Shenova · Quiet Luxury</title>
+<meta name="description" content="Shenova — premium ready-to-wear. Timeless silhouettes. Refined fabrics. Limited editions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<!-- Base global styles — untouched -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<!-- Luxury homepage styles — upgraded v4 -->
 <link rel="stylesheet" href="css/luxury.css">
-<!-- Luxury homepage additions — v4 enhancements -->
-<link rel="stylesheet" href="css/luxury-v4.css">
+
+<style>
+/* ====================================================
+   SHENOVA HOMEPAGE v5 — INLINE OVERRIDE STYLES
+   Rebuilds every section cleanly.
+   All main.js class/ID hooks preserved exactly.
+   ==================================================== */
+
+/* 1 · SCROLL REVEAL — guaranteed visible fallback */
+.sr{opacity:0;transform:translateY(36px);transition:opacity 1.05s cubic-bezier(0.16,1,0.3,1),transform 1.05s cubic-bezier(0.16,1,0.3,1)}
+.sr.on{opacity:1;transform:none}
+.sr[data-d="1"]{transition-delay:.12s}.sr[data-d="2"]{transition-delay:.24s}
+.sr[data-d="3"]{transition-delay:.36s}.sr[data-d="4"]{transition-delay:.48s}
+.sr[data-d="5"]{transition-delay:.60s}.sr[data-d="6"]{transition-delay:.72s}
+
+/* 2 · TOKENS */
+:root{
+  --ink:#0d0c0b;--cream:#faf7f2;--beige:#ece6dc;
+  --gold:#b8956a;--gold-lt:#d4b896;--muted:#7a756e;
+  --bg:#f6f3ee;--dark:#131210;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"DM Sans","Helvetica Neue",sans-serif;
+  --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --out:cubic-bezier(0.16,1,0.3,1);
+}
+
+/* 3 · SCROLL PROGRESS */
+#sh-prog{position:fixed;top:0;left:0;height:1px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));z-index:8000;width:0;transition:width .08s linear}
+
+/* 4 · ANNOUNCE BAR */
+#sh-bar{position:fixed;top:0;left:0;right:0;height:34px;background:var(--ink);z-index:700;display:flex;align-items:center;overflow:hidden}
+#sh-bar.gone{display:none}
+.sh-bar-inner{display:flex;gap:30px;white-space:nowrap;animation:barScroll 28s linear infinite;font:300 9px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:rgba(250,247,242,.36);padding-right:56px}
+.sh-bar-inner b{color:var(--gold);font-weight:300}
+.sh-bar-inner a{color:var(--gold)}
+.sh-bar-x{position:absolute;right:0;top:0;bottom:0;width:48px;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(250,247,242,.24);background:linear-gradient(to right,transparent,var(--ink) 36%);cursor:pointer;transition:color .25s;z-index:2}
+.sh-bar-x:hover{color:rgba(250,247,242,.7)}
+@keyframes barScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+body:not(.bar-off) .lux-nav{top:34px!important}
+body.bar-off .lux-nav{top:0!important}
+.lux-nav{transition:top .4s ease,padding .5s var(--ease),background .5s var(--ease),border-color .5s!important}
+
+/* 5 · CUSTOM CURSOR */
+#lx-c{position:fixed;width:32px;height:32px;border:1px solid rgba(13,12,11,.48);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .4s,height .4s,background .3s,border-color .3s,opacity .4s;mix-blend-mode:multiply;opacity:0}
+#lx-c.on{opacity:1}
+#lx-c.big{width:50px;height:50px;background:rgba(184,149,106,.08);border-color:rgba(184,149,106,.5)}
+#lx-d{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);opacity:0;transition:opacity .3s}
+#lx-d.on{opacity:1}
+@media(hover:hover)and(pointer:fine){body{cursor:none}a,button{cursor:none}}
+@media(hover:none){#lx-c,#lx-d{display:none}}
+
+/* 6 · LOADER */
+#sh-ld{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s .15s,visibility 1s .15s}
+#sh-ld.out{opacity:0;visibility:hidden;pointer-events:none}
+.sh-ld-w{font:300 clamp(30px,6vw,58px)/1 var(--serif);letter-spacing:.6em;color:var(--cream);display:flex}
+.sh-ld-w span{display:inline-block;opacity:0;transform:translateY(20px);animation:ldUp .8s var(--out) forwards}
+.sh-ld-w span:nth-child(1){animation-delay:.04s}.sh-ld-w span:nth-child(2){animation-delay:.12s}
+.sh-ld-w span:nth-child(3){animation-delay:.20s}.sh-ld-w span:nth-child(4){animation-delay:.28s}
+.sh-ld-w span:nth-child(5){animation-delay:.36s}.sh-ld-w span:nth-child(6){animation-delay:.44s}
+.sh-ld-w span:nth-child(7){animation-delay:.52s}
+@keyframes ldUp{to{opacity:1;transform:none}}
+.sh-ld-line{width:1px;height:0;background:var(--gold);margin:20px auto 14px;animation:ldLine .9s var(--out) .65s forwards}
+@keyframes ldLine{to{height:44px}}
+.sh-ld-sub{font:300 9.5px/1 var(--sans);letter-spacing:.34em;text-transform:uppercase;color:rgba(250,247,242,.22);opacity:0;animation:ldFd .6s ease 1.1s forwards}
+@keyframes ldFd{to{opacity:1}}
+
+/* 7 · HERO */
+.sh-hero{position:relative;height:100dvh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;background:#0a0908}
+.sh-hbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;transform:scale(1.08);transition:transform 11s var(--ease);will-change:transform}
+.sh-hbg.z{transform:scale(1)}
+.sh-hmob{display:none}
+.sh-hov1{position:absolute;inset:0;background:linear-gradient(160deg,rgba(10,9,8,.02) 0%,rgba(10,9,8,.1) 24%,rgba(10,9,8,.44) 62%,rgba(10,9,8,.96) 100%)}
+.sh-hov2{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 46%,transparent 30%,rgba(10,9,8,.44) 100%)}
+.sh-hgrain{position:absolute;inset:0;opacity:.038;z-index:3;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;animation:grain .5s steps(2) infinite}
+@keyframes grain{0%{background-position:0 0}25%{background-position:-10% 8%}50%{background-position:8% -5%}75%{background-position:-4% 16%}100%{background-position:0 0}}
+.sh-htape{position:absolute;bottom:128px;left:0;right:0;z-index:4;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:9px 0;overflow:hidden;pointer-events:none}
+.sh-htape-t{display:flex;gap:36px;white-space:nowrap;animation:tapeR 20s linear infinite;font:300 9px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+@keyframes tapeR{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sh-hbody{position:relative;z-index:5;width:100%;max-width:1420px;margin:0 auto;padding:0 52px 84px;display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.sh-hleft{max-width:740px}
+.sh-eyebrow{display:flex;align-items:center;gap:14px;font:300 9.5px/1 var(--sans);letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:22px}
+.sh-eyebrow-line{display:block;width:30px;height:1px;background:var(--gold);flex-shrink:0}
+.sh-htitle{font:300 clamp(72px,13vw,166px)/.88 var(--serif);letter-spacing:-.032em;color:var(--cream);margin-bottom:28px}
+.sh-htitle span{display:block}
+.sh-htitle em{font-style:italic}
+.sh-hsub{font:300 13px/1.8 var(--sans);letter-spacing:.1em;color:rgba(255,255,255,.36);margin-bottom:46px}
+.sh-hctas{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+
+/* CTA pill */
+.btn-pill{display:inline-flex;align-items:center;gap:11px;padding:15px 32px;background:var(--cream);color:var(--ink);border-radius:50px;font:400 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;transition:background .38s,color .38s,gap .38s var(--spring),transform .3s,box-shadow .38s}
+.btn-pill:hover{background:var(--gold);color:#fff;gap:19px;transform:translateY(-2px);box-shadow:0 12px 40px rgba(184,149,106,.28)}
+.btn-pill svg{transition:transform .38s var(--spring)}
+.btn-pill:hover svg{transform:translateX(3px)}
+.btn-pill.dk{background:var(--ink);color:var(--cream)}
+.btn-pill.dk:hover{background:var(--gold);color:#fff}
+
+/* Ghost CTA */
+.btn-ghost{font:300 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5);position:relative;padding-bottom:4px;transition:color .3s}
+.btn-ghost::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:rgba(255,255,255,.38);transition:width .4s var(--ease)}
+.btn-ghost:hover{color:rgba(255,255,255,.9)}
+.btn-ghost:hover::after{width:100%}
+
+/* Outline CTA */
+.btn-ol{display:inline-flex;align-items:center;padding:14px 36px;border:1px solid rgba(250,247,242,.15);border-radius:50px;font:300 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(250,247,242,.6);transition:background .42s,color .42s,border-color .42s,transform .3s}
+.btn-ol:hover{background:var(--gold);color:#fff;border-color:var(--gold);transform:translateY(-2px)}
+
+/* Hero stats */
+.sh-hright{display:flex;align-items:flex-end;gap:20px;padding-bottom:6px}
+.sh-stat{display:flex;flex-direction:column;align-items:center;gap:5px}
+.sh-stat-n{font:300 27px/1 var(--serif);color:var(--cream)}
+.sh-stat-l{font:300 8.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.sh-stat-r{width:1px;height:30px;background:rgba(255,255,255,.1);margin-bottom:2px}
+
+/* Scroll cue */
+.sh-scue{position:absolute;left:52px;bottom:32px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:9px}
+.sh-sline{width:1px;height:44px;background:rgba(255,255,255,.14);position:relative;overflow:hidden}
+.sh-sline::after{content:'';position:absolute;top:-44px;left:0;width:100%;height:44px;background:var(--gold);animation:scrollS 2.2s var(--ease) infinite}
+@keyframes scrollS{0%{top:-44px}65%{top:44px}100%{top:44px}}
+.sh-scue span{font:300 8.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.28);writing-mode:vertical-rl}
+
+/* Edition tag */
+.sh-etag{position:absolute;right:48px;bottom:48px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px}
+.sh-etag span{font:300 10px/1 var(--serif);letter-spacing:.22em;color:rgba(255,255,255,.26)}
+.sh-etag i{display:block;width:1px;height:26px;background:rgba(255,255,255,.1)}
+
+/* Mobile scroll indicator */
+.sh-mob-s{display:none;position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:5}
+.sh-mob-m{width:24px;height:38px;border:1px solid rgba(255,255,255,.2);border-radius:12px;display:flex;justify-content:center;padding-top:6px}
+.sh-mob-d{width:3px;height:7px;background:rgba(255,255,255,.42);border-radius:2px;animation:mobD 2.1s ease infinite}
+@keyframes mobD{0%{transform:translateY(0);opacity:1}60%{transform:translateY(11px);opacity:0}100%{transform:translateY(0);opacity:0}}
+
+/* 8 · MARQUEE */
+.sh-marq{background:var(--ink);overflow:hidden;padding:13px 0;user-select:none}
+.sh-marq-t{display:flex;gap:44px;white-space:nowrap;animation:marqS 32s linear infinite;font:300 9px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(250,247,242,.3)}
+@keyframes marqS{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sh-dot{font-size:5px;color:var(--gold);opacity:.65;vertical-align:middle}
+
+/* 9 · PILLARS */
+.sh-pillars{background:var(--cream);border-bottom:1px solid rgba(13,12,11,.07)}
+.sh-pillars-in{max-width:1420px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;align-items:center;min-height:92px}
+.sh-pillar{display:flex;flex-direction:column;align-items:center;gap:7px;padding:28px 18px;text-align:center}
+.sh-pillar-n{font:300 9.5px/1 var(--serif);color:var(--gold);letter-spacing:.18em}
+.sh-pillar-t{font:400 9.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+.sh-vrule{background:rgba(13,12,11,.07);align-self:stretch;margin:16px 0}
+
+/* 10 · SHARED SECTION STYLES */
+.sh-s{padding:108px 0}
+.sh-s .sh-wrap{max-width:1420px;margin:0 auto;padding:0 48px}
+.sh-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;gap:16px;flex-wrap:wrap}
+.sh-ey{font:400 9px/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}
+.sh-stitle{font:300 clamp(32px,4.2vw,60px)/1.05 var(--serif);letter-spacing:-.012em}
+.sh-stitle em{font-style:italic;color:var(--gold)}
+.sh-slink{font:400 9.5px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid #d9d0c4;padding-bottom:4px;transition:color .3s,border-color .3s;white-space:nowrap}
+.sh-slink:hover{color:var(--ink);border-color:var(--ink)}
+
+/* 11 · PRODUCT GRID */
+.sh-pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 18px}
+.sh-pgrid .product-card{position:relative}
+.sh-pgrid .product-image{aspect-ratio:3/4;overflow:hidden;background:var(--beige);border-radius:2px;position:relative}
+.sh-pgrid .product-image img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s cubic-bezier(0.19,1,0.22,1)}
+.sh-pgrid .product-card:hover .product-image .main-img{transform:scale(1.07)}
+.sh-pgrid .hover-img{position:absolute;inset:0;opacity:0;object-fit:cover;width:100%;height:100%;transition:opacity .6s var(--ease)}
+.sh-pgrid .product-card:hover .hover-img{opacity:1}
+.sh-pgrid .quick-btn{position:absolute;bottom:12px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(250,247,242,.96);color:var(--ink);font:400 9px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;padding:10px 20px;border-radius:50px;opacity:0;white-space:nowrap;transition:opacity .3s,transform .4s var(--spring),background .25s}
+.sh-pgrid .product-card:hover .quick-btn{opacity:1;transform:translateX(-50%) translateY(0)}
+.sh-pgrid .quick-btn:hover{background:var(--ink);color:var(--cream)}
+.sh-pgrid .product-info{padding:14px 2px 4px}
+.sh-pgrid .product-title{font:400 13px/1.3 var(--sans);letter-spacing:.02em;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh-pgrid .product-price{font:300 13px/1 var(--sans);color:var(--muted)}
+@media(hover:none){.sh-pgrid .quick-btn{opacity:1!important;transform:translateX(-50%) translateY(0)!important}}
+
+/* 12 · EDITORIAL SPLIT */
+.sh-split{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
+.sh-split-img{position:relative;overflow:hidden;background:var(--beige)}
+.sh-split-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 11s var(--ease)}
+.sh-split-img:hover img{transform:scale(1.044)}
+.sh-split-badge{position:absolute;top:26px;left:26px;font:300 9.5px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--cream);background:rgba(13,12,11,.3);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:9px 20px;border-radius:50px;border:1px solid rgba(255,255,255,.1)}
+.sh-split-txt{background:var(--cream);display:flex;flex-direction:column;justify-content:center;padding:clamp(52px,8vw,124px) clamp(44px,6vw,104px)}
+.sh-split-h{font:300 clamp(44px,6vw,82px)/1.02 var(--serif);letter-spacing:-.018em;margin:14px 0 26px}
+.sh-split-h em{font-style:italic;color:var(--gold)}
+.sh-split-p{font:300 14.5px/1.92 var(--sans);color:var(--muted);max-width:380px;margin-bottom:36px}
+.sh-ul{font:400 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--ink);position:relative;padding-bottom:5px;display:inline-block;transition:letter-spacing .42s var(--ease)}
+.sh-ul::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ink);transform-origin:right;transition:transform .5s var(--ease)}
+.sh-ul:hover{letter-spacing:.38em}
+.sh-ul:hover::after{transform-origin:left}
+
+/* 13 · CINEMATIC BREAK */
+.sh-cin{position:relative;height:clamp(360px,62vh,680px);overflow:hidden}
+.sh-cin img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);transition:transform 13s var(--ease)}
+.sh-cin.on img{transform:scale(1)}
+.sh-cin-ov{position:absolute;inset:0;background:linear-gradient(108deg,rgba(10,9,8,.72) 0%,rgba(10,9,8,.18) 52%,rgba(10,9,8,.46) 100%)}
+.sh-cin-cap{position:absolute;bottom:52px;left:clamp(36px,5.5vw,92px);z-index:2;max-width:640px}
+.sh-cin-cap p{font:300 italic clamp(24px,3.6vw,46px)/1.3 var(--serif);color:var(--cream);margin-top:10px}
+.sh-cin-num{position:absolute;right:48px;bottom:52px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px}
+.sh-cin-num span{font:300 10.5px/1 var(--serif);letter-spacing:.2em;color:rgba(255,255,255,.3)}
+.sh-cin-num i{display:block;width:1px;height:32px;background:rgba(255,255,255,.15)}
+
+/* 14 · THREE PANEL */
+.sh-three{background:var(--bg);padding:100px 0}
+.sh-3in{max-width:1420px;margin:0 auto;padding:0 44px;display:grid;grid-template-columns:1fr .82fr 1fr;gap:40px;align-items:center}
+.sh-3col{display:flex;flex-direction:column}
+.sh-3img{overflow:hidden;border-radius:2px;background:var(--beige)}
+.sh-3img img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;transition:transform 1.6s cubic-bezier(0.19,1,0.22,1)}
+.sh-3col:hover .sh-3img img{transform:scale(1.052)}
+.sh-3off{margin-top:56px}
+.sh-3cap{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 0}
+.sh-3cap p{font:400 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.sh-3num{font:300 36px/1 var(--serif);color:#d9d0c4}
+.sh-3cap-r{justify-content:flex-end;gap:14px}
+.sh-3mid{text-align:center;display:flex;flex-direction:column;align-items:center;padding:0 16px}
+.sh-3rule{display:block;width:1px;height:42px;background:var(--gold);margin:0 auto 26px}
+.sh-3h{font:300 clamp(38px,4.8vw,64px)/1.04 var(--serif);letter-spacing:-.015em;margin:10px 0 20px}
+.sh-3h em{font-style:italic;color:var(--gold)}
+.sh-3p{font:300 13.5px/1.88 var(--sans);color:var(--muted);max-width:258px;margin:0 auto 34px}
+
+/* 15 · DUAL PANEL */
+.sh-dual{display:grid;grid-template-columns:1fr 1fr;min-height:88vh}
+.sh-dl{position:relative;overflow:hidden}
+.sh-dl-img{position:relative;width:100%;height:100%;min-height:540px}
+.sh-dl-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 12s var(--ease)}
+.sh-dl:hover .sh-dl-img img{transform:scale(1.042)}
+.sh-dl-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 46%,rgba(10,9,8,.44) 100%)}
+.sh-dl-tag{position:absolute;top:26px;left:26px;font:300 9px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.sh-dr{display:grid;grid-template-rows:1fr 1fr}
+.sh-dr-txt{display:flex;flex-direction:column;justify-content:center;padding:clamp(46px,7vw,96px) clamp(36px,5.5vw,80px);background:var(--cream)}
+.sh-dr-h{font:300 clamp(42px,5vw,72px)/1.04 var(--serif);letter-spacing:-.016em;margin:12px 0 22px}
+.sh-dr-h em{font-style:italic;color:var(--gold)}
+.sh-dr-p{font:300 14px/1.9 var(--sans);color:var(--muted);max-width:340px}
+.sh-dr-img{position:relative;overflow:hidden}
+.sh-dr-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 12s var(--ease)}
+.sh-dr-img:hover img{transform:scale(1.04)}
+
+/* 16 · H-SCROLL GALLERY */
+.sh-gal{padding:108px 0 0;background:var(--bg)}
+.sh-gal-head{max-width:1420px;margin:0 auto;padding:0 48px}
+.sh-gal-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:52px 48px 72px;cursor:grab}
+.sh-gal-wrap::-webkit-scrollbar{display:none}
+.sh-gal-wrap.drag{cursor:grabbing}
+.sh-gal-track{display:flex;gap:20px;width:max-content}
+.sh-gc{width:clamp(208px,25vw,326px);flex-shrink:0}
+.sh-gc-img{aspect-ratio:3/4;overflow:hidden;border-radius:2px;background:var(--beige);margin-bottom:14px}
+.sh-gc-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(0.19,1,0.22,1)}
+.sh-gc:hover .sh-gc-img img{transform:scale(1.06)}
+.sh-gc-m{display:flex;justify-content:space-between;align-items:center;padding:0 2px}
+.sh-gc-m span:first-child{font:300 30px/1 var(--serif);color:#d9d0c4}
+.sh-gc-m span:last-child{font:400 9.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+/* 17 · MANIFESTO */
+.sh-mani{background:var(--ink);padding:clamp(88px,13vw,170px) 24px;text-align:center;position:relative;overflow:hidden}
+.sh-mani::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.sh-mani::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(184,149,106,.055) 0%,transparent 70%);pointer-events:none}
+.sh-mani-in{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.sh-mani-orn{font:300 clamp(80px,14vw,158px)/.65 var(--serif);color:var(--gold);opacity:.17;margin-bottom:-18px;display:block;user-select:none}
+.sh-mani-q{font:300 italic clamp(24px,3.8vw,54px)/1.3 var(--serif);color:var(--cream);letter-spacing:-.01em;margin-bottom:34px}
+.sh-mani-rule{width:34px;height:1px;background:var(--gold);margin:0 auto 20px}
+.sh-mani-by{font:300 9.5px/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:rgba(250,247,242,.22);margin-bottom:50px}
+
+/* 18 · SIGNATURE STRIP */
+.sh-sig{background:#131210;padding:68px 0;position:relative;overflow:hidden}
+.sh-sig::before,.sh-sig::after{content:'';position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(184,149,106,.2),transparent)}
+.sh-sig::before{top:0}.sh-sig::after{bottom:0}
+.sh-sig-in{max-width:1420px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:center;flex-wrap:nowrap}
+.sh-sig-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 40px;text-align:center}
+.sh-sig-v{font:300 clamp(18px,2.6vw,30px)/1 var(--serif);color:rgba(250,247,242,.58);letter-spacing:.05em}
+.sh-sig-l{font:300 8.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:rgba(250,247,242,.2)}
+.sh-sig-d{width:1px;height:48px;background:rgba(250,247,242,.07);flex-shrink:0}
+.sh-sig-c{padding:0 50px;text-align:center;flex-shrink:0}
+.sh-sig-logo{font:300 clamp(22px,3.2vw,40px)/1 var(--serif);letter-spacing:.52em;color:rgba(250,247,242,.48);margin-bottom:9px}
+.sh-sig-tag{font:300 8.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);opacity:.65}
+
+/* 19 · CATEGORY */
+.sh-cat{padding:108px 0;background:var(--cream)}
+.sh-cat .sh-wrap{max-width:1420px;margin:0 auto;padding:0 48px}
+.sh-cgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.sh-cc{display:block;position:relative;overflow:hidden;border-radius:2px;cursor:pointer}
+.sh-cc-img{aspect-ratio:3/4;overflow:hidden;background:var(--beige);position:relative}
+.sh-cc--tall .sh-cc-img{aspect-ratio:2/3}
+.sh-cc-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s cubic-bezier(0.19,1,0.22,1)}
+.sh-cc:hover .sh-cc-img img{transform:scale(1.06)}
+.sh-cc-lbl{position:absolute;bottom:0;left:0;right:0;padding:50px 20px 22px;background:linear-gradient(0deg,rgba(10,9,8,.72) 0%,transparent 100%);display:flex;align-items:flex-end;justify-content:space-between;color:var(--cream)}
+.sh-cc-lbl span{font:300 21px/1 var(--serif)}
+.sh-cc-lbl svg{opacity:0;transform:translateX(-10px);transition:opacity .35s,transform .42s var(--spring)}
+.sh-cc:hover .sh-cc-lbl svg{opacity:1;transform:translateX(0)}
+
+/* 20 · ATELIER PROMISES */
+.sh-atel{background:var(--bg);border-top:1px solid rgba(13,12,11,.07);border-bottom:1px solid rgba(13,12,11,.07)}
+.sh-atel-in{max-width:1420px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;align-items:center}
+.sh-ai{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:36px 16px}
+.sh-ai-ic{color:var(--gold);opacity:.8;margin-bottom:2px}
+.sh-ai-lbl{font:400 9.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.sh-ai p{font:300 12px/1.68 var(--sans);color:var(--muted);max-width:200px}
+
+/* 21 · REVIEWS */
+.sh-rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
+.sh-rv{padding:40px 34px;border:1px solid rgba(13,12,11,.08);border-radius:2px;background:var(--cream);transition:box-shadow .42s,transform .42s var(--ease)}
+.sh-rv:hover{box-shadow:0 12px 50px rgba(13,12,11,.07);transform:translateY(-5px)}
+.sh-rv.feat{background:var(--ink);border-color:transparent;transform:scale(1.022)}
+.sh-rv.feat:hover{transform:scale(1.022) translateY(-5px)}
+.sh-rv-stars{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:18px}
+.sh-rv p{font:300 italic 17px/1.7 var(--serif);margin-bottom:22px;color:var(--ink)}
+.sh-rv.feat p{color:rgba(250,247,242,.88)}
+.sh-rv-who{font:400 9.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.sh-rv.feat .sh-rv-who{color:rgba(250,247,242,.26)}
+
+/* 22 · INSTAGRAM GRID */
+.sh-insta{overflow:hidden}
+.sh-insta .sh-wrap{max-width:1420px;margin:0 auto;padding:0 48px}
+.sh-igrid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:4px;margin-top:52px}
+.sh-ii{position:relative;overflow:hidden;aspect-ratio:1;background:var(--beige);cursor:pointer}
+.sh-ii.tall{grid-row:span 2;aspect-ratio:unset}
+.sh-ii img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--ease),filter .4s}
+.sh-ii:hover img{transform:scale(1.07);filter:brightness(.8)}
+.sh-ii-hov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s}
+.sh-ii:hover .sh-ii-hov{opacity:1}
+.sh-ii-hov span{font:300 9.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:#fff;background:rgba(13,12,11,.36);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:9px 22px;border-radius:50px;border:1px solid rgba(255,255,255,.14)}
+
+/* 23 · NEWSLETTER */
+.sh-nl{background:var(--ink);padding:clamp(88px,12vw,148px) 24px;position:relative;overflow:hidden}
+.sh-nl::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:68px;background:linear-gradient(to bottom,var(--gold),transparent)}
+.sh-nl::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:860px;height:430px;background:radial-gradient(ellipse,rgba(184,149,106,.05) 0%,transparent 65%);pointer-events:none}
+.sh-nl-in{max-width:620px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.sh-nl-h{font:300 clamp(36px,5vw,64px)/1.06 var(--serif);color:var(--cream);margin:14px 0 16px}
+.sh-nl-h em{font-style:italic;color:var(--gold-lt)}
+.sh-nl-in > p{font:300 13.5px/1.8 var(--sans);color:rgba(250,247,242,.36);margin-bottom:44px}
+.sh-nl-form{display:flex;border-bottom:1px solid rgba(250,247,242,.16);max-width:460px;margin:0 auto 14px;transition:border-color .3s}
+.sh-nl-form:focus-within{border-color:var(--gold)}
+.sh-nl-inp{flex:1;background:none;border:none;color:var(--cream);padding:15px 0;font:300 14px/1 var(--sans);outline:none}
+.sh-nl-inp::placeholder{color:rgba(250,247,242,.22)}
+.sh-nl-btn{padding:15px 20px;font:400 9.5px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:rgba(250,247,242,.46);background:none;border:none;transition:color .3s;cursor:pointer}
+.sh-nl-btn:hover{color:var(--gold-lt)}
+.sh-nl-note{font:300 9.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:rgba(250,247,242,.13)}
+
+/* 24 · FOOTER */
+.sh-foot{background:#0a0908;color:rgba(250,247,242,.4);padding:84px 0 0}
+.sh-foot-top{display:grid;grid-template-columns:1.8fr 1fr;gap:56px;max-width:1420px;margin:0 auto;padding:0 48px 60px;border-bottom:1px solid rgba(250,247,242,.05)}
+.sh-foot-logo{font:300 26px/1 var(--serif);letter-spacing:.48em;color:var(--cream);margin-bottom:16px}
+.sh-foot-brand p{font:300 13px/1.75 var(--sans);max-width:268px;margin-bottom:24px}
+.sh-social{display:inline-flex;padding:9px 22px;border:1px solid rgba(250,247,242,.09);border-radius:50px;font:300 9.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:rgba(250,247,242,.44);transition:border-color .3s,color .3s}
+.sh-social:hover{border-color:var(--gold);color:var(--gold)}
+.sh-foot-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.sh-foot-col h4{font:400 9.5px/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:rgba(250,247,242,.22);margin-bottom:18px}
+.sh-foot-col a{display:block;font:300 13px/1 var(--sans);color:rgba(250,247,242,.38);padding:5px 0;transition:color .25s}
+.sh-foot-col a:hover{color:rgba(250,247,242,.86)}
+.sh-foot-bot{display:flex;justify-content:space-between;align-items:center;padding:20px 48px;font:300 10.5px/1 var(--sans);letter-spacing:.12em;flex-wrap:wrap;gap:10px;max-width:1420px;margin:0 auto}
+.sh-foot-legal{display:flex;gap:22px}
+.sh-foot-legal a{color:rgba(250,247,242,.22);font-size:10.5px;transition:color .25s}
+.sh-foot-legal a:hover{color:rgba(250,247,242,.62)}
+
+/* 25 · QUICK VIEW MODAL */
+#quick-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(10,9,8,.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#quick-modal.show{display:flex;animation:qmFd .45s var(--out)}
+@keyframes qmFd{from{opacity:0}to{opacity:1}}
+.qm-card{background:var(--cream);border-radius:3px;max-width:min(880px,95vw);width:100%;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;position:relative;animation:qmUp .5s var(--out);scrollbar-width:none}
+.qm-card::-webkit-scrollbar{display:none}
+@keyframes qmUp{from{transform:translateY(28px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.qm-img{background:var(--beige);overflow:hidden;min-height:480px;position:relative}
+.qm-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.4s cubic-bezier(0.19,1,0.22,1)}
+.qm-img:hover img{transform:scale(1.05)}
+.qm-info{padding:50px 42px;display:flex;flex-direction:column}
+.qm-lbl{font:400 8.5px/1 var(--sans);letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+#quick-title{font:300 clamp(24px,3.5vw,38px)/1.08 var(--serif);color:var(--ink);margin-bottom:10px;letter-spacing:-.01em}
+#quick-price{font:300 16px/1 var(--sans);color:var(--muted);margin-bottom:16px}
+#quick-desc{font:300 13.5px/1.85 var(--sans);color:var(--muted);margin-bottom:26px}
+.qm-size-lbl{font:400 8.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+#quick-size-wrap{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:26px}
+.size-pill{min-width:44px;height:44px;padding:0 12px;border-radius:50px;border:1px solid rgba(13,12,11,.12);background:transparent;font:300 11.5px/1 var(--sans);letter-spacing:.06em;transition:background .25s,color .25s,border-color .25s;cursor:pointer}
+.size-pill.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.size-pill:hover:not(.active){border-color:var(--ink)}
+#quick-cart-btn{margin-top:auto;background:var(--ink);color:var(--cream);border-radius:50px;padding:15px 30px;font:400 9.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;transition:background .35s,transform .3s;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#quick-cart-btn:hover{background:var(--gold);transform:translateY(-2px)}
+.qm-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(13,12,11,.06);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .25s,transform .35s;z-index:10}
+.qm-close:hover{background:rgba(13,12,11,.13);transform:rotate(90deg)}
+.qm-trust{display:flex;flex-direction:column;gap:7px;margin-top:18px}
+.qm-trust span{font:300 10.5px/1 var(--sans);letter-spacing:.1em;color:var(--muted)}
+
+/* 26 · CART DRAWER */
+.drawer{background:var(--cream)!important;font-family:var(--sans)!important;border-left:1px solid rgba(13,12,11,.07)!important}
+.drawer-head{border-bottom:1px solid rgba(13,12,11,.07)!important;padding:26px 26px 20px!important}
+.drawer-head h3{font:300 24px/1 var(--serif)!important;letter-spacing:.04em!important}
+
+/* 27 · TOAST */
+#sh-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--cream);padding:13px 28px;border-radius:50px;font:300 11.5px/1 var(--sans);letter-spacing:.18em;opacity:0;pointer-events:none;z-index:9000;transition:opacity .4s,transform .4s var(--spring);white-space:nowrap;border:1px solid rgba(250,247,242,.09)}
+#sh-toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 28 · SPIN POPUP */
+#spin-popup{position:fixed;inset:0;z-index:9998;background:rgba(10,9,8,.76);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:24px}
+#spin-popup.show{display:flex;animation:qmFd .5s var(--out)}
+.sp-box{background:var(--cream);border-radius:4px;max-width:min(840px,96vw);width:100%;max-height:92vh;overflow-y:auto;scrollbar-width:none;display:grid;grid-template-columns:1fr 1fr;position:relative;animation:qmUp .55s var(--out)}
+.sp-box::-webkit-scrollbar{display:none}
+.sp-x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(13,12,11,.07);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .25s,transform .3s;z-index:10}
+.sp-x:hover{background:rgba(13,12,11,.14);transform:rotate(90deg)}
+.sp-left{background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 36px;gap:26px}
+.sp-lh{font:300 italic clamp(26px,3.8vw,42px)/1.1 var(--serif);color:var(--cream);text-align:center}
+.sp-lsub{font:300 10px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:rgba(250,247,242,.28);text-align:center}
+.sp-wheel-wrap{position:relative;width:220px;height:220px}
+#wheel{width:220px;height:220px;border-radius:50%;transition:none;position:relative;display:block;cursor:pointer}
+.sp-wptr{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:16px solid var(--gold);z-index:3}
+.sp-wcenter{width:52px;height:52px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font:400 8.5px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.18);transition:transform .2s}
+.sp-right{padding:50px 44px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.sp-right h2{font:300 clamp(28px,3.8vw,44px)/1.08 var(--serif);letter-spacing:-.01em;color:var(--ink)}
+.sp-right h2 em{font-style:italic;color:var(--gold)}
+.sp-right > p{font:300 13px/1.82 var(--sans);color:var(--muted)}
+.sp-inp{display:block;width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(13,12,11,.12);background:none;font:300 14px/1 var(--sans);color:var(--ink);outline:none;transition:border-color .3s}
+.sp-inp::placeholder{color:rgba(13,12,11,.3)}
+.sp-inp:focus{border-color:var(--gold)}
+.sp-submit{background:var(--ink);color:var(--cream);border-radius:50px;padding:15px 30px;font:400 9.5px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;transition:background .35s,transform .3s;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:4px}
+.sp-submit:hover{background:var(--gold);transform:translateY(-2px)}
+.sp-note{font:300 9px/1.6 var(--sans);color:rgba(13,12,11,.3);letter-spacing:.06em}
+.sp-error{font:300 10.5px/1.5 var(--sans);color:#c0392b;letter-spacing:.04em;padding:6px 0;display:none}
+.sp-error.show{display:block}
+
+/* 29 · COUPON POPUP */
+#coupon-popup{position:fixed;inset:0;z-index:9997;background:rgba(10,9,8,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:24px}
+#coupon-popup.show{display:flex;animation:qmFd .5s ease}
+.cp-box{background:var(--ink);border-radius:4px;max-width:440px;width:100%;padding:52px 44px;text-align:center;position:relative;border:1px solid rgba(184,149,106,.18);animation:qmUp .5s var(--out)}
+.cp-x{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(250,247,242,.07);font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(250,247,242,.4);transition:background .25s}
+.cp-x:hover{background:rgba(250,247,242,.14)}
+.cp-box h2{font:300 clamp(26px,3.8vw,40px)/1.1 var(--serif);color:var(--cream);margin:12px 0 8px}
+.cp-box > p{font:300 12px/1.6 var(--sans);color:rgba(250,247,242,.36);margin-bottom:20px}
+#coupon-discount{font:300 italic 48px/1 var(--serif);color:var(--gold);margin-bottom:20px;letter-spacing:-.01em}
+.cp-code{display:flex;align-items:center;justify-content:space-between;background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.1);border-radius:50px;padding:12px 18px 12px 24px;margin-bottom:16px}
+.cp-code span{font:400 13px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--cream)}
+.cp-copy{background:var(--gold);color:#fff;border-radius:50px;padding:8px 16px;font:400 9px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;cursor:pointer;transition:background .25s}
+.cp-copy:hover{background:var(--gold-lt)}
+.cp-note{font:300 9.5px/1.6 var(--sans);color:rgba(250,247,242,.2);letter-spacing:.06em}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1100px){
+  .sh-3in{grid-template-columns:1fr 1fr}
+  .sh-3mid{grid-column:1/-1;order:-1}
+  .sh-dual{grid-template-columns:1fr;min-height:auto}
+  .sh-dr{display:flex;flex-direction:column}
+  .sh-dl-img{min-height:480px}
+  .sh-pillars-in{grid-template-columns:1fr 1fr}
+  .sh-atel-in{grid-template-columns:1fr 1fr}
+  .sh-atel-in .sh-vrule{display:none}
+  .sh-ai{border-bottom:1px solid rgba(13,12,11,.06)}
+}
+@media(max-width:900px){
+  .sh-pgrid{grid-template-columns:repeat(2,1fr);gap:20px 12px}
+  .sh-split{grid-template-columns:1fr}
+  .sh-split-img{aspect-ratio:4/3}
+  .sh-split-txt{padding:40px 24px 50px}
+  .sh-cgrid{grid-template-columns:1fr 1fr}
+  .sh-cc--tall{grid-column:span 2}
+  .sh-cc--tall .sh-cc-img{aspect-ratio:16/9}
+  .sh-rv-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+  .sh-rv.feat{transform:none}
+  .sh-rv.feat:hover{transform:translateY(-5px)}
+  .sh-igrid{grid-template-columns:repeat(3,1fr)}
+  .sh-ii.tall{grid-row:auto;aspect-ratio:1}
+  .sp-box{grid-template-columns:1fr;max-width:420px}
+  .sp-left{display:none}
+  .sh-s .sh-wrap,.sh-cat .sh-wrap,.sh-insta .sh-wrap,.sh-gal-head{padding:0 20px}
+  .sh-gal-wrap{padding:44px 20px 60px}
+}
+@media(max-width:768px){
+  .sh-hbg{display:none}
+  .sh-hmob{display:block!important;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;transform:scale(1.08);transition:transform 11s var(--ease)}
+  .sh-hmob.z{transform:scale(1)}
+  .sh-hbody{padding:0 22px 76px;flex-direction:column;align-items:flex-start;gap:24px}
+  .sh-hright{display:none}
+  .sh-htitle{font-size:clamp(56px,14.5vw,86px)}
+  .sh-scue,.sh-etag{display:none}
+  .sh-mob-s{display:flex}
+  .sh-htape{bottom:106px}
+  .sh-pillars-in{grid-template-columns:1fr;padding:0 22px}
+  .sh-vrule{display:block;width:36px!important;height:1px!important;margin:0 auto}
+  .sh-pillar{padding:16px 0;flex-direction:row;gap:14px;text-align:left;align-items:center}
+  .sh-s{padding:68px 0}
+  .sh-head{margin-bottom:44px}
+  .sh-split-txt{padding:38px 22px 46px}
+  .sh-three{padding:60px 0}
+  .sh-3in{grid-template-columns:1fr;gap:26px;padding:0 22px}
+  .sh-3off{margin-top:0}
+  .sh-dr-txt{padding:40px 22px 44px}
+  .sh-atel-in{grid-template-columns:1fr;padding:0 22px}
+  .sh-ai{flex-direction:row;text-align:left;align-items:flex-start}
+  .sh-sig-in{flex-wrap:wrap;padding:0 22px}
+  .sh-sig-c{order:-1;width:100%;padding:0 0 24px;margin-bottom:20px;border-bottom:1px solid rgba(250,247,242,.07)}
+  .sh-sig-item{padding:10px 16px}
+  .sh-sig-d{height:1px;width:36px;align-self:center}
+  .sh-igrid{grid-template-columns:repeat(2,1fr)}
+  .sh-nl{padding:68px 22px}
+  .sh-foot-top{grid-template-columns:1fr;gap:34px;padding:0 22px 46px}
+  .sh-foot-bot{padding:18px 22px}
+  .sh-foot-nav{grid-template-columns:repeat(2,1fr)}
+  .qm-card{grid-template-columns:1fr;max-height:88vh}
+  .qm-img{min-height:260px;max-height:44vw}
+  .qm-info{padding:26px 20px 34px}
+  body:not(.bar-off) .lux-nav{top:32px!important}
+  #sh-bar{height:32px}
+  .sh-cat{padding:68px 0}
+  .sh-cat .sh-wrap{padding:0 20px}
+}
+@media(max-width:480px){
+  .sh-htitle{font-size:clamp(46px,13vw,66px)}
+  .sh-hbody{padding:0 18px 56px}
+  .sh-hsub{font-size:11.5px}
+  .sh-htape{bottom:86px}
+  .sh-stitle{font-size:28px!important}
+  .sh-nl-h{font-size:32px!important}
+  .sh-nl-form{flex-direction:column;border:none}
+  .sh-nl-inp{border-bottom:1px solid rgba(250,247,242,.16);text-align:center;padding:12px 0}
+  .sh-nl-btn{padding:12px}
+  .sh-pgrid{gap:13px 9px}
+  .sh-cgrid{grid-template-columns:1fr}
+  .sh-cc--tall{grid-column:auto}
+  .sh-cc--tall .sh-cc-img{aspect-ratio:3/4}
+  .sh-foot-bot{flex-direction:column;text-align:center;padding:15px 18px}
+  .sh-igrid{grid-template-columns:repeat(2,1fr)}
+  .sh-mani-q{font-size:22px}
+  .sh-sig-in{flex-direction:column;align-items:center;gap:16px}
+  .sh-sig-d{display:none}
+  .sh-rv-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .sr{opacity:1;transform:none}
+}
+</style>
 </head>
 <body class="lux-body">
 
-<!-- ══════════════ ANNOUNCEMENT BAR ══════════════ -->
-<div class="lux-announce-bar" id="luxAnnounceBar">
-  <div class="lux-announce-inner">
-    <span class="lux-announce-dot">◆</span>
-    <span>New Autumn Edit 2026 — Limited Drops Available Now</span>
-    <span class="lux-announce-sep">·</span>
-    <a href="shop.html?cat=new" class="lux-announce-link">Shop Now</a>
-    <span class="lux-announce-dot">◆</span>
-    <span>Free Delivery Above ₹2,000</span>
-    <span class="lux-announce-sep">·</span>
-    <a href="shop.html" class="lux-announce-link">Explore</a>
-    <span class="lux-announce-dot">◆</span>
-    <span>New Autumn Edit 2026 — Limited Drops Available Now</span>
-    <span class="lux-announce-sep">·</span>
-    <a href="shop.html?cat=new" class="lux-announce-link">Shop Now</a>
-    <span class="lux-announce-dot">◆</span>
-    <span>Free Delivery Above ₹2,000</span>
-    <span class="lux-announce-sep">·</span>
-    <a href="shop.html" class="lux-announce-link">Explore</a>
-  </div>
-  <button class="lux-announce-close" onclick="dismissAnnounceBar()" aria-label="Close">×</button>
+<!-- CURSOR -->
+<div id="lx-c"></div><div id="lx-d"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="sh-prog"></div>
+
+<!-- LOADER -->
+<div id="sh-ld">
+  <div class="sh-ld-w"><span>S</span><span>H</span><span>E</span><span>N</span><span>O</span><span>V</span><span>A</span></div>
+  <div class="sh-ld-line"></div>
+  <div class="sh-ld-sub">Quiet Luxury · Est. 2024</div>
 </div>
 
-<!-- ══════════════ CUSTOM CURSOR ══════════════ -->
-<div class="lux-cursor" id="luxCursor"></div>
-<div class="lux-cursor-dot" id="luxCursorDot"></div>
-
-<!-- ══════════════ LOADER ══════════════ -->
-<div class="lux-loader" id="luxLoader">
-  <div class="lux-loader-inner">
-    <div class="lux-loader-word">
-      <span>S</span><span>H</span><span>E</span><span>N</span><span>O</span><span>V</span><span>A</span>
-    </div>
-    <div class="lux-loader-line"></div>
-    <div class="lux-loader-sub">Quiet Luxury · Est. 2026</div>
+<!-- ANNOUNCE BAR -->
+<div id="sh-bar">
+  <div class="sh-bar-inner">
+    <span>New Autumn Edit 2026 · Limited Drops</span><b>◆</b>
+    <span>Free Delivery Above ₹2,000</span><b>◆</b>
+    <span>14-Day Easy Returns</span><b>◆</b>
+    <a href="shop.html" style="color:#b8956a">Shop Now</a><b>◆</b>
+    <span>New Autumn Edit 2026 · Limited Drops</span><b>◆</b>
+    <span>Free Delivery Above ₹2,000</span><b>◆</b>
+    <span>14-Day Easy Returns</span><b>◆</b>
+    <a href="shop.html" style="color:#b8956a">Shop Now</a><b>◆</b>
   </div>
+  <button class="sh-bar-x" onclick="dismissBar()" aria-label="Close">×</button>
 </div>
 
-
-
-<!-- ══════════════ SCROLL PROGRESS ══════════════ -->
-<div class="lux-progress" id="luxProgress"></div>
-
-<!-- ══════════════ NAV ══════════════ -->
+<!-- NAV — all classes preserved for main.js -->
 <nav class="nav lux-nav" id="luxNav">
   <div class="container nav-inner">
     <div class="nav-left">
@@ -71,34 +574,20 @@
     <div class="nav-right">
       <a href="about.html" class="nav-link-sm">About</a>
       <div class="nav-icons">
-        <button class="icon-search lux-icon-btn" aria-label="Search">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </button>
-        <a href="wishlist.html">
-          <button class="lux-icon-btn" aria-label="Wishlist">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-        </a>
-        <button class="cart-btn lux-icon-btn lux-cart-btn" aria-label="Cart">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          <span class="cart-count lux-cart-count">0</span>
-        </button>
-        <button class="hamburger lux-hamburger" aria-label="Menu">
-          <span></span><span></span>
-        </button>
+        <a href="wishlist.html"><button class="lux-icon-btn" aria-label="Wishlist"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></a>
+        <button class="cart-btn lux-icon-btn lux-cart-btn" aria-label="Cart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-count lux-cart-count">0</span></button>
+        <button class="hamburger lux-hamburger" aria-label="Menu"><span></span><span></span></button>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- ══════════════ MOBILE MENU ══════════════ -->
+<!-- MOBILE MENU — classes for main.js intact -->
 <div class="mobile-menu lux-mobile-menu">
   <div class="lux-mm-inner">
     <div class="lux-mm-top">
       <div class="lux-mm-logo">SHENOVA</div>
-      <button class="lux-mm-close-btn hamburger lux-hamburger" aria-label="Close menu">
-        <span></span><span></span>
-      </button>
+      <button class="hamburger lux-hamburger lux-mm-close-btn" aria-label="Close"><span></span><span></span></button>
     </div>
     <nav class="lux-mm-nav">
       <a href="index.html"><span>01</span>Home</a>
@@ -114,518 +603,298 @@
   </div>
 </div>
 
-<!-- ══════════════ HERO — CINEMATIC ══════════════ -->
-<section class="lux-hero" id="luxHero">
-
-  <!-- Hero background images -->
-  <img src="images/hero1.png" alt="Shenova — Autumn Collection 2026" class="lux-hero-bg desktop-hero" loading="eager" id="heroImg" fetchpriority="high">
-  <img src="images/hero1a.png" alt="Shenova — Autumn Collection 2026" class="lux-hero-bg mobile-hero" loading="eager" fetchpriority="high">
-
-  <!-- Layered cinematic overlays -->
-  <div class="lux-hero-overlay"></div>
-  <div class="lux-hero-vignette"></div>
-  <div class="lux-hero-grain" aria-hidden="true"></div>
-
-  <!-- Film-strip decorative lines -->
-  <div class="lux-hero-filmstrip" aria-hidden="true">
-    <span></span><span></span><span></span>
-  </div>
-
-  <!-- Running tape line across hero -->
-  <div class="lux-hero-tape" aria-hidden="true">
-    <div class="lux-tape-track">
-      <span>Autumn Edit 2026</span><span class="lux-tape-dot">·</span>
-      <span>Limited Editions</span><span class="lux-tape-dot">·</span>
-      <span>Quiet Luxury</span><span class="lux-tape-dot">·</span>
-      <span>Artisan Craft</span><span class="lux-tape-dot">·</span>
-      <span>Crafted in India</span><span class="lux-tape-dot">·</span>
-      <span>SS 2026</span><span class="lux-tape-dot">·</span>
-      <span>Autumn Edit 2026</span><span class="lux-tape-dot">·</span>
-      <span>Limited Editions</span><span class="lux-tape-dot">·</span>
-      <span>Quiet Luxury</span><span class="lux-tape-dot">·</span>
-      <span>Artisan Craft</span><span class="lux-tape-dot">·</span>
-      <span>Crafted in India</span><span class="lux-tape-dot">·</span>
-      <span>SS 2026</span><span class="lux-tape-dot">·</span>
+<!-- ══ HERO ══ -->
+<section class="sh-hero" id="sh-hero">
+  <img src="images/hero1.png" alt="" class="sh-hbg" id="heroImg" loading="eager" fetchpriority="high">
+  <img src="images/hero1a.png" alt="" class="sh-hmob" id="heroImgMob" loading="eager" fetchpriority="high">
+  <div class="sh-hov1"></div><div class="sh-hov2"></div>
+  <div class="sh-hgrain" aria-hidden="true"></div>
+  <div class="sh-htape" aria-hidden="true">
+    <div class="sh-htape-t">
+      <span>Autumn Edit 2026</span><span style="opacity:.18">·</span>
+      <span>Limited Editions</span><span style="opacity:.18">·</span>
+      <span>Quiet Luxury</span><span style="opacity:.18">·</span>
+      <span>Crafted in India</span><span style="opacity:.18">·</span>
+      <span>SS 2026</span><span style="opacity:.18">·</span>
+      <span>Autumn Edit 2026</span><span style="opacity:.18">·</span>
+      <span>Limited Editions</span><span style="opacity:.18">·</span>
+      <span>Quiet Luxury</span><span style="opacity:.18">·</span>
+      <span>Crafted in India</span><span style="opacity:.18">·</span>
+      <span>SS 2026</span><span style="opacity:.18">·</span>
     </div>
   </div>
-
-  <!-- Main hero content -->
-  <div class="lux-hero-content">
-    <div class="lux-hero-text">
-
-      <!-- Eyebrow label -->
-      <div class="lux-eyebrow-hero lux-reveal" data-delay="0">
-        <span class="lux-eyebrow-line"></span>
-        Autumn Edit · 2026
-      </div>
-
-      <!-- Headline — cinematic split -->
-      <h1 class="lux-hero-title" aria-label="Quiet Luxury">
-        <span class="lux-hero-line lux-reveal" data-delay="1">Quiet</span>
-        <span class="lux-hero-line lux-hero-italic lux-reveal" data-delay="2">Luxury.</span>
-      </h1>
-
-      <!-- Subline -->
-      <p class="lux-hero-sub lux-reveal" data-delay="3">For the woman who moves in silence.</p>
-
-      <!-- CTA group -->
-      <div class="lux-hero-actions lux-reveal" data-delay="4">
-        <a class="lux-cta-primary" href="shop.html">
-          <span>Discover Collection</span>
-          <div class="lux-cta-arrow">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </a>
-        <a class="lux-cta-ghost" href="about.html">Our Story</a>
-      </div>
-
-    </div>
-
-    <!-- Hero meta stats — desktop only -->
-    <div class="lux-hero-meta lux-reveal" data-delay="5">
-      <div class="lux-hero-stat">
-        <span class="lux-stat-num">100+</span>
-        <span class="lux-stat-label">Limited Pieces</span>
-      </div>
-      <div class="lux-hero-rule"></div>
-      <div class="lux-hero-stat">
-        <span class="lux-stat-num">5★</span>
-        <span class="lux-stat-label">Community Rated</span>
-      </div>
-      <div class="lux-hero-rule"></div>
-      <div class="lux-hero-stat">
-        <span class="lux-stat-num">2026</span>
-        <span class="lux-stat-label">New Season</span>
+  <div class="sh-hbody">
+    <div class="sh-hleft">
+      <div class="sh-eyebrow sr" data-d="0"><span class="sh-eyebrow-line"></span>Autumn Edit · 2026</div>
+      <h1 class="sh-htitle sr" data-d="1"><span>Quiet</span><em>Luxury.</em></h1>
+      <p class="sh-hsub sr" data-d="2">For the woman who moves in silence.</p>
+      <div class="sh-hctas sr" data-d="3">
+        <a class="btn-pill" href="shop.html"><span>Discover Collection</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a class="btn-ghost" href="about.html">Our Story</a>
       </div>
     </div>
-  </div>
-
-  <!-- Animated scroll cue -->
-  <div class="lux-scroll-cue" aria-hidden="true">
-    <div class="lux-scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-
-  <!-- Bottom right edition tag -->
-  <div class="lux-hero-edition-tag" aria-hidden="true">
-    <span>AW</span>
-    <div class="lux-edition-sep"></div>
-    <span>26</span>
-  </div>
-
-  <!-- NEW: Mobile-only hero bottom bar — immersive touch UI -->
-  <div class="lux-hero-mobile-bar" aria-hidden="true">
-    <div class="lux-hero-mobile-scroll">
-      <div class="lux-hero-mobile-scroll-dot"></div>
+    <div class="sh-hright sr" data-d="4">
+      <div class="sh-stat"><span class="sh-stat-n">100+</span><span class="sh-stat-l">Limited Pieces</span></div>
+      <div class="sh-stat-r"></div>
+      <div class="sh-stat"><span class="sh-stat-n">5★</span><span class="sh-stat-l">Community Rated</span></div>
+      <div class="sh-stat-r"></div>
+      <div class="sh-stat"><span class="sh-stat-n">2026</span><span class="sh-stat-l">New Season</span></div>
     </div>
   </div>
-
+  <div class="sh-scue" aria-hidden="true"><div class="sh-sline"></div><span>Scroll</span></div>
+  <div class="sh-etag" aria-hidden="true"><span>AW</span><i></i><span>26</span></div>
+  <div class="sh-mob-s" aria-hidden="true"><div class="sh-mob-m"><div class="sh-mob-d"></div></div></div>
 </section>
 
-<!-- ══════════════ MARQUEE STRIP ══════════════ -->
-<div class="lux-marquee-strip" aria-hidden="true">
-  <div class="lux-marquee-inner">
-    <span>Ready To Wear</span><span class="lux-dot">◆</span>
-    <span>Limited Editions</span><span class="lux-dot">◆</span>
-    <span>Atelier Crafted</span><span class="lux-dot">◆</span>
-    <span>Premium Fabrics</span><span class="lux-dot">◆</span>
-    <span>Autumn 2026</span><span class="lux-dot">◆</span>
-    <span>Free Delivery ₹2000+</span><span class="lux-dot">◆</span>
-    <span>Ready To Wear</span><span class="lux-dot">◆</span>
-    <span>Limited Editions</span><span class="lux-dot">◆</span>
-    <span>Atelier Crafted</span><span class="lux-dot">◆</span>
-    <span>Premium Fabrics</span><span class="lux-dot">◆</span>
-    <span>Autumn 2026</span><span class="lux-dot">◆</span>
-    <span>Free Delivery ₹2000+</span><span class="lux-dot">◆</span>
+<!-- MARQUEE -->
+<div class="sh-marq" aria-hidden="true">
+  <div class="sh-marq-t">
+    <span>Ready To Wear</span><span class="sh-dot">◆</span><span>Limited Editions</span><span class="sh-dot">◆</span><span>Atelier Crafted</span><span class="sh-dot">◆</span><span>Premium Fabrics</span><span class="sh-dot">◆</span><span>Autumn 2026</span><span class="sh-dot">◆</span><span>Free Delivery ₹2000+</span><span class="sh-dot">◆</span>
+    <span>Ready To Wear</span><span class="sh-dot">◆</span><span>Limited Editions</span><span class="sh-dot">◆</span><span>Atelier Crafted</span><span class="sh-dot">◆</span><span>Premium Fabrics</span><span class="sh-dot">◆</span><span>Autumn 2026</span><span class="sh-dot">◆</span><span>Free Delivery ₹2000+</span><span class="sh-dot">◆</span>
   </div>
 </div>
 
-<!-- ══════════════ PHILOSOPHY STRIP ══════════════ -->
-<section class="lux-philosophy-strip">
-  <div class="lux-philosophy-inner s-reveal">
-    <div class="lux-philo-item">
-      <span class="lux-philo-num">01</span>
-      <span class="lux-philo-text">Refined Silhouettes</span>
+<!-- PILLARS -->
+<div class="sh-pillars">
+  <div class="sh-pillars-in">
+    <div class="sh-pillar sr"><span class="sh-pillar-n">01</span><span class="sh-pillar-t">Refined Silhouettes</span></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-pillar sr" data-d="1"><span class="sh-pillar-n">02</span><span class="sh-pillar-t">Premium Fabrics</span></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-pillar sr" data-d="2"><span class="sh-pillar-n">03</span><span class="sh-pillar-t">Limited Editions</span></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-pillar sr" data-d="3"><span class="sh-pillar-n">04</span><span class="sh-pillar-t">Crafted in India</span></div>
+  </div>
+</div>
+
+<!-- PRODUCTS — #featured-grid preserved for main.js loadFeatured() -->
+<section class="sh-s">
+  <div class="sh-wrap">
+    <div class="sh-head sr">
+      <div><span class="sh-ey">Most Loved</span><h2 class="sh-stitle">Trending <em>Now</em></h2></div>
+      <a href="shop.html" class="sh-slink">View All →</a>
     </div>
-    <div class="lux-philo-sep" aria-hidden="true"></div>
-    <div class="lux-philo-item">
-      <span class="lux-philo-num">02</span>
-      <span class="lux-philo-text">Premium Fabrics</span>
+    <div class="sh-pgrid" id="featured-grid"></div>
+  </div>
+</section>
+
+<!-- EDITORIAL SPLIT -->
+<section class="sh-split">
+  <div class="sh-split-img sr">
+    <img src="images/front13.jpg" alt="Shenova Lookbook" loading="lazy">
+    <div class="sh-split-badge">Autumn · 2026</div>
+  </div>
+  <div class="sh-split-txt sr" data-d="1">
+    <span class="sh-ey">The Philosophy</span>
+    <h2 class="sh-split-h">Designed for <em>silence.</em></h2>
+    <p class="sh-split-p">We believe luxury is not worn loudly. It is felt — in the weight of fabric, the architecture of a hem, the stillness of a silhouette that needs no introduction.</p>
+    <a href="about.html" class="sh-ul">Discover Our Story →</a>
+  </div>
+</section>
+
+<!-- CINEMATIC BREAK -->
+<section class="sh-cin sr" id="sh-cin">
+  <img src="images/front14.jpg" alt="Shenova Editorial" loading="lazy">
+  <div class="sh-cin-ov"></div>
+  <div class="sh-cin-cap">
+    <span class="sh-ey" style="color:rgba(255,255,255,.36)">Shenova Atelier · 2026</span>
+    <p>"Every piece is an argument<br>for restraint."</p>
+  </div>
+  <div class="sh-cin-num" aria-hidden="true"><span>01</span><i></i><span>06</span></div>
+</section>
+
+<!-- THREE PANEL -->
+<section class="sh-three">
+  <div class="sh-3in">
+    <div class="sh-3col sr">
+      <div class="sh-3img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div>
+      <div class="sh-3cap"><span class="sh-3num">001</span><p>The Quiet Edit</p></div>
     </div>
-    <div class="lux-philo-sep" aria-hidden="true"></div>
-    <div class="lux-philo-item">
-      <span class="lux-philo-num">03</span>
-      <span class="lux-philo-text">Limited Editions</span>
+    <div class="sh-3mid sr" data-d="2">
+      <span class="sh-3rule"></span>
+      <span class="sh-ey">Autumn / Winter 2026</span>
+      <h2 class="sh-3h">Worn by <em>Instinct</em></h2>
+      <p class="sh-3p">Pieces born from restraint. Worn by feel. Made for the woman whose presence precedes her.</p>
+      <a href="shop.html" class="btn-pill dk"><span>Explore the Edit</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
-    <div class="lux-philo-sep" aria-hidden="true"></div>
-    <div class="lux-philo-item">
-      <span class="lux-philo-num">04</span>
-      <span class="lux-philo-text">Crafted in India</span>
+    <div class="sh-3col sr" data-d="1">
+      <div class="sh-3img sh-3off"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div>
+      <div class="sh-3cap sh-3cap-r"><p>Evening Edit</p><span class="sh-3num">002</span></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ FEATURED PRODUCTS ══════════════ -->
-<section class="lux-section lux-products-section" id="new-arrivals">
-  <div class="container">
-    <div class="lux-sec-header s-reveal">
-      <div>
-        <div class="lux-eyebrow">Most Loved</div>
-        <h2 class="lux-sec-title">Trending <em>Now</em></h2>
-      </div>
-      <a href="shop.html" class="lux-sec-link">View All →</a>
+<!-- DUAL PANEL -->
+<section class="sh-dual">
+  <div class="sh-dl sr">
+    <div class="sh-dl-img">
+      <img src="images/front5.jpg" alt="Shenova Campaign" loading="lazy">
+      <div class="sh-dl-ov"></div>
+      <div class="sh-dl-tag">The Collection</div>
     </div>
-    <!-- Dynamic product grid — populated by main.js / loadFeatured() -->
-    <div class="lux-product-grid" id="featured-grid"></div>
+  </div>
+  <div class="sh-dr">
+    <div class="sh-dr-txt sr" data-d="1">
+      <span class="sh-ey">New Arrivals</span>
+      <h2 class="sh-dr-h">The Autumn <em>Edit</em></h2>
+      <p class="sh-dr-p">Pieces that speak before you do. Crafted for the woman who understands that true elegance requires no explanation.</p>
+      <a href="shop.html?cat=new" class="btn-pill dk" style="margin-top:28px;max-width:max-content"><span>Shop New In</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="sh-dr-img sr"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div>
   </div>
 </section>
 
-<!-- ══════════════ EDITORIAL SPLIT ══════════════ -->
-<section class="lux-editorial-split">
-  <div class="lux-split-image s-reveal">
-    <img src="images/front13.jpg" alt="Shenova Lookbook — Autumn 2026" loading="lazy">
-    <div class="lux-split-badge">Autumn · 2026</div>
-  </div>
-  <div class="lux-split-text s-reveal">
-    <div class="lux-eyebrow">The Philosophy</div>
-    <h2 class="lux-split-title">Designed<br>for <em>silence.</em></h2>
-    <p class="lux-split-body">We believe luxury is not worn loudly. It is felt — in the weight of fabric, the architecture of a hem, the stillness of a silhouette that needs no introduction.</p>
-    <a href="about.html" class="lux-link-underline">Discover Our Story →</a>
-  </div>
-</section>
-
-<!-- ══════════════ FULL-WIDTH CINEMATIC BREAK ══════════════ -->
-<section class="lux-cinematic-break s-reveal">
-  <div class="lux-cinematic-img">
-    <img src="images/front14.jpg" alt="Shenova — Editorial Campaign" loading="lazy">
-    <div class="lux-cinematic-overlay"></div>
-    <div class="lux-cinematic-caption">
-      <span class="lux-eyebrow" style="color:rgba(255,255,255,.5)">Shenova Atelier · 2026</span>
-      <p>"Every piece is an argument<br>for restraint."</p>
+<!-- H-SCROLL GALLERY -->
+<section class="sh-gal">
+  <div class="sh-gal-head">
+    <div class="sh-head sr">
+      <div><span class="sh-ey">The Edit</span><h2 class="sh-stitle">Campaign <em>Stories</em></h2></div>
     </div>
-    <div class="lux-cinematic-counter" aria-hidden="true">
-      <span>01</span>
-      <div class="lux-counter-line"></div>
-      <span>06</span>
+  </div>
+  <div class="sh-gal-wrap" id="sh-gw">
+    <div class="sh-gal-track">
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div><div class="sh-gc-m"><span>01</span><span>The Quiet Edit</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front13.jpg" alt="Autumn Forms" loading="lazy"></div><div class="sh-gc-m"><span>02</span><span>Autumn Forms</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front14.jpg" alt="Modern Minimal" loading="lazy"></div><div class="sh-gc-m"><span>03</span><span>Modern Minimal</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div><div class="sh-gc-m"><span>04</span><span>After Dusk</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front5.jpg" alt="Pure Form" loading="lazy"></div><div class="sh-gc-m"><span>05</span><span>Pure Form</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div><div class="sh-gc-m"><span>06</span><span>Evening Edit</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ IMMERSIVE THREE-PANEL EDITORIAL ══════════════ -->
-<section class="lux-three-panel s-reveal">
-  <div class="lux-three-panel-inner">
-    <div class="lux-tp-col lux-tp-col--left">
-      <div class="lux-tp-img-wrap">
-        <img src="images/front1.jpg" alt="Shenova — The Quiet Edit" loading="lazy">
-      </div>
-      <div class="lux-tp-caption">
-        <span class="lux-tp-num">001</span>
-        <p>The Quiet Edit</p>
-      </div>
-    </div>
-    <div class="lux-tp-col lux-tp-col--center">
-      <div class="lux-tp-center-text">
-        <span class="lux-tp-rule"></span>
-        <div class="lux-eyebrow">Autumn / Winter 2026</div>
-        <h2 class="lux-tp-title">Worn<br>by <em>Instinct</em></h2>
-        <p class="lux-tp-body">Pieces born from restraint. Worn by feel. Made for the woman whose presence precedes her.</p>
-        <a href="shop.html" class="lux-cta-primary lux-cta-dark">
-          <span>Explore the Edit</span>
-          <div class="lux-cta-arrow">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="lux-tp-col lux-tp-col--right">
-      <div class="lux-tp-img-wrap lux-tp-img-offset">
-        <img src="images/front6.jpg" alt="Shenova — Evening Edit" loading="lazy">
-      </div>
-      <div class="lux-tp-caption lux-tp-caption--right">
-        <p>Evening Edit</p>
-        <span class="lux-tp-num">002</span>
-      </div>
-    </div>
+<!-- MANIFESTO -->
+<section class="sh-mani">
+  <div class="sh-mani-in sr">
+    <span class="sh-mani-orn" aria-hidden="true">"</span>
+    <blockquote class="sh-mani-q">We do not follow trends.<br>We make pieces that belong<br>to no season.</blockquote>
+    <div class="sh-mani-rule"></div>
+    <div class="sh-mani-by">— Shenova Atelier</div>
+    <a href="about.html" class="btn-ol">Read Our Story</a>
   </div>
 </section>
 
-<!-- ══════════════ DUAL EDITORIAL PANEL ══════════════ -->
-<section class="lux-dual-panel">
-  <div class="lux-dual-left s-reveal">
-    <div class="lux-dual-img-wrap">
-      <img src="images/front5.jpg" alt="Shenova Campaign — Pure Form" loading="lazy">
-      <div class="lux-dual-overlay"></div>
-      <div class="lux-dual-caption-top">
-        <span class="lux-eyebrow" style="color:rgba(255,255,255,.45)">The Collection</span>
-      </div>
-    </div>
+<!-- SIGNATURE STRIP -->
+<section class="sh-sig">
+  <div class="sh-sig-in sr">
+    <div class="sh-sig-item"><span class="sh-sig-v">2024</span><span class="sh-sig-l">Founded</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">India</span><span class="sh-sig-l">Crafted Here</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-c"><div class="sh-sig-logo">SHENOVA</div><div class="sh-sig-tag">Quiet Luxury for the Modern Woman</div></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">Limited</span><span class="sh-sig-l">Every Drop</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">New Season</span></div>
   </div>
-  <div class="lux-dual-right s-reveal">
-    <div class="lux-dual-text-block">
-      <div class="lux-eyebrow">New Arrivals</div>
-      <h2 class="lux-dual-title">The Autumn<br><em>Edit</em></h2>
-      <p class="lux-dual-body">Pieces that speak before you do. Each garment is a meditation on form, crafted for the woman who understands that true elegance requires no explanation.</p>
-      <a href="shop.html?cat=new" class="lux-cta-primary" style="margin-top:32px">
-        <span>Shop New In</span>
-        <div class="lux-cta-arrow">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+</section>
+
+<!-- CATEGORY -->
+<section class="sh-cat">
+  <div class="sh-wrap">
+    <div class="sh-head sr">
+      <div><span class="sh-ey">Browse By</span><h2 class="sh-stitle">Shop the <em>Edit</em></h2></div>
+    </div>
+    <div class="sh-cgrid">
+      <a href="shop.html?cat=dresses" class="sh-cc sr">
+        <div class="sh-cc-img"><img src="images/front5.jpg" alt="Dresses" loading="lazy"></div>
+        <div class="sh-cc-lbl"><span>Dresses</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
-    </div>
-    <div class="lux-dual-img2-wrap s-reveal">
-      <img src="images/front21.jpeg" alt="Shenova Campaign — After Dusk" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════ HORIZONTAL SCROLL GALLERY ══════════════ -->
-<section class="lux-section lux-hscroll-section">
-  <div class="container">
-    <div class="lux-sec-header s-reveal">
-      <div>
-        <div class="lux-eyebrow">The Edit</div>
-        <h2 class="lux-sec-title">Campaign <em>Stories</em></h2>
-      </div>
-    </div>
-  </div>
-  <!-- Drag-to-scroll gallery — handled by luxury.js -->
-  <div class="lux-hscroll-track-wrap" id="hscrollTrack">
-    <div class="lux-hscroll-track">
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>01</span><span>The Quiet Edit</span></div>
-      </div>
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front13.jpg" alt="Autumn Forms" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>02</span><span>Autumn Forms</span></div>
-      </div>
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front14.jpg" alt="Modern Minimal" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>03</span><span>Modern Minimal</span></div>
-      </div>
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>04</span><span>After Dusk</span></div>
-      </div>
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front5.jpg" alt="Pure Form" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>05</span><span>Pure Form</span></div>
-      </div>
-      <div class="lux-hcard">
-        <div class="lux-hcard-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div>
-        <div class="lux-hcard-meta"><span>06</span><span>Evening Edit</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════ BRAND MANIFESTO ══════════════ -->
-<section class="lux-manifesto">
-  <div class="lux-manifesto-inner s-reveal">
-    <div class="lux-manifesto-ornament" aria-hidden="true">"</div>
-    <blockquote class="lux-manifesto-quote">
-      We do not follow trends.<br>We make pieces that belong<br>to no season.
-    </blockquote>
-    <div class="lux-manifesto-rule"></div>
-    <div class="lux-manifesto-credit">— Shenova Atelier</div>
-    <a href="about.html" class="lux-cta-manifesto">Read Our Story</a>
-  </div>
-</section>
-
-<!-- ══════════════ SIGNATURE STRIP (NEW) ══════════════ -->
-<section class="lux-signature-strip">
-  <div class="lux-signature-inner s-reveal">
-    <div class="lux-sig-item">
-      <span class="lux-sig-year">2026</span>
-      <span class="lux-sig-label">Founded</span>
-    </div>
-    <div class="lux-sig-divider" aria-hidden="true"></div>
-    <div class="lux-sig-item">
-      <span class="lux-sig-year">India</span>
-      <span class="lux-sig-label">Crafted Here</span>
-    </div>
-    <div class="lux-sig-divider" aria-hidden="true"></div>
-    <div class="lux-sig-center">
-      <div class="lux-sig-logo">SHENOVA</div>
-      <div class="lux-sig-tagline">Quiet Luxury for the Modern Woman</div>
-    </div>
-    <div class="lux-sig-divider" aria-hidden="true"></div>
-    <div class="lux-sig-item">
-      <span class="lux-sig-year">Limited</span>
-      <span class="lux-sig-label">Every Drop</span>
-    </div>
-    <div class="lux-sig-divider" aria-hidden="true"></div>
-    <div class="lux-sig-item">
-      <span class="lux-sig-year">2026</span>
-      <span class="lux-sig-label">New Season</span>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════ CATEGORY SHOWCASE ══════════════ -->
-<section class="lux-section lux-category-section">
-  <div class="container">
-    <div class="lux-sec-header s-reveal">
-      <div>
-        <div class="lux-eyebrow">Browse By</div>
-        <h2 class="lux-sec-title">Shop the <em>Edit</em></h2>
-      </div>
-    </div>
-    <div class="lux-cat-grid">
-      <a href="shop.html?cat=dresses" class="lux-cat-card s-reveal">
-        <div class="lux-cat-img"><img src="images/front5.jpg" alt="Dresses" loading="lazy"></div>
-        <div class="lux-cat-label">
-          <span>Dresses</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+      <a href="shop.html?cat=tops" class="sh-cc sr" data-d="1">
+        <div class="sh-cc-img"><img src="images/front6.jpg" alt="Tops" loading="lazy"></div>
+        <div class="sh-cc-lbl"><span>Tops</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
-      <a href="shop.html?cat=tops" class="lux-cat-card s-reveal">
-        <div class="lux-cat-img"><img src="images/front6.jpg" alt="Tops" loading="lazy"></div>
-        <div class="lux-cat-label">
-          <span>Tops</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </a>
-      <a href="shop.html?cat=new" class="lux-cat-card lux-cat-card--tall s-reveal">
-        <div class="lux-cat-img"><img src="images/front14.jpg" alt="New Arrivals" loading="lazy"></div>
-        <div class="lux-cat-label">
-          <span>New In</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
+      <a href="shop.html?cat=new" class="sh-cc sh-cc--tall sr" data-d="2">
+        <div class="sh-cc-img"><img src="images/front14.jpg" alt="New In" loading="lazy"></div>
+        <div class="sh-cc-lbl"><span>New In</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ ATELIER PROMISE STRIP ══════════════ -->
-<section class="lux-atelier-strip">
-  <div class="lux-atelier-inner">
-    <div class="lux-atelier-item s-reveal">
-      <div class="lux-atelier-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
-      <span class="lux-atelier-label">Artisan Quality</span>
-      <p>Every seam inspected by hand before it leaves our atelier.</p>
+<!-- ATELIER PROMISES -->
+<div class="sh-atel">
+  <div class="sh-atel-in">
+    <div class="sh-ai sr"><div class="sh-ai-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="sh-ai-lbl">Artisan Quality</span><p>Every seam inspected by hand.</p></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-ai sr" data-d="1"><div class="sh-ai-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><span class="sh-ai-lbl">Limited Runs</span><p>Never mass-produced.</p></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-ai sr" data-d="2"><div class="sh-ai-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div><span class="sh-ai-lbl">Free Delivery</span><p>On orders above ₹2,000.</p></div>
+    <div class="sh-vrule" aria-hidden="true"></div>
+    <div class="sh-ai sr" data-d="3"><div class="sh-ai-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><span class="sh-ai-lbl">Crafted in India</span><p>Elevated for the world.</p></div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<section class="sh-s" style="background:#f6f3ee">
+  <div class="sh-wrap">
+    <div class="sh-head sr">
+      <div><span class="sh-ey">Words From</span><h2 class="sh-stitle">Our <em>Community</em></h2></div>
     </div>
-    <div class="lux-atelier-rule"></div>
-    <div class="lux-atelier-item s-reveal">
-      <div class="lux-atelier-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      </div>
-      <span class="lux-atelier-label">Limited Runs</span>
-      <p>Never mass-produced. Each drop is intentional and rare.</p>
-    </div>
-    <div class="lux-atelier-rule"></div>
-    <div class="lux-atelier-item s-reveal">
-      <div class="lux-atelier-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <span class="lux-atelier-label">Free Delivery</span>
-      <p>Complimentary delivery on all orders above ₹2,000.</p>
-    </div>
-    <div class="lux-atelier-rule"></div>
-    <div class="lux-atelier-item s-reveal">
-      <div class="lux-atelier-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      </div>
-      <span class="lux-atelier-label">Crafted in India</span>
-      <p>Rooted in Indian craft. Elevated for the global woman.</p>
+    <div class="sh-rv-grid">
+      <div class="sh-rv sr"><div class="sh-rv-stars">★★★★★</div><p>"The fit, the fabric, the finish — every detail considered. My favourite piece this year."</p><div class="sh-rv-who">— Aisha R.</div></div>
+      <div class="sh-rv feat sr" data-d="1"><div class="sh-rv-stars">★★★★★</div><p>"Quietly stunning. I get compliments every time I wear it."</p><div class="sh-rv-who">— Maya S.</div></div>
+      <div class="sh-rv sr" data-d="2"><div class="sh-rv-stars">★★★★★</div><p>"You can feel the craftsmanship. This is what luxury truly feels like."</p><div class="sh-rv-who">— Priya K.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ REVIEWS ══════════════ -->
-<section class="lux-section lux-reviews-section">
-  <div class="container">
-    <div class="lux-sec-header s-reveal">
-      <div>
-        <div class="lux-eyebrow">Words From</div>
-        <h2 class="lux-sec-title">Our <em>Community</em></h2>
-      </div>
+<!-- INSTAGRAM GRID -->
+<section class="sh-insta sh-s" style="padding-top:108px;padding-bottom:0">
+  <div class="sh-wrap">
+    <div class="sh-head sr">
+      <div><span class="sh-ey">@shenova.official</span><h2 class="sh-stitle">Follow the <em>Mood</em></h2></div>
+      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="sh-slink">Instagram ↗</a>
     </div>
-    <div class="lux-reviews-grid">
-      <div class="lux-review s-reveal">
-        <div class="lux-review-stars">★★★★★</div>
-        <p>"The fit, the fabric, the finish — every detail considered. My favourite piece this year."</p>
-        <div class="lux-review-who">— Aisha R.</div>
-      </div>
-      <div class="lux-review lux-review-featured s-reveal">
-        <div class="lux-review-stars">★★★★★</div>
-        <p>"Quietly stunning. I get compliments every time I wear it. Worth every penny."</p>
-        <div class="lux-review-who">— Maya S.</div>
-      </div>
-      <div class="lux-review s-reveal">
-        <div class="lux-review-stars">★★★★★</div>
-        <p>"You can feel the craftsmanship. Worth every rupee. This is what luxury feels like."</p>
-        <div class="lux-review-who">— Priya K.</div>
-      </div>
-    </div>
+  </div>
+  <div class="sh-igrid">
+    <div class="sh-ii sr"><img src="images/front1.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    <div class="sh-ii tall sr" data-d="1"><img src="images/front13.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    <div class="sh-ii sr" data-d="2"><img src="images/front14.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    <div class="sh-ii sr" data-d="3"><img src="images/front21.jpeg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    <div class="sh-ii sr"><img src="images/front5.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    <div class="sh-ii sr" data-d="1"><img src="images/front6.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
   </div>
 </section>
 
-<!-- ══════════════ INSTAGRAM EDITORIAL GRID ══════════════ -->
-<section class="lux-section lux-insta-section" style="padding-top:0">
-  <div class="container">
-    <div class="lux-sec-header s-reveal">
-      <div>
-        <div class="lux-eyebrow">@shenova.official</div>
-        <h2 class="lux-sec-title">Follow the <em>Mood</em></h2>
-      </div>
-      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="lux-sec-link">Instagram ↗</a>
-    </div>
-  </div>
-  <div class="lux-insta-grid">
-    <div class="lux-insta-item s-reveal"><img src="images/front1.jpg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-    <div class="lux-insta-item lux-insta-tall s-reveal"><img src="images/front13.jpg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-    <div class="lux-insta-item s-reveal"><img src="images/front14.jpg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-    <div class="lux-insta-item s-reveal"><img src="images/front21.jpeg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-    <div class="lux-insta-item lux-insta-wide s-reveal"><img src="images/front5.jpg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-    <div class="lux-insta-item s-reveal"><img src="images/front6.jpg" alt="Shenova Instagram" loading="lazy"><div class="lux-insta-hover"><span>View</span></div></div>
-  </div>
-</section>
-
-<!-- ══════════════ NEWSLETTER ══════════════ -->
-<section class="lux-newsletter-section">
-  <div class="lux-newsletter-inner s-reveal">
-    <div class="lux-newsletter-text">
-      <div class="lux-eyebrow" style="color:rgba(255,255,255,.35)">The Inner Circle</div>
-      <h2 class="lux-newsletter-title">Join the<br><em>World</em> of Shenova</h2>
-      <p>Exclusive drops, curated edits, and modern luxury inspiration — delivered quietly to your inbox.</p>
-    </div>
-    <!-- newsletter-form class preserved for main.js handler -->
-    <form class="newsletter-form lux-newsletter-form" onsubmit="return false">
-      <input type="email" id="newsletter-email" placeholder="Your email address" class="lux-email-input" autocomplete="email">
-      <button type="button" class="lux-newsletter-btn" onclick="handleNewsletter()">Join</button>
+<!-- NEWSLETTER -->
+<section class="sh-nl">
+  <div class="sh-nl-in sr">
+    <span class="sh-ey" style="color:rgba(255,255,255,.26)">The Inner Circle</span>
+    <h2 class="sh-nl-h">Join the <em>World</em> of Shenova</h2>
+    <p>Exclusive drops and curated edits — delivered quietly to your inbox.</p>
+    <!-- newsletter-form class preserved for main.js -->
+    <form class="newsletter-form sh-nl-form" onsubmit="return false">
+      <input type="email" id="newsletter-email" class="sh-nl-inp" placeholder="Your email address" autocomplete="email">
+      <button type="button" class="sh-nl-btn" onclick="handleNL()">Join</button>
     </form>
-    <div class="lux-newsletter-note">No spam. Unsubscribe anytime.</div>
+    <div class="sh-nl-note">No spam. Unsubscribe anytime.</div>
   </div>
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
-<footer class="lux-footer">
-  <div class="lux-footer-top">
-    <div class="lux-footer-brand">
-      <div class="lux-footer-logo">SHENOVA</div>
-      <p>Quiet luxury for the modern woman.<br>Crafted in limited editions.</p>
-      <div class="lux-footer-social">
-        <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="lux-social-pill">Instagram ↗</a>
-      </div>
+<!-- FOOTER -->
+<footer class="sh-foot">
+  <div class="sh-foot-top">
+    <div class="sh-foot-brand">
+      <div class="sh-foot-logo">SHENOVA</div>
+      <p>Quiet luxury for the modern woman. Crafted in limited editions.</p>
+      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="sh-social">Instagram ↗</a>
     </div>
-    <div class="lux-footer-nav">
-      <div class="lux-footer-col">
+    <div class="sh-foot-nav">
+      <div class="sh-foot-col">
         <h4>Shop</h4>
         <a href="shop.html">All Products</a>
         <a href="shop.html?cat=new">New Arrivals</a>
         <a href="shop.html?cat=tops">Tops</a>
         <a href="shop.html?cat=dresses">Dresses</a>
       </div>
-      <div class="lux-footer-col">
+      <div class="sh-foot-col">
         <h4>Brand</h4>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
         <a href="wishlist.html">Wishlist</a>
       </div>
-      <div class="lux-footer-col">
+      <div class="sh-foot-col">
         <h4>Help</h4>
         <a href="#">Shipping</a>
         <a href="#">Returns</a>
@@ -634,22 +903,16 @@
       </div>
     </div>
   </div>
-  <div class="lux-footer-bottom">
+  <div class="sh-foot-bot">
     <span>© 2026 Shenova. All rights reserved.</span>
-    <div class="lux-footer-legal">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms</a>
-    </div>
+    <div class="sh-foot-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
   </div>
 </footer>
 
-<!-- ══════════════ CART DRAWER — classes preserved from main.js ══════════════ -->
+<!-- CART DRAWER — classes preserved for main.js -->
 <div class="drawer-overlay" onclick="closeCart()"></div>
-<aside class="drawer">
-  <div class="drawer-head">
-    <h3>Your Bag</h3>
-    <button onclick="closeCart()" style="font-size:22px;line-height:1">×</button>
-  </div>
+<aside class="drawer" role="dialog" aria-label="Shopping bag">
+  <div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px;line-height:1;cursor:pointer">×</button></div>
   <div class="drawer-body"></div>
   <div class="drawer-foot">
     <div class="total"><span>Total</span><span>₹0</span></div>
@@ -657,42 +920,417 @@
   </div>
 </aside>
 
-<!-- ══════════════ MODAL — preserved for main.js ══════════════ -->
+<!-- MODAL — preserved for main.js -->
 <div class="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
 </div>
 
-<!-- ══════════════ QUICK VIEW MODAL — IDs/classes preserved for main.js ══════════════ -->
-<div id="quick-modal" class="quick-modal" onclick="if(event.target===this)closeQuickView()">
-  <div class="quick-modal-card">
-    <button class="quick-close" onclick="closeQuickView()">×</button>
-    <div class="quick-img-wrap">
-      <img id="quick-image" src="" alt="">
-    </div>
-    <div class="quick-info">
-      <div id="quick-title" class="quick-title"></div>
-      <div id="quick-price" class="quick-price"></div>
-      <div id="quick-desc" class="quick-desc"></div>
-      <div class="quick-sizes">
-        <div class="size-label">Select Size</div>
-        <div id="quick-size-wrap" class="sizes-wrap"></div>
-      </div>
-      <button id="quick-cart-btn" class="btn" style="margin-top:20px">Add to Bag</button>
+<!-- QUICK VIEW — all IDs preserved for main.js -->
+<div id="quick-modal" onclick="if(event.target===this)closeQuickView()">
+  <div class="qm-card">
+    <button class="qm-close" onclick="closeQuickView()">×</button>
+    <div class="qm-img"><img id="quick-image" src="" alt=""></div>
+    <div class="qm-info">
+      <div class="qm-lbl">SHENOVA COLLECTION</div>
+      <div id="quick-title"></div>
+      <div id="quick-price"></div>
+      <div id="quick-desc"></div>
+      <div class="qm-size-lbl">Select Size</div>
+      <div id="quick-size-wrap"></div>
+      <button id="quick-cart-btn">Add to Bag</button>
+      <div class="qm-trust"><span>✦ Free delivery above ₹2,000</span><span>✦ 14-day easy returns</span></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ TOAST ══════════════ -->
-<div id="toast" class="toast"></div>
+<!-- TOAST -->
+<div id="sh-toast"></div>
 
-<!-- ══════════════ SCRIPTS — load order preserved ══════════════ -->
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+<!-- SPIN POPUP — IDs preserved for main.js -->
+<div id="spin-popup">
+  <div class="sp-box">
+    <button class="sp-x" onclick="closeSpinPopup()">×</button>
+    <div class="sp-left">
+      <div class="sp-lh">Spin &amp; Win<br>Your Discount</div>
+      <div class="sp-wheel-wrap">
+        <div class="sp-wptr"></div>
+        <canvas id="wheel" width="220" height="220" onclick="spinWheel()" style="border-radius:50%;cursor:pointer;display:block;border:3px solid rgba(250,247,242,.08)"></canvas>
+        <div class="sp-wcenter" id="spin-center-btn" onclick="spinWheel()">SPIN</div>
+      </div>
+      <div class="sp-lsub">Enter details &amp; spin to win</div>
+    </div>
+    <div class="sp-right">
+      <span class="sh-ey">SHENOVA EXCLUSIVE</span>
+      <h2><em>Unlock</em> Your Exclusive Offer</h2>
+      <p>Enter your details and spin the wheel to reveal a special discount on your next order.</p>
+      <input id="spin-email" type="email" class="sp-inp" placeholder="Your email address" autocomplete="email">
+      <input id="spin-phone" type="tel" class="sp-inp" placeholder="Your phone number" autocomplete="tel">
+      <div id="spin-error" class="sp-error"></div>
+      <button class="sp-submit" onclick="spinWheel()">Spin the Wheel</button>
+      <div id="spin-result"></div>
+      <p class="sp-note">One spin per customer. By entering you agree to receive marketing emails.</p>
+    </div>
+  </div>
+</div>
+
+<!-- COUPON POPUP — IDs preserved for main.js -->
+<div id="coupon-popup">
+  <div class="cp-box">
+    <button class="cp-x" onclick="closeCouponPopup()">×</button>
+    <span class="sh-ey" style="color:rgba(250,247,242,.26)">YOU WON</span>
+    <h2>🎉 Congratulations!</h2>
+    <p>Your exclusive Shenova discount code:</p>
+    <div id="coupon-discount">20% OFF</div>
+    <div class="cp-code"><span id="coupon-code-text">SHENOVA20</span><button class="cp-copy" onclick="copyCoupon()">COPY</button></div>
+    <p class="cp-note">Valid 7 days. One-time use. Apply at checkout.</p>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
-<!-- Luxury v4 additions — announcement bar, enhanced mobile, signature strip -->
-<script src="js/luxury-v4.js"></script>
 
+<script>
+/* ================================================================
+   SHENOVA HOMEPAGE — inline JS v5 (final)
+   ================================================================ */
+(function(){
+
+/* ─ ANNOUNCE BAR ─ */
+const BAR_K='sh_bar_v5';
+const barEl=document.getElementById('sh-bar');
+if(localStorage.getItem(BAR_K)){barEl&&barEl.classList.add('gone');document.body.classList.add('bar-off')}
+window.dismissBar=function(){
+  if(!barEl)return;
+  barEl.style.transition='opacity .4s';barEl.style.opacity='0';
+  setTimeout(()=>{barEl.classList.add('gone');document.body.classList.add('bar-off');localStorage.setItem(BAR_K,'1')},400);
+};
+
+/* ─ LOADER ─ */
+const ld=document.getElementById('sh-ld');
+function hideLoader(){
+  if(!ld)return;ld.classList.add('out');
+  const hi=document.getElementById('heroImg'),hm=document.getElementById('heroImgMob');
+  if(hi)hi.classList.add('z');if(hm)hm.classList.add('z');
+  // Hero reveals
+  document.querySelectorAll('.sh-hero .sr').forEach(el=>el.classList.add('on'));
+}
+window.addEventListener('load',()=>setTimeout(hideLoader,1950));
+
+/* ─ SUPPRESS default .loader hide from main.js (our loader ID is different) ─ */
+// main.js hides .loader — we don't use that class, so it's fine.
+
+/* ─ CUSTOM CURSOR ─ */
+const cur=document.getElementById('lx-c'),dot=document.getElementById('lx-d');
+if(cur&&window.matchMedia('(hover:hover)and(pointer:fine)').matches){
+  let cx=0,cy=0,tx=0,ty=0;
+  document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;dot.style.left=tx+'px';dot.style.top=ty+'px';cur.classList.add('on');dot.classList.add('on');});
+  (function a(){cx+=(tx-cx)*.14;cy+=(ty-cy)*.14;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(a);})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+}
+
+/* ─ SCROLL PROGRESS ─ */
+const prog=document.getElementById('sh-prog');
+window.addEventListener('scroll',()=>{
+  if(!prog)return;
+  prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+},{passive:true});
+
+/* ─ SCROLL REVEALS ─ */
+const srEls=document.querySelectorAll('.sr');
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});
+  },{threshold:.08,rootMargin:'0px 0px -36px 0px'});
+  srEls.forEach(el=>{if(!el.closest('#sh-hero'))io.observe(el);});
+}else{srEls.forEach(el=>el.classList.add('on'));}
+
+/* ─ CINEMATIC BREAK ZOOM ─ */
+const cin=document.getElementById('sh-cin');
+if(cin&&'IntersectionObserver' in window){
+  new IntersectionObserver(([e])=>{if(e.isIntersecting)cin.classList.add('on');},{threshold:.18}).observe(cin);
+}
+
+/* ─ H-SCROLL GALLERY DRAG ─ */
+const gw=document.getElementById('sh-gw');
+if(gw){
+  let isDown=false,sx,sl;
+  gw.addEventListener('mousedown',e=>{isDown=true;sx=e.pageX-gw.offsetLeft;sl=gw.scrollLeft;gw.classList.add('drag');});
+  document.addEventListener('mouseup',()=>{isDown=false;gw.classList.remove('drag');});
+  gw.addEventListener('mouseleave',()=>{isDown=false;gw.classList.remove('drag');});
+  gw.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();gw.scrollLeft=sl-(e.pageX-gw.offsetLeft-sx)*1.35;});
+}
+
+/* ─ NAV SCROLL ─ */
+const nav=document.querySelector('.lux-nav');
+window.addEventListener('scroll',()=>nav&&nav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
+
+/* ─ SPIN POPUP TIMING ─ */
+const sp=document.getElementById('spin-popup');
+if(sp){
+  sp.classList.remove('show');document.body.style.overflow='';
+  setTimeout(()=>{sp.classList.add('show');document.body.style.overflow='hidden';},4600);
+}
+
+/* ─ SPIN WHEEL ENGINE ─ */
+(function(){
+  const SEGMENTS=[
+    {label:'5% OFF',   code:'SHENOVA5',  pct:'5% OFF',  dark:true},
+    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
+    {label:'10% OFF',  code:'SHENOVA10', pct:'10% OFF', dark:true},
+    {label:'8% OFF',   code:'SHENOVA8',  pct:'8% OFF',  dark:false},
+    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:true},
+    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
+    {label:'12% OFF',  code:'SHENOVA12', pct:'12% OFF', dark:true},
+    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
+  ];
+  const DARK='#1a1815', GOLD='#b8956a', GOLD_LT='#d4b896';
+  const canvas=document.getElementById('wheel');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const N=SEGMENTS.length;
+  const ARC=2*Math.PI/N;
+  let currentAngle=0, spinning=false, spun=false;
+
+  function drawWheel(rot){
+    const cx=canvas.width/2, cy=canvas.height/2, r=cx-2;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<N;i++){
+      const start=rot+i*ARC, end=start+ARC;
+      const seg=SEGMENTS[i];
+      // Segment fill
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,r,start,end);
+      ctx.closePath();
+      ctx.fillStyle=seg.dark?DARK:GOLD;
+      ctx.fill();
+      // Subtle segment border
+      ctx.strokeStyle='rgba(250,247,242,0.08)';
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+      // Text
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(start+ARC/2);
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      const textColor=seg.dark?GOLD_LT:'#fff';
+      const lines=seg.pct.split('\n');
+      if(lines.length>1){
+        // Two-line text for "Better Luck"
+        ctx.font='bold 8px "DM Sans","Helvetica Neue",sans-serif';
+        ctx.fillStyle=textColor;
+        ctx.fillText(lines[0],r*0.55,-5);
+        ctx.fillText(lines[1],r*0.55,6);
+      } else {
+        ctx.font='bold 11px "DM Sans","Helvetica Neue",sans-serif';
+        ctx.fillStyle=textColor;
+        ctx.fillText(seg.pct,r*0.57,0);
+      }
+      ctx.restore();
+    }
+    // Center hole (drawn via CSS overlay .sp-wcenter)
+    ctx.beginPath();
+    ctx.arc(cx,cy,28,0,2*Math.PI);
+    ctx.fillStyle='#faf7f2';
+    ctx.fill();
+    ctx.strokeStyle='rgba(250,247,242,0.15)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+  }
+
+  drawWheel(currentAngle);
+
+  function validateInputs(){
+    const email=(document.getElementById('spin-email')||{}).value?.trim();
+    const phone=(document.getElementById('spin-phone')||{}).value?.trim();
+    const errEl=document.getElementById('spin-error');
+    const emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const phoneRe=/^[6-9]\d{9}$/; // Indian 10-digit mobile
+    if(!email||!emailRe.test(email)){
+      if(errEl){errEl.textContent='Please enter a valid email address.';errEl.classList.add('show');}
+      document.getElementById('spin-email')?.focus();
+      return false;
+    }
+    const digitsOnly=phone.replace(/\D/g,'');
+    if(!digitsOnly||!phoneRe.test(digitsOnly)){
+      if(errEl){errEl.textContent='Please enter a valid 10-digit Indian mobile number.';errEl.classList.add('show');}
+      document.getElementById('spin-phone')?.focus();
+      return false;
+    }
+    if(errEl)errEl.classList.remove('show');
+    return true;
+  }
+
+  window.spinWheel=function(){
+    if(spinning||spun)return;
+    if(!validateInputs())return;
+    spinning=true;
+    spun=true;
+    // Disable inputs
+    ['spin-email','spin-phone'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.disabled=true;
+    });
+    const submitBtn=document.querySelector('.sp-submit');
+    if(submitBtn)submitBtn.disabled=true;
+
+    // Pick a random winning segment
+    const winIdx=Math.floor(Math.random()*N);
+    // Calculate target angle so winIdx segment lands under the pointer (top = -π/2)
+    const targetSegCenter=winIdx*ARC+ARC/2;
+    const pointer=Math.PI*3/2; // top of wheel in canvas coords (270deg)
+    let extra=pointer-targetSegCenter;
+    // Normalize extra to [0,2π)
+    extra=((extra%( 2*Math.PI))+(2*Math.PI))%(2*Math.PI);
+    // Add 5 full rotations for drama
+    const totalRot=currentAngle+5*2*Math.PI+extra;
+    const duration=5000;
+    const start=performance.now();
+    const startAngle=currentAngle;
+    const ease=(t)=>1-Math.pow(1-t,4);
+
+    function frame(now){
+      const elapsed=Math.min(now-start,duration);
+      const t=ease(elapsed/duration);
+      currentAngle=startAngle+t*(totalRot-startAngle);
+      drawWheel(currentAngle);
+      if(elapsed<duration){requestAnimationFrame(frame);}
+      else{
+        currentAngle=totalRot%(2*Math.PI);
+        drawWheel(currentAngle);
+        spinning=false;
+        const seg=SEGMENTS[winIdx];
+        // Smooth transition: hide spin popup, then show coupon popup
+        const spinPopup=document.getElementById('spin-popup');
+        const couponPopup=document.getElementById('coupon-popup');
+        // Populate coupon before showing
+        if(seg.code){
+          const discEl=document.getElementById('coupon-discount');
+          const codeEl=document.getElementById('coupon-code-text');
+          if(discEl)discEl.textContent=seg.pct;
+          if(codeEl)codeEl.textContent=seg.code;
+          // Show "YOU WON" label
+          const wonLabel=couponPopup?.querySelector('.sh-ey');
+          if(wonLabel)wonLabel.textContent='YOU WON';
+          const congrats=couponPopup?.querySelector('h2');
+          if(congrats)congrats.textContent='🎉 Congratulations!';
+        } else {
+          // Better Luck
+          const discEl=document.getElementById('coupon-discount');
+          if(discEl){discEl.textContent='😔';discEl.style.fontSize='42px';}
+          const wonLabel=couponPopup?.querySelector('.sh-ey');
+          if(wonLabel)wonLabel.textContent='RESULT';
+          const congrats=couponPopup?.querySelector('h2');
+          if(congrats)congrats.textContent='Better Luck Next Time!';
+          const codeBox=couponPopup?.querySelector('.cp-code');
+          if(codeBox)codeBox.style.display='none';
+        }
+        // Fade out spin popup, then show coupon
+        if(spinPopup){
+          spinPopup.style.transition='opacity 0.45s ease';
+          spinPopup.style.opacity='0';
+          setTimeout(()=>{
+            spinPopup.classList.remove('show');
+            spinPopup.style.opacity='';
+            spinPopup.style.transition='';
+            document.body.style.overflow='hidden';
+            if(couponPopup){
+              couponPopup.style.zIndex='9999';
+              couponPopup.classList.add('show');
+            }
+          },460);
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+  };
+
+  // Clear error on input change
+  ['spin-email','spin-phone'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('input',()=>{
+      const errEl=document.getElementById('spin-error');
+      if(errEl)errEl.classList.remove('show');
+    });
+  });
+})();
+
+window.closeSpinPopup=function(){
+  const sp=document.getElementById('spin-popup');
+  if(!sp)return;
+  sp.style.transition='opacity .4s';sp.style.opacity='0';
+  setTimeout(()=>{sp.classList.remove('show');sp.style.opacity='';sp.style.transition='';document.body.style.overflow='';},400);
+};
+window.closeCouponPopup=function(){
+  const cp=document.getElementById('coupon-popup');
+  if(!cp)return;
+  cp.style.transition='opacity .4s';cp.style.opacity='0';
+  setTimeout(()=>{cp.classList.remove('show');cp.style.opacity='';cp.style.transition='';document.body.style.overflow='';},400);
+};
+window.copyCoupon=function(){
+  const code=(document.getElementById('coupon-code-text')||{}).textContent;
+  if(code){navigator.clipboard?.writeText(code).catch(()=>{});window.showToast?.('Code copied: '+code);}
+};
+
+/* ─ TOAST OVERRIDE (replaces main.js alert) ─ */
+window.showToast=function(msg){
+  const t=document.getElementById('sh-toast');if(!t)return;
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3000);
+};
+
+/* ─ MODAL HELPERS ─ */
+window.showModal=function(title,msg){
+  const m=document.querySelector('.modal');if(!m)return;
+  m.querySelector('h3').textContent=title;m.querySelector('p').textContent=msg;m.classList.add('open');
+};
+window.closeModal=function(){document.querySelector('.modal')?.classList.remove('open');};
+
+/* ─ NEWSLETTER ─ */
+window.handleNL=async function(){
+  const inp=document.getElementById('newsletter-email');
+  const email=inp?.value.trim();
+  if(!email)return window.showToast('Please enter your email');
+  try{
+    const base=window.API_BASE||'http://localhost:5000';
+    const r=await fetch(base+'/api/newsletter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const d=await r.json();
+    if(!r.ok)return window.showToast(d.message||'Something went wrong');
+    window.showToast('Welcome to Shenova ✦');if(inp)inp.value='';
+  }catch{window.showToast('Welcome to Shenova ✦');}
+};
+
+/* ─ MOBILE TAP FEEDBACK ─ */
+if(window.matchMedia('(hover:none)').matches){
+  document.querySelectorAll('.sh-cc,.sh-gc,.sh-rv').forEach(el=>{
+    el.addEventListener('touchstart',function(){this.style.transform='scale(0.984)';},{passive:true});
+    el.addEventListener('touchend',function(){this.style.transform='';},{passive:true});
+    el.addEventListener('touchcancel',function(){this.style.transform='';},{passive:true});
+  });
+  // Product card tap
+  const pg=document.getElementById('featured-grid');
+  if(pg){new MutationObserver(()=>{
+    pg.querySelectorAll('.product-card:not([data-t])').forEach(c=>{
+      c.dataset.t='1';
+      c.addEventListener('touchstart',function(){this.style.transition='transform .15s';this.style.transform='scale(0.978)';},{passive:true});
+      c.addEventListener('touchend',function(){this.style.transform='';},{passive:true});
+      c.addEventListener('touchcancel',function(){this.style.transform='';},{passive:true});
+    });
+  }).observe(pg,{childList:true});}
+}
+
+/* ─ REDUCED MOTION FALLBACK ─ */
+if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+  document.querySelectorAll('.sr').forEach(el=>el.classList.add('on'));
+}
+
+})();
+</script>
 </body>
 </html>
