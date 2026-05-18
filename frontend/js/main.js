@@ -1,8 +1,12 @@
 // ================= GLOBAL CONFIG CHECK =================
-if(typeof API_BASE === "undefined"){
-  const API_BASE = 'http://localhost:5000';
-  const API = API_BASE + '/api';
-}
+/* ================= API CONFIG ================= */
+
+const API_BASE =
+  window.location.hostname.includes('localhost')
+    ? 'http://localhost:5000'
+    : 'https://shenova-website-production.up.railway.app';
+
+const API = API_BASE + '/api';
 
 // ================= LOADER =================
 /* ================= LOADER ================= */
