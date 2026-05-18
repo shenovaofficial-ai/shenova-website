@@ -240,17 +240,17 @@ document
         'success'
       );
 
-      /* Redirect on modal close */
-      setTimeout(() => {
-        const modalBtn = document.querySelector('.co-modal-btn');
-        if (modalBtn) {
-          const original = modalBtn.onclick;
-          modalBtn.onclick = () => {
-            if (original) original();
-            location.href = 'index.html';
-          };
-        }
-      }, 120);
+const modalBtn = document.querySelector('.co-modal-btn');
+
+if (modalBtn) {
+  modalBtn.addEventListener('click', () => {
+    document
+      .querySelector('.co-modal')
+      ?.classList.remove('show', 'open');
+
+    window.location.href = 'index.html';
+  });
+}
 
     } catch (err) {
       console.error('[Checkout] Order failed:', err);
