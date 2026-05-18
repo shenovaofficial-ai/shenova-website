@@ -7,25 +7,17 @@ if(typeof API_BASE === "undefined"){
 // ================= LOADER =================
 /* ================= LOADER ================= */
 
-window.addEventListener('load', () => {
+window.onload = function () {
 
   const loader = document.querySelector('.lux-loader');
 
-  if(loader){
+  if (loader) {
 
-    setTimeout(() => {
-
-      loader.classList.add('hide');
-
-      setTimeout(() => {
-        loader.style.display = 'none';
-      }, 1000);
-
-    }, 1200);
+    loader.style.display = 'none';
 
   }
 
-});
+};
 
 // ================= NAV =================
 const nav = document.querySelector('.nav');
