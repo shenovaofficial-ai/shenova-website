@@ -46,7 +46,7 @@
    CUSTOM CURSOR (desktop only)
 ────────────────────────────────────────────── */
 @media (hover: hover) and (pointer: fine) {
-  body { cursor: none; }
+  
 
 .lux-cursor{
   position:fixed;
@@ -86,7 +86,6 @@
   }
 
   .lux-cursor-dot.visible { opacity: 1; }
-  a, button { cursor: none; }
 }
 
 /* ──────────────────────────────────────────────
@@ -1897,7 +1896,7 @@
   color: rgba(250,247,242,0.5);
   font-family: var(--sans);
   transition: color 0.3s;
-  background: none; border: none; cursor: none;
+  background: none; border: none;
   font-weight: 400;
 }
 
@@ -2271,3 +2270,7 @@ body.menu-open { overflow: hidden; }
    SPIN WHEEL / COUPON — from style.css
 ────────────────────────────────────────────── */
 
+.lux-cursor,
+.lux-cursor-dot{
+  display:none !important;
+}

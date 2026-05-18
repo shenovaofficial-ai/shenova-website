@@ -166,6 +166,7 @@ if (!hamburger || !mobileMenu) {
   let curX   = 0, curY   = 0;
 
   if (cursor && cursorDot && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.body.classList.add('lux-cursor-active');
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -173,6 +174,8 @@ if (!hamburger || !mobileMenu) {
       cursorDot.style.top  = mouseY + 'px';
       cursor?.classList.add('visible');
       cursorDot?.classList.add('visible');
+      cursor.style.opacity = '1';
+cursorDot.style.opacity = '1';
     });
 
     function animateCursor() {
