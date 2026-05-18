@@ -12,6 +12,17 @@ const API = API_BASE + '/api';
 /* ================= LOADER ================= */
 
 
+window.addEventListener('load', ()=>{
+
+const loader = document.querySelector('.lux-loader'); 
+
+  setTimeout(()=>{
+
+loader?.classList.add('hide');
+
+  }, 1800);
+
+});
 
 // ================= NAV =================
 const nav = document.querySelector('.nav');
