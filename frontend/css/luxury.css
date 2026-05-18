@@ -48,23 +48,22 @@
 @media (hover: hover) and (pointer: fine) {
   body { cursor: none; }
 
-  .lux-cursor {
-    position: fixed;
-    width: 34px;
-    height: 34px;
-    border: 1px solid rgba(13,12,11,0.55);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    transform: translate(-50%, -50%);
-    transition: width 0.5s var(--ease-out),
-                height 0.5s var(--ease-out),
-                border-color 0.3s,
-                background 0.3s,
-                opacity 0.4s;
-    mix-blend-mode: multiply;
-    opacity: 0;
-  }
+.lux-cursor{
+  position:fixed;
+  width:34px;
+  height:34px;
+  border:1px solid rgba(13,12,11,0.55);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:
+    width .5s,
+    height .5s,
+    opacity .3s;
+
+  opacity:0;
+}
 
   .lux-cursor.visible  { opacity: 1; }
   .lux-cursor.hovered  {
@@ -80,7 +79,7 @@
     background: var(--lux-gold);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 10001;
+    z-index: 100000;
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity 0.3s;
