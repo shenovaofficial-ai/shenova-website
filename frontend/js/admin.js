@@ -286,19 +286,38 @@ function resetMediaPreviews(context) {
   const vidPreview = document.getElementById(`${context}-vid-preview`);
   if (imgPreview) imgPreview.innerHTML = '';
   if (vidPreview) vidPreview.innerHTML = '';
+  // Also reset file inputs so re-opening doesn't show stale selections
+  if (context === 'edit') {
+    const imgInput = document.getElementById('edit-images-input');
+    const vidInput = document.getElementById('edit-videos-input');
+    if (imgInput) imgInput.value = '';
+    if (vidInput) vidInput.value = '';
+  }
 }
 
 // ================= EDIT PRODUCT MODAL =================
 
 window.openEditModal = async function(id) {
-  const r       = await fetch(API + '/products/' + id);
-  const product = await r.json();
-
   const modal = document.getElementById('edit-modal');
   const form  = document.getElementById('edit-form');
 
+  // Show modal immediately with a loading state
   modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
 
+  let product;
+  try {
+    const r = await fetch(API + '/products/' + id);
+    if (!r.ok) throw new Error('Failed to load product');
+    product = await r.json();
+  } catch (err) {
+    alert('Could not load product details. Please try again.');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    return;
+  }
+
+  // Populate form fields
   form.id.value          = product._id || '';
   form.name.value        = product.name || '';
   form.category.value    = product.category || '';
@@ -307,41 +326,37 @@ window.openEditModal = async function(id) {
   form.sizes.value       = (product.sizes || []).join(',');
   form.description.value = product.description || '';
 
-  // Show existing images
+  // ── Current images ───────────────────────────────────────
   const existImgWrap = document.getElementById('edit-existing-images');
   if (existImgWrap) {
     if (product.images?.length) {
-      existImgWrap.innerHTML =
-        '<p class="media-label">Current Images:</p>' +
-        product.images.map(src => `
-          <img src="${mediaUrl(src)}" class="preview-thumb" alt="">
-        `).join('');
+      existImgWrap.innerHTML = product.images.map(src => `
+        <img src="${mediaUrl(src)}" alt="Product image" loading="lazy">
+      `).join('');
     } else {
-      existImgWrap.innerHTML = '';
+      existImgWrap.innerHTML = '<span class="no-media-text">No images uploaded</span>';
     }
   }
 
-  // Show existing videos
+  // ── Current videos ───────────────────────────────────────
   const existVidWrap = document.getElementById('edit-existing-videos');
   if (existVidWrap) {
     if (product.videos?.length) {
-      existVidWrap.innerHTML =
-        '<p class="media-label">Current Videos:</p>' +
-        product.videos.map(src => `
-          <video src="${mediaUrl(src)}" class="preview-thumb preview-video"
-                 controls muted preload="metadata"></video>
-        `).join('');
+      existVidWrap.innerHTML = product.videos.map(src => `
+        <video src="${mediaUrl(src)}" controls muted preload="metadata"></video>
+      `).join('');
     } else {
-      existVidWrap.innerHTML = '';
+      existVidWrap.innerHTML = '<span class="no-media-text">No videos uploaded</span>';
     }
   }
 
-  // Clear any new-file previews from a previous open
+  // Clear new-file previews from any previous open
   resetMediaPreviews('edit');
 };
 
 window.closeEditModal = function() {
   document.getElementById('edit-modal').classList.remove('show');
+  document.body.style.overflow = '';
 };
 
 // ================= SAVE EDITED PRODUCT =================

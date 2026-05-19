@@ -8,13 +8,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ── Video / media upload additions ────────────────────────────── */
+/* ════════════════════════════════════════════════════════
+   MEDIA UPLOAD — Add Product form
+   ════════════════════════════════════════════════════════ */
 .media-section {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-
 .media-section label {
   font-size: 11px;
   letter-spacing: .08em;
@@ -22,10 +23,7 @@
   color: #888;
   font-weight: 500;
 }
-
-.media-section input[type="file"] {
-  width: 100%;
-}
+.media-section input[type="file"] { width: 100%; }
 
 .media-row {
   display: grid;
@@ -39,9 +37,7 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
-  min-height: 0;
 }
-
 .preview-thumb {
   width: 72px;
   height: 72px;
@@ -50,14 +46,9 @@
   border: 1px solid #e0dbd4;
   background: #f5f2ed;
 }
+.preview-video { width: 120px; height: 72px; object-fit: cover; }
 
-.preview-video {
-  width: 120px;
-  height: 72px;
-  object-fit: cover;
-}
-
-/* Badge shown in the products table */
+/* Badge in products table */
 .media-badge {
   display: inline-block;
   background: #f5f0e8;
@@ -71,31 +62,315 @@
   letter-spacing: .04em;
 }
 
-/* Existing-media wrappers in edit modal */
-.media-label {
+/* ════════════════════════════════════════════════════════
+   EDIT MODAL — full redesign
+   ════════════════════════════════════════════════════════ */
+
+/* Overlay backdrop */
+.edit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(13, 12, 10, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px 40px;
+  overflow-y: auto;
+}
+.edit-modal.show {
+  display: flex;
+  animation: modalFadeIn .22s ease;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Modal box */
+.edit-box {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 720px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08);
+  animation: modalSlideUp .25s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(28px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Modal header */
+.edit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid #f0ece6;
+  background: #faf8f5;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.edit-top h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #1a1814;
+  letter-spacing: .02em;
+  margin: 0;
+}
+.edit-top .modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #e2ddd6;
+  background: #fff;
+  color: #666;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .18s;
+  flex-shrink: 0;
+}
+.edit-top .modal-close-btn:hover {
+  background: #f5f0e8;
+  border-color: #c8b89a;
+  color: #1a1814;
+}
+
+/* Modal body */
+.edit-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Section dividers inside the modal */
+.edit-section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f0ece6;
+}
+.edit-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.edit-section-title {
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #b0a898;
+  font-weight: 600;
+  margin-bottom: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Grid rows inside the modal form */
+.edit-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.edit-row2:last-child { margin-bottom: 0; }
+
+/* Full-width field */
+.edit-row1 { margin-bottom: 12px; }
+.edit-row1:last-child { margin-bottom: 0; }
+
+/* Inputs inside the modal */
+.edit-body input[type="text"],
+.edit-body input[type="number"],
+.edit-body textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #e2ddd6;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  color: #1a1814;
+  background: #fdfcfb;
+  transition: border-color .18s, box-shadow .18s;
+  outline: none;
+}
+.edit-body input[type="text"]:focus,
+.edit-body input[type="number"]:focus,
+.edit-body textarea:focus {
+  border-color: #c8b89a;
+  box-shadow: 0 0 0 3px rgba(200,184,154,.14);
+  background: #fff;
+}
+.edit-body input::placeholder,
+.edit-body textarea::placeholder { color: #c0b8ac; }
+.edit-body textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.55;
+}
+
+/* ── Current media display ─────────────────────────────────── */
+.current-media-block {
+  background: #faf8f5;
+  border: 1.5px solid #ede9e2;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.current-media-label {
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: #aaa;
-  margin-bottom: 4px;
+  color: #b0a898;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
 }
-
-.existing-media-wrap {
+.current-media-strip {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+  align-items: flex-start;
+}
+.current-media-strip img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1.5px solid #e0dbd4;
+  background: #f5f2ed;
+}
+.current-media-strip video {
+  width: 110px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1.5px solid #e0dbd4;
+  background: #111;
+}
+.no-media-text {
+  font-size: 12px;
+  color: #c0b8ac;
+  font-style: italic;
 }
 
-/* Override thumb size inside existing-media-wrap */
-.existing-media-wrap .preview-thumb {
-  width: 64px;
-  height: 64px;
+/* ── Upload inputs inside modal ────────────────────────────── */
+.edit-upload-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.edit-upload-col {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.edit-upload-label {
+  font-size: 11px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+.edit-upload-hint {
+  font-size: 11px;
+  color: #b8b0a4;
+  margin-top: 2px;
+}
+.edit-upload-col input[type="file"] {
+  width: 100%;
+  font-size: 12.5px;
+  padding: 9px 10px;
+  border: 1.5px dashed #d8d2c8;
+  border-radius: 8px;
+  background: #fdfcfb;
+  cursor: pointer;
+  transition: border-color .18s, background .18s;
+  color: #666;
+  box-sizing: border-box;
+}
+.edit-upload-col input[type="file"]:hover {
+  border-color: #c8b89a;
+  background: #faf7f3;
+}
+.edit-new-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.edit-new-preview img {
+  width: 58px; height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0dbd4;
+}
+.edit-new-preview video {
+  width: 90px; height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0dbd4;
 }
 
-.existing-media-wrap .preview-video {
-  width: 108px;
-  height: 64px;
+/* ── Modal footer / save button ───────────────────────────── */
+.edit-footer {
+  padding: 20px 28px 24px;
+  border-top: 1px solid #f0ece6;
+  background: #faf8f5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.edit-cancel-btn {
+  padding: 11px 22px;
+  border-radius: 8px;
+  border: 1.5px solid #e2ddd6;
+  background: #fff;
+  color: #666;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s;
+  letter-spacing: .03em;
+}
+.edit-cancel-btn:hover {
+  border-color: #c8b89a;
+  color: #1a1814;
+}
+.edit-save-btn {
+  padding: 11px 28px;
+  border-radius: 8px;
+  border: none;
+  background: #1a1814;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  transition: background .18s, transform .12s;
+}
+.edit-save-btn:hover  { background: #2e2a23; }
+.edit-save-btn:active { transform: scale(.97); }
+.edit-save-btn:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+  transform: none;
 }
 </style>
 </head>
@@ -177,35 +452,20 @@
 
         <textarea name="description" placeholder="Product Description"></textarea>
 
-        <!-- ── Media uploads ──────────────────────────────────────── -->
         <div class="media-row">
-
-          <!-- Images -->
           <div class="media-section">
             <label>Product Images (max 8)</label>
-            <input
-              id="add-images-input"
-              type="file"
-              name="images"
-              multiple
+            <input id="add-images-input" type="file" name="images" multiple
               accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
             <div class="preview-strip" id="add-img-preview"></div>
           </div>
-
-          <!-- Videos -->
           <div class="media-section">
             <label>Product Videos — MP4, WebM, MOV (max 4)</label>
-            <input
-              id="add-videos-input"
-              type="file"
-              name="videos"
-              multiple
+            <input id="add-videos-input" type="file" name="videos" multiple
               accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/ogg">
             <div class="preview-strip" id="add-vid-preview"></div>
           </div>
-
         </div>
-        <!-- ── end media uploads ──────────────────────────────────── -->
 
         <button type="submit" class="btn-primary">Add Product</button>
 
@@ -215,14 +475,12 @@
 
     <!-- ===== PRODUCTS TABLE ===== -->
     <section class="panel">
-
       <div class="section-head">
         <div>
           <p class="mini">Inventory</p>
           <h3>Products</h3>
         </div>
       </div>
-
       <div class="table-wrap">
         <table id="products-table">
           <thead>
@@ -238,12 +496,10 @@
           <tbody></tbody>
         </table>
       </div>
-
     </section>
 
     <!-- ===== ORDERS ===== -->
     <section id="orders" class="panel orders-panel">
-
       <div class="orders-top">
         <div>
           <p class="mini">Order Management</p>
@@ -260,9 +516,7 @@
           </select>
         </div>
       </div>
-
       <div class="orders-grid" id="orders-grid"></div>
-
     </section>
 
     <!-- ===== CONTACT MESSAGES ===== -->
@@ -294,63 +548,125 @@
   </div>
 </div>
 
-<!-- ===== EDIT PRODUCT MODAL ===== -->
+<!-- ═══════════════════════════════════════════════════════════
+     EDIT PRODUCT MODAL — redesigned
+     ═══════════════════════════════════════════════════════════ -->
 <div class="edit-modal" id="edit-modal">
   <div class="edit-box">
 
+    <!-- Header -->
     <div class="edit-top">
       <h2>Edit Product</h2>
-      <button type="button" onclick="closeEditModal()">×</button>
+      <button type="button" class="modal-close-btn" onclick="closeEditModal()">×</button>
     </div>
 
     <form id="edit-form">
-
       <input type="hidden" name="id">
 
-      <input type="text"   name="name"        placeholder="Product Name">
-      <input type="text"   name="category"    placeholder="Category">
-      <input type="number" name="price"       placeholder="Price">
-      <input type="number" name="stock"       placeholder="Stock">
-      <input type="text"   name="sizes"       placeholder="Sizes (XS,S,M,L)">
-      <textarea            name="description" placeholder="Description"></textarea>
+      <div class="edit-body">
 
-      <!-- ── Existing media (populated by openEditModal) ─────────── -->
-      <div class="existing-media-wrap" id="edit-existing-images"></div>
-      <div class="existing-media-wrap" id="edit-existing-videos"></div>
+        <!-- ── Section 1: Basic Info ─────────────────────────── -->
+        <div class="edit-section">
+          <div class="edit-section-title">Basic Information</div>
 
-      <!-- ── Replace / add new media ─────────────────────────────── -->
-      <div class="media-row">
+          <div class="edit-row2">
+            <div>
+              <input type="text" name="name" placeholder="Product Name">
+            </div>
+            <div>
+              <input type="text" name="category" placeholder="Category">
+            </div>
+          </div>
 
-        <div class="media-section">
-          <label>Replace Images (leave empty to keep current)</label>
-          <input
-            id="edit-images-input"
-            type="file"
-            name="images"
-            multiple
-            accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
-          <div class="preview-strip" id="edit-img-preview"></div>
+          <div class="edit-row2">
+            <div>
+              <input type="number" name="price" placeholder="Price (₹)">
+            </div>
+            <div>
+              <input type="number" name="stock" placeholder="Stock qty">
+            </div>
+          </div>
+
+          <div class="edit-row1">
+            <input type="text" name="sizes" placeholder="Sizes — comma separated e.g. XS,S,M,L,XL,XXL">
+          </div>
+
+          <div class="edit-row1">
+            <textarea name="description" placeholder="Product description…"></textarea>
+          </div>
         </div>
 
-        <div class="media-section">
-          <label>Replace Videos (leave empty to keep current)</label>
-          <input
-            id="edit-videos-input"
-            type="file"
-            name="videos"
-            multiple
-            accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/ogg">
-          <div class="preview-strip" id="edit-vid-preview"></div>
+        <!-- ── Section 2: Current Media ─────────────────────── -->
+        <div class="edit-section">
+          <div class="edit-section-title">Current Media</div>
+
+          <!-- Current images -->
+          <div class="current-media-block" id="edit-existing-images-block">
+            <div class="current-media-label">Images</div>
+            <div class="current-media-strip" id="edit-existing-images">
+              <span class="no-media-text">No images uploaded</span>
+            </div>
+          </div>
+
+          <!-- Current videos -->
+          <div class="current-media-block" id="edit-existing-videos-block">
+            <div class="current-media-label">Videos</div>
+            <div class="current-media-strip" id="edit-existing-videos">
+              <span class="no-media-text">No videos uploaded</span>
+            </div>
+          </div>
         </div>
 
+        <!-- ── Section 3: Replace Media ─────────────────────── -->
+        <div class="edit-section">
+          <div class="edit-section-title">Replace Media</div>
+          <p style="font-size:12px;color:#b0a898;margin:0 0 14px;line-height:1.5;">
+            Leave empty to keep existing media. Uploading new files will replace the current ones.
+          </p>
+
+          <div class="edit-upload-row">
+
+            <!-- Replace images -->
+            <div class="edit-upload-col">
+              <span class="edit-upload-label">New Images</span>
+              <input
+                id="edit-images-input"
+                type="file"
+                name="images"
+                multiple
+                accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
+              <span class="edit-upload-hint">JPEG, PNG, WEBP, GIF — max 8 files</span>
+              <div class="edit-new-preview" id="edit-img-preview"></div>
+            </div>
+
+            <!-- Replace videos -->
+            <div class="edit-upload-col">
+              <span class="edit-upload-label">New Videos</span>
+              <input
+                id="edit-videos-input"
+                type="file"
+                name="videos"
+                multiple
+                accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/ogg">
+              <span class="edit-upload-hint">MP4, WebM, MOV — max 4 files</span>
+              <div class="edit-new-preview" id="edit-vid-preview"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /.edit-body -->
+
+      <!-- Footer with action buttons -->
+      <div class="edit-footer">
+        <button type="button" class="edit-cancel-btn" onclick="closeEditModal()">Cancel</button>
+        <button type="submit" class="edit-save-btn">Save Changes</button>
       </div>
-
-      <button type="submit">Save Changes</button>
 
     </form>
 
-  </div>
-</div>
+  </div><!-- /.edit-box -->
+</div><!-- /.edit-modal -->
 
 <script src="../js/config.js"></script>
 <script src="../js/admin.js"></script>
