@@ -149,9 +149,20 @@ app.post('/api/products', handleUpload, async (req, res) => {
     body.featured = body.featured === 'true';
     body.trending = body.trending === 'true';
 
-    const { images, videos } = await processUploads(req.files);
+const { images, videos } = await processUploads(req.files);
     body.images = images;
     body.videos = videos;
+
+    // Always generate a unique slug from name
+    if (body.name) {
+      body.slug = body.name
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-') +
+        '-' + Date.now();
+    }
 
     console.log(`POST /products — images: ${images.length}, videos: ${videos.length}`);
     const product = await Product.create(body);
