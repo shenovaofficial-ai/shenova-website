@@ -694,14 +694,55 @@ const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
 
         order_id: order.id,
 
-        handler: async function (response) {
+ handler: async function (response) {
 
-          console.log(response);
+  console.log(response);
 
-          alert("Payment Successful");
+  // order data
+  const orderData = {
 
-          // yaha order save kar sakta hai
-        },
+    customer: {
+      name: customerName,
+      email: customerEmail,
+      phone: customerPhone,
+    },
+
+    paymentMethod: paymentMethod,
+
+    paymentStatus: "Paid",
+
+    razorpayPaymentId:
+      response.razorpay_payment_id,
+
+    razorpayOrderId:
+      response.razorpay_order_id,
+
+    totalAmount: totalPrice,
+
+    items: JSON.parse(
+      localStorage.getItem("cart")
+    ) || [],
+  };
+
+  // save order in backend
+  const saveRes = await fetch(
+    "https://shenova-website-production.up.railway.app/api/orders",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    }
+  );
+
+  const saved = await saveRes.json();
+
+  console.log(saved);
+
+  alert("Order Placed Successfully");
+
+},
 
         prefill: {
           name: customerName,
