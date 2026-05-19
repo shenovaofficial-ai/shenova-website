@@ -95,7 +95,7 @@ function renderSummary() {
 
   /* ── Pricing (original calc unchanged) ── */
   const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ship = sub > 2000 ? 0 : 69;
+  const ship = sub > 2000 ? 0 : 0;
 
   document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
   document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
@@ -127,7 +127,7 @@ document
 
     /* ── Pricing (same as original) ── */
     const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const ship = sub > 2000 ? 0 : 69;
+    const ship = sub > 2000 ? 0 : 0;
 
     /* ─────────────── COUPON (original API call) ─────────────── */
 /* ─────────────── COUPON (uses pre-validated discount) ─────────────── */
