@@ -321,7 +321,7 @@
   padding: 8px 14px;
   border-radius: 6px;
   display: none;
-"></div>x
+"></div>
             </div>
 
           </div>
@@ -862,7 +862,7 @@ e.stopPropagation();
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ coupon: window.appliedCouponCode })
+        body: JSON.stringify({ coupon: window.appliedCouponCode, email: customerEmail })
       }
     ).catch(() => {});
     // Clear coupon from localStorage

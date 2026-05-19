@@ -1,75 +1,72 @@
-const express = require('express');
+const express  = require('express');
+const router   = express.Router();
+const Coupon   = require('../models/Coupon');    // ← validate from here
+const SpinLead = require('../models/SpinLead');  // ← mark used here too
 
-const router = express.Router();
+// POST /api/coupon/apply  — validate a coupon code at checkout
+router.post('/apply', async (req, res) => {
+  try {
+    const code = (req.body.coupon || '').trim().toUpperCase();
 
-const SpinLead =
-require('../models/SpinLead');
-
-router.post('/apply', async(req,res)=>{
-
-  try{
-
-    const { coupon } = req.body;
-
-    const found =
-    await SpinLead.findOne({ coupon });
-
-    if(!found){
-
-      return res.status(400).json({
-        message:'Invalid coupon'
-      });
-
+    if (!code) {
+      return res.status(400).json({ message: 'Coupon code is required' });
     }
 
-    if(found.used){
+    // Look up in Coupon collection (the source of truth)
+    const found = await Coupon.findOne({ code });
 
-      return res.status(400).json({
-        message:'Coupon already used'
-      });
+    if (!found) {
+      return res.status(400).json({ message: 'Invalid coupon' });
+    }
 
+    if (found.used) {
+      return res.status(400).json({ message: 'Coupon already used' });
+    }
+
+    // Check expiry
+    if (found.expiresAt && new Date() > new Date(found.expiresAt)) {
+      return res.status(400).json({ message: 'Coupon has expired' });
     }
 
     res.json({
-      success:true,
-      discount:found.discount
+      success:  true,
+      discount: found.discount   // percentage, e.g. 10 means 10%
     });
 
-  }catch(err){
-
+  } catch (err) {
     console.log(err);
-
-    res.status(500).json({
-      message:'Server error'
-    });
-
+    res.status(500).json({ message: 'Server error' });
   }
-
 });
 
-router.post('/use', async(req,res)=>{
+// POST /api/coupon/use  — mark coupon as used after successful payment
+router.post('/use', async (req, res) => {
+  try {
+    const code  = (req.body.coupon || '').trim().toUpperCase();
+    const email = req.body.email || null;
 
-  try{
+    if (!code) {
+      return res.status(400).json({ message: 'Coupon code is required' });
+    }
 
-    const { coupon } = req.body;
-
-    await SpinLead.findOneAndUpdate(
-      { coupon },
-      { used:true }
+    // Mark used in Coupon collection
+    await Coupon.findOneAndUpdate(
+      { code },
+      { used: true, usedBy: email }
     );
 
-    res.json({
-      success:true
-    });
+    // Also mark used in SpinLead collection (keep in sync)
+    await SpinLead.findOneAndUpdate(
+      { coupon: code },
+      { used: true }
+    );
 
-  }catch(err){
+    res.json({ success: true });
 
-    res.status(500).json({
-      message:'Server error'
-    });
-
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Server error' });
   }
-
 });
 
 module.exports = router;
