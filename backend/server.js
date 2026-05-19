@@ -275,16 +275,18 @@ app.post('/api/spin/save', async (req, res) => {
     const { email, coupon, discount } = req.body;
     if (!email || !coupon) return res.status(400).json({ message: 'Email and coupon are required' });
 
-    // One coupon per email — don't duplicate
-    const existing = await SpinLead.findOne({ email: email.toLowerCase() });
-    if (existing) return res.json({ success: true, message: 'Already saved' });
-
-    await SpinLead.create({
-      email:    email.toLowerCase(),
-      coupon:   coupon.toUpperCase(),
-      discount: Number(discount) || 0,
-      used:     false
-    });
+    // Always upsert — update existing record or create new one
+    // This handles re-spins and clears old broken/hardcoded codes
+    await SpinLead.findOneAndUpdate(
+      { email: email.toLowerCase() },
+      {
+        email:    email.toLowerCase(),
+        coupon:   coupon.toUpperCase(),
+        discount: Number(discount) || 0,
+        used:     false
+      },
+      { upsert: true, new: true }
+    );
 
     console.log(`✅ Spin coupon saved — ${coupon} (${discount}%) for ${email}`);
     res.json({ success: true });
