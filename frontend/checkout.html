@@ -521,10 +521,10 @@
 ───────────────────────────── */
 
 document
-  .getElementById("checkout-form")
-  .addEventListener("submit", async function (e) {
-
-    e.preventDefault();
+  .getElementById("place-order-btn")
+  .addEventListener("click", async function (e) {
+e.preventDefault();
+e.stopPropagation();
 
     try {
 
