@@ -4,15 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Checkout · Shenova</title>
+
+  <!-- Fonts: Cormorant (editorial serif) + DM Sans (refined sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Global site styles (nav, drawer, modal, utilities) -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Luxury checkout overrides — NEW FILE -->
   <link rel="stylesheet" href="css/checkout-luxury.css">
 </head>
 <body class="checkout-page">
 
-  <!-- NAV -->
+
+
+  <!-- ═══════════════════════════════
+       NAV (all classes intact for main.js)
+  ═══════════════════════════════ -->
   <nav class="nav scrolled">
     <div class="container nav-inner">
       <a class="nav-logo" href="index.html">SHENOVA</a>
@@ -28,14 +37,16 @@
     </div>
   </nav>
 
-  <!-- MOBILE MENU -->
+  <!-- MOBILE MENU (existing structure) -->
   <div class="mobile-menu">
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
     <a href="about.html">About</a>
   </div>
 
-  <!-- CHECKOUT HERO -->
+  <!-- ═══════════════════════════════
+       CHECKOUT HERO STRIP
+  ═══════════════════════════════ -->
   <div class="co-hero">
     <div class="co-hero-inner">
       <p class="co-hero-eyebrow">Shenova · Secure Checkout</p>
@@ -48,14 +59,16 @@
     </div>
   </div>
 
-  <!-- MAIN CHECKOUT LAYOUT -->
+  <!-- ═══════════════════════════════
+       MAIN CHECKOUT LAYOUT
+  ═══════════════════════════════ -->
   <main class="co-wrap">
     <div class="co-inner">
 
-      <!-- LEFT: FORM COLUMN -->
+      <!-- ── LEFT: FORM COLUMN ── -->
       <div class="co-form-col">
 
-        <!-- STEP PROGRESS -->
+        <!-- ── STEP PROGRESS ── -->
         <div class="co-steps">
           <div class="co-step active" data-step="1">
             <span class="co-step-num">01</span>
@@ -73,10 +86,12 @@
           </div>
         </div>
 
+        <!-- ── CHECKOUT FORM (all name attrs identical to original) ── -->
         <form id="checkout-form" novalidate>
 
-          <!-- SECTION 1: SHIPPING ADDRESS -->
+          <!-- ── SECTION 1: SHIPPING ADDRESS ── -->
           <div class="co-section" id="co-section-1">
+
             <div class="co-section-head">
               <span class="co-section-num">01</span>
               <div>
@@ -86,65 +101,144 @@
             </div>
 
             <div class="co-fields">
+
               <div class="co-field-row two">
+                <!-- Full Name -->
                 <div class="co-field">
-                  <input type="text" name="fullName" id="f-fullName" class="co-input" placeholder=" " required autocomplete="name">
+                  <input
+                    type="text"
+                    name="fullName"
+                    id="f-fullName"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="name"
+                  >
                   <label class="co-label" for="f-fullName">Full Name</label>
                   <span class="co-field-line"></span>
                 </div>
+                <!-- Email -->
                 <div class="co-field">
-                  <input type="email" name="email" id="f-email" class="co-input" placeholder=" " required autocomplete="email">
+                  <input
+                    type="email"
+                    name="email"
+                    id="f-email"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="email"
+                  >
                   <label class="co-label" for="f-email">Email Address</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
               <div class="co-field-row two">
+                <!-- Phone -->
                 <div class="co-field">
-                  <input type="tel" name="phone" id="f-phone" class="co-input" placeholder=" " required autocomplete="tel">
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="f-phone"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="tel"
+                  >
                   <label class="co-label" for="f-phone">Phone Number</label>
                   <span class="co-field-line"></span>
                 </div>
+                <!-- Country -->
                 <div class="co-field">
-                  <input type="text" name="country" id="f-country" class="co-input" placeholder=" " value="India" required autocomplete="country-name">
+                  <input
+                    type="text"
+                    name="country"
+                    id="f-country"
+                    class="co-input"
+                    placeholder=" "
+                    value="India"
+                    required
+                    autocomplete="country-name"
+                  >
                   <label class="co-label" for="f-country">Country</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
+              <!-- Address (full width) -->
               <div class="co-field-row">
                 <div class="co-field">
-                  <input type="text" name="address" id="f-address" class="co-input" placeholder=" " required autocomplete="street-address">
+                  <input
+                    type="text"
+                    name="address"
+                    id="f-address"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="street-address"
+                  >
                   <label class="co-label" for="f-address">Street Address</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
               <div class="co-field-row two">
+                <!-- City -->
                 <div class="co-field">
-                  <input type="text" name="city" id="f-city" class="co-input" placeholder=" " required autocomplete="address-level2">
+                  <input
+                    type="text"
+                    name="city"
+                    id="f-city"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="address-level2"
+                  >
                   <label class="co-label" for="f-city">City</label>
                   <span class="co-field-line"></span>
                 </div>
+                <!-- State -->
                 <div class="co-field">
-                  <input type="text" name="state" id="f-state" class="co-input" placeholder=" " required autocomplete="address-level1">
+                  <input
+                    type="text"
+                    name="state"
+                    id="f-state"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="address-level1"
+                  >
                   <label class="co-label" for="f-state">State</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
+              <!-- ZIP (full width) -->
               <div class="co-field-row">
                 <div class="co-field co-field--half">
-                  <input type="text" name="zip" id="f-zip" class="co-input" placeholder=" " required autocomplete="postal-code">
+                  <input
+                    type="text"
+                    name="zip"
+                    id="f-zip"
+                    class="co-input"
+                    placeholder=" "
+                    required
+                    autocomplete="postal-code"
+                  >
                   <label class="co-label" for="f-zip">ZIP / Postal Code</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- SECTION 2: PAYMENT -->
+            </div>
+            <!-- end .co-fields -->
+
+          </div>
+          <!-- end co-section-1 -->
+
+          <!-- ── SECTION 2: PAYMENT ── -->
           <div class="co-section" id="co-section-2">
+
             <div class="co-section-head">
               <span class="co-section-num">02</span>
               <div>
@@ -153,7 +247,9 @@
               </div>
             </div>
 
+            <!-- Payment method cards -->
             <div class="co-pay-options">
+
               <label class="co-pay-card active" id="pay-cod">
                 <input type="radio" name="payment" value="Cash on Delivery" checked>
                 <div class="co-pay-icon">
@@ -189,46 +285,49 @@
                 </div>
                 <div class="co-pay-radio"></div>
               </label>
+
             </div>
 
-            <!-- ✅ COUPON SECTION — clean, no stray text -->
+            <!-- Coupon -->
             <div class="co-coupon">
               <p class="co-coupon-label">Have a coupon code?</p>
-              <div class="co-coupon-row">
-                <div class="co-field co-coupon-field">
-                  <input type="text" name="coupon" id="f-coupon" class="co-input"
-                    placeholder=" " autocomplete="off" style="text-transform:uppercase">
-                  <label class="co-label" for="f-coupon">Enter Coupon Code</label>
-                  <span class="co-field-line"></span>
-                </div>
-                <button type="button" id="apply-coupon-btn" style="
-                  padding:10px 22px;
-                  background:#0d0c0b;
-                  color:#faf7f2;
-                  border:none;
-                  border-radius:50px;
-                  font:400 9.5px/1 'DM Sans',sans-serif;
-                  letter-spacing:.26em;
-                  text-transform:uppercase;
-                  cursor:pointer;
-                  white-space:nowrap;
-                  flex-shrink:0;
-                  transition:background .3s;
-                ">Apply</button>
-              </div>
-              <!-- Feedback message — NO stray text after this -->
-              <div id="coupon-msg" style="
-                font:300 11px/1.5 'DM Sans',sans-serif;
-                margin-top:10px;
-                padding:8px 14px;
-                border-radius:6px;
-                display:none;
-              "></div>
+             <div class="co-coupon-row">
+  <div class="co-field co-coupon-field">
+    <input type="text" name="coupon" id="f-coupon" class="co-input"
+      placeholder=" " autocomplete="off" style="text-transform:uppercase">
+    <label class="co-label" for="f-coupon">Enter Coupon Code</label>
+    <span class="co-field-line"></span>
+  </div>
+  <button type="button" id="apply-coupon-btn" style="
+    padding: 10px 22px;
+    background: #0d0c0b;
+    color: #faf7f2;
+    border: none;
+    border-radius: 50px;
+    font: 400 9.5px/1 'DM Sans', sans-serif;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .3s;
+    flex-shrink: 0;
+  ">Apply</button>
+</div>
+
+<!-- Coupon feedback message -->
+<div id="coupon-msg" style="
+  font: 300 11px/1 'DM Sans', sans-serif;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: none;
+"></div>x
             </div>
 
           </div>
+          <!-- end co-section-2 -->
 
-          <!-- PLACE ORDER CTA -->
+          <!-- ── PLACE ORDER CTA ── -->
           <div class="co-submit-wrap">
             <button class="co-submit-btn" type="submit" id="place-order-btn">
               <span class="co-submit-text">Place Order</span>
@@ -244,26 +343,37 @@
           </div>
 
         </form>
-      </div>
+        <!-- end #checkout-form -->
 
-      <!-- RIGHT: ORDER SUMMARY COLUMN -->
+      </div>
+      <!-- end .co-form-col -->
+
+      <!-- ── RIGHT: ORDER SUMMARY COLUMN ── -->
       <aside class="co-summary-col">
+
         <div class="co-summary-sticky">
+
+          <!-- Summary header -->
           <div class="co-summary-head">
             <h3 class="co-summary-title">Your Order</h3>
             <a href="shop.html" class="co-summary-edit">Edit bag</a>
           </div>
 
-          <div class="co-items" id="summary-items"></div>
+          <!-- Cart items (rendered by checkout.js → renderSummary) -->
+          <div class="co-items" id="summary-items">
+            <!-- Injected dynamically -->
+          </div>
 
+          <!-- Divider -->
           <div class="co-summary-rule"></div>
 
-          <!-- Discount row — shown when coupon is applied -->
+          <!-- Coupon applied state (shown via JS) -->
           <div class="co-discount-row" id="co-discount-row" style="display:none">
             <span class="co-discount-label">Discount Applied</span>
             <span class="co-discount-val" id="co-discount-val">—</span>
           </div>
 
+          <!-- Totals -->
           <div class="co-totals">
             <div class="co-total-row">
               <span>Subtotal</span>
@@ -279,6 +389,7 @@
             </div>
           </div>
 
+          <!-- Trust badges -->
           <div class="co-trust-badges">
             <div class="co-badge">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -293,13 +404,20 @@
               <span>Free Delivery ₹2k+</span>
             </div>
           </div>
+
         </div>
+        <!-- end .co-summary-sticky -->
+
       </aside>
+      <!-- end .co-summary-col -->
 
     </div>
+    <!-- end .co-inner -->
   </main>
 
-  <!-- FOOTER -->
+  <!-- ═══════════════════════════════
+       FOOTER
+  ═══════════════════════════════ -->
   <footer class="co-footer">
     <div class="container">
       <div class="co-footer-inner">
@@ -313,7 +431,9 @@
     </div>
   </footer>
 
-  <!-- CART DRAWER -->
+  <!-- ═══════════════════════════════
+       CART DRAWER (all classes intact for main.js)
+  ═══════════════════════════════ -->
   <div class="drawer-overlay" onclick="closeCart()"></div>
   <aside class="drawer" role="dialog" aria-label="Shopping bag">
     <div class="drawer-head">
@@ -322,24 +442,34 @@
     </div>
     <div class="drawer-body"></div>
     <div class="drawer-foot">
-      <div class="total"><span>Total</span><span>₹0</span></div>
+      <div class="total">
+        <span>Total</span>
+        <span>₹0</span>
+      </div>
       <a class="btn" href="checkout.html">Checkout</a>
     </div>
   </aside>
 
-  <!-- ORDER MODAL -->
+  <!-- ═══════════════════════════════
+       ORDER SUCCESS / ERROR MODAL
+       (class structure preserved — modal / modal-card)
+  ═══════════════════════════════ -->
   <div class="modal co-modal">
     <div class="modal-card co-modal-card">
-      <div class="co-modal-icon" id="co-modal-icon"></div>
+      <div class="co-modal-icon" id="co-modal-icon">
+        <!-- JS injects success or error icon -->
+      </div>
       <h3></h3>
       <p></p>
-      <button class="co-modal-btn" onclick="this.closest('.modal').classList.remove('show','open')">
+      <button class="co-modal-btn" onclick="this.closest('.modal').classList.remove('show', 'open')">
         Continue
       </button>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- ═══════════════════════════════
+       SCRIPTS (load order preserved)
+  ═══════════════════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -347,15 +477,10 @@
   <script src="js/main.js"></script>
   <script src="js/checkout.js"></script>
 
+  <!-- Inline enhancement: payment card toggle + page animations -->
   <script>
-    /* ══════════════════════════════════════════════════
-       CHECKOUT PAGE — INLINE SCRIPT
-       ══════════════════════════════════════════════════ */
-
-    /* ── Global discount trackers (ONE declaration only) ── */
-    window.appliedDiscount    = 0;
-    window.appliedCouponCode  = '';
-
+    // Global discount tracker — updated by checkout.js coupon logic
+window.appliedDiscount = 0;
     /* ── Payment method card toggle ── */
     document.querySelectorAll('.co-pay-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -364,35 +489,40 @@
       });
     });
 
-    /* ── Floating label support ── */
+    /* ── Input floating label support for pre-filled values ── */
     document.querySelectorAll('.co-input').forEach(inp => {
-      const check = () => inp.value
-        ? inp.classList.add('has-value')
-        : inp.classList.remove('has-value');
-      inp.addEventListener('input',  check);
+      const check = () => {
+        if (inp.value) inp.classList.add('has-value');
+        else inp.classList.remove('has-value');
+      };
+      inp.addEventListener('input', check);
       inp.addEventListener('change', check);
-      check();
+      check(); /* fire on load for pre-filled country */
     });
 
-    /* ── Stagger form sections on load ── */
+    /* ── Stagger in form sections on load ── */
     window.addEventListener('load', () => {
-      document.querySelectorAll('.co-section, .co-submit-wrap').forEach((el, i) => {
-        el.style.opacity   = '0';
+      const els = document.querySelectorAll('.co-section, .co-submit-wrap');
+      els.forEach((el, i) => {
+        el.style.opacity = '0';
         el.style.transform = 'translateY(24px)';
         el.style.transition = `opacity 0.7s ease ${0.15 + i * 0.12}s, transform 0.7s ease ${0.15 + i * 0.12}s`;
         requestAnimationFrame(() => requestAnimationFrame(() => {
-          el.style.opacity   = '1';
+          el.style.opacity = '1';
           el.style.transform = 'translateY(0)';
         }));
       });
     });
 
-    /* ── Step indicator ── */
+    /* ── Step indicator update when scrolling sections ── */
     const updateStep = () => {
-      const s2    = document.getElementById('co-section-2');
+      const s1 = document.getElementById('co-section-1');
+      const s2 = document.getElementById('co-section-2');
+      if (!s1 || !s2) return;
+      const r1 = s1.getBoundingClientRect();
+      const r2 = s2.getBoundingClientRect();
       const steps = document.querySelectorAll('.co-step');
-      if (!s2 || !steps.length) return;
-      if (s2.getBoundingClientRect().top <= window.innerHeight * 0.5) {
+      if (r2.top <= window.innerHeight * 0.5) {
         steps[0].classList.add('done');
         steps[1].classList.add('active');
       } else {
@@ -401,151 +531,202 @@
       }
     };
     window.addEventListener('scroll', updateStep, { passive: true });
+    /* ── LIVE COUPON APPLY ── */
+window.appliedDiscount = 0;
+window.appliedCouponCode = '';
 
-    /* ══════════════════════════════════════════════════
-       COUPON APPLY — live validation
-       ══════════════════════════════════════════════════ */
+document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
+  const couponInput = document.getElementById('f-coupon');
+  const msgEl = document.getElementById('coupon-msg');
+  const code = couponInput?.value.trim().toUpperCase();
 
-    document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
-      const code = document.getElementById('f-coupon')?.value.trim().toUpperCase();
-      const btn  = document.getElementById('apply-coupon-btn');
+  if (!code) {
+    showCouponMsg('Please enter a coupon code.', 'error');
+    return;
+  }
 
-      if (!code) { showCouponMsg('Please enter a coupon code.', 'error'); return; }
+  // Button loading state
+  const btn = document.getElementById('apply-coupon-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
 
-      btn.textContent = '...';
-      btn.disabled    = true;
-
-      try {
-        const res  = await fetch(API + '/coupon/apply', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ coupon: code })
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-          showCouponMsg(data.message || 'Invalid coupon code.', 'error');
-          window.appliedDiscount   = 0;
-          window.appliedCouponCode = '';
-          refreshTotals();
-          return;
-        }
-
-        /* ✅ Valid — calculate and store discount */
-        window.appliedCouponCode = code;
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-        window.appliedDiscount = sub * (data.discount / 100);
-
-        showCouponMsg(`✦ ${data.discount}% discount applied!`, 'success');
-        refreshTotals();
-
-      } catch (err) {
-        showCouponMsg('Could not validate coupon. Try again.', 'error');
-      } finally {
-        btn.textContent = 'Apply';
-        btn.disabled    = false;
+  try {
+    const res = await fetch(
+      'https://shenova-website-production.up.railway.app/api/coupon/apply',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coupon: code })
       }
-    });
+    );
 
-    /* Enter key in coupon field triggers Apply */
-    document.getElementById('f-coupon')?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('apply-coupon-btn')?.click(); }
-    });
+    const data = await res.json();
 
-    /* Clear discount if coupon field is emptied */
-    document.getElementById('f-coupon')?.addEventListener('input', e => {
-      if (!e.target.value.trim()) {
-        window.appliedDiscount   = 0;
-        window.appliedCouponCode = '';
-        const msgEl = document.getElementById('coupon-msg');
-        if (msgEl) msgEl.style.display = 'none';
-        refreshTotals();
-      }
-    });
-
-    function showCouponMsg(msg, type) {
-      const el = document.getElementById('coupon-msg');
-      if (!el) return;
-      el.textContent      = msg;
-      el.style.display    = 'block';
-      el.style.background = type === 'success' ? 'rgba(184,149,106,0.12)' : 'rgba(192,57,43,0.08)';
-      el.style.color      = type === 'success' ? '#8a6a3a'                 : '#c0392b';
-      el.style.border     = `1px solid ${type === 'success' ? 'rgba(184,149,106,0.3)' : 'rgba(192,57,43,0.2)'}`;
+    if (!res.ok) {
+      showCouponMsg(data.message || 'Invalid coupon code.', 'error');
+      window.appliedDiscount = 0;
+      window.appliedCouponCode = '';
+      refreshTotals();
+      return;
     }
 
-    function refreshTotals() {
-      const cart     = JSON.parse(localStorage.getItem('cart') || '[]');
-      const sub      = cart.reduce((s, i) => s + i.price * i.qty, 0);
-      const ship     = sub > 2000 ? 0 : 69;
-      const discount = window.appliedDiscount || 0;
-      const total    = sub + ship - discount;
+    // ✅ Valid coupon — apply discount
+    window.appliedCouponCode = code;
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    window.appliedDiscount = sub * (data.discount / 100);
 
-      document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
-      document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
-      document.querySelector('#tot').textContent  = '₹' + total.toLocaleString();
+    showCouponMsg(`✦ ${data.discount}% discount applied!`, 'success');
+    refreshTotals();
 
-      const discRow = document.getElementById('co-discount-row');
-      const discVal = document.getElementById('co-discount-val');
-      if (discRow) discRow.style.display = discount > 0 ? 'flex' : 'none';
-      if (discVal) discVal.textContent   = '−₹' + discount.toLocaleString();
-    }
+  } catch (err) {
+    showCouponMsg('Could not validate coupon. Try again.', 'error');
+  } finally {
+    btn.textContent = 'Apply';
+    btn.disabled = false;
+  }
+});
 
-    /* ══════════════════════════════════════════════════
-       RAZORPAY — triggered by form submit (via checkout.js)
-       openRazorpay() is called from checkout.js AFTER
-       coupon is validated, so it always uses discounted total
-       ══════════════════════════════════════════════════ */
+// Allow pressing Enter in coupon field
+document.getElementById('f-coupon')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    document.getElementById('apply-coupon-btn')?.click();
+  }
+});
 
-    window.openRazorpay = async function(finalTotal) {
-      const customerName  = document.getElementById('f-fullName').value;
-      const customerEmail = document.getElementById('f-email').value;
-      const customerPhone = document.getElementById('f-phone').value;
+// Reset discount if coupon is cleared
+document.getElementById('f-coupon')?.addEventListener('input', e => {
+  if (!e.target.value.trim()) {
+    window.appliedDiscount = 0;
+    window.appliedCouponCode = '';
+    document.getElementById('coupon-msg').style.display = 'none';
+    refreshTotals();
+  }
+});
 
+function showCouponMsg(msg, type) {
+  const el = document.getElementById('coupon-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? 'rgba(184,149,106,0.12)' : 'rgba(192,57,43,0.08)';
+  el.style.color = type === 'success' ? '#8a6a3a' : '#c0392b';
+  el.style.border = `1px solid ${type === 'success' ? 'rgba(184,149,106,0.3)' : 'rgba(192,57,43,0.2)'}`;
+}
+
+function refreshTotals() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const ship = sub > 2000 ? 0 : 69;
+  const discount = window.appliedDiscount || 0;
+  const total = sub + ship - discount;
+
+  document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
+  document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
+  document.querySelector('#tot').textContent  = '₹' + total.toLocaleString();
+
+  // Show/hide discount row in sidebar
+  const discRow = document.getElementById('co-discount-row');
+  const discVal = document.getElementById('co-discount-val');
+  if (discRow) discRow.style.display = discount > 0 ? 'flex' : 'none';
+  if (discVal) discVal.textContent = '−₹' + discount.toLocaleString();
+}
+    /* ─────────────────────────────
+   RAZORPAY PAYMENT
+───────────────────────────── */
+
+document
+  .getElementById("place-order-btn")
+  .addEventListener("click", async function (e) {
+e.preventDefault();
+e.stopPropagation();
+
+    try {
+
+      // customer details
+      const customerName =
+        document.getElementById("f-fullName").value;
+
+      const customerEmail =
+        document.getElementById("f-email").value;
+
+      const customerPhone =
+        document.getElementById("f-phone").value;
+
+      // total amount
+const totalText = document.getElementById("tot").innerText;
+const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
+
+      // selected payment method
+      const paymentMethod =
+        document.querySelector(
+          'input[name="payment"]:checked'
+        ).value;
+
+      // Razorpay order create
       const response = await fetch(
-        'https://shenova-website-production.up.railway.app/api/payment/create-order',
+        "https://shenova-website-production.up.railway.app/api/payment/create-order",
         {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ amount: finalTotal }) // ✅ discounted total in ₹
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: totalPrice,
+          }),
         }
       );
 
       const order = await response.json();
 
-      return new Promise((resolve, reject) => {
-        const options = {
-          key:         'rzp_live_SrBfy3qYGJaxKG',
-          amount:      order.amount,   // paise from backend
-          currency:    'INR',
-          name:        'SHENOVA',
-          description: 'Order Payment',
-          order_id:    order.id,
-          handler: function(response) {
-            console.log('Razorpay success', response);
-            resolve(true); // ✅ payment done — checkout.js saves order
-          },
-          prefill: {
-            name:    customerName,
-            email:   customerEmail,
-            contact: customerPhone
-          },
-          modal: {
-            ondismiss: function() {
-              reject(new Error('Payment was cancelled'));
-            }
-          },
-          theme: { color: '#000000' }
-        };
+      const options = {
 
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function(resp) {
-          reject(new Error('Payment failed: ' + resp.error.description));
-        });
-        rzp.open();
-      });
-    };
+        key: "rzp_live_SrBfy3qYGJaxKG",
 
+        amount: order.amount,
+
+        currency: "INR",
+
+        name: "SHENOVA",
+
+        description: "Order Payment",
+
+        order_id: order.id,
+
+        handler: async function (response) {
+
+          console.log(response);
+
+          alert("Payment Successful");
+
+          // yaha order save kar sakta hai
+        },
+
+        prefill: {
+          name: customerName,
+          email: customerEmail,
+          contact: customerPhone,
+        },
+
+        theme: {
+          color: "#000000",
+        },
+      };
+
+const rzp = new Razorpay(options);
+
+      rzp.open();
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Payment Failed");
+
+    }
+
+});
   </script>
 
 </body>
