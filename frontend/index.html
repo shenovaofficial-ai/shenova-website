@@ -1255,7 +1255,8 @@ if(sp){
           if(discEl)discEl.textContent=seg.pct;
           if(codeEl)codeEl.textContent=seg.code;
           const spinEmail = document.getElementById('spin-email')?.value;
-  const discountNum = parseInt(seg.label); // gets 8 from "8% OFF"
+  // Parse discount safely: "10% OFF" → 10, "Try Again" → 0
+  const discountNum = parseInt(seg.label.replace(/[^0-9]/g,'')) || 0;
   fetch((window.API_BASE || '') + '/api/spin/save', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1264,7 +1265,15 @@ if(sp){
       coupon:   seg.code,
       discount: discountNum
     })
-  }).catch(e => console.error('Spin save error:', e));  
+  }).catch(e => console.error('Spin save error:', e));
+  // ── Persist coupon to localStorage so checkout page can auto-fill ──
+  if(seg.code){
+    localStorage.setItem('shenova_coupon', JSON.stringify({
+      code:     seg.code,
+      discount: discountNum,
+      ts:       Date.now()
+    }));
+  }
           // Show "YOU WON" label
           const wonLabel=couponPopup?.querySelector('.sh-ey');
           if(wonLabel)wonLabel.textContent='YOU WON';

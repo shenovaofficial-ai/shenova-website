@@ -1,62 +1,16 @@
 /* ================================================================
    checkout.js — SHENOVA Luxury Checkout
    ================================================================
-   ALL original backend logic is fully preserved:
-   - renderSummary()       → cart items + shipping calc
-   - coupon apply API      → POST /api/coupon/apply
-   - coupon use API        → POST /api/coupon/use
-   - order creation API    → POST /api/orders
-   - localStorage cart     → read / clear
-   - updateCartCount()     → inherited from main.js
+   Handles:
+   - renderSummary()  → cart items + pricing in sidebar
+   - updateCartCount() inherited from main.js
 
-   New additions (UI only, no backend changes):
-   - Luxury item card HTML for summary sidebar
-   - Loading state on submit button
-   - Premium modal icon (success / error)
-   - Discount row reveal in sidebar
-   - showModal() / alert() mapping to luxury modal
+   NOTE: Coupon logic, Razorpay payment, and order submission
+   are all handled by the inline <script> in checkout.html.
+   This file only renders the summary sidebar.
    ================================================================ */
 
-/* ── CUSTOM ALERT → maps to luxury modal (no browser dialogs) ── */
-window.alert = function(title, msg) {
-  /* Support both single-arg (legacy alert) and two-arg (custom) */
-  if (msg === undefined) {
-    msg   = title;
-    title = '';
-  }
-  showLuxuryModal(title, msg);
-};
-
-/* ── LUXURY MODAL SHOW ── */
-function showLuxuryModal(title, msg, type) {
-  /* type: 'success' | 'error' | '' */
-  const modal   = document.querySelector('.co-modal');
-  const iconWrap = document.getElementById('co-modal-icon');
-  const h3       = modal?.querySelector('h3');
-  const p        = modal?.querySelector('p');
-
-  if (!modal) return;
-
-  /* Icon */
-  if (iconWrap) {
-    iconWrap.className = 'co-modal-icon';
-    if (type === 'success') {
-      iconWrap.classList.add('success');
-      iconWrap.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>`;
-    } else if (type === 'error') {
-      iconWrap.classList.add('error');
-      iconWrap.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-    } else {
-      iconWrap.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
-    }
-  }
-
-  if (h3) h3.textContent = title;
-  if (p)  p.textContent  = msg;
-  modal.classList.add('show', 'open');
-}
-
-/* ── RENDER SUMMARY (original logic; luxury HTML output) ── */
+/* ── RENDER SUMMARY ── */
 function renderSummary() {
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
   const wrap = document.querySelector('#summary-items');
@@ -64,17 +18,17 @@ function renderSummary() {
 
   if (!cart.length) {
     wrap.innerHTML = `<div class="co-items-empty">Your bag is empty.</div>`;
-    document.querySelector('#sub').textContent  = '₹0';
-    document.querySelector('#ship').textContent = '—';
-    document.querySelector('#tot').textContent  = '₹0';
+    document.querySelector('#sub')  && (document.querySelector('#sub').textContent  = '₹0');
+    document.querySelector('#ship') && (document.querySelector('#ship').textContent = '—');
+    document.querySelector('#tot')  && (document.querySelector('#tot').textContent  = '₹0');
     return;
   }
 
-  /* ── Luxury item cards ── */
+  /* Luxury item cards */
   wrap.innerHTML = cart.map(it => {
-    const imgSrc = it.image?.startsWith('http')
+    const imgSrc = (it.image || '').startsWith('http')
       ? it.image
-      : API_BASE + it.image;
+      : (window.API_BASE || '') + (it.image || '');
 
     return `
       <div class="co-item">
@@ -82,7 +36,7 @@ function renderSummary() {
           class="co-item-img"
           src="${imgSrc}"
           alt="${it.name}"
-          onerror="this.style.background='var(--co-light)'"
+          onerror="this.style.background='var(--co-light,#ece6dc)'"
         >
         <div class="co-item-info">
           <div class="co-item-name">${it.name}</div>
@@ -93,166 +47,16 @@ function renderSummary() {
     `;
   }).join('');
 
-  /* ── Pricing (original calc unchanged) ── */
+  /* Pricing */
   const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ship = sub > 2000 ? 0 : 0;
+  const ship = sub > 2000 ? 0 : 69;
+  const disc = window.appliedDiscount || 0;
+  const tot  = Math.max(0, sub + ship - disc);
 
-  document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
-  document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
-  document.querySelector('#tot').textContent  = '₹' + (sub + ship).toLocaleString();
+  document.querySelector('#sub')  && (document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString());
+  document.querySelector('#ship') && (document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free');
+  document.querySelector('#tot')  && (document.querySelector('#tot').textContent  = '₹' + tot.toLocaleString());
 }
 
 /* ── INITIAL RENDER ── */
 renderSummary();
-
-/* ── SUBMIT HANDLER (all original logic preserved) ── */
-document
-  .querySelector('#checkout-form')
-  .addEventListener('submit', async e => {
-    e.preventDefault();
-
-    const f   = e.target;
-    const btn = document.getElementById('place-order-btn');
-
-    /* Cart check */
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    if (!cart.length) {
-      showLuxuryModal(
-        'Your bag is empty',
-        'Please add items to your bag before placing an order.',
-        'error'
-      );
-      return;
-    }
-
-    /* ── Pricing (same as original) ── */
-    const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const ship = sub > 2000 ? 0 : 0;
-
-    /* ─────────────── COUPON (original API call) ─────────────── */
-/* ─────────────── COUPON (uses pre-validated discount) ─────────────── */
-let discountAmount = 0;
-
-if (f.coupon.value) {
-  // If Apply button was clicked → use already validated discount
-  if (window.appliedCouponCode &&
-      window.appliedCouponCode === f.coupon.value.trim().toUpperCase()) {
-
-    discountAmount = window.appliedDiscount || 0;
-
-  } else {
-    // Apply button was NOT clicked — block and remind user
-    showLuxuryModal(
-      'Apply Your Coupon First',
-      'Please click the Apply button next to the coupon field to validate your code.',
-      'error'
-    );
-    if (btn) {
-      btn.disabled = false;
-      btn.classList.remove('loading');
-      btn.querySelector('.co-submit-text').textContent = 'Place Order';
-    }
-    return;
-  }
-}
-
-    /* ─────────────── ORDER BODY (unchanged from original) ──── */
-    const body = {
-      items: cart.map(i => ({
-        name:  i.name,
-        image: i.image,
-        price: i.price,
-        size:  i.size,
-        color: i.color,
-        qty:   i.qty
-      })),
-      shipping: {
-        fullName: f.fullName.value,
-        email:    f.email.value,
-        phone:    f.phone.value,
-        address:  f.address.value,
-        city:     f.city.value,
-        state:    f.state.value,
-        zip:      f.zip.value,
-        country:  f.country.value
-      },
-      paymentMethod: f.payment.value,
-      coupon:        f.coupon.value,
-      subtotal:      sub,
-      shippingFee:   ship,
-      discount:      discountAmount,
-      total:         (sub + ship) - discountAmount
-    };
-
-    /* ─────────────── UX: LOADING STATE ──────────────────────── */
-    if (btn) {
-      btn.disabled = true;
-      btn.classList.add('loading');
-      btn.querySelector('.co-submit-text').textContent = 'Placing Order';
-    }
-
-    try {
-      /* ─────────────── CREATE ORDER (original API) ─────────── */
-      const r = await fetch(
-        API + '/orders',
-        {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(body)
-        }
-      );
-
-      if (!r.ok) throw 0;
-
-      const res = await r.json();
-
-      /* ─────────────── MARK COUPON USED (original) ─────────── */
-      if (f.coupon.value) {
-        await fetch(
-          API + '/coupon/use',
-          {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ coupon: f.coupon.value })
-          }
-        );
-      }
-
-      /* ─────────────── SUCCESS ─────────────────────────────── */
-      localStorage.removeItem('cart');
-      updateCartCount();
-
-      showLuxuryModal(
-        'Order Placed ✦',
-        'Your order has been successfully placed! We\'ll send a confirmation to your email shortly.',
-        'success'
-      );
-
-const modalBtn = document.querySelector('.co-modal-btn');
-
-if (modalBtn) {
-  modalBtn.addEventListener('click', () => {
-    document
-      .querySelector('.co-modal')
-      ?.classList.remove('show', 'open');
-
-    window.location.href = 'index.html';
-  });
-}
-
-    } catch (err) {
-      console.error('[Checkout] Order failed:', err);
-      showLuxuryModal(
-        'Order Failed',
-        'Something went wrong while placing your order. Please try again.',
-        'error'
-      );
-    }
-
-    /* ─────────────── RESET BUTTON ───────────────────────────── */
-    if (btn) {
-      btn.disabled = false;
-      btn.classList.remove('loading');
-      btn.querySelector('.co-submit-text').textContent = 'Place Order';
-    }
-  });

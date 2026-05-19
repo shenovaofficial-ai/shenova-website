@@ -264,6 +264,11 @@ app.post('/api/newsletter', async (req, res) => {
 
 // ================= SPIN WHEEL =================
 
+// Legacy alias — main.js calls /api/spin (old code path)
+app.post('/api/spin', async (req, res) => {
+  res.redirect(307, '/api/spin/save');
+});
+
 // Save coupon when user wins the spin wheel
 app.post('/api/spin/save', async (req, res) => {
   try {
@@ -277,7 +282,7 @@ app.post('/api/spin/save', async (req, res) => {
     await SpinLead.create({
       email:    email.toLowerCase(),
       coupon:   coupon.toUpperCase(),
-      discount: Number(discount),
+      discount: Number(discount) || 0,
       used:     false
     });
 
@@ -300,7 +305,7 @@ app.post('/api/coupon/apply', async (req, res) => {
     const found = await SpinLead.findOne({ coupon: coupon.toUpperCase() });
 
     if (!found) return res.status(400).json({ message: 'Invalid coupon code' });
-    if (found.used) return res.status(400).json({ message: 'Coupon has already been used' });
+    if (found.used) return res.status(400).json({ message: 'This coupon has already been used' });
 
     console.log(`✅ Coupon applied — ${coupon} (${found.discount}%)`);
     res.json({ success: true, discount: found.discount });
@@ -325,6 +330,41 @@ app.post('/api/coupon/use', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('Coupon use error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ── ADMIN: list all coupons ──
+app.get('/api/admin/coupons', async (req, res) => {
+  try {
+    const coupons = await SpinLead.find().sort('-createdAt');
+    res.json(coupons);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ── ADMIN: disable / re-enable a coupon ──
+app.put('/api/admin/coupons/:id', async (req, res) => {
+  try {
+    const updated = await SpinLead.findByIdAndUpdate(
+      req.params.id,
+      { used: req.body.used },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: 'Coupon not found' });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ── ADMIN: delete a coupon ──
+app.delete('/api/admin/coupons/:id', async (req, res) => {
+  try {
+    await SpinLead.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 });
