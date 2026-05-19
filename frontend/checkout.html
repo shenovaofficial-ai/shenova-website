@@ -701,26 +701,28 @@ const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
   // order data
 const orderData = {
 
-  name: customerName,
+  customer: {
+    name: customerName,
+    email: customerEmail,
+    phone: customerPhone,
+  },
 
-  email: customerEmail,
+  shippingAddress: {
+    address:
+      document.getElementById("f-address").value,
 
-  phone: customerPhone,
+    city:
+      document.getElementById("f-city").value,
 
-  address:
-    document.getElementById("f-address").value,
+    state:
+      document.getElementById("f-state").value,
 
-  city:
-    document.getElementById("f-city").value,
+    zip:
+      document.getElementById("f-zip").value,
 
-  state:
-    document.getElementById("f-state").value,
-
-  zip:
-    document.getElementById("f-zip").value,
-
-  country:
-    document.getElementById("f-country").value,
+    country:
+      document.getElementById("f-country").value,
+  },
 
   paymentMethod: paymentMethod,
 
@@ -755,7 +757,8 @@ const orderData = {
 
   console.log(saved);
 
-  alert("Order Placed Successfully");
+  alert("Payment Successful & Order Placed!");
+// clear cart
 // clear cart
 localStorage.removeItem("cart");
 
@@ -764,6 +767,11 @@ document
   .getElementById("checkout-form")
   .reset();
 
+alert("Payment Successful & Order Placed!");
+
+setTimeout(() => {
+  window.location.href = "index.html";
+}, 2000);
 // redirect
 window.location.href = "index.html";
 },
