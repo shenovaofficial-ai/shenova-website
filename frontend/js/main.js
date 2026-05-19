@@ -483,18 +483,6 @@ document
 });
 /* ================= SPIN WHEEL ================= */
 
-window.addEventListener('load',()=>{
-
-setTimeout(()=>{
-
-  document
-  .getElementById('spin-popup')
-  ?.classList.add('show');
-
-},1200);
-document.body.style.overflow = 'hidden';
-});
-
 function closeSpinPopup(){
 document.body.style.overflow = '';
   document
