@@ -462,8 +462,14 @@ body.bar-off .lux-nav{top:0!important}
   .sh-rv.feat:hover{transform:translateY(-5px)}
   .sh-igrid{grid-template-columns:repeat(3,1fr)}
   .sh-ii.tall{grid-row:auto;aspect-ratio:1}
-  .sp-box{grid-template-columns:1fr;max-width:420px}
-  .sp-left{display:none}
+  /* Spin popup: single column, wheel on top */
+  .sp-box{grid-template-columns:1fr;max-width:420px;max-height:92vh;overflow-y:auto}
+  .sp-left{display:flex!important;padding:32px 24px 20px;gap:16px}
+  .sp-lh{font-size:18px!important;text-align:center}
+  .sp-lsub{display:none}
+  .sp-wheel-wrap{width:200px;height:200px}
+  #wheel{width:200px!important;height:200px!important}
+  .sp-right{padding:20px 24px 32px;gap:12px}
   .sh-s .sh-wrap,.sh-cat .sh-wrap,.sh-insta .sh-wrap,.sh-gal-head{padding:0 20px}
   .sh-gal-wrap{padding:44px 20px 60px}
 }
@@ -526,6 +532,13 @@ body.bar-off .lux-nav{top:0!important}
   .sh-sig-in{flex-direction:column;align-items:center;gap:16px}
   .sh-sig-d{display:none}
   .sh-rv-grid{grid-template-columns:1fr}
+  /* Spin popup small phones */
+  .sp-box{max-width:100%;border-radius:0;max-height:100dvh;border-radius:12px}
+  .sp-left{padding:24px 18px 16px}
+  .sp-wheel-wrap{width:170px;height:170px}
+  #wheel{width:170px!important;height:170px!important}
+  .sp-right{padding:16px 18px 28px}
+  .sp-right h2{font-size:24px!important}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
@@ -1072,9 +1085,20 @@ window.addEventListener('scroll',()=>nav&&nav.classList.toggle('scrolled',window
 
 /* ─ SPIN POPUP TIMING ─ */
 const sp=document.getElementById('spin-popup');
+function lockBody(){
+  // iOS-safe scroll lock
+  document.body.style.overflow='hidden';
+  document.body.style.position='fixed';
+  document.body.style.width='100%';
+}
+function unlockBody(){
+  document.body.style.overflow='';
+  document.body.style.position='';
+  document.body.style.width='';
+}
 if(sp){
-  sp.classList.remove('show');document.body.style.overflow='';
-  setTimeout(()=>{sp.classList.add('show');document.body.style.overflow='hidden';},4600);
+  sp.classList.remove('show');unlockBody();
+  setTimeout(()=>{sp.classList.add('show');lockBody();},4600);
 }
 
 /* ─ SPIN WHEEL ENGINE ─ */
@@ -1097,20 +1121,33 @@ if(sp){
   const ARC=2*Math.PI/N;
   let currentAngle=0, spinning=false, spun=false;
 
+  /* Sync canvas pixel size to its CSS rendered size (fixes mobile DPI/scaling issues) */
+  function syncCanvasSize(){
+    const rect=canvas.getBoundingClientRect();
+    const w=Math.round(rect.width)||220;
+    const h=Math.round(rect.height)||220;
+    if(canvas.width!==w||canvas.height!==h){
+      canvas.width=w;
+      canvas.height=h;
+    }
+  }
+
   function drawWheel(rot){
-    const cx=canvas.width/2, cy=canvas.height/2, r=cx-2;
+    syncCanvasSize();
+    const cx=canvas.width/2, cy=canvas.height/2, r=cx-3;
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Scale font sizes relative to wheel radius
+    const baseFontSize=Math.max(7,Math.round(r*0.11));
+    const discFontSize=Math.max(9,Math.round(r*0.13));
     for(let i=0;i<N;i++){
       const start=rot+i*ARC, end=start+ARC;
       const seg=SEGMENTS[i];
-      // Segment fill
       ctx.beginPath();
       ctx.moveTo(cx,cy);
       ctx.arc(cx,cy,r,start,end);
       ctx.closePath();
       ctx.fillStyle=seg.dark?DARK:GOLD;
       ctx.fill();
-      // Subtle segment border
       ctx.strokeStyle='rgba(250,247,242,0.08)';
       ctx.lineWidth=1.5;
       ctx.stroke();
@@ -1122,22 +1159,24 @@ if(sp){
       ctx.textBaseline='middle';
       const textColor=seg.dark?GOLD_LT:'#fff';
       const lines=seg.pct.split('\n');
+      const textX=r*0.57;
       if(lines.length>1){
-        // Two-line text for "Better Luck"
-        ctx.font='bold 8px "DM Sans","Helvetica Neue",sans-serif';
+        const lh=baseFontSize+3;
+        ctx.font=`bold ${baseFontSize}px "DM Sans","Helvetica Neue",sans-serif`;
         ctx.fillStyle=textColor;
-        ctx.fillText(lines[0],r*0.55,-5);
-        ctx.fillText(lines[1],r*0.55,6);
+        ctx.fillText(lines[0],textX,-lh/2);
+        ctx.fillText(lines[1],textX, lh/2);
       } else {
-        ctx.font='bold 11px "DM Sans","Helvetica Neue",sans-serif';
+        ctx.font=`bold ${discFontSize}px "DM Sans","Helvetica Neue",sans-serif`;
         ctx.fillStyle=textColor;
-        ctx.fillText(seg.pct,r*0.57,0);
+        ctx.fillText(seg.pct,textX,0);
       }
       ctx.restore();
     }
-    // Center hole (drawn via CSS overlay .sp-wcenter)
+    // Center hole
+    const holeR=Math.max(22,Math.round(r*0.28));
     ctx.beginPath();
-    ctx.arc(cx,cy,28,0,2*Math.PI);
+    ctx.arc(cx,cy,holeR,0,2*Math.PI);
     ctx.fillStyle='#faf7f2';
     ctx.fill();
     ctx.strokeStyle='rgba(250,247,242,0.15)';
@@ -1145,7 +1184,22 @@ if(sp){
     ctx.stroke();
   }
 
-  drawWheel(currentAngle);
+  // Draw after popup becomes visible so getBoundingClientRect is accurate
+  function initDraw(){
+    syncCanvasSize();
+    drawWheel(currentAngle);
+  }
+  // Draw immediately (desktop), and also once the popup is shown (mobile)
+  requestAnimationFrame(initDraw);
+  if(sp){
+    const observer=new MutationObserver(()=>{
+      if(sp.classList.contains('show')){
+        // Wait one frame for layout to settle after display:flex
+        requestAnimationFrame(()=>requestAnimationFrame(initDraw));
+      }
+    });
+    observer.observe(sp,{attributes:true,attributeFilter:['class']});
+  }
 
   function validateInputs(){
     const email=(document.getElementById('spin-email')||{}).value?.trim();
@@ -1240,7 +1294,7 @@ if(sp){
             spinPopup.classList.remove('show');
             spinPopup.style.opacity='';
             spinPopup.style.transition='';
-            document.body.style.overflow='hidden';
+            lockBody();
             if(couponPopup){
               couponPopup.style.zIndex='9999';
               couponPopup.classList.add('show');
@@ -1265,13 +1319,13 @@ window.closeSpinPopup=function(){
   const sp=document.getElementById('spin-popup');
   if(!sp)return;
   sp.style.transition='opacity .4s';sp.style.opacity='0';
-  setTimeout(()=>{sp.classList.remove('show');sp.style.opacity='';sp.style.transition='';document.body.style.overflow='';},400);
+  setTimeout(()=>{sp.classList.remove('show');sp.style.opacity='';sp.style.transition='';unlockBody();},400);
 };
 window.closeCouponPopup=function(){
   const cp=document.getElementById('coupon-popup');
   if(!cp)return;
   cp.style.transition='opacity .4s';cp.style.opacity='0';
-  setTimeout(()=>{cp.classList.remove('show');cp.style.opacity='';cp.style.transition='';document.body.style.overflow='';},400);
+  setTimeout(()=>{cp.classList.remove('show');cp.style.opacity='';cp.style.transition='';unlockBody();},400);
 };
 window.copyCoupon=function(){
   const code=(document.getElementById('coupon-code-text')||{}).textContent;
