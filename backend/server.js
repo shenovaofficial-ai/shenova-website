@@ -37,15 +37,28 @@ const Product = mongoose.model('Product', new mongoose.Schema({
 }, { timestamps: true }));
 
 const Order = mongoose.model('Order', new mongoose.Schema({
-  user:     { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  items:    Array,
-  total:    Number,
-  shipping: Object,
-  status:   { type: String, default: 'pending' }
+  user:          { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  items:         Array,
+  total:         Number,
+  shipping:      Object,
+  paymentMethod: String,
+  coupon:        String,
+  subtotal:      Number,
+  shippingFee:   Number,
+  discount:      Number,
+  status:        { type: String, default: 'pending' }
 }, { timestamps: true }));
 
 const Message = mongoose.model('Message', new mongoose.Schema({
   name: String, email: String, message: String
+}, { timestamps: true }));
+
+// ✅ NEW — SpinLead model for spin wheel coupons
+const SpinLead = mongoose.model('SpinLead', new mongoose.Schema({
+  email:    { type: String },
+  coupon:   { type: String },
+  discount: { type: Number },
+  used:     { type: Boolean, default: false }
 }, { timestamps: true }));
 
 // ================= AUTH =================
@@ -94,7 +107,6 @@ function handleUpload(req, res, next) {
   });
 }
 
-// Upload all files in req.files to Cloudinary, return { images, videos }
 async function processUploads(files) {
   const imageFiles = files?.images || [];
   const videoFiles = files?.videos || [];
@@ -149,11 +161,10 @@ app.post('/api/products', handleUpload, async (req, res) => {
     body.featured = body.featured === 'true';
     body.trending = body.trending === 'true';
 
-const { images, videos } = await processUploads(req.files);
+    const { images, videos } = await processUploads(req.files);
     body.images = images;
     body.videos = videos;
 
-    // Always generate a unique slug from name
     if (body.name) {
       body.slug = body.name
         .toLowerCase()
@@ -207,12 +218,18 @@ app.delete('/api/products/:id', async (req, res) => {
 // ================= ORDERS =================
 
 app.post('/api/orders', async (req, res) => {
-  const order = await Order.create(req.body);
-  res.json(order);
+  try {
+    const order = await Order.create(req.body);
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create order' });
+  }
 });
+
 app.get('/api/orders', async (req, res) => {
   res.json(await Order.find().sort('-createdAt'));
 });
+
 app.put('/api/orders/:id', async (req, res) => {
   res.json(await Order.findByIdAndUpdate(req.params.id, req.body, { new: true }));
 });
@@ -223,13 +240,99 @@ app.post('/api/contact', async (req, res) => {
   try { await Message.create(req.body); res.json({ success: true }); }
   catch (e) { res.status(500).json({ error: e.message }); }
 });
+
 app.get('/api/contact', async (req, res) => {
   res.json(await Message.find().sort({ createdAt: -1 }));
 });
+
 app.delete('/api/contact/:id', async (req, res) => {
   await Message.findByIdAndDelete(req.params.id);
   res.json({ ok: true });
 });
+
+// ================= NEWSLETTER =================
+
+app.post('/api/newsletter', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email required' });
+    res.json({ success: true, message: 'Subscribed successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ================= SPIN WHEEL =================
+
+// Save coupon when user wins the spin wheel
+app.post('/api/spin/save', async (req, res) => {
+  try {
+    const { email, coupon, discount } = req.body;
+    if (!email || !coupon) return res.status(400).json({ message: 'Email and coupon are required' });
+
+    // One coupon per email — don't duplicate
+    const existing = await SpinLead.findOne({ email: email.toLowerCase() });
+    if (existing) return res.json({ success: true, message: 'Already saved' });
+
+    await SpinLead.create({
+      email:    email.toLowerCase(),
+      coupon:   coupon.toUpperCase(),
+      discount: Number(discount),
+      used:     false
+    });
+
+    console.log(`✅ Spin coupon saved — ${coupon} (${discount}%) for ${email}`);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Spin save error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ================= COUPON =================
+
+// Validate coupon code
+app.post('/api/coupon/apply', async (req, res) => {
+  try {
+    const { coupon } = req.body;
+    if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
+
+    const found = await SpinLead.findOne({ coupon: coupon.toUpperCase() });
+
+    if (!found) return res.status(400).json({ message: 'Invalid coupon code' });
+    if (found.used) return res.status(400).json({ message: 'Coupon has already been used' });
+
+    console.log(`✅ Coupon applied — ${coupon} (${found.discount}%)`);
+    res.json({ success: true, discount: found.discount });
+  } catch (err) {
+    console.error('Coupon apply error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Mark coupon as used after order is placed
+app.post('/api/coupon/use', async (req, res) => {
+  try {
+    const { coupon } = req.body;
+    if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
+
+    await SpinLead.findOneAndUpdate(
+      { coupon: coupon.toUpperCase() },
+      { used: true }
+    );
+
+    console.log(`🔒 Coupon marked used — ${coupon}`);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Coupon use error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ================= PAYMENT =================
+
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api/payment', paymentRoutes);
 
 // ================= START =================
 
@@ -246,9 +349,6 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shenova')
       });
       console.log('👤 Admin seeded');
     }
-    app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => { console.error('MongoDB error:', err); process.exit(1); });
-
-  const paymentRoutes = require("./routes/paymentRoutes");
-  app.use("/api/payment", paymentRoutes);

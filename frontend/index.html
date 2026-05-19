@@ -1272,6 +1272,17 @@ if(sp){
           const codeEl=document.getElementById('coupon-code-text');
           if(discEl)discEl.textContent=seg.pct;
           if(codeEl)codeEl.textContent=seg.code;
+          const spinEmail = document.getElementById('spin-email')?.value;
+  const discountNum = parseInt(seg.label); // gets 8 from "8% OFF"
+  fetch((window.API_BASE || '') + '/api/spin/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email:    spinEmail,
+      coupon:   seg.code,
+      discount: discountNum
+    })
+  }).catch(e => console.error('Spin save error:', e));  
           // Show "YOU WON" label
           const wonLabel=couponPopup?.querySelector('.sh-ey');
           if(wonLabel)wonLabel.textContent='YOU WON';
