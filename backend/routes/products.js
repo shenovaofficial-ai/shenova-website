@@ -1,9 +1,22 @@
 const router  = require('express').Router();
 const Product = require('../models/Product');
 const upload  = require('../middleware/upload');
+const path    = require('path');
+
+/* ── Detect video by extension ───────────────────────────────────── */
+const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.avi', '.ogg']);
+function isVideoFile(filename) {
+  return VIDEO_EXTS.has(path.extname(filename || '').toLowerCase());
+}
+
+/* ── Extract the public URL from a multer-cloudinary file object ─── */
+// multer-storage-cloudinary puts the Cloudinary URL in file.path
+function fileUrl(file) {
+  return file.path; // full https://res.cloudinary.com/... URL
+}
 
 /* ════════════════════════════════════════════════════════════════════
-   GET /api/products  — public, filterable
+   GET /api/products  — public
    ════════════════════════════════════════════════════════════════════ */
 router.get('/', async (req, res) => {
   try {
@@ -40,17 +53,15 @@ router.get('/:id', async (req, res) => {
 });
 
 /* ════════════════════════════════════════════════════════════════════
-   POST /api/products — supports images + videos
-   Field names: "images" for images, "videos" for videos.
+   POST /api/products — create with images + videos via Cloudinary
    ════════════════════════════════════════════════════════════════════ */
 router.post('/', (req, res, next) => {
-  // Run multer, then catch multer-specific errors cleanly
   upload.fields([
     { name: 'images', maxCount: 8 },
-    { name: 'videos', maxCount: 4 }
+    { name: 'videos', maxCount: 4 },
   ])(req, res, (err) => {
     if (err) {
-      console.error('Multer error on POST /products:', err.message);
+      console.error('Upload error on POST /products:', err.message);
       return res.status(400).json({ error: err.message });
     }
     next();
@@ -59,19 +70,17 @@ router.post('/', (req, res, next) => {
   try {
     const body = { ...req.body };
 
-    // Parse comma-separated strings into arrays
     body.sizes    = body.sizes    ? body.sizes.split(',').map(s => s.trim()).filter(Boolean)  : [];
     body.colors   = body.colors   ? body.colors.split(',').map(s => s.trim()).filter(Boolean) : [];
     body.featured = body.featured === 'true';
     body.trending = body.trending === 'true';
 
-    // Images uploaded under the "images" field
+    // Cloudinary URLs come back in file.path
     const imageFiles = req.files?.images || [];
-    body.images = imageFiles.map(f => '/uploads/' + f.filename);
-
-    // Videos uploaded under the "videos" field
     const videoFiles = req.files?.videos || [];
-    body.videos = videoFiles.map(f => '/uploads/' + f.filename);
+
+    body.images = imageFiles.map(fileUrl);
+    body.videos = videoFiles.map(fileUrl);
 
     console.log(`POST /products — images: ${body.images.length}, videos: ${body.videos.length}`);
 
@@ -84,15 +93,15 @@ router.post('/', (req, res, next) => {
 });
 
 /* ════════════════════════════════════════════════════════════════════
-   PUT /api/products/:id — update, replaces media only if new files sent
+   PUT /api/products/:id — update; replaces media only if new files sent
    ════════════════════════════════════════════════════════════════════ */
 router.put('/:id', (req, res, next) => {
   upload.fields([
     { name: 'images', maxCount: 8 },
-    { name: 'videos', maxCount: 4 }
+    { name: 'videos', maxCount: 4 },
   ])(req, res, (err) => {
     if (err) {
-      console.error('Multer error on PUT /products/:id:', err.message);
+      console.error('Upload error on PUT /products/:id:', err.message);
       return res.status(400).json({ error: err.message });
     }
     next();
@@ -101,34 +110,25 @@ router.put('/:id', (req, res, next) => {
   try {
     const body = { ...req.body };
 
-    if (body.sizes && typeof body.sizes === 'string')
-      body.sizes = body.sizes.split(',').map(s => s.trim()).filter(Boolean);
+    if (body.sizes  && typeof body.sizes  === 'string')
+      body.sizes  = body.sizes.split(',').map(s => s.trim()).filter(Boolean);
     if (body.colors && typeof body.colors === 'string')
       body.colors = body.colors.split(',').map(s => s.trim()).filter(Boolean);
     if (body.featured !== undefined) body.featured = body.featured === 'true';
     if (body.trending !== undefined) body.trending = body.trending === 'true';
 
-    // Only overwrite images/videos if new files were actually uploaded
     const newImageFiles = req.files?.images || [];
     const newVideoFiles = req.files?.videos || [];
 
-    if (newImageFiles.length > 0)
-      body.images = newImageFiles.map(f => '/uploads/' + f.filename);
+    // Only overwrite if new files were actually uploaded
+    if (newImageFiles.length > 0) body.images = newImageFiles.map(fileUrl);
+    if (newVideoFiles.length > 0) body.videos = newVideoFiles.map(fileUrl);
 
-    if (newVideoFiles.length > 0)
-      body.videos = newVideoFiles.map(f => '/uploads/' + f.filename);
-
-    // Safety: never overwrite _id from body
-    delete body.id;
+    delete body.id; // never overwrite _id
 
     console.log(`PUT /products/${req.params.id} — images: ${newImageFiles.length}, videos: ${newVideoFiles.length}`);
 
-    const updated = await Product.findByIdAndUpdate(
-      req.params.id,
-      body,
-      { new: true }
-    );
-
+    const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Product not found' });
     res.json(updated);
   } catch (err) {
