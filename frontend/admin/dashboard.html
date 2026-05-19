@@ -4,10 +4,100 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shenova Admin</title>
-
 <link rel="stylesheet" href="../css/admin.css">
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── Video / media upload additions ────────────────────────────── */
+.media-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.media-section label {
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 500;
+}
+
+.media-section input[type="file"] {
+  width: 100%;
+}
+
+.media-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Preview thumbnails */
+.preview-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  min-height: 0;
+}
+
+.preview-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e0dbd4;
+  background: #f5f2ed;
+}
+
+.preview-video {
+  width: 120px;
+  height: 72px;
+  object-fit: cover;
+}
+
+/* Badge shown in the products table */
+.media-badge {
+  display: inline-block;
+  background: #f5f0e8;
+  color: #a07840;
+  border: 1px solid #ddd0b8;
+  border-radius: 4px;
+  font-size: 10px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: .04em;
+}
+
+/* Existing-media wrappers in edit modal */
+.media-label {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+.existing-media-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Override thumb size inside existing-media-wrap */
+.existing-media-wrap .preview-thumb {
+  width: 64px;
+  height: 64px;
+}
+
+.existing-media-wrap .preview-video {
+  width: 108px;
+  height: 64px;
+}
+</style>
 </head>
 
 <body>
@@ -17,7 +107,6 @@
   <!-- ===== SIDEBAR ===== -->
   <aside class="side">
     <h2>SHENOVA</h2>
-
     <a class="active">Dashboard</a>
     <a href="#products">Products</a>
     <a href="#orders">Orders</a>
@@ -29,42 +118,34 @@
 
     <!-- ===== TOPBAR ===== -->
     <div class="topbar">
-
       <div>
         <p class="mini">Luxury Fashion Admin</p>
         <h1>Dashboard Overview</h1>
       </div>
-
       <div class="admin-user">
         <div class="dot"></div>
         Admin Panel
       </div>
-
     </div>
 
     <!-- ===== KPI CARDS ===== -->
     <div class="cards">
-
       <div class="kpi">
         <span>Total Products</span>
         <div class="v" id="kpi-products">0</div>
       </div>
-
       <div class="kpi">
         <span>Total Orders</span>
         <div class="v" id="kpi-orders">0</div>
       </div>
-
       <div class="kpi">
         <span>Total Revenue</span>
         <div class="v" id="kpi-revenue">₹0</div>
       </div>
-
       <div class="kpi">
         <span>Pending Orders</span>
         <div class="v" id="kpi-pending">0</div>
       </div>
-
     </div>
 
     <!-- ===== ADD PRODUCT ===== -->
@@ -90,15 +171,43 @@
         </div>
 
         <div class="row2">
-          <input name="sizes" placeholder="Sizes (XS,S,M,L)">
+          <input name="sizes"  placeholder="Sizes (XS,S,M,L)">
           <input name="colors" placeholder="Colors (#000,#fff)">
         </div>
 
         <textarea name="description" placeholder="Product Description"></textarea>
 
-        <input type="file" name="images" multiple accept="image/*">
+        <!-- ── Media uploads ──────────────────────────────────────── -->
+        <div class="media-row">
 
-        <button class="btn-primary">Add Product</button>
+          <!-- Images -->
+          <div class="media-section">
+            <label>Product Images (max 8)</label>
+            <input
+              id="add-images-input"
+              type="file"
+              name="images"
+              multiple
+              accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
+            <div class="preview-strip" id="add-img-preview"></div>
+          </div>
+
+          <!-- Videos -->
+          <div class="media-section">
+            <label>Product Videos — MP4, WebM, MOV (max 4)</label>
+            <input
+              id="add-videos-input"
+              type="file"
+              name="videos"
+              multiple
+              accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/ogg">
+            <div class="preview-strip" id="add-vid-preview"></div>
+          </div>
+
+        </div>
+        <!-- ── end media uploads ──────────────────────────────────── -->
+
+        <button type="submit" class="btn-primary">Add Product</button>
 
       </form>
 
@@ -136,15 +245,12 @@
     <section id="orders" class="panel orders-panel">
 
       <div class="orders-top">
-
         <div>
           <p class="mini">Order Management</p>
           <h3>Customer Orders</h3>
         </div>
-
         <div class="orders-actions">
           <input type="text" placeholder="Search orders">
-
           <select>
             <option>All Orders</option>
             <option>Pending</option>
@@ -153,7 +259,6 @@
             <option>Delivered</option>
           </select>
         </div>
-
       </div>
 
       <div class="orders-grid" id="orders-grid"></div>
@@ -162,107 +267,91 @@
 
     <!-- ===== CONTACT MESSAGES ===== -->
     <section class="panel">
-
       <div class="section-head">
         <div>
           <p class="mini">Customer Queries</p>
           <h3>Contact Messages</h3>
         </div>
       </div>
-
       <div id="messages-grid" class="messages-grid"></div>
-
     </section>
 
   </main>
 </div>
 
-<!-- ===== DRAWER ===== -->
+<!-- ===== ORDER DRAWER ===== -->
 <div class="drawer" id="order-drawer">
-
   <div class="drawer-overlay" onclick="closeDrawer()"></div>
-
   <div class="drawer-content">
-
     <div class="drawer-head">
       <div>
         <p class="mini">Order Details</p>
         <h2 id="drawer-order-id">#SHN</h2>
       </div>
-
       <button class="close-btn" onclick="closeDrawer()">×</button>
     </div>
-
     <div class="drawer-body" id="drawer-body"></div>
-
   </div>
-
 </div>
 
-<!-- EDIT MODAL -->
-
+<!-- ===== EDIT PRODUCT MODAL ===== -->
 <div class="edit-modal" id="edit-modal">
-
   <div class="edit-box">
 
     <div class="edit-top">
-
       <h2>Edit Product</h2>
-
-      <button type="button"
-      onclick="closeEditModal()">
-        ×
-      </button>
-
+      <button type="button" onclick="closeEditModal()">×</button>
     </div>
 
     <form id="edit-form">
 
       <input type="hidden" name="id">
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Product Name">
+      <input type="text"   name="name"        placeholder="Product Name">
+      <input type="text"   name="category"    placeholder="Category">
+      <input type="number" name="price"       placeholder="Price">
+      <input type="number" name="stock"       placeholder="Stock">
+      <input type="text"   name="sizes"       placeholder="Sizes (XS,S,M,L)">
+      <textarea            name="description" placeholder="Description"></textarea>
 
-      <input
-        type="text"
-        name="category"
-        placeholder="Category">
+      <!-- ── Existing media (populated by openEditModal) ─────────── -->
+      <div class="existing-media-wrap" id="edit-existing-images"></div>
+      <div class="existing-media-wrap" id="edit-existing-videos"></div>
 
-      <input
-        type="number"
-        name="price"
-        placeholder="Price">
+      <!-- ── Replace / add new media ─────────────────────────────── -->
+      <div class="media-row">
 
-      <input
-        type="number"
-        name="stock"
-        placeholder="Stock">
+        <div class="media-section">
+          <label>Replace Images (leave empty to keep current)</label>
+          <input
+            id="edit-images-input"
+            type="file"
+            name="images"
+            multiple
+            accept="image/jpeg,image/png,image/webp,image/gif,image/avif">
+          <div class="preview-strip" id="edit-img-preview"></div>
+        </div>
 
-      <input
-        type="text"
-        name="sizes"
-        placeholder="Sizes">
+        <div class="media-section">
+          <label>Replace Videos (leave empty to keep current)</label>
+          <input
+            id="edit-videos-input"
+            type="file"
+            name="videos"
+            multiple
+            accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/ogg">
+          <div class="preview-strip" id="edit-vid-preview"></div>
+        </div>
 
-      <textarea
-        name="description"
-        placeholder="Description"></textarea>
+      </div>
 
-      <input
-        type="file"
-        name="images"
-        multiple>
-
-      <button type="submit">
-        Save Changes
-      </button>
+      <button type="submit">Save Changes</button>
 
     </form>
 
   </div>
-
 </div>
+
 <script src="../js/config.js"></script>
 <script src="../js/admin.js"></script>
 

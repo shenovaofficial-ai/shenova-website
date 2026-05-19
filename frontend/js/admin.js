@@ -20,11 +20,9 @@ async function api(path, opts = {}) {
 
 window.adminLogin = async (e) => {
   e.preventDefault();
-
   const email = e.target.email.value;
-
-  if(email === 'admin@shenova.com'){
-    localStorage.setItem('admin_token','demo');
+  if (email === 'admin@shenova.com') {
+    localStorage.setItem('admin_token', 'demo');
     location.href = 'dashboard.html';
   } else {
     alert('Invalid admin credentials');
@@ -36,120 +34,82 @@ window.logout = () => {
   location.href = 'login.html';
 };
 
+// ================= MEDIA URL HELPER =================
+
+function mediaUrl(src) {
+  if (!src) return '';
+  return src.startsWith('http') ? src : API_BASE + src;
+}
+
+function isVideo(src) {
+  return /\.(mp4|webm|mov|avi|ogg)$/i.test(src);
+}
+
 // ================= DASHBOARD =================
 
-async function loadDash(){
-
+async function loadDash() {
   if (!document.querySelector('#kpi-products')) return;
 
   const products = await api('/products');
-  const orders = await api('/orders');
+  const orders   = await api('/orders');
 
   document.querySelector('#kpi-products').textContent = products.length;
+  document.querySelector('#kpi-orders').textContent   = orders.length;
+  document.querySelector('#kpi-revenue').textContent  =
+    '₹' + orders.reduce((s, o) => s + (o.total || 0), 0).toLocaleString();
+  document.querySelector('#kpi-pending').textContent  =
+    orders.filter(o => o.status === 'pending').length;
 
-  document.querySelector('#kpi-orders').textContent = orders.length;
-
-  document.querySelector('#kpi-revenue').textContent =
-    '₹' + orders.reduce((s,o)=>s+(o.total||0),0).toLocaleString();
-
-  document.querySelector('#kpi-pending').textContent =
-    orders.filter(o=>o.status==='pending').length;
-
-  // ================= PRODUCTS TABLE =================
-
+  // ── Products table ────────────────────────────────────────────────
   document.querySelector('#products-table tbody').innerHTML =
-    products.map(p => `
-      <tr>
+    products.map(p => {
+      // Show first image or first video thumbnail in the table
+      const firstMedia = (p.images?.[0]) || (p.videos?.[0]) || '';
+      const thumbHtml = firstMedia
+        ? isVideo(firstMedia)
+          ? `<video class="thumb" src="${mediaUrl(firstMedia)}" muted playsinline preload="metadata"></video>`
+          : `<img class="thumb" src="${mediaUrl(firstMedia)}" alt="">`
+        : `<div class="thumb" style="background:#f0ede8"></div>`;
 
-        <td>
-          <img 
-            class="thumb"
-            src="${
-              p.images?.[0]
-              ? (p.images[0].startsWith('http')
-                  ? p.images[0]
-                  : API_BASE + p.images[0])
-              : ''
-            }">
-        </td>
+      const hasVideos = p.videos?.length > 0;
 
-        <td>${p.name}</td>
+      return `
+        <tr>
+          <td>${thumbHtml}</td>
+          <td>
+            ${p.name}
+            ${hasVideos ? `<span class="media-badge">🎬 ${p.videos.length} video${p.videos.length > 1 ? 's' : ''}</span>` : ''}
+          </td>
+          <td>${p.category || '-'}</td>
+          <td>₹${p.price}</td>
+          <td>${p.stock}</td>
+          <td>
+            <div style="display:flex;gap:10px">
+              <button class="edit-btn" onclick="openEditModal('${p._id}')">EDIT</button>
+              <button onclick="delProduct('${p._id}')">DELETE</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
 
-        <td>${p.category || '-'}</td>
-
-        <td>₹${p.price}</td>
-
-        <td>${p.stock}</td>
-
-        <td>
-          <div style="display:flex;gap:10px">
-
-            <button 
-  class="edit-btn"
-  onclick="openEditModal('${p._id}')">
-  EDIT
-</button>
-
-            <button 
-              onclick="delProduct('${p._id}')">
-              DELETE
-            </button>
-
-          </div>
-        </td>
-
-      </tr>
-    `).join('');
-
-  // ================= ORDERS =================
-
+  // ── Orders ────────────────────────────────────────────────────────
   document.querySelector('#orders-grid').innerHTML =
     orders.map(o => `
-      <div class="order-card"
-      onclick='openDrawer(${JSON.stringify(o)})'>
-
+      <div class="order-card" onclick='openDrawer(${JSON.stringify(o)})'>
         <div class="order-top">
-
           <div>
-            <div class="order-id">
-              #${o._id.slice(-6)}
-            </div>
-
-            <div class="customer">
-              ${o.shipping?.fullName || 'Unknown'}
-            </div>
+            <div class="order-id">#${o._id.slice(-6)}</div>
+            <div class="customer">${o.shipping?.fullName || 'Unknown'}</div>
           </div>
-
-          <div class="badge ${o.status}">
-            ${o.status}
-          </div>
-
+          <div class="badge ${o.status}">${o.status}</div>
         </div>
-
         <div class="order-meta">
-
-          <div class="meta-box">
-            <span>Total</span>
-            ₹${o.total}
-          </div>
-
-          <div class="meta-box">
-            <span>Phone</span>
-            ${o.shipping?.phone || '-'}
-          </div>
-
-          <div class="meta-box">
-            <span>City</span>
-            ${o.shipping?.city || '-'}
-          </div>
-
-          <div class="meta-box">
-            <span>Items</span>
-            ${o.items?.length || 0}
-          </div>
-
+          <div class="meta-box"><span>Total</span>₹${o.total}</div>
+          <div class="meta-box"><span>Phone</span>${o.shipping?.phone || '-'}</div>
+          <div class="meta-box"><span>City</span>${o.shipping?.city || '-'}</div>
+          <div class="meta-box"><span>Items</span>${o.items?.length || 0}</div>
         </div>
-
       </div>
     `).join('');
 }
@@ -157,285 +117,265 @@ async function loadDash(){
 // ================= ORDER DRAWER =================
 
 window.openDrawer = (o) => {
-
-  document.querySelector('#order-drawer')
-    .classList.add('active');
-
-  document.querySelector('#drawer-order-id')
-    .textContent = '#' + o._id.slice(-6);
-
+  document.querySelector('#order-drawer').classList.add('active');
+  document.querySelector('#drawer-order-id').textContent = '#' + o._id.slice(-6);
   document.querySelector('#drawer-body').innerHTML = `
-
     <div class="info-card">
-
       <h4>Customer Details</h4>
-
-      <div class="info-row">
-        <span>Name</span>
-        <strong>${o.shipping?.fullName || '-'}</strong>
-      </div>
-
-      <div class="info-row">
-        <span>Email</span>
-        <strong>${o.shipping?.email || '-'}</strong>
-      </div>
-
-      <div class="info-row">
-        <span>Phone</span>
-        <strong>${o.shipping?.phone || '-'}</strong>
-      </div>
-
+      <div class="info-row"><span>Name</span><strong>${o.shipping?.fullName || '-'}</strong></div>
+      <div class="info-row"><span>Email</span><strong>${o.shipping?.email || '-'}</strong></div>
+      <div class="info-row"><span>Phone</span><strong>${o.shipping?.phone || '-'}</strong></div>
     </div>
-
     <div class="info-card">
-
       <h4>Shipping Address</h4>
-
-      <p>
-        ${o.shipping?.address || ''}<br>
-        ${o.shipping?.city || ''},
-        ${o.shipping?.state || ''}<br>
-        ${o.shipping?.zip || ''}
-      </p>
-
-      <button 
-        onclick="navigator.clipboard.writeText('${o.shipping?.address || ''}')">
-        Copy Address
-      </button>
-
+      <p>${o.shipping?.address || ''}<br>${o.shipping?.city || ''}, ${o.shipping?.state || ''}<br>${o.shipping?.zip || ''}</p>
+      <button onclick="navigator.clipboard.writeText('${o.shipping?.address || ''}')">Copy Address</button>
     </div>
-
     <div class="info-card">
-
       <h4>Products Ordered</h4>
-
       ${(o.items || []).map(i => `
-
         <div class="product-item">
-
           <img src="${i.image}">
-
           <div>
             <h5>${i.name}</h5>
             <p>₹${i.price}</p>
             <p>Qty: ${i.qty || 1}</p>
             <p>Size: ${i.size || '-'}</p>
           </div>
-
         </div>
-
       `).join('')}
-
     </div>
-
     <div class="info-card">
-
       <h4>Order Controls</h4>
-
-      <select onchange="updOrder('${o._id}',this.value)">
-
-        ${['pending','processing','shipped','delivered','cancelled']
-          .map(s => `
-            <option ${o.status===s?'selected':''}>
-              ${s}
-            </option>
-          `).join('')}
-
+      <select onchange="updOrder('${o._id}', this.value)">
+        ${['pending','processing','shipped','delivered','cancelled'].map(s =>
+          `<option ${o.status === s ? 'selected' : ''}>${s}</option>`
+        ).join('')}
       </select>
-
     </div>
   `;
 };
 
 window.closeDrawer = () => {
-  document.querySelector('#order-drawer')
-    .classList.remove('active');
+  document.querySelector('#order-drawer').classList.remove('active');
 };
 
 // ================= ADD PRODUCT =================
 
 window.addProduct = async (e) => {
-
   e.preventDefault();
-
   const fd = new FormData(e.target);
 
-  const r = await fetch(API + '/products', {
-    method:'POST',
-    body:fd
-  });
+  // FormData already captures the "images" and "videos" file inputs
+  // by their name attributes — nothing extra needed.
 
-  if(r.ok){
+  const btn = e.target.querySelector('button[type="submit"], button:last-of-type');
+  if (btn) { btn.disabled = true; btn.textContent = 'Uploading…'; }
 
-    alert('Product added ✅');
-
-    e.target.reset();
-
-    loadDash();
-
-  } else {
-
-    alert('Failed to add product ❌');
+  try {
+    const r = await fetch(API + '/products', { method: 'POST', body: fd });
+    if (r.ok) {
+      alert('Product added ✅');
+      e.target.reset();
+      resetMediaPreviews('add');
+      loadDash();
+    } else {
+      const err = await r.json().catch(() => ({}));
+      alert('Failed to add product ❌ ' + (err.error || ''));
+    }
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Add Product'; }
   }
 };
 
 // ================= DELETE PRODUCT =================
 
-window.delProduct = async id => {
-
-  if(confirm('Delete product?')){
-
-    await api('/products/' + id, {
-      method:'DELETE'
-    });
-
+window.delProduct = async (id) => {
+  if (confirm('Delete product?')) {
+    await api('/products/' + id, { method: 'DELETE' });
     loadDash();
   }
 };
 
 // ================= UPDATE ORDER =================
 
-window.updOrder = async (id,status) => {
-
+window.updOrder = async (id, status) => {
   await api('/orders/' + id, {
-    method:'PUT',
-    headers:{ 'Content-Type':'application/json' },
-    body:JSON.stringify({ status })
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
   });
-
   loadDash();
 };
 
 // ================= CONTACT MESSAGES =================
 
-async function loadMessages(){
-
-  try{
-
-    const res = await fetch(API + '/contact');
-
+async function loadMessages() {
+  try {
+    const res  = await fetch(API + '/contact');
     const data = await res.json();
-
     const wrap = document.querySelector('#messages-grid');
+    if (!wrap) return;
 
-    if(!wrap) return;
-
-    if(!data.length){
-
-      wrap.innerHTML = '<p>No messages yet</p>';
-
-      return;
-    }
+    if (!data.length) { wrap.innerHTML = '<p>No messages yet</p>'; return; }
 
     wrap.innerHTML = data.map(m => `
       <div class="msg-card">
-
         <strong>${m.name}</strong>
-
         <p>${m.email}</p>
-
         <p>${m.message}</p>
-
-        <button onclick="deleteMsg('${m._id}')">
-          Delete
-        </button>
-
+        <button onclick="deleteMsg('${m._id}')">Delete</button>
       </div>
     `).join('');
-
-  }catch(err){
-
+  } catch (err) {
     console.log(err);
   }
 }
 
-async function deleteMsg(id){
-
-  if(!confirm("Delete this message?")) return;
-
-  await fetch(API + '/contact/' + id, {
-    method: 'DELETE'
-  });
-
+async function deleteMsg(id) {
+  if (!confirm('Delete this message?')) return;
+  await fetch(API + '/contact/' + id, { method: 'DELETE' });
   loadMessages();
+}
+
+// ================= MEDIA PREVIEW HELPER =================
+
+/**
+ * Attach live preview behaviour to a pair of file inputs.
+ * @param {string} context  'add' | 'edit'
+ */
+function attachMediaPreviews(context) {
+  const imgInput   = document.getElementById(`${context}-images-input`);
+  const vidInput   = document.getElementById(`${context}-videos-input`);
+  const imgPreview = document.getElementById(`${context}-img-preview`);
+  const vidPreview = document.getElementById(`${context}-vid-preview`);
+
+  if (imgInput && imgPreview) {
+    imgInput.addEventListener('change', () => {
+      imgPreview.innerHTML = '';
+      Array.from(imgInput.files).forEach(file => {
+        const url = URL.createObjectURL(file);
+        const el  = document.createElement('img');
+        el.src    = url;
+        el.className = 'preview-thumb';
+        imgPreview.appendChild(el);
+      });
+    });
+  }
+
+  if (vidInput && vidPreview) {
+    vidInput.addEventListener('change', () => {
+      vidPreview.innerHTML = '';
+      Array.from(vidInput.files).forEach(file => {
+        const url = URL.createObjectURL(file);
+        const el  = document.createElement('video');
+        el.src    = url;
+        el.controls = true;
+        el.muted    = true;
+        el.className = 'preview-thumb preview-video';
+        vidPreview.appendChild(el);
+      });
+    });
+  }
+}
+
+function resetMediaPreviews(context) {
+  const imgPreview = document.getElementById(`${context}-img-preview`);
+  const vidPreview = document.getElementById(`${context}-vid-preview`);
+  if (imgPreview) imgPreview.innerHTML = '';
+  if (vidPreview) vidPreview.innerHTML = '';
 }
 
 // ================= EDIT PRODUCT MODAL =================
 
-window.openEditModal = async function(id){
-
-  const r = await fetch(API + '/products/' + id);
-
+window.openEditModal = async function(id) {
+  const r       = await fetch(API + '/products/' + id);
   const product = await r.json();
 
   const modal = document.getElementById('edit-modal');
-
-  const form = document.getElementById('edit-form');
+  const form  = document.getElementById('edit-form');
 
   modal.classList.add('show');
 
-  form.id.value = product._id || '';
-
-  form.name.value = product.name || '';
-
-  form.category.value = product.category || '';
-
-  form.price.value = product.price || '';
-
-  form.stock.value = product.stock || '';
-
-  form.sizes.value = (product.sizes || []).join(',');
-
+  form.id.value          = product._id || '';
+  form.name.value        = product.name || '';
+  form.category.value    = product.category || '';
+  form.price.value       = product.price || '';
+  form.stock.value       = product.stock || '';
+  form.sizes.value       = (product.sizes || []).join(',');
   form.description.value = product.description || '';
-}
 
-window.closeEditModal = function(){
+  // Show existing images
+  const existImgWrap = document.getElementById('edit-existing-images');
+  if (existImgWrap) {
+    if (product.images?.length) {
+      existImgWrap.innerHTML =
+        '<p class="media-label">Current Images:</p>' +
+        product.images.map(src => `
+          <img src="${mediaUrl(src)}" class="preview-thumb" alt="">
+        `).join('');
+    } else {
+      existImgWrap.innerHTML = '';
+    }
+  }
 
-  document.getElementById('edit-modal')
-    .classList.remove('show');
-}
+  // Show existing videos
+  const existVidWrap = document.getElementById('edit-existing-videos');
+  if (existVidWrap) {
+    if (product.videos?.length) {
+      existVidWrap.innerHTML =
+        '<p class="media-label">Current Videos:</p>' +
+        product.videos.map(src => `
+          <video src="${mediaUrl(src)}" class="preview-thumb preview-video"
+                 controls muted preload="metadata"></video>
+        `).join('');
+    } else {
+      existVidWrap.innerHTML = '';
+    }
+  }
+
+  // Clear any new-file previews from a previous open
+  resetMediaPreviews('edit');
+};
+
+window.closeEditModal = function() {
+  document.getElementById('edit-modal').classList.remove('show');
+};
 
 // ================= SAVE EDITED PRODUCT =================
 
-document.getElementById('edit-form')
-.addEventListener('submit', async (e) => {
-
+document.getElementById('edit-form').addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const form = e.target;
+  const fd   = new FormData(form);
+  const id   = form.id.value;
 
-  const fd = new FormData(form);
+  const btn = form.querySelector('button[type="submit"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
 
-  const id = form.id.value;
-
-  try{
-
-    const r = await fetch(API + '/products/' + id, {
-      method:'PUT',
-      body:fd
-    });
-
-    if(!r.ok){
-      throw new Error('Update failed');
-    }
-
+  try {
+    const r = await fetch(API + '/products/' + id, { method: 'PUT', body: fd });
+    if (!r.ok) throw new Error('Update failed');
     alert('Product updated ✅');
-
     closeEditModal();
-
     loadDash();
-
-  }catch(err){
-
+  } catch (err) {
     console.log(err);
-
     alert('Update failed ❌');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Save Changes'; }
   }
-
 });
 
 // ================= INIT =================
 
-loadDash();
+// Attach live preview listeners once DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  attachMediaPreviews('add');
+  attachMediaPreviews('edit');
+});
 
+loadDash();
 loadMessages();

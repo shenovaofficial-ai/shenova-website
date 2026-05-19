@@ -664,6 +664,77 @@ footer {
 @media (max-width: 440px) {
   .pdp-related-head h2 { font-size: 30px; }
 }
+/* ── Video thumbnail in desktop sidebar strip ──────────────────── */
+.pdp-thumb-item {
+  position: relative;
+  width: 80px;
+  height: 106px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  opacity: .48;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--parchment);
+  transition: opacity .32s, border-color .32s, transform .32s;
+}
+.pdp-thumb-item:hover { opacity: .76; transform: scale(1.025); }
+.pdp-thumb-item.active { opacity: 1; border-color: var(--ink); }
+
+.pdp-thumb-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  pointer-events: none;
+}
+
+/* Play icon overlay on video thumbnails */
+.pdp-thumb-play-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: rgba(255,255,255,.9);
+  background: rgba(13,13,11,.28);
+  backdrop-filter: blur(2px);
+  border-radius: 4px;
+  pointer-events: none;
+  transition: background .2s;
+}
+.pdp-thumb-item:hover .pdp-thumb-play-icon {
+  background: rgba(13,13,11,.42);
+}
+
+/* ── Video dot indicator (mobile) ──────────────────────────────── */
+.pdp-dot-video {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  transform: scale(1.2);
+}
+.pdp-dot-video.active {
+  background: var(--ink) !important;
+  border-color: var(--ink) !important;
+}
+
+/* ── Main video element inside .pdp-main-frame ─────────────────── */
+#pdp-main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+  display: block;
+  /* Videos don't get the zoom-in cursor or hover-scale */
+}
+
+/* Disable the hover scale when a video is active */
+.pdp-main-frame:has(#pdp-main-video):hover img,
+.pdp-main-frame:has(#pdp-main-video) img {
+  transform: none !important;
+}
 </style>
 </head>
 <body>

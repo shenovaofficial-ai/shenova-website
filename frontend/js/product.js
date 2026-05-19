@@ -1,16 +1,37 @@
 /* ============================================================
    product.js — Shenova PDP Logic
-   Backend integrations fully preserved.
-   Updated selectors to match redesigned product.html.
+   Updated: full mixed image + video gallery support.
+   All existing backend integrations and functionality preserved.
    ============================================================ */
 
 const id = new URLSearchParams(location.search).get('id');
-let product = null;
-let currentImg = 0;
-let selectedSize = null;
+let product     = null;
+let currentIdx  = 0;   // index across combined media array (images + videos)
+let selectedSize  = null;
 let selectedColor = null;
 
-/* ──── Load product from API or fallback to sample ──── */
+/* ──── Media helpers ──── */
+function imgUrl(s) {
+  return s?.startsWith('http') ? s : API_BASE + s;
+}
+
+const VIDEO_EXT = /\.(mp4|webm|mov|avi|ogg)$/i;
+function isVideo(src) {
+  return VIDEO_EXT.test(src || '');
+}
+
+/**
+ * Returns a flat ordered array of all media items for the gallery.
+ * Images come first, then videos — matching what most shoppers expect.
+ * Each item: { src: string, type: 'image'|'video' }
+ */
+function getMedia() {
+  const imgs = (product.images || []).map(s => ({ src: s, type: 'image' }));
+  const vids = (product.videos || []).map(s => ({ src: s, type: 'video' }));
+  return [...imgs, ...vids];
+}
+
+/* ──── Load product from API ──── */
 async function loadProduct() {
   try {
     const r = await fetch(API + '/products/' + id);
@@ -22,64 +43,72 @@ async function loadProduct() {
   render();
 }
 
-/* ──── Image URL helper ──── */
-function imgUrl(s) {
-  return s?.startsWith('http') ? s : API_BASE + s;
-}
-
 /* ──── Full render ──── */
 function render() {
   if (!product) return;
 
-  /* Page title */
   document.title = product.name + ' · Shenova';
 
-  /* Breadcrumb */
   const bc = document.getElementById('pdp-bc-name');
   if (bc) bc.textContent = product.name;
 
-  /* Category eyebrow */
   const catEl = document.getElementById('pdp-category');
   if (catEl && product.category) catEl.textContent = product.category;
 
-  /* Name, price, description */
-  document.querySelector('#pdp-name').textContent = product.name;
+  document.querySelector('#pdp-name').textContent  = product.name;
   document.querySelector('#pdp-price').textContent = '₹' + product.price.toLocaleString();
-  document.querySelector('#pdp-desc').textContent =
+  document.querySelector('#pdp-desc').textContent  =
     product.description || 'Crafted with the finest fabrics for an effortless silhouette.';
 
-  /* Images */
-  const imgs = product.images || [];
-  const mainImg = document.querySelector('#pdp-main-img');
-  if (mainImg) mainImg.src = imgUrl(imgs[0] || '');
+  const media = getMedia();
 
-  /* Counter */
+  /* ── Main frame: render first media item ── */
+  renderMainMedia(0);
+
+  /* ── Counter ── */
   updateCounter();
 
-  /* Thumbnail strip */
+  /* ── Thumbnail strip (desktop) ── */
   const thumbsWrap = document.querySelector('#pdp-thumbs');
   if (thumbsWrap) {
-    thumbsWrap.innerHTML = imgs.map((im, i) =>
-      `<img src="${imgUrl(im)}" class="${i === 0 ? 'active' : ''}"
-            onclick="setImg(${i})" alt="View ${i + 1}">`
-    ).join('');
+    thumbsWrap.innerHTML = media.map((m, i) => {
+      if (m.type === 'video') {
+        return `
+          <div class="pdp-thumb-item ${i === 0 ? 'active' : ''}"
+               onclick="setMedia(${i})" data-idx="${i}"
+               title="Video ${i + 1}">
+            <video class="pdp-thumb-video"
+                   src="${imgUrl(m.src)}"
+                   muted preload="metadata"
+                   style="width:80px;height:106px;object-fit:cover;border-radius:4px;display:block;pointer-events:none"></video>
+            <div class="pdp-thumb-play-icon">▶</div>
+          </div>`;
+      }
+      return `
+        <img src="${imgUrl(m.src)}"
+             class="${i === 0 ? 'active' : ''}"
+             onclick="setMedia(${i})"
+             data-idx="${i}"
+             alt="View ${i + 1}">`;
+    }).join('');
   }
 
-  /* Mobile dots */
+  /* ── Mobile dots ── */
   const dotsWrap = document.getElementById('pdp-dots');
   if (dotsWrap) {
-    dotsWrap.innerHTML = imgs.map((_, i) =>
-      `<span class="pdp-dot ${i === 0 ? 'active' : ''}" onclick="setImg(${i})"></span>`
-    ).join('');
+    dotsWrap.innerHTML = media.map((m, i) => {
+      const cls = m.type === 'video' ? 'pdp-dot pdp-dot-video' : 'pdp-dot';
+      return `<span class="${cls} ${i === 0 ? 'active' : ''}" onclick="setMedia(${i})"></span>`;
+    }).join('');
   }
 
-  /* Size buttons */
+  /* ── Sizes ── */
   document.querySelector('#pdp-sizes').innerHTML =
     (product.sizes || ['XS', 'S', 'M', 'L']).map(s =>
       `<button class="size" onclick="setSize('${s}',this)"><span>${s}</span></button>`
     ).join('');
 
-  /* Colour swatches */
+  /* ── Colors ── */
   const colors = product.colors || [];
   const colorWrap = document.querySelector('#pdp-colors-wrap');
   if (colorWrap) colorWrap.style.display = colors.length ? 'block' : 'none';
@@ -87,51 +116,120 @@ function render() {
     `<button class="color" style="background:${c}" onclick="setColor('${c}',this)" title="${c}"></button>`
   ).join('');
 
-  /* Wishlist state */
+  /* ── Wishlist state ── */
   const wishIds = JSON.parse(localStorage.getItem('wishlist') || '[]');
   const pid = product._id || product.id;
   if (wishIds.includes(pid)) {
     document.querySelector('#pdp-wish')?.classList.add('active');
   }
 
-  /* Related products */
   loadRelated();
-
-  /* Smooth stagger for info section */
   animateInfoIn();
 }
 
-/* ──── Image counter display ──── */
-function updateCounter() {
-  const total = (product.images || []).length;
-  const cur  = document.getElementById('pdp-img-cur');
-  const tot  = document.getElementById('pdp-img-total');
-  if (cur) cur.textContent  = currentImg + 1;
-  if (tot) tot.textContent  = total;
+/* ──── Render main media slot (image or video) ──── */
+function renderMainMedia(idx) {
+  const media = getMedia();
+  if (!media.length) return;
+
+  const frame = document.getElementById('pdp-main-frame');
+  if (!frame) return;
+
+  const item = media[idx];
+
+  // Remove existing main media elements (keep badges/arrows/counter)
+  frame.querySelectorAll(
+    '#pdp-main-img, #pdp-main-video, .pdp-video-overlay-play'
+  ).forEach(el => el.remove());
+
+  if (item.type === 'video') {
+    // Build video element
+    const vid = document.createElement('video');
+    vid.id       = 'pdp-main-video';
+    vid.src      = imgUrl(item.src);
+    vid.controls = true;
+    vid.playsInline = true;
+    vid.preload  = 'metadata';
+    Object.assign(vid.style, {
+      width: '100%', height: '100%',
+      objectFit: 'cover',
+      borderRadius: '3px',
+      display: 'block',
+      cursor: 'default'
+    });
+
+    // Insert before badges/arrows (first child)
+    frame.insertBefore(vid, frame.firstChild);
+
+    // Hide zoom cursor on the frame while video is active
+    frame.style.cursor = 'default';
+
+  } else {
+    // Build image element
+    const img = document.createElement('img');
+    img.id  = 'pdp-main-img';
+    img.src = imgUrl(item.src);
+    img.alt = 'Product';
+    Object.assign(img.style, {
+      width: '100%', height: '100%',
+      objectFit: 'cover',
+      transition: 'transform 2s cubic-bezier(.25,.46,.45,.94), opacity .22s ease',
+      cursor: 'zoom-in',
+      display: 'block'
+    });
+
+    frame.insertBefore(img, frame.firstChild);
+
+    // Re-attach zoom listener to fresh img element
+    img.addEventListener('click', function() {
+      const overlay = document.getElementById('pdp-zoom-overlay');
+      const zoomImg = document.getElementById('pdp-zoom-img');
+      if (overlay && zoomImg) {
+        zoomImg.src = this.src;
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    frame.style.cursor = '';
+  }
 }
 
-/* ──── Image switching with fade ──── */
-window.setImg = function(i) {
-  currentImg = i;
-  const imgs = product.images || [];
+/* ──── Switch active media item ──── */
+window.setMedia = function(i) {
+  const media = getMedia();
+  if (i < 0 || i >= media.length) return;
 
-  const mainImg = document.querySelector('#pdp-main-img');
-  if (mainImg) {
-    mainImg.style.opacity   = '0';
-    mainImg.style.transform = 'scale(1.025)';
-    setTimeout(() => {
-      mainImg.src             = imgUrl(imgs[i]);
-      mainImg.style.opacity   = '1';
-      mainImg.style.transform = 'scale(1)';
-    }, 180);
+  // Pause any playing video before switching away
+  const prevVid = document.getElementById('pdp-main-video');
+  if (prevVid) prevVid.pause();
+
+  currentIdx = i;
+
+  // Fade out
+  const frame = document.getElementById('pdp-main-frame');
+  const currentMain = frame?.querySelector('#pdp-main-img, #pdp-main-video');
+  if (currentMain) {
+    currentMain.style.opacity   = '0';
+    currentMain.style.transform = 'scale(1.025)';
   }
 
-  /* Thumbnail active */
-  document.querySelectorAll('#pdp-thumbs img').forEach((t, k) =>
+  setTimeout(() => {
+    renderMainMedia(i);
+    // Fade in
+    const newMain = frame?.querySelector('#pdp-main-img, #pdp-main-video');
+    if (newMain) {
+      newMain.style.opacity   = '1';
+      newMain.style.transform = 'scale(1)';
+    }
+  }, 180);
+
+  // Thumbnail active state
+  document.querySelectorAll('#pdp-thumbs img, #pdp-thumbs .pdp-thumb-item').forEach((t, k) =>
     t.classList.toggle('active', k === i)
   );
 
-  /* Dot active */
+  // Dot active state
   document.querySelectorAll('.pdp-dot').forEach((d, k) =>
     d.classList.toggle('active', k === i)
   );
@@ -139,16 +237,27 @@ window.setImg = function(i) {
   updateCounter();
 };
 
-/* Attach transition once img is ready */
-const _mainImg = document.querySelector('#pdp-main-img');
-if (_mainImg) {
-  Object.assign(_mainImg.style, {
-    transition: 'opacity 0.22s ease, transform 0.22s ease'
-  });
+/* ── Keep old setImg alias so any other code using it still works ── */
+window.setImg = function(i) { window.setMedia(i); };
+
+/* ──── Counter ──── */
+function updateCounter() {
+  const total = getMedia().length;
+  const cur   = document.getElementById('pdp-img-cur');
+  const tot   = document.getElementById('pdp-img-total');
+  if (cur) cur.textContent = currentIdx + 1;
+  if (tot) tot.textContent = total;
 }
 
-window.nextImg = () => setImg((currentImg + 1) % (product?.images?.length || 1));
-window.prevImg = () => setImg((currentImg - 1 + (product?.images?.length || 1)) % (product?.images?.length || 1));
+/* ──── Arrow navigation ──── */
+window.nextImg = () => {
+  const total = getMedia().length;
+  window.setMedia((currentIdx + 1) % (total || 1));
+};
+window.prevImg = () => {
+  const total = getMedia().length;
+  window.setMedia((currentIdx - 1 + (total || 1)) % (total || 1));
+};
 
 /* ──── Swipe support (mobile) ──── */
 let _touchStartX = 0;
@@ -176,26 +285,28 @@ window.setColor = function(c, el) {
   if (nameEl) nameEl.textContent = c;
 };
 
-/* ──── Add to cart (backend logic intact) ──── */
+/* ──── Add to cart ──── */
 window.addToCart = function() {
   if (!selectedSize) {
     showModal('Select your size', 'Please choose a size before adding to your bag.');
-    /* Shake the size row */
     const sizesEl = document.querySelector('#pdp-sizes');
     if (sizesEl) {
       sizesEl.style.animation = 'none';
-      sizesEl.offsetHeight; // reflow
+      sizesEl.offsetHeight;
       sizesEl.style.animation = 'pdpShake 0.4s ease';
     }
     return;
   }
 
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  // Always use the first image for cart thumbnail (not video)
+  const cartImage = product.images?.[0] ? imgUrl(product.images[0]) : '';
+
   cart.push({
     id:    product._id || product.id,
     name:  product.name,
     price: product.price,
-    image: imgUrl(product.images[0]),
+    image: cartImage,
     size:  selectedSize,
     color: selectedColor,
     qty:   1
@@ -204,7 +315,6 @@ window.addToCart = function() {
   updateCartCount();
   openCart();
 
-  /* Button success feedback */
   const btn = document.querySelector('.pdp-add-btn');
   if (btn) {
     const orig = btn.innerHTML;
@@ -227,23 +337,13 @@ window.toggleWish = function() {
   document.querySelector('#pdp-wish')?.classList.toggle('active');
 };
 
-/* ──── Zoom overlay (delegated; inline listener in HTML also works) ──── */
-document.querySelector('#pdp-main-img')?.addEventListener('click', function() {
-  const overlay = document.getElementById('pdp-zoom-overlay');
-  const zoomImg = document.getElementById('pdp-zoom-img');
-  if (overlay && zoomImg) {
-    zoomImg.src = this.src;
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-});
-
+/* ──── Zoom (images only; videos have native controls) ──── */
 window.closeZoom = function() {
   document.getElementById('pdp-zoom-overlay')?.classList.remove('open');
   document.body.style.overflow = '';
 };
 
-/* ──── Related products (backend intact) ──── */
+/* ──── Related products ──── */
 async function loadRelated() {
   const wrap = document.querySelector('#related');
   if (!wrap) return;
@@ -258,19 +358,11 @@ async function loadRelated() {
   }
 }
 
-/* ──── Staggered entry animation for info panel ──── */
+/* ──── Info panel stagger animation ──── */
 function animateInfoIn() {
   const targets = [
-    '.pdp-eyebrow',
-    '.pdp-title',
-    '.pdp-price-row',
-    '.pdp-rating',
-    '.pdp-rule',
-    '.pdp-desc',
-    '.pdp-opt',
-    '.pdp-cta',
-    '.pdp-trust',
-    '.pdp-acc'
+    '.pdp-eyebrow', '.pdp-title', '.pdp-price-row', '.pdp-rating',
+    '.pdp-rule', '.pdp-desc', '.pdp-opt', '.pdp-cta', '.pdp-trust', '.pdp-acc'
   ];
   targets.forEach((sel, i) => {
     const el = document.querySelector(sel);
@@ -287,25 +379,18 @@ function animateInfoIn() {
 
 /* ──── Keyboard navigation ──── */
 document.addEventListener('keydown', e => {
+  // Don't hijack arrow keys when a video is playing / focused
+  const vid = document.getElementById('pdp-main-video');
+  if (vid && document.activeElement === vid) return;
+
   if (e.key === 'ArrowRight') window.nextImg?.();
   if (e.key === 'ArrowLeft')  window.prevImg?.();
   if (e.key === 'Escape')   { window.closeZoom?.(); }
 });
 
+/* ──── Size guide ──── */
+window.openSizeGuide  = () => document.getElementById('sizeGuide')?.classList.add('active');
+window.closeSizeGuide = () => document.getElementById('sizeGuide')?.classList.remove('active');
+
 /* ──── Init ──── */
 loadProduct();
-window.openSizeGuide = function(){
-
-  document
-  .getElementById('sizeGuide')
-  .classList.add('active');
-
-}
-
-window.closeSizeGuide = function(){
-
-  document
-  .getElementById('sizeGuide')
-  .classList.remove('active');
-
-}
