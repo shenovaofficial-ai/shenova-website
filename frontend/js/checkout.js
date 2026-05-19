@@ -130,44 +130,31 @@ document
     const ship = sub > 2000 ? 0 : 69;
 
     /* ─────────────── COUPON (original API call) ─────────────── */
-    let discountAmount = 0;
+/* ─────────────── COUPON (uses pre-validated discount) ─────────────── */
+let discountAmount = 0;
 
-    if (f.coupon.value) {
-      try {
-        const cr = await fetch(
-          API + '/coupon/apply',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ coupon: f.coupon.value })
-          }
-        );
+if (f.coupon.value) {
+  // If Apply button was clicked → use already validated discount
+  if (window.appliedCouponCode &&
+      window.appliedCouponCode === f.coupon.value.trim().toUpperCase()) {
 
-        const cd = await cr.json();
+    discountAmount = window.appliedDiscount || 0;
 
-        if (!cr.ok) {
-          showLuxuryModal('Coupon Error', cd.message, 'error');
-          return;
-        }
-
-        discountAmount = sub * (cd.discount / 100);
-        window.appliedDiscount = discountAmount; // ← ADD THIS LINE
-
-        /* Show discount row in sidebar */
-        const discRow = document.getElementById('co-discount-row');
-        const discVal = document.getElementById('co-discount-val');
-        if (discRow) discRow.style.display = 'flex';
-        if (discVal) discVal.textContent = '−₹' + discountAmount.toLocaleString();
-
-        /* Update total display */
-        document.querySelector('#tot').textContent =
-          '₹' + (sub + ship - discountAmount).toLocaleString();
-
-      } catch (err) {
-        showLuxuryModal('Coupon Error', 'Coupon validation failed. Please try again.', 'error');
-        return;
-      }
+  } else {
+    // Apply button was NOT clicked — block and remind user
+    showLuxuryModal(
+      'Apply Your Coupon First',
+      'Please click the Apply button next to the coupon field to validate your code.',
+      'error'
+    );
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.querySelector('.co-submit-text').textContent = 'Place Order';
     }
+    return;
+  }
+}
 
     /* ─────────────── ORDER BODY (unchanged from original) ──── */
     const body = {

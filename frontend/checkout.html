@@ -291,25 +291,37 @@
             <!-- Coupon -->
             <div class="co-coupon">
               <p class="co-coupon-label">Have a coupon code?</p>
-              <div class="co-coupon-row">
-                <div class="co-field co-coupon-field">
-                  <input
-                    type="text"
-                    name="coupon"
-                    id="f-coupon"
-                    class="co-input"
-                    placeholder=" "
-                    autocomplete="off"
-                    style="text-transform:uppercase"
-                  >
-                  <label class="co-label" for="f-coupon">Enter Coupon Code</label>
-                  <span class="co-field-line"></span>
-                </div>
-                <div class="co-coupon-tag">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                  Optional
-                </div>
-              </div>
+             <div class="co-coupon-row">
+  <div class="co-field co-coupon-field">
+    <input type="text" name="coupon" id="f-coupon" class="co-input"
+      placeholder=" " autocomplete="off" style="text-transform:uppercase">
+    <label class="co-label" for="f-coupon">Enter Coupon Code</label>
+    <span class="co-field-line"></span>
+  </div>
+  <button type="button" id="apply-coupon-btn" style="
+    padding: 10px 22px;
+    background: #0d0c0b;
+    color: #faf7f2;
+    border: none;
+    border-radius: 50px;
+    font: 400 9.5px/1 'DM Sans', sans-serif;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .3s;
+    flex-shrink: 0;
+  ">Apply</button>
+</div>
+
+<!-- Coupon feedback message -->
+<div id="coupon-msg" style="
+  font: 300 11px/1 'DM Sans', sans-serif;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  display: none;
+"></div>x
             </div>
 
           </div>
@@ -519,6 +531,107 @@ window.appliedDiscount = 0;
       }
     };
     window.addEventListener('scroll', updateStep, { passive: true });
+    /* ── LIVE COUPON APPLY ── */
+window.appliedDiscount = 0;
+window.appliedCouponCode = '';
+
+document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
+  const couponInput = document.getElementById('f-coupon');
+  const msgEl = document.getElementById('coupon-msg');
+  const code = couponInput?.value.trim().toUpperCase();
+
+  if (!code) {
+    showCouponMsg('Please enter a coupon code.', 'error');
+    return;
+  }
+
+  // Button loading state
+  const btn = document.getElementById('apply-coupon-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(
+      'https://shenova-website-production.up.railway.app/api/coupon/apply',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coupon: code })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showCouponMsg(data.message || 'Invalid coupon code.', 'error');
+      window.appliedDiscount = 0;
+      window.appliedCouponCode = '';
+      refreshTotals();
+      return;
+    }
+
+    // ✅ Valid coupon — apply discount
+    window.appliedCouponCode = code;
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    window.appliedDiscount = sub * (data.discount / 100);
+
+    showCouponMsg(`✦ ${data.discount}% discount applied!`, 'success');
+    refreshTotals();
+
+  } catch (err) {
+    showCouponMsg('Could not validate coupon. Try again.', 'error');
+  } finally {
+    btn.textContent = 'Apply';
+    btn.disabled = false;
+  }
+});
+
+// Allow pressing Enter in coupon field
+document.getElementById('f-coupon')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    document.getElementById('apply-coupon-btn')?.click();
+  }
+});
+
+// Reset discount if coupon is cleared
+document.getElementById('f-coupon')?.addEventListener('input', e => {
+  if (!e.target.value.trim()) {
+    window.appliedDiscount = 0;
+    window.appliedCouponCode = '';
+    document.getElementById('coupon-msg').style.display = 'none';
+    refreshTotals();
+  }
+});
+
+function showCouponMsg(msg, type) {
+  const el = document.getElementById('coupon-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? 'rgba(184,149,106,0.12)' : 'rgba(192,57,43,0.08)';
+  el.style.color = type === 'success' ? '#8a6a3a' : '#c0392b';
+  el.style.border = `1px solid ${type === 'success' ? 'rgba(184,149,106,0.3)' : 'rgba(192,57,43,0.2)'}`;
+}
+
+function refreshTotals() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const ship = sub > 2000 ? 0 : 69;
+  const discount = window.appliedDiscount || 0;
+  const total = sub + ship - discount;
+
+  document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
+  document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
+  document.querySelector('#tot').textContent  = '₹' + total.toLocaleString();
+
+  // Show/hide discount row in sidebar
+  const discRow = document.getElementById('co-discount-row');
+  const discVal = document.getElementById('co-discount-val');
+  if (discRow) discRow.style.display = discount > 0 ? 'flex' : 'none';
+  if (discVal) discVal.textContent = '−₹' + discount.toLocaleString();
+}
     /* ─────────────────────────────
    RAZORPAY PAYMENT
 ───────────────────────────── */
