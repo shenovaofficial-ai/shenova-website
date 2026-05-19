@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Contact · Shenova</title>
 <link rel="icon" type="image/png" href="images/logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -24,21 +27,798 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+
+<style>
+/* ── CONTACT PAGE VARS ── */
+:root {
+  --co-gold: #b8956a;
+  --co-gold-lt: #d4b896;
+  --co-ink: #0a0909;
+  --co-bg: #faf8f5;
+  --co-muted: #6b6460;
+  --co-beige: #ece6dc;
+  --co-line: rgba(10,9,8,.09);
+  --co-serif: "Cormorant Garamond", Georgia, serif;
+  --co-sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --ease-out: cubic-bezier(.19,1,.22,1);
+}
+
+/* ── BASE ── */
+.contact-page { background: var(--co-bg); font-family: var(--co-sans); }
+
+/* ════════════════════════════════════
+   HERO BANNER
+════════════════════════════════════ */
+.ct-hero {
+  position: relative;
+  padding: 180px 0 100px;
+  overflow: hidden;
+  background: var(--co-ink);
+}
+.ct-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(184,149,106,.13) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 90%, rgba(184,149,106,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+/* Decorative large serif watermark */
+.ct-hero-wm {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--co-serif);
+  font-size: clamp(160px, 22vw, 320px);
+  font-weight: 300;
+  color: rgba(255,255,255,.025);
+  letter-spacing: -.03em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+.ct-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.ct-hero-eye {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: ctFadeUp .9s var(--ease-out) .2s forwards;
+}
+.ct-hero-title {
+  font-family: var(--co-serif);
+  font-size: clamp(64px, 10vw, 140px);
+  font-weight: 300;
+  line-height: .92;
+  letter-spacing: -.025em;
+  color: #faf8f5;
+  margin-bottom: 30px;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: ctFadeUp 1.1s var(--ease-out) .35s forwards;
+}
+.ct-hero-title em {
+  font-style: italic;
+  color: var(--co-gold-lt);
+}
+.ct-hero-sub {
+  font-size: 15px;
+  color: rgba(250,248,245,.5);
+  letter-spacing: .04em;
+  max-width: 420px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: ctFadeUp .9s var(--ease-out) .55s forwards;
+}
+
+/* Trust strip inside hero */
+.ct-hero-trust {
+  display: flex;
+  gap: 36px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: ctFadeUp .9s var(--ease-out) .75s forwards;
+}
+.ct-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+}
+.ct-trust-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(184,149,106,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--co-gold);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════
+   INFO CARDS ROW
+════════════════════════════════════ */
+.ct-cards-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.ct-cards-section {
+  margin-top: -1px;
+  padding: 80px 0 60px;
+  background: var(--co-bg);
+}
+.ct-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.ct-card {
+  position: relative;
+  padding: 44px 36px;
+  background: #fff;
+  border: 1px solid var(--co-line);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out), border-color .4s;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(28px);
+}
+.ct-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out),
+              box-shadow .4s var(--ease-out), border-color .4s;
+}
+.ct-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0,0,0,.08);
+  border-color: rgba(184,149,106,.3);
+}
+/* Gold bottom-line accent on hover */
+.ct-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--co-gold), var(--co-gold-lt));
+  transition: width .5s var(--ease-out);
+}
+.ct-card:hover::after { width: 100%; }
+
+.ct-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--co-beige);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: var(--co-gold);
+  transition: background .35s, color .35s;
+}
+.ct-card:hover .ct-card-icon {
+  background: var(--co-gold);
+  color: #fff;
+}
+.ct-card-label {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  margin-bottom: 10px;
+}
+.ct-card-title {
+  font-family: var(--co-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--co-ink);
+  margin-bottom: 8px;
+}
+.ct-card-val {
+  font-size: 13px;
+  color: var(--co-muted);
+  line-height: 1.7;
+}
+.ct-card-val a {
+  color: inherit;
+  text-decoration: none;
+  transition: color .25s;
+}
+.ct-card-val a:hover { color: var(--co-ink); }
+
+/* ════════════════════════════════════
+   MAIN CONTENT: FORM + MAP
+════════════════════════════════════ */
+.ct-main-section {
+  padding: 40px 0 100px;
+  background: var(--co-bg);
+}
+.ct-main-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* ── FORM ── */
+.ct-section-eye {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  margin-bottom: 14px;
+}
+.ct-section-title {
+  font-family: var(--co-serif);
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 300;
+  letter-spacing: -.015em;
+  line-height: 1.05;
+  color: var(--co-ink);
+  margin-bottom: 10px;
+}
+.ct-section-sub {
+  font-size: 14px;
+  color: var(--co-muted);
+  margin-bottom: 48px;
+  line-height: 1.7;
+  max-width: 400px;
+}
+
+/* Form fields */
+.ct-form { display: flex; flex-direction: column; gap: 0; }
+.ct-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.ct-row.full { grid-template-columns: 1fr; }
+
+.ct-field {
+  position: relative;
+}
+.ct-field input,
+.ct-field textarea,
+.ct-field select {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid rgba(10,9,8,.15);
+  padding: 14px 0 12px;
+  font-family: var(--co-sans);
+  font-size: 14px;
+  color: var(--co-ink);
+  outline: none;
+  transition: border-color .35s;
+  resize: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ct-field textarea { min-height: 120px; }
+.ct-field input::placeholder,
+.ct-field textarea::placeholder { color: transparent; }
+
+.ct-field label {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  font-size: 13px;
+  color: var(--co-muted);
+  pointer-events: none;
+  transition: all .3s var(--ease-out);
+  letter-spacing: .04em;
+}
+.ct-field input:focus ~ label,
+.ct-field input:not(:placeholder-shown) ~ label,
+.ct-field textarea:focus ~ label,
+.ct-field textarea:not(:placeholder-shown) ~ label {
+  top: -8px;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+}
+/* Focus gold underline */
+.ct-field::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--co-gold);
+  transition: width .4s var(--ease-out);
+}
+.ct-field:focus-within::after { width: 100%; }
+.ct-field:focus-within input,
+.ct-field:focus-within textarea { border-color: transparent; }
+
+/* Subject select styling */
+.ct-field select {
+  cursor: pointer;
+  padding-right: 20px;
+}
+.ct-field .ct-select-wrap { position: relative; }
+.ct-field .ct-select-wrap::after {
+  content: "↓";
+  position: absolute;
+  right: 0;
+  top: 14px;
+  font-size: 12px;
+  color: var(--co-muted);
+  pointer-events: none;
+}
+
+/* Submit button */
+.ct-submit {
+  margin-top: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 48px;
+  background: var(--co-ink);
+  color: #faf8f5;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--co-sans);
+  font-size: 11px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .35s var(--ease-out), background .35s;
+  align-self: flex-start;
+}
+.ct-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  transform: translateX(-100%);
+  transition: transform .6s ease;
+}
+.ct-submit:hover::before { transform: translateX(100%); }
+.ct-submit:hover { transform: translateY(-3px); background: #1a1815; }
+.ct-submit svg { transition: transform .35s; }
+.ct-submit:hover svg { transform: translateX(4px); }
+.ct-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Form success state */
+.ct-success {
+  display: none;
+  padding: 32px;
+  background: rgba(184,149,106,.07);
+  border: 1px solid rgba(184,149,106,.25);
+  border-radius: 2px;
+  text-align: center;
+  margin-top: 20px;
+}
+.ct-success.show { display: block; }
+.ct-success-icon {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+.ct-success h4 {
+  font-family: var(--co-serif);
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.ct-success p { font-size: 13px; color: var(--co-muted); }
+
+/* ── RIGHT COLUMN ── */
+.ct-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: sticky;
+  top: 100px;
+}
+
+/* Map */
+.ct-map-card {
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--co-line);
+  background: #fff;
+}
+.ct-map-card iframe {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: none;
+}
+.ct-map-footer {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ct-map-addr {
+  font-size: 12px;
+  color: var(--co-muted);
+  line-height: 1.6;
+}
+.ct-map-link {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(184,149,106,.35);
+  padding-bottom: 2px;
+  transition: color .25s, border-color .25s;
+}
+.ct-map-link:hover { color: var(--co-ink); border-color: var(--co-ink); }
+
+/* Social links */
+.ct-social-card {
+  padding: 32px;
+  background: #fff;
+  border: 1px solid var(--co-line);
+  border-radius: 2px;
+}
+.ct-social-title {
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--co-muted);
+  margin-bottom: 20px;
+}
+.ct-socials {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ct-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border: 1px solid var(--co-line);
+  border-radius: 50px;
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--co-ink);
+  text-decoration: none;
+  transition: all .3s var(--ease-out);
+  background: transparent;
+  cursor: pointer;
+}
+.ct-social-btn:hover {
+  background: var(--co-ink);
+  color: #faf8f5;
+  border-color: var(--co-ink);
+  transform: translateY(-2px);
+}
+.ct-social-btn svg { flex-shrink: 0; }
+
+/* Response promise */
+.ct-promise {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 28px;
+  background: linear-gradient(135deg, rgba(184,149,106,.1) 0%, rgba(212,184,150,.05) 100%);
+  border: 1px solid rgba(184,149,106,.2);
+  border-radius: 2px;
+}
+.ct-promise-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(184,149,106,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--co-gold);
+  flex-shrink: 0;
+}
+.ct-promise-text strong {
+  display: block;
+  font-size: 13px;
+  color: var(--co-ink);
+  margin-bottom: 3px;
+  letter-spacing: .02em;
+}
+.ct-promise-text span {
+  font-size: 12px;
+  color: var(--co-muted);
+}
+
+/* ════════════════════════════════════
+   FAQ SECTION
+════════════════════════════════════ */
+.ct-faq-section {
+  padding: 100px 0;
+  background: var(--co-ink);
+}
+.ct-faq-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 80px;
+  align-items: start;
+}
+.ct-faq-left {
+  position: sticky;
+  top: 100px;
+}
+.ct-faq-eye {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  margin-bottom: 16px;
+}
+.ct-faq-title {
+  font-family: var(--co-serif);
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: #faf8f5;
+  margin-bottom: 20px;
+}
+.ct-faq-title em { font-style: italic; color: var(--co-gold-lt); }
+.ct-faq-desc {
+  font-size: 14px;
+  color: rgba(250,248,245,.45);
+  line-height: 1.75;
+  margin-bottom: 36px;
+}
+.ct-faq-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(184,149,106,.3);
+  padding-bottom: 4px;
+  transition: color .25s, border-color .25s;
+}
+.ct-faq-cta:hover { color: #faf8f5; border-color: rgba(250,248,245,.4); }
+
+/* FAQ accordion */
+.ct-faqs { display: flex; flex-direction: column; gap: 0; }
+.ct-faq-item {
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  overflow: hidden;
+}
+.ct-faq-item:first-child { border-top: 1px solid rgba(255,255,255,.07); }
+.ct-faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 0;
+  cursor: pointer;
+  gap: 20px;
+}
+.ct-faq-q-text {
+  font-family: var(--co-serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(250,248,245,.85);
+  transition: color .3s;
+  line-height: 1.2;
+}
+.ct-faq-item.open .ct-faq-q-text { color: #faf8f5; }
+.ct-faq-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.4);
+  flex-shrink: 0;
+  transition: all .35s;
+}
+.ct-faq-item.open .ct-faq-toggle {
+  background: var(--co-gold);
+  border-color: var(--co-gold);
+  color: #fff;
+  transform: rotate(45deg);
+}
+.ct-faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .5s var(--ease-out);
+}
+.ct-faq-item.open .ct-faq-a { max-height: 300px; }
+.ct-faq-a-inner {
+  padding: 0 0 26px;
+  font-size: 14px;
+  color: rgba(250,248,245,.45);
+  line-height: 1.8;
+}
+
+/* ════════════════════════════════════
+   BOTTOM CTA BANNER
+════════════════════════════════════ */
+.ct-cta-section {
+  padding: 120px 0;
+  background: var(--co-bg);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.ct-cta-section::before {
+  content: "SHENOVA";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: var(--co-serif);
+  font-size: clamp(80px, 16vw, 220px);
+  font-weight: 300;
+  color: rgba(10,9,8,.03);
+  letter-spacing: .1em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.ct-cta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.ct-cta-eye {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--co-gold);
+  margin-bottom: 20px;
+}
+.ct-cta-title {
+  font-family: var(--co-serif);
+  font-size: clamp(44px, 6vw, 80px);
+  font-weight: 300;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: var(--co-ink);
+  margin-bottom: 20px;
+}
+.ct-cta-title em { font-style: italic; color: var(--co-gold); }
+.ct-cta-sub {
+  font-size: 14px;
+  color: var(--co-muted);
+  margin-bottom: 44px;
+  line-height: 1.7;
+}
+.ct-cta-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ct-btn-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 42px;
+  background: var(--co-ink);
+  color: #faf8f5;
+  border: 1px solid var(--co-ink);
+  border-radius: 50px;
+  font-family: var(--co-sans);
+  font-size: 11px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all .35s var(--ease-out);
+  cursor: pointer;
+}
+.ct-btn-dark:hover { transform: translateY(-3px); background: #1a1815; }
+.ct-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 42px;
+  background: transparent;
+  color: var(--co-ink);
+  border: 1px solid rgba(10,9,8,.2);
+  border-radius: 50px;
+  font-family: var(--co-sans);
+  font-size: 11px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all .35s var(--ease-out);
+  cursor: pointer;
+}
+.ct-btn-ghost:hover { border-color: var(--co-ink); transform: translateY(-3px); }
+
+/* ════════════════════════════════════
+   KEYFRAMES
+════════════════════════════════════ */
+@keyframes ctFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .ct-main-wrap { grid-template-columns: 1fr; gap: 60px; }
+  .ct-faq-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .ct-right-col { position: static; }
+  .ct-faq-left { position: static; }
+}
+@media (max-width: 768px) {
+  .ct-hero { padding: 140px 0 80px; }
+  .ct-hero-inner { padding: 0 24px; }
+  .ct-cards-wrap, .ct-main-wrap, .ct-faq-wrap, .ct-cta-inner { padding-left: 24px; padding-right: 24px; }
+  .ct-cards { grid-template-columns: 1fr; gap: 16px; }
+  .ct-row { grid-template-columns: 1fr; }
+  .ct-hero-trust { gap: 20px; }
+  .ct-faq-wrap { padding: 0 24px; }
+  .ct-card { padding: 32px 24px; }
+  .ct-social-card, .ct-promise { padding: 24px 20px; }
+  .ct-main-section { padding: 40px 0 80px; }
+  .ct-cta-section { padding: 80px 0; }
+}
+@media (max-width: 480px) {
+  .ct-hero-title { font-size: 58px; }
+  .ct-cta-btns { flex-direction: column; align-items: center; }
+}
+</style>
 </head>
 
-<body>
+<body class="contact-page">
 
-
+<!-- ═══════════════════════════════
+     NAV (unchanged — main.js hooks)
+═══════════════════════════════ -->
 <nav class="nav scrolled">
   <div class="container nav-inner">
     <a class="nav-logo" href="index.html">SHENOVA</a>
-
     <div class="nav-menu">
       <a href="shop.html">Shop</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
     </div>
-
     <div class="nav-icons">
       <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
       <button class="hamburger">≡</button>
@@ -47,103 +827,329 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 </nav>
 
 <div class="mobile-menu">
-    <a href="index.html">
-    Home
-  </a>
+  <a href="index.html">Home</a>
   <a href="shop.html">Shop</a>
   <a href="about.html">About</a>
   <a href="contact.html">Contact</a>
 </div>
 
-<div class="container" style="padding-top:140px">
+<!-- ═══════════════════════════════
+     HERO BANNER
+═══════════════════════════════ -->
+<section class="ct-hero">
+  <div class="ct-hero-wm">Contact</div>
+  <div class="ct-hero-inner">
+    <div class="ct-hero-eye">Shenova · Customer Care</div>
+    <h1 class="ct-hero-title">Let's <em>talk.</em></h1>
+    <p class="ct-hero-sub">We'd love to hear from you. Whether it's a question about an order, styling advice, or a collaboration — we're here.</p>
+    <div class="ct-hero-trust">
+      <div class="ct-trust-item">
+        <div class="ct-trust-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        Response within 24 hours
+      </div>
+      <div class="ct-trust-item">
+        <div class="ct-trust-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        Secure & Confidential
+      </div>
+      <div class="ct-trust-item">
+        <div class="ct-trust-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        Free Returns · 14 Days
+      </div>
+    </div>
+  </div>
+</section>
 
-  <div class="eyebrow reveal">Get in touch</div>
+<!-- ═══════════════════════════════
+     CONTACT INFO CARDS
+═══════════════════════════════ -->
+<section class="ct-cards-section">
+  <div class="ct-cards-wrap">
+    <div class="ct-cards">
 
-  <h1 class="serif reveal" style="font-size:clamp(48px,7vw,90px);margin-bottom:50px">
-    Let's talk.
-  </h1>
+      <!-- Email -->
+      <div class="ct-card" data-reveal>
+        <div class="ct-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="ct-card-label">Email Us</div>
+        <div class="ct-card-title">shenovaofficial<br>@gmail.com</div>
+        <div class="ct-card-val">
+          <a href="mailto:shenovaofficial@gmail.com">Send a message →</a>
+        </div>
+      </div>
 
-  <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:60px">
+      <!-- Phone -->
+      <div class="ct-card" data-reveal style="transition-delay:.1s">
+        <div class="ct-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 6 6l1.09-.89a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="ct-card-label">Call Us</div>
+        <div class="ct-card-title">+91 70417<br>02391</div>
+        <div class="ct-card-val">
+          <a href="tel:+917041702391">Mon – Sat, 10am – 7pm IST</a>
+        </div>
+      </div>
 
-    <!-- ✅ FINAL WORKING FORM -->
-    <form id="contact-form" class="reveal">
+      <!-- Location -->
+      <div class="ct-card" data-reveal style="transition-delay:.2s">
+        <div class="ct-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="ct-card-label">Visit Us</div>
+        <div class="ct-card-title">Sarigam,<br>Gujarat</div>
+        <div class="ct-card-val">396155 · India</div>
+      </div>
 
-      <div class="form-row two">
-        <div>
-          <label>Name</label>
-          <input name="name" required>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     FORM + MAP
+═══════════════════════════════ -->
+<section class="ct-main-section">
+  <div class="ct-main-wrap">
+
+    <!-- FORM COLUMN -->
+    <div class="ct-form-col" data-reveal>
+      <div class="ct-section-eye">Send a Message</div>
+      <h2 class="ct-section-title">We'd love<br>to hear<br><em style="font-style:italic;color:var(--co-gold)">from you.</em></h2>
+      <p class="ct-section-sub">Fill in the form and our team will get back to you within 24 hours.</p>
+
+      <!-- ✅ BACKEND INTACT — same id, name attrs, same API call in main.js -->
+      <form id="contact-form" class="ct-form" novalidate>
+
+        <div class="ct-row">
+          <div class="ct-field">
+            <input type="text" name="name" id="ct-name" placeholder=" " required autocomplete="name">
+            <label for="ct-name">Full Name</label>
+          </div>
+          <div class="ct-field">
+            <input type="email" name="email" id="ct-email" placeholder=" " required autocomplete="email">
+            <label for="ct-email">Email Address</label>
+          </div>
         </div>
 
-        <div>
-          <label>Email</label>
-          <input name="email" type="email" required>
+        <div class="ct-row full">
+          <div class="ct-field">
+            <input type="text" name="subject" id="ct-subject" placeholder=" " autocomplete="off">
+            <label for="ct-subject">Subject</label>
+          </div>
         </div>
+
+        <div class="ct-row full">
+          <div class="ct-field">
+            <textarea name="message" id="ct-message" placeholder=" " rows="6" required></textarea>
+            <label for="ct-message">Your Message</label>
+          </div>
+        </div>
+
+        <button type="submit" class="ct-submit">
+          <span>Send Message</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+      </form>
+
+      <!-- Success state (shown by JS) -->
+      <div class="ct-success" id="ct-success">
+        <div class="ct-success-icon">✦</div>
+        <h4>Message Sent</h4>
+        <p>Thank you for reaching out. We'll be in touch within 24 hours.</p>
       </div>
-
-      <div class="form-row">
-        <label>Subject</label>
-        <input name="subject">
-      </div>
-
-      <div class="form-row">
-        <label>Message</label>
-        <textarea name="message" rows="6" required></textarea>
-      </div>
-
-      <button type="submit" class="btn">Send Message</button>
-
-    </form>
-
-    <div class="reveal">
-      <h3 class="serif" style="font-size:28px;margin-bottom:14px">Studio</h3>
-
-      <p style="color:var(--muted);margin-bottom:24px">
-       Sarigam,Gujarat<br>
-        396155<br>
-        India
-      </p>
-
-      <p style="color:var(--muted);margin-bottom:30px">
-        shenovaofficial@gmail.com<br>
-        +917041702391
-      </p>
-
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27092.209996141166!2d72.83482393687524!3d20.29060724836419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0d3078e3a43cd%3A0x6eb0adc6577f3441!2sSarigam%2C%20Gujarat!5e1!3m2!1sen!2sin!4v1778068588539!5m2!1sen!2sin" width="100%" height="280" style="border:0;border-radius:14px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 
+    <!-- RIGHT COLUMN -->
+    <div class="ct-right-col">
+
+      <!-- Response promise -->
+      <div class="ct-promise" data-reveal>
+        <div class="ct-promise-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="ct-promise-text">
+          <strong>Response within 24 hours</strong>
+          <span>Our team is available Mon–Sat, 10am–7pm IST</span>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="ct-map-card" data-reveal>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27092.209996141166!2d72.83482393687524!3d20.29060724836419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0d3078e3a43cd%3A0x6eb0adc6577f3441!2sSarigam%2C%20Gujarat!5e1!3m2!1sen!2sin!4v1778068588539!5m2!1sen!2sin"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Shenova Studio Location"
+        ></iframe>
+        <div class="ct-map-footer">
+          <div class="ct-map-addr">Sarigam, Gujarat · 396155<br>India</div>
+          <a
+            class="ct-map-link"
+            href="https://maps.google.com/?q=Sarigam,Gujarat"
+            target="_blank"
+            rel="noopener"
+          >Open in Maps →</a>
+        </div>
+      </div>
+
+      <!-- Social links -->
+      <div class="ct-social-card" data-reveal>
+        <div class="ct-social-title">Follow Shenova</div>
+        <div class="ct-socials">
+          <a class="ct-social-btn" href="https://www.instagram.com/shenova.official" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            Instagram
+          </a>
+          <a class="ct-social-btn" href="https://wa.me/917041702391" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            WhatsApp
+          </a>
+          <a class="ct-social-btn" href="mailto:shenovaofficial@gmail.com">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <!-- end right col -->
+
   </div>
-</div>
+</section>
 
-<style>
-@media(max-width:900px){
-  .contact-grid{grid-template-columns:1fr !important}
-}
-</style>
+<!-- ═══════════════════════════════
+     FAQ SECTION
+═══════════════════════════════ -->
+<section class="ct-faq-section">
+  <div class="ct-faq-wrap">
 
+    <div class="ct-faq-left" data-reveal-dark>
+      <div class="ct-faq-eye">Support</div>
+      <h2 class="ct-faq-title">Common<br><em>questions.</em></h2>
+      <p class="ct-faq-desc">Can't find the answer below? Our team is always happy to help directly.</p>
+      <a href="mailto:shenovaofficial@gmail.com" class="ct-faq-cta">
+        Email Support
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="ct-faqs" data-reveal-dark>
+
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <span class="ct-faq-q-text">How long does delivery take?</span>
+          <div class="ct-faq-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+        <div class="ct-faq-a">
+          <div class="ct-faq-a-inner">Standard delivery takes 5–7 business days across India. Express delivery (2–3 days) is available at checkout for select pin codes. All orders above ₹2,000 ship for free.</div>
+        </div>
+      </div>
+
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <span class="ct-faq-q-text">What is the return and exchange policy?</span>
+          <div class="ct-faq-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+        <div class="ct-faq-a">
+          <div class="ct-faq-a-inner">We accept returns within 14 days of delivery. Items must be unworn, unwashed, and in original packaging with tags attached. To initiate a return, email us at shenovaofficial@gmail.com with your order number.</div>
+        </div>
+      </div>
+
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <span class="ct-faq-q-text">How do I track my order?</span>
+          <div class="ct-faq-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+        <div class="ct-faq-a">
+          <div class="ct-faq-a-inner">Once your order ships, you'll receive a confirmation email with a tracking link. You can also WhatsApp us at +91 70417 02391 with your order number for real-time updates.</div>
+        </div>
+      </div>
+
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <span class="ct-faq-q-text">Can I modify or cancel my order?</span>
+          <div class="ct-faq-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+        <div class="ct-faq-a">
+          <div class="ct-faq-a-inner">Orders can be modified or cancelled within 2 hours of placement. After that, the order enters our fulfilment process and cannot be changed. Please contact us immediately if you need to make any changes.</div>
+        </div>
+      </div>
+
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <span class="ct-faq-q-text">Do you offer custom sizing or alterations?</span>
+          <div class="ct-faq-toggle">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+        </div>
+        <div class="ct-faq-a">
+          <div class="ct-faq-a-inner">We currently offer standard sizes as listed on each product page. For bespoke or alteration inquiries, please email us directly and our team will be happy to discuss options for you.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     BOTTOM CTA
+═══════════════════════════════ -->
+<section class="ct-cta-section">
+  <div class="ct-cta-inner" data-reveal>
+    <div class="ct-cta-eye">Ready to Shop?</div>
+    <h2 class="ct-cta-title">Discover the<br><em>Collection.</em></h2>
+    <p class="ct-cta-sub">Thoughtfully crafted luxury fashion — designed for those who move with intention.</p>
+    <div class="ct-cta-btns">
+      <a href="shop.html" class="ct-btn-dark">
+        Browse Collection
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="mailto:shenovaofficial@gmail.com" class="ct-btn-ghost">
+        Email Directly
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     FOOTER
+═══════════════════════════════ -->
 <footer>
   <div class="container">
     <div class="foot-bottom" style="border:none;margin-top:80px">
-      © 2026 SHENOVA
+      © 2026 SHENOVA — All Rights Reserved
     </div>
   </div>
 </footer>
 
+<!-- CART DRAWER (unchanged — main.js hooks) -->
 <div class="drawer-overlay" onclick="closeCart()"></div>
-
 <aside class="drawer">
   <div class="drawer-head">
     <h3>Your Bag</h3>
     <button onclick="closeCart()" style="font-size:22px">×</button>
   </div>
-
   <div class="drawer-body"></div>
-
   <div class="drawer-foot">
     <div class="total">
       <span>Total</span>
       <span>₹0</span>
     </div>
-
     <a class="btn" href="checkout.html">Checkout</a>
   </div>
 </aside>
@@ -155,11 +1161,93 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     <button class="btn" onclick="closeModal()">OK</button>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
+<!-- SCRIPTS (load order preserved) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+/* ── SCROLL REVEAL ── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+    revealObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('[data-reveal]').forEach((el, i) => {
+  el.style.transitionDelay = el.style.transitionDelay || (i % 3 * 0.1) + 's';
+  revealObserver.observe(el);
+});
+
+/* ── DARK SECTION REVEAL (FAQ) ── */
+const darkRevealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.style.opacity = '1';
+    entry.target.style.transform = 'translateY(0)';
+    darkRevealObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('[data-reveal-dark]').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity .8s cubic-bezier(.19,1,.22,1), transform .8s cubic-bezier(.19,1,.22,1)';
+  darkRevealObserver.observe(el);
+});
+
+/* ── FAQ ACCORDION ── */
+document.querySelectorAll('.ct-faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.ct-faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.ct-faq-item').forEach(i => i.classList.remove('open'));
+    // Open clicked (if it was closed)
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+/* ── CONTACT FORM — preserves original backend API from main.js ──
+   main.js already listens on #contact-form submit and calls /api/contact.
+   We enhance only the UI: loading state + success panel. ── */
+(function enhanceContactForm() {
+  const form    = document.getElementById('contact-form');
+  const success = document.getElementById('ct-success');
+  const submit  = form?.querySelector('.ct-submit');
+  if (!form || !submit) return;
+
+  // Intercept BEFORE main.js fires (capture phase)
+  // We only touch the button state; actual submission is handled by main.js
+  form.addEventListener('submit', () => {
+    submit.disabled = true;
+    submit.querySelector('span').textContent = 'Sending…';
+  }, true); // capture = true, fires before main.js bubble listener
+
+  // Patch alert so we can show success panel instead of raw browser alert
+  const _origAlert = window.alert.bind(window);
+  window.alert = function(msg) {
+    if (typeof msg === 'string' && msg.includes('sent')) {
+      // Restore button
+      submit.disabled = false;
+      submit.querySelector('span').textContent = 'Send Message';
+      // Show inline success
+      form.style.display = 'none';
+      if (success) success.classList.add('show');
+    } else if (typeof msg === 'string' && msg.includes('Error')) {
+      submit.disabled = false;
+      submit.querySelector('span').textContent = 'Send Message';
+      _origAlert(msg);
+    } else {
+      _origAlert(msg);
+    }
+  };
+})();
+</script>
 
 </body>
 </html>
