@@ -16,7 +16,8 @@
     "mongoose": "^8.5.1",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^2.2.1",
-    "pdfkit": "^0.18.0"
+    "pdfkit": "^0.18.0",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
