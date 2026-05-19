@@ -1088,15 +1088,23 @@ if(sp){
 /* ─ SPIN WHEEL ENGINE ─ */
 (function(){
   const SEGMENTS=[
-    {label:'5% OFF',   code:'SHENOVA5',  pct:'5% OFF',  dark:true},
-    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
-    {label:'10% OFF',  code:'SHENOVA10', pct:'10% OFF', dark:true},
-    {label:'8% OFF',   code:'SHENOVA8',  pct:'8% OFF',  dark:false},
-    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:true},
-    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
-    {label:'12% OFF',  code:'SHENOVA12', pct:'12% OFF', dark:true},
-    {label:'Try Again',code:'',          pct:'Better Luck\nNext Time', dark:false},
+    {label:'5% OFF',   discount:5,  pct:'5% OFF',  dark:true},
+    {label:'Try Again',discount:0,  pct:'Better Luck\nNext Time', dark:false},
+    {label:'10% OFF',  discount:10, pct:'10% OFF', dark:true},
+    {label:'8% OFF',   discount:8,  pct:'8% OFF',  dark:false},
+    {label:'Try Again',discount:0,  pct:'Better Luck\nNext Time', dark:true},
+    {label:'Try Again',discount:0,  pct:'Better Luck\nNext Time', dark:false},
+    {label:'12% OFF',  discount:12, pct:'12% OFF', dark:true},
+    {label:'Try Again',discount:0,  pct:'Better Luck\nNext Time', dark:false},
   ];
+
+  /* Generate a random unique coupon code */
+  function generateCouponCode(discount){
+    const prefixes=['SHENOVA','LUXE','SILENT','NOIR','VELVET'];
+    const prefix=prefixes[Math.floor(Math.random()*prefixes.length)];
+    const num=Math.floor(1000+Math.random()*9000);
+    return prefix+discount+'X'+num;
+  }
   const DARK='#1a1815', GOLD='#b8956a', GOLD_LT='#d4b896';
   const canvas=document.getElementById('wheel');
   if(!canvas)return;
@@ -1245,42 +1253,41 @@ if(sp){
         drawWheel(currentAngle);
         spinning=false;
         const seg=SEGMENTS[winIdx];
+        // Generate random unique code if this is a winning segment
+        const wonCode = seg.discount > 0 ? generateCouponCode(seg.discount) : '';
         // Smooth transition: hide spin popup, then show coupon popup
         const spinPopup=document.getElementById('spin-popup');
         const couponPopup=document.getElementById('coupon-popup');
         // Populate coupon before showing
-        if(seg.code){
+        if(wonCode){
           const discEl=document.getElementById('coupon-discount');
           const codeEl=document.getElementById('coupon-code-text');
           if(discEl)discEl.textContent=seg.pct;
-          if(codeEl)codeEl.textContent=seg.code;
+          if(codeEl)codeEl.textContent=wonCode;
           const spinEmail = document.getElementById('spin-email')?.value;
-  // Parse discount safely: "10% OFF" → 10, "Try Again" → 0
-  const discountNum = parseInt(seg.label.replace(/[^0-9]/g,'')) || 0;
-  fetch((window.API_BASE || '') + '/api/spin/save', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email:    spinEmail,
-      coupon:   seg.code,
-      discount: discountNum
-    })
-  }).catch(e => console.error('Spin save error:', e));
-  // ── Persist coupon to localStorage so checkout page can auto-fill ──
-  if(seg.code){
-    localStorage.setItem('shenova_coupon', JSON.stringify({
-      code:     seg.code,
-      discount: discountNum,
-      ts:       Date.now()
-    }));
-  }
+          // Save to DB FIRST, then show to user
+          fetch((window.API_BASE || '') + '/api/spin/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email:    spinEmail,
+              coupon:   wonCode,
+              discount: seg.discount
+            })
+          }).catch(e => console.error('Spin save error:', e));
+          // Persist to localStorage so checkout can auto-fill
+          localStorage.setItem('shenova_coupon', JSON.stringify({
+            code:     wonCode,
+            discount: seg.discount,
+            ts:       Date.now()
+          }));
           // Show "YOU WON" label
           const wonLabel=couponPopup?.querySelector('.sh-ey');
           if(wonLabel)wonLabel.textContent='YOU WON';
           const congrats=couponPopup?.querySelector('h2');
           if(congrats)congrats.textContent='🎉 Congratulations!';
         } else {
-          // Better Luck
+          // Better Luck Next Time
           const discEl=document.getElementById('coupon-discount');
           if(discEl){discEl.textContent='😔';discEl.style.fontSize='42px';}
           const wonLabel=couponPopup?.querySelector('.sh-ey');
