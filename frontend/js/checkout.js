@@ -151,6 +151,7 @@ document
         }
 
         discountAmount = sub * (cd.discount / 100);
+        window.appliedDiscount = discountAmount; // ← ADD THIS LINE
 
         /* Show discount row in sidebar */
         const discRow = document.getElementById('co-discount-row');

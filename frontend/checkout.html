@@ -467,6 +467,8 @@
 
   <!-- Inline enhancement: payment card toggle + page animations -->
   <script>
+    // Global discount tracker — updated by checkout.js coupon logic
+window.appliedDiscount = 0;
     /* ── Payment method card toggle ── */
     document.querySelectorAll('.co-pay-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -540,13 +542,8 @@ e.stopPropagation();
         document.getElementById("f-phone").value;
 
       // total amount
-      const totalText =
-        document.getElementById("tot").innerText;
-
-      // ₹2000 → 2000
-      const totalPrice = parseInt(
-        totalText.replace(/[₹,]/g, "")
-      );
+const totalText = document.getElementById("tot").innerText;
+const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
 
       // selected payment method
       const paymentMethod =
