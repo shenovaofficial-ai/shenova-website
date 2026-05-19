@@ -127,7 +127,15 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   display: flex; align-items: center; justify-content: center;
   font-family: var(--sans);
 }
-.hamburger { display: none; font-size: 22px; line-height: 1; }
+.hamburger{
+  display: none;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 300;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--ink);
+}
 .mobile-menu {
   position: fixed; inset: 0; background: var(--cream); z-index: 390;
   transform: translateX(100%); transition: transform .65s var(--ease-out);
@@ -652,7 +660,16 @@ footer {
   .pdp-info { animation: none; }
 }
 @media (max-width: 680px) {
-  .hamburger { display: block; }
+  @media (max-width:680px){
+
+  .hamburger{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+  }
+
+}
   .nav-menu { display: none; }
   .pdp-title { font-size: 36px; }
   .pdp-price { font-size: 26px; }
@@ -776,7 +793,7 @@ footer {
         🛍
         <span class="cart-count">0</span>
       </button>
-      <button class="hamburger" aria-label="Menu">≡</button>
+      <button class="hamburger" aria-label="Menu">☰</button>
     </div>
   </div>
 </nav>
