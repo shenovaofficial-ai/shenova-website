@@ -736,9 +736,26 @@ footer {
 .pdp-main-frame:has(#pdp-main-video) img {
   transform: none !important;
 }
+.nav-icons{
+  position: relative;
+  z-index: 9999;
+}
+
+.hamburger{
+  position: relative;
+  z-index: 99999;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.mobile-menu{
+  z-index: 9998;
+}
+.nav{
+  z-index: 9999;
+}
 </style>
 </head>
-<body>
+<body>  
 
 <!-- Scroll progress -->
 <div class="s-prog" id="s-prog"></div>
@@ -1039,9 +1056,11 @@ window.addEventListener('scroll', () => {
 });
 
 /* ── Mobile hamburger ─────────────────────────────────────────── */
-document.querySelector('.hamburger')?.addEventListener('click', () => {
-  document.querySelector('.hamburger').classList.toggle('active');
-  document.querySelector('.mobile-menu').classList.toggle('open');
+const hamburger = document.querySelector('.hamburger');
+const mobileMenu = document.querySelector('.mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
 });
 
 /* ── Accordion ────────────────────────────────────────────────── */
