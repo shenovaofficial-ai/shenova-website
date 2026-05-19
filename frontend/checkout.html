@@ -701,13 +701,14 @@ const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
   // order data
 const orderData = {
 
-  customer: {
-    name: customerName,
-    email: customerEmail,
-    phone: customerPhone,
-  },
+  shipping: {
 
-  shippingAddress: {
+    fullName: customerName,
+
+    email: customerEmail,
+
+    phone: customerPhone,
+
     address:
       document.getElementById("f-address").value,
 
@@ -726,15 +727,13 @@ const orderData = {
 
   paymentMethod: paymentMethod,
 
-  paymentStatus: "Paid",
+  subtotal: totalPrice,
 
-  razorpayPaymentId:
-    response.razorpay_payment_id,
+  shippingFee: 0,
 
-  razorpayOrderId:
-    response.razorpay_order_id,
+  total: totalPrice,
 
-  totalAmount: totalPrice,
+  status: "pending",
 
   items: JSON.parse(
     localStorage.getItem("cart")
@@ -773,7 +772,6 @@ setTimeout(() => {
   window.location.href = "index.html";
 }, 2000);
 // redirect
-window.location.href = "index.html";
 },
 
         prefill: {
