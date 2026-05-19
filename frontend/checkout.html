@@ -516,6 +516,115 @@
       }
     };
     window.addEventListener('scroll', updateStep, { passive: true });
+    /* ─────────────────────────────
+   RAZORPAY PAYMENT
+───────────────────────────── */
+
+document
+  .getElementById("checkout-form")
+  .addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    try {
+
+      // customer details
+      const customerName =
+        document.getElementById("f-fullName").value;
+
+      const customerEmail =
+        document.getElementById("f-email").value;
+
+      const customerPhone =
+        document.getElementById("f-phone").value;
+
+      // total amount
+      const totalText =
+        document.getElementById("tot").innerText;
+
+      // ₹2000 → 2000
+      const totalPrice = parseInt(
+        totalText.replace(/[₹,]/g, "")
+      );
+
+      // selected payment method
+      const paymentMethod =
+        document.querySelector(
+          'input[name="payment"]:checked'
+        ).value;
+
+      // COD
+      if (paymentMethod === "Cash on Delivery") {
+
+        alert("Order Placed Successfully");
+
+        return;
+      }
+
+      // Razorpay order create
+      const response = await fetch(
+        "https://shenova-website-production.up.railway.app/api/payment/create-order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: totalPrice,
+          }),
+        }
+      );
+
+      const order = await response.json();
+
+      const options = {
+
+        key: "rzp_live_SrBfy3qYGJaxKG",
+
+        amount: order.amount,
+
+        currency: "INR",
+
+        name: "SHENOVA",
+
+        description: "Order Payment",
+
+        order_id: order.id,
+
+        handler: async function (response) {
+
+          console.log(response);
+
+          alert("Payment Successful");
+
+          // yaha order save kar sakta hai
+        },
+
+        prefill: {
+          name: customerName,
+          email: customerEmail,
+          contact: customerPhone,
+        },
+
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const razorpay =
+        new window.Razorpay(options);
+
+      razorpay.open();
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Payment Failed");
+
+    }
+
+});
   </script>
 
 </body>
