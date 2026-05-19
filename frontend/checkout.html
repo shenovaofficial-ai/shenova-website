@@ -699,30 +699,45 @@ const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
   console.log(response);
 
   // order data
-  const orderData = {
+const orderData = {
 
-    customer: {
-      name: customerName,
-      email: customerEmail,
-      phone: customerPhone,
-    },
+  name: customerName,
 
-    paymentMethod: paymentMethod,
+  email: customerEmail,
 
-    paymentStatus: "Paid",
+  phone: customerPhone,
 
-    razorpayPaymentId:
-      response.razorpay_payment_id,
+  address:
+    document.getElementById("f-address").value,
 
-    razorpayOrderId:
-      response.razorpay_order_id,
+  city:
+    document.getElementById("f-city").value,
 
-    totalAmount: totalPrice,
+  state:
+    document.getElementById("f-state").value,
 
-    items: JSON.parse(
-      localStorage.getItem("cart")
-    ) || [],
-  };
+  zip:
+    document.getElementById("f-zip").value,
+
+  country:
+    document.getElementById("f-country").value,
+
+  paymentMethod: paymentMethod,
+
+  paymentStatus: "Paid",
+
+  razorpayPaymentId:
+    response.razorpay_payment_id,
+
+  razorpayOrderId:
+    response.razorpay_order_id,
+
+  totalAmount: totalPrice,
+
+  items: JSON.parse(
+    localStorage.getItem("cart")
+  ) || [],
+};
 
   // save order in backend
   const saveRes = await fetch(
@@ -741,7 +756,16 @@ const totalPrice = parseInt(totalText.replace(/[₹,]/g, ""));
   console.log(saved);
 
   alert("Order Placed Successfully");
+// clear cart
+localStorage.removeItem("cart");
 
+// reset form
+document
+  .getElementById("checkout-form")
+  .reset();
+
+// redirect
+window.location.href = "index.html";
 },
 
         prefill: {
