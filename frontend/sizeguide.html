@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Size Guide · Shenova</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+:root {
+  --gold: #b8956a;
+  --gold-lt: #d4b896;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --bg: #faf8f5;
+  --ink: #0a0909;
+  --muted: #6b6460;
+  --beige: #ece6dc;
+  --line: rgba(10,9,8,.09);
+  --ease: cubic-bezier(.19,1,.22,1);
+}
+.sg-page { background: var(--bg); font-family: var(--sans); }
+
+/* ── HERO ── */
+.sg-hero {
+  background: var(--ink);
+  padding: 160px 0 80px;
+  position: relative; overflow: hidden;
+}
+.sg-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,149,106,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sg-hero-wm {
+  position: absolute; right: -30px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(100px,16vw,240px);
+  font-weight: 300; color: rgba(255,255,255,.025);
+  letter-spacing: -.03em; white-space: nowrap;
+  pointer-events: none; user-select: none;
+}
+.sg-hero-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  position: relative; z-index: 2;
+}
+.sg-hero-eye {
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; display: block;
+  opacity: 0; transform: translateY(14px);
+  animation: sgUp .8s var(--ease) .15s forwards;
+}
+.sg-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px,8vw,110px);
+  font-weight: 300; line-height: .93;
+  letter-spacing: -.025em; color: #faf8f5; margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+  animation: sgUp 1s var(--ease) .3s forwards;
+}
+.sg-hero-title em { font-style: italic; color: var(--gold-lt); }
+.sg-hero-sub {
+  font-size: 14px; color: rgba(250,248,245,.45);
+  max-width: 400px; line-height: 1.75;
+  opacity: 0; transform: translateY(14px);
+  animation: sgUp .8s var(--ease) .5s forwards;
+}
+.sg-hero-badges {
+  display: flex; gap: 14px; margin-top: 44px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(10px);
+  animation: sgUp .8s var(--ease) .65s forwards;
+}
+.sg-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px;
+  border: 1px solid rgba(184,149,106,.25); border-radius: 50px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.sg-badge svg { color: var(--gold); flex-shrink: 0; }
+
+/* ── UNIT TOGGLE ── */
+.sg-toggle-bar {
+  background: #fff; border-bottom: 1px solid var(--line);
+  padding: 20px 40px;
+}
+.sg-toggle-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.sg-toggle-label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sg-toggle {
+  display: flex; gap: 4px; background: var(--beige); padding: 4px; border-radius: 50px;
+}
+.sg-toggle-btn {
+  padding: 8px 22px; border-radius: 50px; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  background: transparent; color: var(--muted);
+  transition: all .3s var(--ease);
+}
+.sg-toggle-btn.active {
+  background: var(--ink); color: #faf8f5;
+}
+
+/* ── MAIN CONTENT ── */
+.sg-wrap {
+  max-width: 1400px; margin: 0 auto; padding: 80px 40px 100px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 80px; align-items: start;
+}
+.sg-sidebar { position: sticky; top: 100px; }
+.sg-sidebar-title {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+.sg-nav { display: flex; flex-direction: column; gap: 2px; }
+.sg-nav a {
+  font-size: 13px; color: var(--muted); padding: 9px 14px;
+  border-radius: 4px; transition: all .25s; text-decoration: none;
+  border-left: 2px solid transparent; letter-spacing: .02em;
+}
+.sg-nav a:hover, .sg-nav a.active {
+  color: var(--ink); background: rgba(184,149,106,.07); border-left-color: var(--gold);
+}
+
+/* Section titles */
+.sg-section { margin-bottom: 72px; }
+.sg-section:last-child { margin-bottom: 0; }
+.sg-section-eye {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; display: block;
+}
+.sg-section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px,4vw,48px); font-weight: 300;
+  letter-spacing: -.01em; color: var(--ink); margin-bottom: 8px; line-height: 1.1;
+}
+.sg-section-title em { font-style: italic; }
+.sg-section-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; max-width: 600px; }
+
+/* ── SIZE TABLE ── */
+.sg-table-wrap { overflow-x: auto; border-radius: 2px; border: 1px solid var(--line); }
+.sg-table {
+  width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+}
+.sg-table thead tr {
+  background: rgba(184,149,106,.08);
+}
+.sg-table th {
+  padding: 16px 20px; text-align: center;
+  font-size: 10px; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.sg-table th:first-child { text-align: left; }
+.sg-table td {
+  padding: 16px 20px; text-align: center;
+  border-bottom: 1px solid var(--line); color: var(--muted);
+  transition: background .2s;
+}
+.sg-table td:first-child {
+  text-align: left; font-family: var(--serif); font-size: 22px;
+  font-weight: 400; color: var(--ink); letter-spacing: .02em;
+}
+.sg-table tr:last-child td { border-bottom: none; }
+.sg-table tbody tr:hover td { background: rgba(184,149,106,.04); }
+/* Highlight active size row */
+.sg-table tbody tr.highlight td { background: rgba(184,149,106,.08); }
+.sg-table tbody tr.highlight td:first-child { color: var(--gold); }
+
+/* inch/cm toggle */
+.inch-val, .cm-val { transition: opacity .3s; }
+.cm-val { display: none; }
+body.show-cm .cm-val { display: inline; }
+body.show-cm .inch-val { display: none; }
+
+/* ── HOW TO MEASURE ── */
+.sg-measure-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 8px;
+}
+.sg-measure-card {
+  padding: 32px 24px; background: #fff;
+  border: 1px solid var(--line); border-radius: 2px;
+  text-align: center; position: relative; overflow: hidden;
+  transition: border-color .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.sg-measure-card:hover {
+  border-color: rgba(184,149,106,.3); transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+}
+.sg-measure-card::after {
+  content: ""; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition: width .4s var(--ease);
+}
+.sg-measure-card:hover::after { width: 100%; }
+.sg-measure-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--beige); margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-size: 26px;
+  transition: background .3s;
+}
+.sg-measure-card:hover .sg-measure-icon { background: var(--gold); color: #fff; }
+.sg-measure-name {
+  font-family: var(--serif); font-size: 22px; font-weight: 400;
+  color: var(--ink); margin-bottom: 10px;
+}
+.sg-measure-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── FIT TIPS ── */
+.sg-tips { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.sg-tip {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 18px 22px; background: #fff;
+  border: 1px solid var(--line); border-radius: 2px;
+  transition: border-color .3s, transform .3s var(--ease);
+}
+.sg-tip:hover { border-color: rgba(184,149,106,.25); transform: translateX(4px); }
+.sg-tip-num {
+  font-family: var(--serif); font-size: 20px; color: var(--gold);
+  min-width: 28px; margin-top: 1px;
+}
+.sg-tip-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.sg-tip-text strong { color: var(--ink); }
+
+/* ── NOTE CALLOUT ── */
+.sg-note {
+  margin-top: 32px; padding: 22px 28px;
+  background: linear-gradient(135deg,rgba(184,149,106,.1),rgba(212,184,150,.04));
+  border: 1px solid rgba(184,149,106,.2); border-radius: 2px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.sg-note-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(184,149,106,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0; margin-top: 2px;
+}
+.sg-note-text { font-size: 13px; color: var(--muted); line-height: 1.75; }
+.sg-note-text strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+/* ── CTA ── */
+.sg-cta {
+  background: var(--ink); padding: 70px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.sg-cta::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(184,149,106,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sg-cta-inner { position: relative; z-index: 1; }
+.sg-cta-eye { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+.sg-cta-title { font-family: var(--serif); font-size: clamp(34px,5vw,64px); font-weight: 300; color: #faf8f5; margin-bottom: 14px; letter-spacing: -.02em; }
+.sg-cta-title em { font-style: italic; color: var(--gold-lt); }
+.sg-cta-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+.sg-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.sg-btn-light {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: #faf8f5; color: var(--ink); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.sg-btn-light:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+.sg-btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: transparent; color: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.sg-btn-ghost:hover { color: #faf8f5; border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+
+@keyframes sgUp { to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px) {
+  .sg-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .sg-sidebar { position: static; }
+  .sg-nav { flex-direction: row; flex-wrap: wrap; }
+  .sg-nav a { border-left: none; border-bottom: 2px solid transparent; }
+  .sg-nav a:hover,.sg-nav a.active { border-left-color: transparent; border-bottom-color: var(--gold); }
+}
+@media(max-width:768px) {
+  .sg-hero { padding: 130px 0 60px; }
+  .sg-hero-inner,.sg-wrap,.sg-cta,.sg-toggle-bar { padding-left: 24px; padding-right: 24px; }
+  .sg-measure-grid { grid-template-columns: 1fr; }
+  .sg-wrap { padding-top: 50px; padding-bottom: 70px; }
+}
+@media(max-width:480px) {
+  .sg-hero-badges { flex-direction: column; gap: 10px; }
+  .sg-cta-btns { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body class="sg-page">
+
+<!-- NAV -->
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="hamburger">≡</button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="sg-hero">
+  <div class="sg-hero-wm">Size Guide</div>
+  <div class="sg-hero-inner">
+    <span class="sg-hero-eye">Shenova · Size Guide</span>
+    <h1 class="sg-hero-title">Find your<br><em>perfect fit.</em></h1>
+    <p class="sg-hero-sub">Every Shenova piece is crafted for a specific silhouette. Use this guide to find your ideal size before you order.</p>
+    <div class="sg-hero-badges">
+      <div class="sg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Women's Dresses
+      </div>
+      <div class="sg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        1–2 inch variation allowed
+      </div>
+      <div class="sg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Free exchanges on sizing
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIT TOGGLE -->
+<div class="sg-toggle-bar">
+  <div class="sg-toggle-inner">
+    <span class="sg-toggle-label">All measurements in:</span>
+    <div class="sg-toggle">
+      <button class="sg-toggle-btn active" onclick="setUnit('inch')">Inches</button>
+      <button class="sg-toggle-btn" onclick="setUnit('cm')">Centimetres</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="sg-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sg-sidebar">
+    <div class="sg-sidebar-title">On this page</div>
+    <nav class="sg-nav">
+      <a href="#size-table" class="active">Size Chart</a>
+      <a href="#how-to-measure">How to Measure</a>
+      <a href="#fit-tips">Fit Tips</a>
+    </nav>
+  </aside>
+
+  <!-- ARTICLE -->
+  <div>
+
+    <!-- SIZE TABLE -->
+    <div class="sg-section" id="size-table">
+      <span class="sg-section-eye">01 · Women's Dresses</span>
+      <h2 class="sg-section-title">Shenova<br><em>Size Chart.</em></h2>
+      <p class="sg-section-sub">All measurements are body measurements, not garment measurements. Measure yourself and match to the chart below.</p>
+
+      <div class="sg-table-wrap">
+        <table class="sg-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Bust <span class="inch-val">(inch)</span><span class="cm-val">(cm)</span></th>
+              <th>Waist <span class="inch-val">(inch)</span><span class="cm-val">(cm)</span></th>
+              <th>Hips <span class="inch-val">(inch)</span><span class="cm-val">(cm)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>M</td>
+              <td><span class="inch-val">36 – 37</span><span class="cm-val">91 – 94</span></td>
+              <td><span class="inch-val">34 – 35</span><span class="cm-val">86 – 89</span></td>
+              <td><span class="inch-val">38 – 39</span><span class="cm-val">97 – 99</span></td>
+            </tr>
+            <tr>
+              <td>L</td>
+              <td><span class="inch-val">38 – 41</span><span class="cm-val">97 – 104</span></td>
+              <td><span class="inch-val">38 – 39</span><span class="cm-val">97 – 99</span></td>
+              <td><span class="inch-val">42 – 43</span><span class="cm-val">107 – 109</span></td>
+            </tr>
+            <tr>
+              <td>XL</td>
+              <td><span class="inch-val">40 – 41</span><span class="cm-val">102 – 104</span></td>
+              <td><span class="inch-val">40 – 41</span><span class="cm-val">102 – 104</span></td>
+              <td><span class="inch-val">44 – 45</span><span class="cm-val">112 – 114</span></td>
+            </tr>
+            <tr>
+              <td>2XL</td>
+              <td><span class="inch-val">42 – 43</span><span class="cm-val">107 – 109</span></td>
+              <td><span class="inch-val">42 – 43</span><span class="cm-val">107 – 109</span></td>
+              <td><span class="inch-val">46 – 47</span><span class="cm-val">117 – 119</span></td>
+            </tr>
+            <tr>
+              <td>3XL</td>
+              <td><span class="inch-val">44 – 45</span><span class="cm-val">112 – 114</span></td>
+              <td><span class="inch-val">44 – 45</span><span class="cm-val">112 – 114</span></td>
+              <td><span class="inch-val">48 – 49</span><span class="cm-val">122 – 124</span></td>
+            </tr>
+            <tr>
+              <td>4XL</td>
+              <td><span class="inch-val">48</span><span class="cm-val">122</span></td>
+              <td><span class="inch-val">46</span><span class="cm-val">117</span></td>
+              <td><span class="inch-val">50</span><span class="cm-val">127</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sg-note">
+        <div class="sg-note-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="sg-note-text">
+          <strong>Please allow 1–2 inch variation</strong>
+          All measurements are in inches unless toggled above. Due to the nature of manual measurement and fabric drape, a 1–2 inch variation is normal. If you're between sizes, we recommend sizing up.
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW TO MEASURE -->
+    <div class="sg-section" id="how-to-measure">
+      <span class="sg-section-eye">02 · Measuring Guide</span>
+      <h2 class="sg-section-title">How to<br><em>measure yourself.</em></h2>
+      <p class="sg-section-sub">Use a soft measuring tape and measure over lightweight clothing or directly on skin for the most accurate result.</p>
+
+      <div class="sg-measure-grid">
+        <div class="sg-measure-card">
+          <div class="sg-measure-icon">
+            <!-- Bust icon SVG -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M12 2C8 2 5 5 5 9c0 3 1.5 5.5 4 7l3 2 3-2c2.5-1.5 4-4 4-7 0-4-3-7-7-7z"/>
+            </svg>
+          </div>
+          <div class="sg-measure-name">Bust</div>
+          <div class="sg-measure-desc">Measure around the fullest part of your bust, keeping the tape parallel to the floor.</div>
+        </div>
+        <div class="sg-measure-card">
+          <div class="sg-measure-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <ellipse cx="12" cy="12" rx="5" ry="8"/>
+              <line x1="7" y1="8" x2="17" y2="8"/>
+              <line x1="7" y1="16" x2="17" y2="16"/>
+            </svg>
+          </div>
+          <div class="sg-measure-name">Waist</div>
+          <div class="sg-measure-desc">Measure around the narrowest part of your natural waist, usually just above the belly button.</div>
+        </div>
+        <div class="sg-measure-card">
+          <div class="sg-measure-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M5 8c0 5 3 10 7 12 4-2 7-7 7-12"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </div>
+          <div class="sg-measure-name">Hips</div>
+          <div class="sg-measure-desc">Measure around the fullest part of your hips and seat, about 8 inches below your natural waist.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIT TIPS -->
+    <div class="sg-section" id="fit-tips">
+      <span class="sg-section-eye">03 · Fit Tips</span>
+      <h2 class="sg-section-title">Tips for the<br><em>best fit.</em></h2>
+      <p class="sg-section-sub">A few things to keep in mind when choosing your size.</p>
+
+      <div class="sg-tips">
+        <div class="sg-tip">
+          <div class="sg-tip-num">01</div>
+          <div class="sg-tip-text"><strong>Always measure before ordering.</strong> Sizes vary between styles. Even if you know your size, take measurements for each new style — our fitted dresses and flowy cuts may fit differently.</div>
+        </div>
+        <div class="sg-tip">
+          <div class="sg-tip-num">02</div>
+          <div class="sg-tip-text"><strong>Between two sizes? Go up.</strong> Shenova pieces are designed with a slightly tailored fit. If your measurements fall between sizes, we recommend choosing the larger size for comfort.</div>
+        </div>
+        <div class="sg-tip">
+          <div class="sg-tip-num">03</div>
+          <div class="sg-tip-text"><strong>Use a soft tape measure.</strong> A metal ruler or a string approximation won't give accurate results. Borrow a soft tailor's tape or use a piece of string and then measure it against a ruler.</div>
+        </div>
+        <div class="sg-tip">
+          <div class="sg-tip-num">04</div>
+          <div class="sg-tip-text"><strong>Free size exchange.</strong> If your item doesn't fit as expected, we offer a free size exchange within 14 days of delivery. See our <a href="returns.html" style="color:var(--gold);border-bottom:1px solid rgba(184,149,106,.3)">Returns Policy</a> for details.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="sg-cta">
+  <div class="sg-cta-inner">
+    <span class="sg-cta-eye">Still unsure?</span>
+    <h2 class="sg-cta-title">We'll help you<br><em>find your fit.</em></h2>
+    <p class="sg-cta-sub">WhatsApp or email us with your measurements — we'll recommend the right size personally.</p>
+    <div class="sg-cta-btns">
+      <a href="https://wa.me/917041702391" target="_blank" class="sg-btn-light">WhatsApp Us</a>
+      <a href="shop.html" class="sg-btn-ghost">Browse Collection →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-bottom" style="border:none;margin-top:80px">© 2026 SHENOVA — All Rights Reserved</div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:22px">×</button>
+  </div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><span>₹0</span></div>
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* Unit toggle */
+function setUnit(unit) {
+  document.body.classList.toggle('show-cm', unit === 'cm');
+  document.querySelectorAll('.sg-toggle-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+/* Sidebar scroll spy */
+const sections = document.querySelectorAll('.sg-section[id]');
+const navLinks  = document.querySelectorAll('.sg-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 160) current = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+}, { passive: true });
+</script>
+</body>
+</html>

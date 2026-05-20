@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Care Guide · Shenova</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+:root {
+  --gold: #b8956a;
+  --gold-lt: #d4b896;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --bg: #faf8f5;
+  --ink: #0a0909;
+  --muted: #6b6460;
+  --beige: #ece6dc;
+  --line: rgba(10,9,8,.09);
+  --ease: cubic-bezier(.19,1,.22,1);
+}
+.cg-page { background: var(--bg); font-family: var(--sans); }
+
+/* ── HERO ── */
+.cg-hero {
+  background: var(--ink);
+  padding: 160px 0 80px;
+  position: relative; overflow: hidden;
+}
+.cg-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 70% at 30% 50%, rgba(184,149,106,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cg-hero-wm {
+  position: absolute; left: -20px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(100px,16vw,240px);
+  font-weight: 300; color: rgba(255,255,255,.025);
+  letter-spacing: -.03em; white-space: nowrap;
+  pointer-events: none; user-select: none;
+}
+.cg-hero-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  position: relative; z-index: 2;
+}
+.cg-hero-eye {
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; display: block;
+  opacity: 0; transform: translateY(14px);
+  animation: cgUp .8s var(--ease) .15s forwards;
+}
+.cg-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px,8vw,110px);
+  font-weight: 300; line-height: .93;
+  letter-spacing: -.025em; color: #faf8f5; margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+  animation: cgUp 1s var(--ease) .3s forwards;
+}
+.cg-hero-title em { font-style: italic; color: var(--gold-lt); }
+.cg-hero-sub {
+  font-size: 14px; color: rgba(250,248,245,.45);
+  max-width: 420px; line-height: 1.75;
+  opacity: 0; transform: translateY(14px);
+  animation: cgUp .8s var(--ease) .5s forwards;
+}
+.cg-hero-badges {
+  display: flex; gap: 14px; margin-top: 44px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(10px);
+  animation: cgUp .8s var(--ease) .65s forwards;
+}
+.cg-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px;
+  border: 1px solid rgba(184,149,106,.25); border-radius: 50px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.cg-badge svg { color: var(--gold); flex-shrink: 0; }
+
+/* ── SYMBOLS STRIP ── */
+.cg-symbols-section {
+  background: #fff; border-bottom: 1px solid var(--line);
+  padding: 40px 40px;
+}
+.cg-symbols-inner {
+  max-width: 1400px; margin: 0 auto;
+}
+.cg-symbols-title {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 28px; text-align: center;
+}
+.cg-symbols {
+  display: grid; grid-template-columns: repeat(6,1fr); gap: 16px;
+}
+.cg-symbol {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 20px 12px; border: 1px solid var(--line); border-radius: 2px;
+  text-align: center; background: var(--bg);
+  transition: border-color .3s, transform .3s var(--ease);
+}
+.cg-symbol:hover { border-color: rgba(184,149,106,.3); transform: translateY(-3px); }
+.cg-symbol-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--beige); display: flex; align-items: center; justify-content: center;
+  font-size: 20px; transition: background .3s;
+}
+.cg-symbol:hover .cg-symbol-icon { background: rgba(184,149,106,.2); }
+.cg-symbol-name { font-size: 11px; font-weight: 500; color: var(--ink); letter-spacing: .05em; }
+.cg-symbol-desc { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+/* ── MAIN CONTENT ── */
+.cg-wrap {
+  max-width: 1400px; margin: 0 auto; padding: 80px 40px 100px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 80px; align-items: start;
+}
+.cg-sidebar { position: sticky; top: 100px; }
+.cg-sidebar-title {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+.cg-nav { display: flex; flex-direction: column; gap: 2px; }
+.cg-nav a {
+  font-size: 13px; color: var(--muted); padding: 9px 14px;
+  border-radius: 4px; transition: all .25s; text-decoration: none;
+  border-left: 2px solid transparent; letter-spacing: .02em;
+}
+.cg-nav a:hover, .cg-nav a.active {
+  color: var(--ink); background: rgba(184,149,106,.07); border-left-color: var(--gold);
+}
+
+.cg-section { margin-bottom: 72px; }
+.cg-section:last-child { margin-bottom: 0; }
+.cg-section-eye {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; display: block;
+}
+.cg-section-title {
+  font-family: var(--serif); font-size: clamp(28px,4vw,48px);
+  font-weight: 300; letter-spacing: -.01em;
+  color: var(--ink); margin-bottom: 8px; line-height: 1.1;
+}
+.cg-section-title em { font-style: italic; }
+.cg-section-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; max-width: 620px; }
+
+/* Fabric cards */
+.cg-fabric-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 20px;
+}
+.cg-fabric-card {
+  padding: 30px 26px; background: #fff;
+  border: 1px solid var(--line); border-radius: 2px;
+  position: relative; overflow: hidden;
+  transition: border-color .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.cg-fabric-card:hover {
+  border-color: rgba(184,149,106,.3); transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+}
+.cg-fabric-card::after {
+  content: ""; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition: width .4s var(--ease);
+}
+.cg-fabric-card:hover::after { width: 100%; }
+.cg-fabric-tag {
+  display: inline-block; margin-bottom: 16px;
+  padding: 4px 14px; border-radius: 50px;
+  background: rgba(184,149,106,.1); color: var(--gold);
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  border: 1px solid rgba(184,149,106,.2);
+}
+.cg-fabric-name {
+  font-family: var(--serif); font-size: 24px; font-weight: 400;
+  color: var(--ink); margin-bottom: 14px;
+}
+.cg-fabric-rules { display: flex; flex-direction: column; gap: 8px; }
+.cg-fabric-rule {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+}
+.cg-fabric-rule-icon { color: var(--gold); flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+
+/* Do / Don't cards */
+.cg-dos-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px;
+}
+.cg-dos-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 20px; margin-bottom: 4px;
+  border-radius: 2px 2px 0 0;
+  font-size: 11px; letter-spacing: .22em; text-transform: uppercase; font-weight: 500;
+}
+.cg-dos-head.yes { background: rgba(100,180,120,.1); color: #4a9c64; }
+.cg-dos-head.no  { background: rgba(200,80,80,.08); color: #b84a4a; }
+.cg-dos-list { display: flex; flex-direction: column; gap: 2px; }
+.cg-dos-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px; background: #fff;
+  border: 1px solid var(--line); border-top: none;
+  font-size: 13px; color: var(--muted); line-height: 1.6;
+}
+.cg-dos-item:last-child { border-radius: 0 0 2px 2px; }
+.cg-dos-icon { flex-shrink: 0; margin-top: 2px; }
+.cg-dos-icon.yes { color: #4a9c64; }
+.cg-dos-icon.no  { color: #b84a4a; }
+
+/* Storage tips */
+.cg-storage-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 8px;
+}
+.cg-storage-card {
+  padding: 26px 20px; text-align: center; background: #fff;
+  border: 1px solid var(--line); border-radius: 2px;
+  transition: border-color .3s, transform .3s var(--ease);
+}
+.cg-storage-card:hover { border-color: rgba(184,149,106,.3); transform: translateY(-3px); }
+.cg-storage-icon {
+  font-size: 28px; margin-bottom: 14px; display: block;
+}
+.cg-storage-name {
+  font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;
+}
+.cg-storage-desc { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+/* Callout */
+.cg-callout {
+  margin-top: 28px; padding: 22px 28px;
+  background: linear-gradient(135deg,rgba(184,149,106,.1),rgba(212,184,150,.04));
+  border: 1px solid rgba(184,149,106,.2); border-radius: 2px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.cg-callout-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(184,149,106,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0; margin-top: 2px;
+}
+.cg-callout-text { font-size: 13px; color: var(--muted); line-height: 1.75; }
+.cg-callout-text strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+/* ── CTA ── */
+.cg-cta {
+  background: var(--ink); padding: 70px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cg-cta::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(184,149,106,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cg-cta-inner { position: relative; z-index: 1; }
+.cg-cta-eye { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: block; }
+.cg-cta-title { font-family: var(--serif); font-size: clamp(34px,5vw,64px); font-weight: 300; color: #faf8f5; margin-bottom: 14px; letter-spacing: -.02em; }
+.cg-cta-title em { font-style: italic; color: var(--gold-lt); }
+.cg-cta-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+.cg-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.cg-btn-light {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: #faf8f5; color: var(--ink); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.cg-btn-light:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+.cg-btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: transparent; color: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.cg-btn-ghost:hover { color: #faf8f5; border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+
+@keyframes cgUp { to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px) {
+  .cg-symbols { grid-template-columns: repeat(3,1fr); }
+}
+@media(max-width:1000px) {
+  .cg-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .cg-sidebar { position: static; }
+  .cg-nav { flex-direction: row; flex-wrap: wrap; }
+  .cg-nav a { border-left: none; border-bottom: 2px solid transparent; }
+  .cg-nav a:hover,.cg-nav a.active { border-left-color: transparent; border-bottom-color: var(--gold); }
+}
+@media(max-width:768px) {
+  .cg-hero { padding: 130px 0 60px; }
+  .cg-hero-inner,.cg-wrap,.cg-cta,.cg-symbols-section { padding-left: 24px; padding-right: 24px; }
+  .cg-fabric-grid,.cg-dos-grid,.cg-storage-grid { grid-template-columns: 1fr; }
+  .cg-symbols { grid-template-columns: repeat(2,1fr); }
+  .cg-wrap { padding-top: 50px; padding-bottom: 70px; }
+}
+@media(max-width:480px) {
+  .cg-hero-badges { flex-direction: column; gap: 10px; }
+  .cg-cta-btns { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body class="cg-page">
+
+<!-- NAV -->
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="hamburger">≡</button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="cg-hero">
+  <div class="cg-hero-wm">Care</div>
+  <div class="cg-hero-inner">
+    <span class="cg-hero-eye">Shenova · Care Guide</span>
+    <h1 class="cg-hero-title">Care for<br><em>your pieces.</em></h1>
+    <p class="cg-hero-sub">Shenova garments are crafted from premium fabrics. Proper care ensures they stay beautiful and last for years to come.</p>
+    <div class="cg-hero-badges">
+      <div class="cg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22C6 22 2 17 2 12S6 2 12 2s10 5 10 10-4 10-10 10z"/><path d="M8 12l2 2 4-4"/></svg>
+        Hand wash recommended
+      </div>
+      <div class="cg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Avoid harsh chemicals
+      </div>
+      <div class="cg-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Made to last forever
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARE SYMBOLS -->
+<div class="cg-symbols-section">
+  <div class="cg-symbols-inner">
+    <div class="cg-symbols-title">Common care label symbols</div>
+    <div class="cg-symbols">
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">🫧</div>
+        <div class="cg-symbol-name">Hand Wash</div>
+        <div class="cg-symbol-desc">Gentle hand wash only</div>
+      </div>
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">❄️</div>
+        <div class="cg-symbol-name">Cold Water</div>
+        <div class="cg-symbol-desc">30°C max water temp</div>
+      </div>
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">🚫</div>
+        <div class="cg-symbol-name">No Bleach</div>
+        <div class="cg-symbol-desc">Never use bleach</div>
+      </div>
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">👕</div>
+        <div class="cg-symbol-name">Flat Dry</div>
+        <div class="cg-symbol-desc">Dry flat in shade</div>
+      </div>
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">🌡️</div>
+        <div class="cg-symbol-name">Low Iron</div>
+        <div class="cg-symbol-desc">Low heat only</div>
+      </div>
+      <div class="cg-symbol">
+        <div class="cg-symbol-icon">🧺</div>
+        <div class="cg-symbol-name">No Tumble</div>
+        <div class="cg-symbol-desc">Do not tumble dry</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="cg-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="cg-sidebar">
+    <div class="cg-sidebar-title">On this page</div>
+    <nav class="cg-nav">
+      <a href="#fabric-care" class="active">By Fabric</a>
+      <a href="#dos-donts">Do's &amp; Don'ts</a>
+      <a href="#washing">Washing</a>
+      <a href="#storage">Storage</a>
+      <a href="#ironing">Ironing</a>
+    </nav>
+  </aside>
+
+  <!-- ARTICLE -->
+  <div>
+
+    <!-- BY FABRIC -->
+    <div class="cg-section" id="fabric-care">
+      <span class="cg-section-eye">01 · Fabric Care</span>
+      <h2 class="cg-section-title">Care by<br><em>fabric type.</em></h2>
+      <p class="cg-section-sub">Different fabrics need different care. Here's exactly how to treat the most common fabrics used in Shenova garments.</p>
+
+      <div class="cg-fabric-grid">
+        <div class="cg-fabric-card">
+          <span class="cg-fabric-tag">Cotton</span>
+          <div class="cg-fabric-name">Cotton & Cotton Blends</div>
+          <div class="cg-fabric-rules">
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Hand wash or machine wash on gentle cycle at 30°C</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Use mild detergent — no harsh chemicals</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Do not wring — gently squeeze out excess water</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Dry in shade, flat or on a hanger</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Iron on medium heat while slightly damp</div>
+          </div>
+        </div>
+        <div class="cg-fabric-card">
+          <span class="cg-fabric-tag">Chiffon</span>
+          <div class="cg-fabric-name">Chiffon & Georgette</div>
+          <div class="cg-fabric-rules">
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Hand wash only in cold water — very gentle</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Use a delicate fabric detergent or baby shampoo</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Never wring or twist — roll in a towel to absorb water</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Hang dry away from direct sunlight</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Iron on lowest setting with a pressing cloth</div>
+          </div>
+        </div>
+        <div class="cg-fabric-card">
+          <span class="cg-fabric-tag">Silk</span>
+          <div class="cg-fabric-name">Silk & Satin</div>
+          <div class="cg-fabric-rules">
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Dry clean recommended for pure silk</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> If hand washing, use cold water with silk-specific detergent</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Never soak for more than 5 minutes</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Dry flat on a clean towel, out of sunlight</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Iron on the lowest setting, always inside-out</div>
+          </div>
+        </div>
+        <div class="cg-fabric-card">
+          <span class="cg-fabric-tag">Rayon</span>
+          <div class="cg-fabric-name">Rayon & Viscose</div>
+          <div class="cg-fabric-rules">
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Hand wash in cold water or dry clean</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Rayon shrinks — never use hot water or a dryer</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Gently squeeze, do not wring</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Hang dry or lay flat — keep away from direct sun</div>
+            <div class="cg-fabric-rule"><span class="cg-fabric-rule-icon">✦</span> Iron on low heat while slightly damp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOS & DONTS -->
+    <div class="cg-section" id="dos-donts">
+      <span class="cg-section-eye">02 · Do's &amp; Don'ts</span>
+      <h2 class="cg-section-title">What to do<br><em>&amp; what to avoid.</em></h2>
+      <p class="cg-section-sub">A quick reference for keeping your Shenova pieces in perfect condition.</p>
+
+      <div class="cg-dos-grid">
+        <div>
+          <div class="cg-dos-head yes">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Do's
+          </div>
+          <div class="cg-dos-list">
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Wash dark colours separately the first time
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Turn garments inside out before washing
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Use a mesh laundry bag for delicates
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Store folded or hung in a cool dry place
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Treat stains immediately and gently
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon yes" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Air out garments after wearing before storing
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="cg-dos-head no">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Don'ts
+          </div>
+          <div class="cg-dos-list">
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Never use bleach or strong detergents
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Don't tumble dry any Shenova piece
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Avoid soaking for extended periods
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Don't dry in direct sunlight — causes fading
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Don't wring or twist delicate fabrics
+            </div>
+            <div class="cg-dos-item">
+              <svg class="cg-dos-icon no" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Never iron directly on embellishments
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WASHING -->
+    <div class="cg-section" id="washing">
+      <span class="cg-section-eye">03 · Washing</span>
+      <h2 class="cg-section-title">Washing<br><em>your garment.</em></h2>
+      <p class="cg-section-sub">For most Shenova pieces, gentle hand washing is the best way to preserve colour, shape, and fabric quality.</p>
+
+      <div class="cg-callout">
+        <div class="cg-callout-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="cg-callout-text">
+          <strong>Hand wash step by step</strong>
+          1. Fill a basin with cool or lukewarm water (max 30°C). &nbsp;2. Add a small amount of mild detergent and mix gently. &nbsp;3. Submerge the garment and swirl softly — do not scrub. &nbsp;4. Rinse thoroughly with cool water until no soap remains. &nbsp;5. Gently press out excess water — never wring. &nbsp;6. Lay flat or hang to dry in shade.
+        </div>
+      </div>
+    </div>
+
+    <!-- STORAGE -->
+    <div class="cg-section" id="storage">
+      <span class="cg-section-eye">04 · Storage</span>
+      <h2 class="cg-section-title">Storing your<br><em>pieces properly.</em></h2>
+      <p class="cg-section-sub">How you store your clothes is just as important as how you wash them. Good storage keeps fabric fresh and shape intact.</p>
+
+      <div class="cg-storage-grid">
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">🪝</span>
+          <div class="cg-storage-name">Hang Dresses</div>
+          <div class="cg-storage-desc">Hang dresses and blouses on padded or wide hangers to maintain shoulder shape and prevent creasing.</div>
+        </div>
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">📦</span>
+          <div class="cg-storage-name">Fold Knits</div>
+          <div class="cg-storage-desc">Never hang knits — they stretch. Fold and store flat in a drawer or on a shelf to keep their shape.</div>
+        </div>
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">💨</span>
+          <div class="cg-storage-name">Breathable Bags</div>
+          <div class="cg-storage-desc">Store off-season pieces in breathable cotton garment bags — never plastic, which traps moisture.</div>
+        </div>
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">🌿</span>
+          <div class="cg-storage-name">Natural Repellent</div>
+          <div class="cg-storage-desc">Use cedar blocks or lavender sachets instead of mothballs. Keeps clothes fresh without chemical odour.</div>
+        </div>
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">🌑</span>
+          <div class="cg-storage-name">Away from Light</div>
+          <div class="cg-storage-desc">Store away from direct sunlight and artificial lighting. UV rays fade fabric colour over time.</div>
+        </div>
+        <div class="cg-storage-card">
+          <span class="cg-storage-icon">💧</span>
+          <div class="cg-storage-name">Keep Dry</div>
+          <div class="cg-storage-desc">Ensure garments are completely dry before storing. Damp clothes lead to mould and musty odours.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IRONING -->
+    <div class="cg-section" id="ironing">
+      <span class="cg-section-eye">05 · Ironing</span>
+      <h2 class="cg-section-title">Ironing &<br><em>steaming.</em></h2>
+      <p class="cg-section-sub">A steamer is always preferable to an iron for Shenova pieces — it's gentler on delicate fabrics and removes wrinkles without direct contact.</p>
+
+      <div class="cg-callout">
+        <div class="cg-callout-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="cg-callout-text">
+          <strong>Ironing tips</strong>
+          Always check the care label first. Iron on the lowest setting suitable for the fabric. For embroidered or embellished pieces, always iron inside-out or use a pressing cloth between the iron and the garment. Never iron directly on prints, beads, or sequins.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cg-cta">
+  <div class="cg-cta-inner">
+    <span class="cg-cta-eye">Have a question?</span>
+    <h2 class="cg-cta-title">We're here<br><em>to help.</em></h2>
+    <p class="cg-cta-sub">Not sure how to care for a specific piece? Ask us directly.</p>
+    <div class="cg-cta-btns">
+      <a href="contact.html" class="cg-btn-light">Contact Us</a>
+      <a href="sizeguide.html" class="cg-btn-ghost">Size Guide →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-bottom" style="border:none;margin-top:80px">© 2026 SHENOVA — All Rights Reserved</div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:22px">×</button>
+  </div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><span>₹0</span></div>
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* Sidebar scroll spy */
+const sections = document.querySelectorAll('.cg-section[id]');
+const navLinks  = document.querySelectorAll('.cg-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 160) current = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+}, { passive: true });
+</script>
+</body>
+</html>
