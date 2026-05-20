@@ -603,7 +603,7 @@ document.getElementById('apply-coupon-btn')?.addEventListener('click', async () 
   btn.disabled = true;
 
   try {
-    const API_URL = (window.API_BASE || 'https://shenova-website-production.up.railway.app') + '/api/coupon/apply';
+    const API_URL = (window.API_BASE || 'https://shenova-backend.onrender.com') + '/api/coupon/apply';
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -794,7 +794,7 @@ e.stopPropagation();
 
       // Razorpay order create
       const response = await fetch(
-        "https://shenova-website-production.up.railway.app/api/payment/create-order",
+        "https://shenova-backend.onrender.com/api/payment/create-order",
         {
           method: "POST",
           headers: {

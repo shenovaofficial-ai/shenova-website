@@ -4,7 +4,7 @@
 const API_BASE =
   window.location.hostname.includes('localhost')
     ? 'http://localhost:5000'
-    : 'https://shenova-website-production.up.railway.app';
+    : 'https://shenova-backend.onrender.com';
 
 const API = API_BASE + '/api';
 
