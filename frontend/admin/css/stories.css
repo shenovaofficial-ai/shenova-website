@@ -864,3 +864,10 @@
   }
 
 }
+.navbar{
+  justify-content:space-between !important;
+}
+
+.nav-right{
+  gap:12px !important;
+}
