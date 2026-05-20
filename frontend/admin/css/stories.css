@@ -830,3 +830,37 @@
     border-radius: 0;
   }
 }
+
+@media(max-width:768px){
+
+  .nav-left{
+    gap:8px !important;
+  }
+
+  .story-bubble-wrap{
+    margin-left:8px !important;
+  }
+
+  .story-bubble{
+    width:46px !important;
+    height:46px !important;
+  }
+
+  .story-bubble-mark{
+    font-size:17px !important;
+  }
+
+  /* IMPORTANT */
+  .menu-toggle,
+  .hamburger,
+  .mobile-menu-btn{
+
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+
+    position:relative !important;
+    z-index:99999 !important;
+  }
+
+}
