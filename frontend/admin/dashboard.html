@@ -1303,6 +1303,29 @@ select{
   0%,100% { opacity:1 }
   50%      { opacity:0.4 }
 }
+
+/* ── Stories integration safety (ensures modal is hidden even if stories.css fails to load) ── */
+.story-edit-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.story-edit-modal.show{display:flex}
+
+/* Story admin grid — scoped so it never bleeds into other panels */
+.story-admin-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:16px;
+  margin-top:8px;
+}
 </style>
 <link rel="stylesheet" href="css/stories.css">
 
@@ -1986,8 +2009,7 @@ select{
   </div>
 </div>
 <!-- ★ NEW — Story Edit Modal -->
-<div class="story-edit-modal" id="storyEditModal">
-  <div class="modal-overlay" onclick="adminCloseEditStory()"></div>
+<div class="story-edit-modal" id="storyEditModal" onclick="if(event.target===this)adminCloseEditStory()">
   <div class="story-edit-box">
     <div class="story-edit-head">
       <h3>Edit Story</h3>
@@ -2069,7 +2091,8 @@ const sectionTitles = {
   products:'Products',
   add:'Add Product',
   orders:'Orders',
-  messages:'Messages'
+  messages:'Messages',
+  stories:'Stories'
 };
 
 function showSection(id){
@@ -2082,6 +2105,7 @@ function showSection(id){
   if(id==='products') renderAllProducts();
   if(id==='orders')   renderAllOrders();
   if(id==='messages') loadMessages();
+  if(id==='stories')  typeof loadAdminStories==='function' && loadAdminStories();
 }
 
 /* ─────────────────────────────────────────
@@ -2654,6 +2678,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   setupUploadZone('add-vid-zone','add-videos-input','add-vid-preview','video');
   setupUploadZone(null,'edit-images-input','edit-img-preview','image');
   setupUploadZone(null,'edit-videos-input','edit-vid-preview','video');
+  setupUploadZone('storyUploadZone','storyFileInput','storyFilePreview','image');
 
   // Edit modal file inputs (no zone, just input change)
   document.getElementById('edit-images-input')?.addEventListener('change', function(){

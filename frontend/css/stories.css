@@ -314,10 +314,7 @@
   transition: none;
 }
 
-/* Active story — animates via JS */
-.story-progress-bar.active .story-progress-fill {
-  /* width set by JS via requestAnimationFrame */
-}
+/* Active story — width is set dynamically by JS via requestAnimationFrame */
 
 /* ── Header (avatar + brand + close) ─────────── */
 .story-header {
@@ -761,6 +758,7 @@
   z-index    : 9999;
   background : rgba(0,0,0,0.6);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display    : none;
   align-items: center;
   justify-content: center;
