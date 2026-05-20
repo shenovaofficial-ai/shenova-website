@@ -366,10 +366,7 @@ app.delete('/api/admin/coupons/:id', async (req, res) => {
 const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payment', paymentRoutes);
 
-// ================= STORIES ✅ =================
-// ⚠️ MUST be before app.listen — registered with all other routes
 
-const storyRoutes = require('./routes/storyRoutes');
 
 
 // ================= START SERVER =================
