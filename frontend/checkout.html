@@ -861,7 +861,7 @@ e.stopPropagation();
 
   // Save order
   const saveRes = await fetch(
-    "https://shenova-website-production.up.railway.app/api/orders",
+    "https://shenova-backend.onrender.com/api/orders",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -874,7 +874,7 @@ e.stopPropagation();
   // ✅ Mark coupon as used (one-time use)
   if (window.appliedCouponCode) {
     await fetch(
-      "https://shenova-website-production.up.railway.app/api/coupon/use",
+      "https://shenova-backend.onrender.com/api/coupon/use",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
