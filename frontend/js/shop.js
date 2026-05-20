@@ -32,10 +32,3 @@ document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () =
 
 document.querySelector('#sort')?.addEventListener('change', e => { currentSort = e.target.value; renderShop(); });
 loadShop();
-const hamburger = document.querySelector('.hamburger');
-const mobileMenu = document.querySelector('.mobile-menu');
-
-hamburger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
-  hamburger.classList.toggle('open');
-});
