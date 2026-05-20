@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Returns & Exchanges · Shenova</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+:root {
+  --gold: #b8956a;
+  --gold-lt: #d4b896;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --bg: #faf8f5;
+  --ink: #0a0909;
+  --muted: #6b6460;
+  --line: rgba(10,9,8,.09);
+  --ease: cubic-bezier(.19,1,.22,1);
+}
+
+.rt-page { background: var(--bg); font-family: var(--sans); }
+
+/* ── HERO ── */
+.rt-hero {
+  background: var(--ink);
+  padding: 160px 0 80px;
+  position: relative; overflow: hidden;
+}
+.rt-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 70% at 25% 50%, rgba(184,149,106,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.rt-hero-wm {
+  position: absolute;
+  left: -20px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(120px,18vw,260px);
+  font-weight: 300;
+  color: rgba(255,255,255,.025);
+  letter-spacing: -.03em;
+  white-space: nowrap;
+  pointer-events: none; user-select: none;
+}
+.rt-hero-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  position: relative; z-index: 2;
+}
+.rt-hero-eye {
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; display: block;
+  opacity: 0; transform: translateY(14px);
+  animation: rtUp .8s var(--ease) .15s forwards;
+}
+.rt-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 300; line-height: .93;
+  letter-spacing: -.025em; color: #faf8f5;
+  margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+  animation: rtUp 1s var(--ease) .3s forwards;
+}
+.rt-hero-title em { font-style: italic; color: var(--gold-lt); }
+.rt-hero-sub {
+  font-size: 14px; color: rgba(250,248,245,.45);
+  max-width: 400px; line-height: 1.75;
+  opacity: 0; transform: translateY(14px);
+  animation: rtUp .8s var(--ease) .5s forwards;
+}
+.rt-hero-badges {
+  display: flex; gap: 14px; margin-top: 48px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(10px);
+  animation: rtUp .8s var(--ease) .65s forwards;
+}
+.rt-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px;
+  border: 1px solid rgba(184,149,106,.25); border-radius: 50px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.rt-badge svg { color: var(--gold); flex-shrink: 0; }
+
+/* ── STEPS STRIP ── */
+.rt-steps-section {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.rt-steps {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: repeat(4,1fr);
+}
+.rt-step {
+  padding: 40px 28px;
+  border-right: 1px solid var(--line);
+  position: relative;
+}
+.rt-step:last-child { border-right: none; }
+.rt-step-num {
+  font-family: var(--serif);
+  font-size: 13px; letter-spacing: .15em;
+  color: var(--gold); margin-bottom: 14px; display: block;
+}
+.rt-step-title {
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 400;
+  color: var(--ink); margin-bottom: 8px; line-height: 1.2;
+}
+.rt-step-body { font-size: 12px; color: var(--muted); line-height: 1.65; }
+/* Arrow connector */
+.rt-step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -14px; top: 42px;
+  font-size: 16px; color: rgba(184,149,106,.35);
+  z-index: 1;
+}
+
+/* ── CONTENT ── */
+.rt-content {
+  max-width: 1400px; margin: 0 auto; padding: 80px 40px 100px;
+  display: grid; grid-template-columns: 260px 1fr; gap: 80px; align-items: start;
+}
+
+/* Sticky sidebar */
+.rt-sidebar { position: sticky; top: 100px; }
+.rt-sidebar-title {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+.rt-nav { display: flex; flex-direction: column; gap: 2px; }
+.rt-nav a {
+  font-size: 13px; color: var(--muted); padding: 9px 14px;
+  border-radius: 4px; transition: all .25s;
+  text-decoration: none; letter-spacing: .02em;
+  border-left: 2px solid transparent;
+}
+.rt-nav a:hover, .rt-nav a.active {
+  color: var(--ink); background: rgba(184,149,106,.07);
+  border-left-color: var(--gold);
+}
+
+/* Article */
+.rt-article {}
+.rt-section { margin-bottom: 64px; }
+.rt-section:last-child { margin-bottom: 0; }
+.rt-section-eye {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; display: block;
+}
+.rt-section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px,4vw,44px);
+  font-weight: 300; letter-spacing: -.01em;
+  color: var(--ink); margin-bottom: 24px; line-height: 1.1;
+}
+.rt-section-title em { font-style: italic; }
+.rt-section-body {
+  font-size: 14px; color: var(--muted); line-height: 1.85; max-width: 680px;
+}
+.rt-section-body p { margin-bottom: 16px; }
+.rt-section-body p:last-child { margin-bottom: 0; }
+.rt-section-body strong { color: var(--ink); font-weight: 500; }
+
+/* Eligibility checklist */
+.rt-checklist {
+  margin-top: 28px; display: flex; flex-direction: column; gap: 12px;
+}
+.rt-check-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 20px;
+  border: 1px solid var(--line); border-radius: 2px; background: #fff;
+  transition: border-color .3s, transform .3s var(--ease);
+}
+.rt-check-item:hover { border-color: rgba(184,149,106,.25); transform: translateX(4px); }
+.rt-check-icon {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.rt-check-icon.yes { background: rgba(100,180,120,.12); color: #4a9c64; }
+.rt-check-icon.no  { background: rgba(200,80,80,.1); color: #b84a4a; }
+.rt-check-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.rt-check-text strong { color: var(--ink); }
+
+/* Cards grid */
+.rt-cards {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; margin-top: 28px;
+}
+.rt-card {
+  padding: 28px 24px;
+  border: 1px solid var(--line); border-radius: 2px; background: #fff;
+  position: relative; overflow: hidden;
+  transition: border-color .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.rt-card:hover {
+  border-color: rgba(184,149,106,.3);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+}
+.rt-card::after {
+  content: ""; position: absolute;
+  bottom: 0; left: 0; width: 0; height: 2px;
+  background: linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition: width .4s var(--ease);
+}
+.rt-card:hover::after { width: 100%; }
+.rt-card-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(184,149,106,.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); margin-bottom: 16px;
+  transition: background .3s;
+}
+.rt-card:hover .rt-card-icon { background: var(--gold); color: #fff; }
+.rt-card-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+.rt-card-detail { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+/* Timeline */
+.rt-timeline { margin-top: 28px; display: flex; flex-direction: column; gap: 0; }
+.rt-tl-item {
+  display: flex; gap: 24px; padding-bottom: 32px;
+  position: relative;
+}
+.rt-tl-item:last-child { padding-bottom: 0; }
+.rt-tl-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.rt-tl-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(184,149,106,.12); border: 1px solid rgba(184,149,106,.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0; z-index: 1;
+  font-family: var(--serif); font-size: 14px; font-weight: 400;
+}
+.rt-tl-line {
+  width: 1px; flex: 1; background: rgba(184,149,106,.2); margin-top: 6px;
+}
+.rt-tl-item:last-child .rt-tl-line { display: none; }
+.rt-tl-body { padding-top: 6px; }
+.rt-tl-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 400;
+  color: var(--ink); margin-bottom: 6px;
+}
+.rt-tl-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.rt-tl-tag {
+  display: inline-block; margin-top: 10px;
+  padding: 4px 12px; border-radius: 50px;
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  background: rgba(184,149,106,.1); color: var(--gold);
+  border: 1px solid rgba(184,149,106,.2);
+}
+
+/* Callout */
+.rt-callout {
+  margin-top: 28px; padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(184,149,106,.1), rgba(212,184,150,.04));
+  border: 1px solid rgba(184,149,106,.2); border-radius: 2px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.rt-callout-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(184,149,106,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0; margin-top: 2px;
+}
+.rt-callout-body strong {
+  display: block; font-size: 13px; color: var(--ink);
+  margin-bottom: 5px; letter-spacing: .02em;
+}
+.rt-callout-body span { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* Refund table */
+.rt-table {
+  width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 13px;
+}
+.rt-table th {
+  text-align: left; padding: 12px 16px;
+  font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); background: rgba(184,149,106,.07);
+  border-bottom: 1px solid var(--line);
+}
+.rt-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  color: var(--muted); vertical-align: top;
+}
+.rt-table td:first-child { color: var(--ink); font-weight: 500; }
+.rt-table tr:last-child td { border-bottom: none; }
+.rt-table tr:hover td { background: rgba(184,149,106,.04); }
+.rt-pill-yes {
+  display: inline-block; padding: 3px 10px; border-radius: 50px;
+  background: rgba(100,180,120,.12); color: #4a9c64;
+  font-size: 11px; letter-spacing: .1em;
+}
+.rt-pill-no {
+  display: inline-block; padding: 3px 10px; border-radius: 50px;
+  background: rgba(200,80,80,.1); color: #b84a4a;
+  font-size: 11px; letter-spacing: .1em;
+}
+.rt-pill-partial {
+  display: inline-block; padding: 3px 10px; border-radius: 50px;
+  background: rgba(184,149,106,.12); color: var(--gold);
+  font-size: 11px; letter-spacing: .1em;
+}
+
+/* ── CTA BAR ── */
+.rt-cta {
+  background: var(--ink); padding: 70px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.rt-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(184,149,106,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.rt-cta-inner { position: relative; z-index: 1; }
+.rt-cta-eye {
+  font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px; display: block;
+}
+.rt-cta-title {
+  font-family: var(--serif);
+  font-size: clamp(34px,5vw,64px);
+  font-weight: 300; letter-spacing: -.02em; color: #faf8f5; margin-bottom: 14px;
+}
+.rt-cta-title em { font-style: italic; color: var(--gold-lt); }
+.rt-cta-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+.rt-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.rt-btn-light {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: #faf8f5; color: var(--ink); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.rt-btn-light:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+.rt-btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px; background: transparent; color: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.rt-btn-ghost:hover { color: #faf8f5; border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+
+@keyframes rtUp { to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px) {
+  .rt-content { grid-template-columns: 1fr; gap: 40px; }
+  .rt-sidebar { position: static; }
+  .rt-nav { flex-direction: row; flex-wrap: wrap; }
+  .rt-nav a { border-left: none; border-bottom: 2px solid transparent; }
+  .rt-nav a:hover, .rt-nav a.active { border-left-color: transparent; border-bottom-color: var(--gold); }
+}
+@media(max-width:768px) {
+  .rt-hero { padding: 130px 0 60px; }
+  .rt-hero-inner, .rt-content, .rt-cta { padding-left: 24px; padding-right: 24px; }
+  .rt-steps { grid-template-columns: repeat(2,1fr); }
+  .rt-step:nth-child(2) { border-right: none; }
+  .rt-step:nth-child(2)::after, .rt-step:nth-child(4)::after { display: none; }
+  .rt-cards { grid-template-columns: 1fr; }
+  .rt-content { padding-top: 50px; padding-bottom: 70px; }
+}
+@media(max-width:480px) {
+  .rt-steps { grid-template-columns: 1fr; }
+  .rt-step { border-right: none; border-bottom: 1px solid var(--line); }
+  .rt-step:last-child { border-bottom: none; }
+  .rt-step::after { display: none !important; }
+  .rt-hero-badges { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body class="rt-page">
+
+<!-- NAV -->
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="hamburger">≡</button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="rt-hero">
+  <div class="rt-hero-wm">Returns</div>
+  <div class="rt-hero-inner">
+    <span class="rt-hero-eye">Shenova · Returns & Exchanges</span>
+    <h1 class="rt-hero-title">Returns &<br><em>Exchanges.</em></h1>
+    <p class="rt-hero-sub">Changed your mind? We make it easy. Hassle-free returns within 14 days of delivery — no questions asked.</p>
+    <div class="rt-hero-badges">
+      <div class="rt-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        14-day return window
+      </div>
+      <div class="rt-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Free return pickup
+      </div>
+      <div class="rt-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Full refund guaranteed
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS STEPS -->
+<div class="rt-steps-section">
+  <div class="rt-steps">
+    <div class="rt-step">
+      <span class="rt-step-num">Step 01</span>
+      <div class="rt-step-title">Raise a Request</div>
+      <div class="rt-step-body">Email or WhatsApp us within 14 days of delivery with your order number.</div>
+    </div>
+    <div class="rt-step">
+      <span class="rt-step-num">Step 02</span>
+      <div class="rt-step-title">We Arrange Pickup</div>
+      <div class="rt-step-body">Our team schedules a free pickup from your doorstep within 2 business days.</div>
+    </div>
+    <div class="rt-step">
+      <span class="rt-step-num">Step 03</span>
+      <div class="rt-step-title">Item Inspected</div>
+      <div class="rt-step-body">Once received, we inspect the item within 1–2 business days to confirm eligibility.</div>
+    </div>
+    <div class="rt-step">
+      <span class="rt-step-num">Step 04</span>
+      <div class="rt-step-title">Refund or Exchange</div>
+      <div class="rt-step-body">Refund issued within 5–7 business days to your original payment method.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="rt-content">
+
+  <!-- SIDEBAR -->
+  <aside class="rt-sidebar">
+    <div class="rt-sidebar-title">On this page</div>
+    <nav class="rt-nav">
+      <a href="#eligibility" class="active">Eligibility</a>
+      <a href="#how-to">How to Return</a>
+      <a href="#exchanges">Exchanges</a>
+      <a href="#refunds">Refunds</a>
+      <a href="#non-returnable">Non-Returnable</a>
+    </nav>
+  </aside>
+
+  <!-- ARTICLE -->
+  <article class="rt-article">
+
+    <!-- ELIGIBILITY -->
+    <div class="rt-section" id="eligibility">
+      <span class="rt-section-eye">01 · Return Eligibility</span>
+      <h2 class="rt-section-title">Is your item<br><em>eligible?</em></h2>
+      <div class="rt-section-body">
+        <p>To be eligible for a return, your item must meet all of the following conditions. Items that do not meet these criteria may be returned to you at your cost.</p>
+      </div>
+      <div class="rt-checklist">
+        <div class="rt-check-item">
+          <div class="rt-check-icon yes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Within 14 days</strong> — Return request raised within 14 days of the delivery date.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon yes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Unworn &amp; unwashed</strong> — Item has not been worn, washed, or altered in any way.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon yes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Original tags attached</strong> — All brand tags, price tags, and labels are intact and attached.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon yes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Original packaging</strong> — Returned in the original Shenova packaging or a clean equivalent.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Not a final-sale item</strong> — Items marked "Final Sale" or purchased during clearance events are not eligible.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Not innerwear or accessories</strong> — For hygiene reasons, innerwear, swimwear, and earrings cannot be returned.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW TO RETURN -->
+    <div class="rt-section" id="how-to">
+      <span class="rt-section-eye">02 · How to Return</span>
+      <h2 class="rt-section-title">Starting your<br><em>return.</em></h2>
+      <div class="rt-section-body">
+        <p>Our return process is simple and designed to be as effortless as possible for you. Follow the steps below to get started.</p>
+      </div>
+      <div class="rt-timeline">
+        <div class="rt-tl-item">
+          <div class="rt-tl-left">
+            <div class="rt-tl-dot">1</div>
+            <div class="rt-tl-line"></div>
+          </div>
+          <div class="rt-tl-body">
+            <div class="rt-tl-title">Contact our team</div>
+            <div class="rt-tl-desc">Email <strong>shenovaofficial@gmail.com</strong> or WhatsApp <strong>+91 70417 02391</strong> with your order number, the item(s) you'd like to return, and the reason for return.</div>
+            <span class="rt-tl-tag">Within 14 days of delivery</span>
+          </div>
+        </div>
+        <div class="rt-tl-item">
+          <div class="rt-tl-left">
+            <div class="rt-tl-dot">2</div>
+            <div class="rt-tl-line"></div>
+          </div>
+          <div class="rt-tl-body">
+            <div class="rt-tl-title">We confirm &amp; schedule pickup</div>
+            <div class="rt-tl-desc">Our team will confirm your request within 24 hours and schedule a free pickup at your convenience — no need to visit any courier partner.</div>
+            <span class="rt-tl-tag">Within 24–48 hours</span>
+          </div>
+        </div>
+        <div class="rt-tl-item">
+          <div class="rt-tl-left">
+            <div class="rt-tl-dot">3</div>
+            <div class="rt-tl-line"></div>
+          </div>
+          <div class="rt-tl-body">
+            <div class="rt-tl-title">Pack the item securely</div>
+            <div class="rt-tl-desc">Place the item(s) in the original packaging with all tags attached. Include a note with your order number inside the package.</div>
+            <span class="rt-tl-tag">Before pickup date</span>
+          </div>
+        </div>
+        <div class="rt-tl-item">
+          <div class="rt-tl-left">
+            <div class="rt-tl-dot">4</div>
+            <div class="rt-tl-line"></div>
+          </div>
+          <div class="rt-tl-body">
+            <div class="rt-tl-title">Refund or exchange processed</div>
+            <div class="rt-tl-desc">Once we receive and inspect the item, your refund or exchange will be initiated within 1–2 business days.</div>
+            <span class="rt-tl-tag">5–7 business days for refund</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXCHANGES -->
+    <div class="rt-section" id="exchanges">
+      <span class="rt-section-eye">03 · Exchanges</span>
+      <h2 class="rt-section-title">Need a different<br><em>size or colour?</em></h2>
+      <div class="rt-section-body">
+        <p>We are happy to exchange your item for a different size or colour, subject to availability. If the desired variant is not in stock, we will offer you store credit or a full refund.</p>
+        <p>Exchange requests must be made within <strong>14 days</strong> of delivery, and the original item must meet all return eligibility criteria above.</p>
+      </div>
+      <div class="rt-cards">
+        <div class="rt-card">
+          <div class="rt-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          </div>
+          <div class="rt-card-name">Size Exchange</div>
+          <div class="rt-card-detail">Swap for a different size free of charge. Subject to availability. Processed within 5–7 days after pickup.</div>
+        </div>
+        <div class="rt-card">
+          <div class="rt-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5" fill="none"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 20v-8.5"/><path d="M12 20c-4.418 0-8-1.79-8-4"/><path d="M12 20c4.418 0 8-1.79 8-4"/></svg>
+          </div>
+          <div class="rt-card-name">Colour Exchange</div>
+          <div class="rt-card-detail">Prefer another colour? We'll swap it if stock is available. Otherwise, a full refund will be issued.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFUNDS -->
+    <div class="rt-section" id="refunds">
+      <span class="rt-section-eye">04 · Refunds</span>
+      <h2 class="rt-section-title">Getting your<br><em>money back.</em></h2>
+      <div class="rt-section-body">
+        <p>Once your return is approved and received, your refund will be processed within <strong>5–7 business days</strong> to your original payment method. You will receive an email confirmation once the refund has been initiated.</p>
+        <p>Please note that your bank may take an additional 2–5 business days to reflect the amount in your account, depending on your payment provider.</p>
+      </div>
+      <table class="rt-table">
+        <thead>
+          <tr>
+            <th>Payment Method</th>
+            <th>Refund Mode</th>
+            <th>Timeline</th>
+            <th>Eligible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>UPI / Net Banking</td>
+            <td>Original source</td>
+            <td>5–7 business days</td>
+            <td><span class="rt-pill-yes">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Credit / Debit Card</td>
+            <td>Original card</td>
+            <td>7–10 business days</td>
+            <td><span class="rt-pill-yes">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Cash on Delivery</td>
+            <td>Bank transfer</td>
+            <td>5–7 business days</td>
+            <td><span class="rt-pill-yes">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Coupon / Discount</td>
+            <td>Store credit</td>
+            <td>1–2 business days</td>
+            <td><span class="rt-pill-partial">Partial</span></td>
+          </tr>
+          <tr>
+            <td>Final Sale Items</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="rt-pill-no">No</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rt-callout">
+        <div class="rt-callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="rt-callout-body">
+          <strong>Shipping charges are non-refundable</strong>
+          <span>Original shipping fees (if any) will not be included in the refund. However, return pickup is always arranged free of charge by Shenova.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NON-RETURNABLE -->
+    <div class="rt-section" id="non-returnable">
+      <span class="rt-section-eye">05 · Non-Returnable Items</span>
+      <h2 class="rt-section-title">Items we<br><em>cannot accept.</em></h2>
+      <div class="rt-section-body">
+        <p>The following items are strictly non-returnable due to hygiene, safety, or policy reasons. Please review these carefully before placing your order.</p>
+      </div>
+      <div class="rt-checklist">
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Innerwear &amp; intimate apparel</strong> — Cannot be returned for hygiene reasons, regardless of condition.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Earrings &amp; pierced jewellery</strong> — Cannot be returned once removed from sealed packaging.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Final Sale &amp; clearance items</strong> — Items marked "Final Sale" at time of purchase are not eligible for return or exchange.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Worn, washed, or altered items</strong> — Any item showing signs of use, washing, or alteration will not be accepted.</div>
+        </div>
+        <div class="rt-check-item">
+          <div class="rt-check-icon no">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rt-check-text"><strong>Items returned after 14 days</strong> — Return window expires 14 days after the confirmed delivery date.</div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<!-- CTA -->
+<div class="rt-cta">
+  <div class="rt-cta-inner">
+    <span class="rt-cta-eye">We're Here to Help</span>
+    <h2 class="rt-cta-title">Start your<br><em>return today.</em></h2>
+    <p class="rt-cta-sub">Our team responds within 24 hours, Mon–Sat. We'll handle everything.</p>
+    <div class="rt-cta-btns">
+      <a href="contact.html" class="rt-btn-light">Contact Us</a>
+      <a href="shipping.html" class="rt-btn-ghost">Shipping Policy →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-bottom" style="border:none;margin-top:80px">
+      © 2026 SHENOVA — All Rights Reserved
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:22px">×</button>
+  </div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><span>₹0</span></div>
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* Sidebar active link on scroll */
+const sections = document.querySelectorAll('.rt-section[id]');
+const navLinks  = document.querySelectorAll('.rt-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 160) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

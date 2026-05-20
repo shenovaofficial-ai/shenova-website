@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shipping Policy · Shenova</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+:root {
+  --gold: #b8956a;
+  --gold-lt: #d4b896;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", "Helvetica Neue", sans-serif;
+  --bg: #faf8f5;
+  --ink: #0a0909;
+  --muted: #6b6460;
+  --line: rgba(10,9,8,.09);
+  --ease: cubic-bezier(.19,1,.22,1);
+}
+
+/* ── PAGE ── */
+.sp-page { background: var(--bg); font-family: var(--sans); }
+
+/* ── HERO ── */
+.sp-hero {
+  background: var(--ink);
+  padding: 160px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.sp-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 70% at 75% 50%, rgba(184,149,106,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sp-hero-wm {
+  position: absolute;
+  right: -20px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(120px,18vw,260px);
+  font-weight: 300;
+  color: rgba(255,255,255,.025);
+  letter-spacing: -.03em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.sp-hero-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  position: relative; z-index: 2;
+}
+.sp-hero-eye {
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; display: block;
+  opacity: 0; transform: translateY(14px);
+  animation: spUp .8s var(--ease) .15s forwards;
+}
+.sp-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 300; line-height: .93;
+  letter-spacing: -.025em; color: #faf8f5;
+  margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+  animation: spUp 1s var(--ease) .3s forwards;
+}
+.sp-hero-title em { font-style: italic; color: var(--gold-lt); }
+.sp-hero-sub {
+  font-size: 14px; color: rgba(250,248,245,.45);
+  max-width: 380px; line-height: 1.75;
+  opacity: 0; transform: translateY(14px);
+  animation: spUp .8s var(--ease) .5s forwards;
+}
+.sp-hero-badges {
+  display: flex; gap: 14px; margin-top: 48px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(10px);
+  animation: spUp .8s var(--ease) .65s forwards;
+}
+.sp-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px;
+  border: 1px solid rgba(184,149,106,.25);
+  border-radius: 50px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.sp-badge svg { color: var(--gold); flex-shrink: 0; }
+
+/* ── QUICK STATS ── */
+.sp-stats-section {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.sp-stats {
+  max-width: 1400px; margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: repeat(4,1fr);
+}
+.sp-stat {
+  padding: 36px 24px;
+  border-right: 1px solid var(--line);
+  text-align: center;
+}
+.sp-stat:last-child { border-right: none; }
+.sp-stat-num {
+  font-family: var(--serif);
+  font-size: clamp(32px,4vw,52px);
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: -.02em;
+  display: block;
+  margin-bottom: 6px;
+}
+.sp-stat-num em { font-style: italic; color: var(--gold); }
+.sp-stat-label {
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── CONTENT ── */
+.sp-content {
+  max-width: 1400px; margin: 0 auto; padding: 80px 40px 100px;
+  display: grid; grid-template-columns: 260px 1fr; gap: 80px; align-items: start;
+}
+
+/* Sticky sidebar nav */
+.sp-sidebar {
+  position: sticky; top: 100px;
+}
+.sp-sidebar-title {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+.sp-nav { display: flex; flex-direction: column; gap: 2px; }
+.sp-nav a {
+  font-size: 13px; color: var(--muted); padding: 9px 14px;
+  border-radius: 4px; transition: all .25s;
+  text-decoration: none; letter-spacing: .02em;
+  border-left: 2px solid transparent;
+}
+.sp-nav a:hover, .sp-nav a.active {
+  color: var(--ink); background: rgba(184,149,106,.07);
+  border-left-color: var(--gold);
+}
+
+/* Main article */
+.sp-article {}
+.sp-section { margin-bottom: 64px; }
+.sp-section:last-child { margin-bottom: 0; }
+
+.sp-section-eye {
+  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; display: block;
+}
+.sp-section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px,4vw,44px);
+  font-weight: 300; letter-spacing: -.01em;
+  color: var(--ink); margin-bottom: 24px; line-height: 1.1;
+}
+.sp-section-title em { font-style: italic; }
+.sp-section-body {
+  font-size: 14px; color: var(--muted); line-height: 1.85;
+  max-width: 680px;
+}
+.sp-section-body p { margin-bottom: 16px; }
+.sp-section-body p:last-child { margin-bottom: 0; }
+.sp-section-body strong { color: var(--ink); font-weight: 500; }
+
+/* Info cards */
+.sp-cards {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 20px;
+  margin-top: 32px;
+}
+.sp-card {
+  padding: 28px 24px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.sp-card:hover {
+  border-color: rgba(184,149,106,.3);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.06);
+}
+.sp-card::after {
+  content: ""; position: absolute;
+  bottom: 0; left: 0; width: 0; height: 2px;
+  background: linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition: width .4s var(--ease);
+}
+.sp-card:hover::after { width: 100%; }
+.sp-card-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(184,149,106,.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); margin-bottom: 16px;
+  transition: background .3s;
+}
+.sp-card:hover .sp-card-icon { background: var(--gold); color: #fff; }
+.sp-card-name {
+  font-size: 13px; font-weight: 500; color: var(--ink);
+  margin-bottom: 6px; letter-spacing: .02em;
+}
+.sp-card-detail { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* Table */
+.sp-table {
+  width: 100%; border-collapse: collapse;
+  margin-top: 28px; font-size: 13px;
+}
+.sp-table th {
+  text-align: left; padding: 12px 16px;
+  font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); background: rgba(184,149,106,.07);
+  border-bottom: 1px solid var(--line);
+}
+.sp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted); vertical-align: top;
+}
+.sp-table td:first-child { color: var(--ink); font-weight: 500; }
+.sp-table tr:last-child td { border-bottom: none; }
+.sp-table tr:hover td { background: rgba(184,149,106,.04); }
+
+/* Highlight callout */
+.sp-callout {
+  margin-top: 28px; padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(184,149,106,.1), rgba(212,184,150,.04));
+  border: 1px solid rgba(184,149,106,.2); border-radius: 2px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.sp-callout-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(184,149,106,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0; margin-top: 2px;
+}
+.sp-callout-body strong {
+  display: block; font-size: 13px; color: var(--ink);
+  margin-bottom: 5px; letter-spacing: .02em;
+}
+.sp-callout-body span { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── CTA BAR ── */
+.sp-cta {
+  background: var(--ink);
+  padding: 70px 40px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.sp-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(184,149,106,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sp-cta-inner { position: relative; z-index: 1; }
+.sp-cta-eye {
+  font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px; display: block;
+}
+.sp-cta-title {
+  font-family: var(--serif);
+  font-size: clamp(34px,5vw,64px);
+  font-weight: 300; letter-spacing: -.02em;
+  color: #faf8f5; margin-bottom: 14px;
+}
+.sp-cta-title em { font-style: italic; color: var(--gold-lt); }
+.sp-cta-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 36px; }
+.sp-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.sp-btn-light {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px;
+  background: #faf8f5; color: var(--ink);
+  border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.sp-btn-light:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+.sp-btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px;
+  background: transparent; color: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 50px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+  text-decoration: none; transition: all .3s var(--ease);
+}
+.sp-btn-ghost:hover { color: #faf8f5; border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+
+@keyframes spUp { to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px) {
+  .sp-content { grid-template-columns: 1fr; gap: 40px; }
+  .sp-sidebar { position: static; }
+  .sp-nav { flex-direction: row; flex-wrap: wrap; }
+  .sp-nav a { border-left: none; border-bottom: 2px solid transparent; }
+  .sp-nav a:hover, .sp-nav a.active { border-left-color: transparent; border-bottom-color: var(--gold); }
+}
+@media(max-width:768px) {
+  .sp-hero { padding: 130px 0 60px; }
+  .sp-hero-inner, .sp-content, .sp-cta { padding-left: 24px; padding-right: 24px; }
+  .sp-stats { grid-template-columns: repeat(2,1fr); }
+  .sp-stat:nth-child(2) { border-right: none; }
+  .sp-cards { grid-template-columns: 1fr; }
+  .sp-content { padding-top: 50px; padding-bottom: 70px; }
+}
+@media(max-width:480px) {
+  .sp-stats { grid-template-columns: 1fr 1fr; }
+  .sp-hero-badges { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body class="sp-page">
+
+<!-- NAV -->
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="index.html">SHENOVA</a>
+    <div class="nav-menu">
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-icons">
+      <button class="cart-btn">🛍 <span class="cart-count">0</span></button>
+      <button class="hamburger">≡</button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="sp-hero">
+  <div class="sp-hero-wm">Shipping</div>
+  <div class="sp-hero-inner">
+    <span class="sp-hero-eye">Shenova · Delivery</span>
+    <h1 class="sp-hero-title">Shipping<br><em>Policy.</em></h1>
+    <p class="sp-hero-sub">We deliver across India with care. Every order is packed thoughtfully and dispatched promptly.</p>
+    <div class="sp-hero-badges">
+      <div class="sp-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Free delivery above ₹2,000
+      </div>
+      <div class="sp-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        5–7 business days
+      </div>
+      <div class="sp-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Pan India delivery
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="sp-stats-section">
+  <div class="sp-stats">
+    <div class="sp-stat">
+      <span class="sp-stat-num"><em>Free</em></span>
+      <span class="sp-stat-label">On orders ₹2,000+</span>
+    </div>
+    <div class="sp-stat">
+      <span class="sp-stat-num">5–7</span>
+      <span class="sp-stat-label">Business days standard</span>
+    </div>
+    <div class="sp-stat">
+      <span class="sp-stat-num">2–3</span>
+      <span class="sp-stat-label">Days express delivery</span>
+    </div>
+    <div class="sp-stat">
+      <span class="sp-stat-num"><em>Pan</em> India</span>
+      <span class="sp-stat-label">All states covered</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="sp-content">
+
+  <!-- SIDEBAR NAV -->
+  <aside class="sp-sidebar">
+    <div class="sp-sidebar-title">On this page</div>
+    <nav class="sp-nav">
+      <a href="#processing" class="active">Processing</a>
+      <a href="#delivery">Delivery Options</a>
+      <a href="#tracking">Order Tracking</a>
+      <a href="#international">International</a>
+      <a href="#issues">Issues & Damages</a>
+    </nav>
+  </aside>
+
+  <!-- ARTICLE -->
+  <article class="sp-article">
+
+    <!-- PROCESSING -->
+    <div class="sp-section" id="processing">
+      <span class="sp-section-eye">01 · Order Processing</span>
+      <h2 class="sp-section-title">Processing<br><em>your order.</em></h2>
+      <div class="sp-section-body">
+        <p>All orders are processed within <strong>1–2 business days</strong> of payment confirmation. Orders placed after 5:00 PM IST or on weekends and public holidays will be processed the next business day.</p>
+        <p>Once your order is dispatched, you will receive a confirmation email with your tracking details. Please ensure your email address and delivery address are entered correctly at checkout.</p>
+      </div>
+      <div class="sp-callout">
+        <div class="sp-callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="sp-callout-body">
+          <strong>Peak season delays</strong>
+          <span>During sale periods and festive seasons (Diwali, New Year), processing may take up to 3 business days. We appreciate your patience.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERY -->
+    <div class="sp-section" id="delivery">
+      <span class="sp-section-eye">02 · Delivery Options</span>
+      <h2 class="sp-section-title">Choose your<br><em>delivery.</em></h2>
+      <div class="sp-section-body">
+        <p>We offer two delivery options across India. Shipping charges are calculated automatically at checkout based on your order value and location.</p>
+      </div>
+      <div class="sp-cards">
+        <div class="sp-card">
+          <div class="sp-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="sp-card-name">Standard Delivery</div>
+          <div class="sp-card-detail">5–7 business days · ₹69 flat fee<br>Free on orders above ₹2,000</div>
+        </div>
+        <div class="sp-card">
+          <div class="sp-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="sp-card-name">Express Delivery</div>
+          <div class="sp-card-detail">2–3 business days · ₹149 flat fee<br>Available for select pin codes</div>
+        </div>
+      </div>
+
+      <table class="sp-table">
+        <thead>
+          <tr>
+            <th>Order Value</th>
+            <th>Standard</th>
+            <th>Express</th>
+            <th>Estimated Days</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Below ₹2,000</td>
+            <td>₹69</td>
+            <td>₹149</td>
+            <td>5–7 / 2–3 days</td>
+          </tr>
+          <tr>
+            <td>₹2,000 and above</td>
+            <td>Free</td>
+            <td>₹149</td>
+            <td>5–7 / 2–3 days</td>
+          </tr>
+          <tr>
+            <td>COD orders</td>
+            <td>₹69</td>
+            <td>—</td>
+            <td>5–7 days</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TRACKING -->
+    <div class="sp-section" id="tracking">
+      <span class="sp-section-eye">03 · Order Tracking</span>
+      <h2 class="sp-section-title">Track your<br><em>package.</em></h2>
+      <div class="sp-section-body">
+        <p>As soon as your order ships, you'll receive an email with your AWB (tracking number) and a direct link to track your shipment. You can also WhatsApp us at <strong>+91 70417 02391</strong> with your order number for updates.</p>
+        <p>Tracking links typically activate within <strong>12–24 hours</strong> of dispatch. If the link shows no movement for more than 48 hours, please contact us and we'll investigate immediately.</p>
+      </div>
+    </div>
+
+    <!-- INTERNATIONAL -->
+    <div class="sp-section" id="international">
+      <span class="sp-section-eye">04 · International</span>
+      <h2 class="sp-section-title">International<br><em>orders.</em></h2>
+      <div class="sp-section-body">
+        <p>Currently, Shenova ships within <strong>India only</strong>. We are working on expanding international delivery and hope to launch soon.</p>
+        <p>If you are based outside India and would like to place an order, please reach out to us at <strong>shenovaofficial@gmail.com</strong> and we will do our best to accommodate your request on a case-by-case basis.</p>
+      </div>
+    </div>
+
+    <!-- ISSUES -->
+    <div class="sp-section" id="issues">
+      <span class="sp-section-eye">05 · Issues & Damages</span>
+      <h2 class="sp-section-title">Wrong or<br><em>damaged order?</em></h2>
+      <div class="sp-section-body">
+        <p>If you received a damaged, defective, or wrong item, please contact us within <strong>48 hours</strong> of delivery with your order number and clear photographs of the item and packaging.</p>
+        <p>We will arrange a free pickup and send you a replacement or issue a full refund — your choice. We take full responsibility for errors on our end.</p>
+      </div>
+      <div class="sp-callout">
+        <div class="sp-callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 6 6l1.09-.89a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="sp-callout-body">
+          <strong>Get in touch quickly</strong>
+          <span>Email us at shenovaofficial@gmail.com or WhatsApp +91 70417 02391. Include your order number and photos for the fastest resolution.</span>
+        </div>
+      </div>
+    </div>
+
+  </article>
+</div>
+
+<!-- CTA BAR -->
+<div class="sp-cta">
+  <div class="sp-cta-inner">
+    <span class="sp-cta-eye">Need Help?</span>
+    <h2 class="sp-cta-title">Still have<br><em>questions?</em></h2>
+    <p class="sp-cta-sub">Our team responds within 24 hours, Mon–Sat.</p>
+    <div class="sp-cta-btns">
+      <a href="contact.html" class="sp-btn-light">Contact Us</a>
+      <a href="returns.html" class="sp-btn-ghost">Returns Policy →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-bottom" style="border:none;margin-top:80px">
+      © 2026 SHENOVA — All Rights Reserved
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="drawer-overlay" onclick="closeCart()"></div>
+<aside class="drawer">
+  <div class="drawer-head">
+    <h3>Your Bag</h3>
+    <button onclick="closeCart()" style="font-size:22px">×</button>
+  </div>
+  <div class="drawer-body"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><span>₹0</span></div>
+    <a class="btn" href="checkout.html">Checkout</a>
+  </div>
+</aside>
+<div class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* Sidebar active link on scroll */
+const sections = document.querySelectorAll('.sp-section[id]');
+const navLinks  = document.querySelectorAll('.sp-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 160) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
