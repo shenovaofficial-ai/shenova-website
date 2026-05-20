@@ -7,812 +7,605 @@
 <link rel="icon" type="image/png" href="images/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 
 <!-- Meta Pixel Code -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '26862489086743105');
-fbq('track', 'PageView');
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','26862489086743105');fbq('track','PageView');
 </script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"/></noscript>
 
 <style>
-/* ── CONTACT PAGE VARS ── */
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
 :root {
-  --co-gold: #b8956a;
-  --co-gold-lt: #d4b896;
-  --co-ink: #0a0909;
-  --co-bg: #faf8f5;
-  --co-muted: #6b6460;
-  --co-beige: #ece6dc;
-  --co-line: rgba(10,9,8,.09);
-  --co-serif: "Cormorant Garamond", Georgia, serif;
-  --co-sans: "DM Sans", "Helvetica Neue", sans-serif;
-  --ease-out: cubic-bezier(.19,1,.22,1);
+  --gold:    #b8956a;
+  --gold-lt: #d4b896;
+  --ink:     #0a0909;
+  --bg:      #faf8f5;
+  --muted:   #6b6460;
+  --beige:   #ece6dc;
+  --line:    rgba(10,9,8,.09);
+  --white:   #faf8f5;
+  --serif:   "Cormorant Garamond", Georgia, serif;
+  --sans:    "DM Sans", "Helvetica Neue", sans-serif;
+  --ease:    cubic-bezier(.19,1,.22,1);
+
+  /* spacing scale */
+  --s1: clamp(8px,2vw,12px);
+  --s2: clamp(16px,3vw,24px);
+  --s3: clamp(24px,4vw,40px);
+  --s4: clamp(40px,6vw,72px);
+  --s5: clamp(60px,8vw,120px);
+
+  /* container */
+  --max: 1400px;
+  --pad: clamp(20px,5vw,60px);
 }
 
-/* ── BASE ── */
-.contact-page { background: var(--co-bg); font-family: var(--co-sans); }
+/* ══════════════════════════════════════
+   RESET + BASE
+══════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body { background:var(--bg); font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased; }
+img  { display:block; max-width:100%; }
+a    { color:inherit; text-decoration:none; }
+button { font-family:inherit; cursor:pointer; }
+input,textarea,select { font-family:inherit; }
 
-/* ════════════════════════════════════
-   HERO BANNER
-════════════════════════════════════ */
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
 .ct-hero {
-  position: relative;
-  padding: 180px 0 100px;
-  overflow: hidden;
-  background: var(--co-ink);
-}
-.ct-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(184,149,106,.13) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 10% 90%, rgba(184,149,106,.08) 0%, transparent 60%);
-  pointer-events: none;
-}
-/* Decorative large serif watermark */
-.ct-hero-wm {
-  position: absolute;
-  right: -40px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--co-serif);
-  font-size: clamp(160px, 22vw, 320px);
-  font-weight: 300;
-  color: rgba(255,255,255,.025);
-  letter-spacing: -.03em;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
-}
-.ct-hero-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-.ct-hero-eye {
-  display: inline-block;
-  font-size: 10px;
-  letter-spacing: .32em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  margin-bottom: 24px;
-  opacity: 0;
-  transform: translateY(16px);
-  animation: ctFadeUp .9s var(--ease-out) .2s forwards;
-}
-.ct-hero-title {
-  font-family: var(--co-serif);
-  font-size: clamp(64px, 10vw, 140px);
-  font-weight: 300;
-  line-height: .92;
-  letter-spacing: -.025em;
-  color: #faf8f5;
-  margin-bottom: 30px;
-  opacity: 0;
-  transform: translateY(24px);
-  animation: ctFadeUp 1.1s var(--ease-out) .35s forwards;
-}
-.ct-hero-title em {
-  font-style: italic;
-  color: var(--co-gold-lt);
-}
-.ct-hero-sub {
-  font-size: 15px;
-  color: rgba(250,248,245,.5);
-  letter-spacing: .04em;
-  max-width: 420px;
-  line-height: 1.7;
-  opacity: 0;
-  transform: translateY(16px);
-  animation: ctFadeUp .9s var(--ease-out) .55s forwards;
+  position:relative;
+  background:var(--ink);
+  padding: clamp(120px,18vw,200px) var(--pad) clamp(60px,8vw,100px);
+  overflow:hidden;
+  /* touch-action for mobile swipe performance */
+  touch-action:pan-y;
 }
 
-/* Trust strip inside hero */
+/* ambient glow */
+.ct-hero::before {
+  content:"";
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 90% at 85% 40%, rgba(184,149,106,.14) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 5% 90%,  rgba(184,149,106,.07) 0%, transparent 55%);
+}
+
+/* large watermark — hidden on tiny screens */
+.ct-hero-wm {
+  position:absolute; right:clamp(-20px,0vw,0); top:50%;
+  transform:translateY(-50%);
+  font-family:var(--serif);
+  font-size:clamp(100px,18vw,300px);
+  font-weight:300;
+  color:rgba(255,255,255,.022);
+  letter-spacing:-.03em;
+  line-height:1;
+  pointer-events:none; user-select:none; white-space:nowrap;
+}
+
+.ct-hero-inner {
+  position:relative; z-index:2;
+  max-width:var(--max); margin:0 auto;
+}
+
+.ct-hero-eye {
+  display:inline-block;
+  font-size:clamp(9px,2vw,11px);
+  letter-spacing:.3em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:var(--s2);
+  opacity:0; transform:translateY(14px);
+  animation:fadeUp .9s var(--ease) .15s forwards;
+}
+
+.ct-hero-title {
+  font-family:var(--serif);
+  font-size:clamp(56px,12vw,140px);
+  font-weight:300; line-height:.9; letter-spacing:-.025em;
+  color:var(--white); margin-bottom:var(--s2);
+  opacity:0; transform:translateY(22px);
+  animation:fadeUp 1.1s var(--ease) .3s forwards;
+}
+.ct-hero-title em { font-style:italic; color:var(--gold-lt); }
+
+.ct-hero-sub {
+  font-size:clamp(13px,2.5vw,15px);
+  color:rgba(250,248,245,.5);
+  line-height:1.75; max-width:400px;
+  opacity:0; transform:translateY(14px);
+  animation:fadeUp .9s var(--ease) .5s forwards;
+}
+
+/* trust pills */
 .ct-hero-trust {
-  display: flex;
-  gap: 36px;
-  margin-top: 56px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  flex-wrap: wrap;
-  opacity: 0;
-  transform: translateY(12px);
-  animation: ctFadeUp .9s var(--ease-out) .75s forwards;
+  display:flex; gap:clamp(16px,3vw,36px);
+  margin-top:var(--s4); padding-top:var(--s3);
+  border-top:1px solid rgba(255,255,255,.07);
+  flex-wrap:wrap;
+  opacity:0; transform:translateY(10px);
+  animation:fadeUp .9s var(--ease) .7s forwards;
 }
 .ct-trust-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.45);
+  display:flex; align-items:center; gap:8px;
+  font-size:clamp(9px,1.8vw,11px);
+  letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.4);
 }
 .ct-trust-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(184,149,106,.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--co-gold);
-  flex-shrink: 0;
+  width:28px; height:28px; border-radius:50%;
+  border:1px solid rgba(184,149,106,.3);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold); flex-shrink:0;
 }
 
-/* ════════════════════════════════════
-   INFO CARDS ROW
-════════════════════════════════════ */
-.ct-cards-wrap {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 40px;
+/* ══════════════════════════════════════
+   QUICK-CONTACT RIBBON (mobile-first)
+   Three tap-friendly cards stacked or in a row
+══════════════════════════════════════ */
+.ct-ribbon {
+  background:var(--bg);
+  padding: var(--s4) var(--pad);
 }
-.ct-cards-section {
-  margin-top: -1px;
-  padding: 80px 0 60px;
-  background: var(--co-bg);
+.ct-ribbon-inner {
+  max-width:var(--max); margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s2);
 }
-.ct-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
+
 .ct-card {
-  position: relative;
-  padding: 44px 36px;
-  background: #fff;
-  border: 1px solid var(--co-line);
-  border-radius: 2px;
-  overflow: hidden;
-  transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out), border-color .4s;
-  cursor: default;
-  opacity: 0;
-  transform: translateY(28px);
+  position:relative;
+  padding:clamp(28px,4vw,44px) clamp(20px,3vw,36px);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:3px;
+  overflow:hidden;
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .35s;
+  /* Prevent text inflate on iOS */
+  -webkit-text-size-adjust:none;
 }
-.ct-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out),
-              box-shadow .4s var(--ease-out), border-color .4s;
-}
-.ct-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 60px rgba(0,0,0,.08);
-  border-color: rgba(184,149,106,.3);
-}
-/* Gold bottom-line accent on hover */
 .ct-card::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--co-gold), var(--co-gold-lt));
-  transition: width .5s var(--ease-out);
+  content:""; position:absolute; bottom:0; left:0;
+  width:0; height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+  transition:width .5s var(--ease);
 }
-.ct-card:hover::after { width: 100%; }
+.ct-card:hover { transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,.07); border-color:rgba(184,149,106,.3); }
+.ct-card:hover::after { width:100%; }
 
 .ct-card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--co-beige);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  color: var(--co-gold);
-  transition: background .35s, color .35s;
+  width:46px; height:46px; border-radius:50%;
+  background:var(--beige);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold); margin-bottom:20px;
+  transition:background .3s, color .3s;
 }
-.ct-card:hover .ct-card-icon {
-  background: var(--co-gold);
-  color: #fff;
-}
+.ct-card:hover .ct-card-icon { background:var(--gold); color:#fff; }
+
 .ct-card-label {
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  margin-bottom: 10px;
+  font-size:9px; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:8px;
 }
 .ct-card-title {
-  font-family: var(--co-serif);
-  font-size: 22px;
-  font-weight: 400;
-  color: var(--co-ink);
-  margin-bottom: 8px;
+  font-family:var(--serif);
+  font-size:clamp(18px,2.5vw,22px);
+  font-weight:400; color:var(--ink); margin-bottom:6px;
+  line-height:1.25;
 }
 .ct-card-val {
-  font-size: 13px;
-  color: var(--co-muted);
-  line-height: 1.7;
+  font-size:12px; color:var(--muted); line-height:1.7;
 }
-.ct-card-val a {
-  color: inherit;
-  text-decoration: none;
-  transition: color .25s;
-}
-.ct-card-val a:hover { color: var(--co-ink); }
+.ct-card-val a { transition:color .25s; }
+.ct-card-val a:hover { color:var(--ink); }
 
-/* ════════════════════════════════════
-   MAIN CONTENT: FORM + MAP
-════════════════════════════════════ */
-.ct-main-section {
-  padding: 40px 0 100px;
-  background: var(--co-bg);
-}
-.ct-main-wrap {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  gap: 80px;
-  align-items: start;
+/* Tap affordance — mobile tap highlight */
+@media (hover:none) {
+  .ct-card:active { transform:scale(.98); box-shadow:none; }
 }
 
-/* ── FORM ── */
-.ct-section-eye {
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  margin-bottom: 14px;
+/* ══════════════════════════════════════
+   MAIN GRID  (form + sidebar)
+══════════════════════════════════════ */
+.ct-main {
+  padding: 0 var(--pad) var(--s5);
+  background:var(--bg);
 }
-.ct-section-title {
-  font-family: var(--co-serif);
-  font-size: clamp(38px, 5vw, 62px);
-  font-weight: 300;
-  letter-spacing: -.015em;
-  line-height: 1.05;
-  color: var(--co-ink);
-  margin-bottom: 10px;
-}
-.ct-section-sub {
-  font-size: 14px;
-  color: var(--co-muted);
-  margin-bottom: 48px;
-  line-height: 1.7;
-  max-width: 400px;
+.ct-main-inner {
+  max-width:var(--max); margin:0 auto;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:clamp(40px,6vw,80px);
+  align-items:start;
 }
 
-/* Form fields */
-.ct-form { display: flex; flex-direction: column; gap: 0; }
+/* ── section labels ── */
+.eyebrow {
+  font-size:9px; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:12px;
+}
+.section-title {
+  font-family:var(--serif);
+  font-size:clamp(36px,5.5vw,62px);
+  font-weight:300; letter-spacing:-.015em; line-height:1.03;
+  color:var(--ink); margin-bottom:8px;
+}
+.section-sub {
+  font-size:13px; color:var(--muted);
+  line-height:1.75; max-width:390px; margin-bottom:var(--s4);
+}
+
+/* ══════════════════════════════════════
+   FORM
+══════════════════════════════════════ */
+.ct-form { display:flex; flex-direction:column; }
+
 .ct-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 28px;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(16px,3vw,24px); margin-bottom:clamp(20px,3vw,28px);
 }
-.ct-row.full { grid-template-columns: 1fr; }
+.ct-row.single { grid-template-columns:1fr; }
 
-.ct-field {
-  position: relative;
-}
+/* floating label field */
+.ct-field { position:relative; }
+
 .ct-field input,
-.ct-field textarea,
-.ct-field select {
-  width: 100%;
-  background: none;
-  border: none;
-  border-bottom: 1.5px solid rgba(10,9,8,.15);
-  padding: 14px 0 12px;
-  font-family: var(--co-sans);
-  font-size: 14px;
-  color: var(--co-ink);
-  outline: none;
-  transition: border-color .35s;
-  resize: none;
-  -webkit-appearance: none;
-  appearance: none;
-  /* include vendor prefix for older Firefox */
-  -moz-appearance: none;
+.ct-field textarea {
+  width:100%; background:none;
+  border:none; border-bottom:1.5px solid rgba(10,9,8,.14);
+  padding:clamp(12px,2vw,14px) 0 10px;
+  font-size:clamp(13px,2vw,14px); color:var(--ink);
+  outline:none; resize:none;
+  -webkit-appearance:none; appearance:none;
+  /* explicit tap size */
+  min-height:44px;
+  transition:border-color .3s;
 }
-.ct-field textarea { min-height: 120px; }
+.ct-field textarea { min-height:110px; padding-top:14px; }
+
 .ct-field input::placeholder,
-.ct-field textarea::placeholder { color: transparent; }
+.ct-field textarea::placeholder { color:transparent; }
 
 .ct-field label {
-  position: absolute;
-  top: 14px;
-  left: 0;
-  font-size: 13px;
-  color: var(--co-muted);
-  pointer-events: none;
-  transition: all .3s var(--ease-out);
-  letter-spacing: .04em;
+  position:absolute; top:clamp(12px,2vw,14px); left:0;
+  font-size:13px; color:var(--muted);
+  pointer-events:none;
+  transition:all .28s var(--ease);
+  letter-spacing:.03em;
 }
 .ct-field input:focus ~ label,
 .ct-field input:not(:placeholder-shown) ~ label,
 .ct-field textarea:focus ~ label,
 .ct-field textarea:not(:placeholder-shown) ~ label {
-  top: -8px;
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--co-gold);
+  top:-9px; font-size:9px;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold);
 }
-/* Focus gold underline */
+
+/* gold underline on focus */
 .ct-field::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: var(--co-gold);
-  transition: width .4s var(--ease-out);
+  content:""; position:absolute; bottom:0; left:0;
+  width:0; height:1.5px; background:var(--gold);
+  transition:width .38s var(--ease);
 }
-.ct-field:focus-within::after { width: 100%; }
+.ct-field:focus-within::after { width:100%; }
 .ct-field:focus-within input,
-.ct-field:focus-within textarea { border-color: transparent; }
+.ct-field:focus-within textarea { border-color:transparent; }
 
-/* Subject select styling */
-.ct-field select {
-  cursor: pointer;
-  padding-right: 20px;
-}
-.ct-field .ct-select-wrap { position: relative; }
-.ct-field .ct-select-wrap::after {
-  content: "↓";
-  position: absolute;
-  right: 0;
-  top: 14px;
-  font-size: 12px;
-  color: var(--co-muted);
-  pointer-events: none;
-}
-
-/* Submit button */
+/* submit */
 .ct-submit {
-  margin-top: 40px;
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 48px;
-  background: var(--co-ink);
-  color: #faf8f5;
-  border: none;
-  border-radius: 50px;
-  font-family: var(--co-sans);
-  font-size: 11px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform .35s var(--ease-out), background .35s;
-  align-self: flex-start;
+  margin-top:clamp(28px,4vw,40px);
+  align-self:flex-start;
+  display:inline-flex; align-items:center; gap:12px;
+  padding:clamp(15px,2.5vw,18px) clamp(32px,5vw,48px);
+  background:var(--ink); color:var(--white);
+  border:none; border-radius:50px;
+  font-size:clamp(10px,1.8vw,11px); letter-spacing:.26em; text-transform:uppercase;
+  position:relative; overflow:hidden;
+  transition:transform .35s var(--ease), background .35s;
+  /* min tap target */
+  min-height:48px; min-width:48px;
 }
 .ct-submit::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-  transform: translateX(-100%);
-  transition: transform .6s ease;
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+  transform:translateX(-100%); transition:transform .6s ease;
 }
-.ct-submit:hover::before { transform: translateX(100%); }
-.ct-submit:hover { transform: translateY(-3px); background: #1a1815; }
-.ct-submit svg { transition: transform .35s; }
-.ct-submit:hover svg { transform: translateX(4px); }
-.ct-submit:disabled { opacity: .6; cursor: not-allowed; }
+.ct-submit:hover::before { transform:translateX(100%); }
+.ct-submit:hover { transform:translateY(-3px); background:#1a1815; }
+.ct-submit svg { transition:transform .3s; flex-shrink:0; }
+.ct-submit:hover svg { transform:translateX(4px); }
+.ct-submit:disabled { opacity:.6; cursor:not-allowed; }
 
-/* Form success state */
+/* mobile: full-width button */
+@media(max-width:480px) {
+  .ct-submit { width:100%; justify-content:center; }
+}
+
+/* success */
 .ct-success {
-  display: none;
-  padding: 32px;
-  background: rgba(184,149,106,.07);
-  border: 1px solid rgba(184,149,106,.25);
-  border-radius: 2px;
-  text-align: center;
-  margin-top: 20px;
+  display:none; margin-top:20px;
+  padding:28px 24px;
+  background:rgba(184,149,106,.07);
+  border:1px solid rgba(184,149,106,.25);
+  border-radius:3px; text-align:center;
 }
-.ct-success.show { display: block; }
-.ct-success-icon {
-  font-size: 32px;
-  margin-bottom: 14px;
-}
-.ct-success h4 {
-  font-family: var(--co-serif);
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-.ct-success p { font-size: 13px; color: var(--co-muted); }
+.ct-success.show { display:block; }
+.ct-success-icon { font-size:28px; margin-bottom:12px; }
+.ct-success h4 { font-family:var(--serif); font-size:22px; margin-bottom:6px; }
+.ct-success p  { font-size:13px; color:var(--muted); }
 
-/* ── RIGHT COLUMN ── */
-.ct-right-col {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  position: sticky;
-  top: 100px;
+/* ══════════════════════════════════════
+   RIGHT SIDEBAR
+══════════════════════════════════════ */
+.ct-sidebar {
+  display:flex; flex-direction:column; gap:clamp(20px,3vw,28px);
+  position:sticky; top:90px;
 }
 
-/* Map */
-.ct-map-card {
-  border-radius: 2px;
-  overflow: hidden;
-  border: 1px solid var(--co-line);
-  background: #fff;
-}
-.ct-map-card iframe {
-  display: block;
-  width: 100%;
-  height: 260px;
-  border: none;
-}
-.ct-map-footer {
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.ct-map-addr {
-  font-size: 12px;
-  color: var(--co-muted);
-  line-height: 1.6;
-}
-.ct-map-link {
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  white-space: nowrap;
-  border-bottom: 1px solid rgba(184,149,106,.35);
-  padding-bottom: 2px;
-  transition: color .25s, border-color .25s;
-}
-.ct-map-link:hover { color: var(--co-ink); border-color: var(--co-ink); }
-
-/* Social links */
-.ct-social-card {
-  padding: 32px;
-  background: #fff;
-  border: 1px solid var(--co-line);
-  border-radius: 2px;
-}
-.ct-social-title {
-  font-size: 10px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--co-muted);
-  margin-bottom: 20px;
-}
-.ct-socials {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.ct-social-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 10px 18px;
-  border: 1px solid var(--co-line);
-  border-radius: 50px;
-  font-size: 12px;
-  letter-spacing: .1em;
-  color: var(--co-ink);
-  text-decoration: none;
-  transition: all .3s var(--ease-out);
-  background: transparent;
-  cursor: pointer;
-}
-.ct-social-btn:hover {
-  background: var(--co-ink);
-  color: #faf8f5;
-  border-color: var(--co-ink);
-  transform: translateY(-2px);
-}
-.ct-social-btn svg { flex-shrink: 0; }
-
-/* Response promise */
+/* response promise */
 .ct-promise {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 22px 28px;
-  background: linear-gradient(135deg, rgba(184,149,106,.1) 0%, rgba(212,184,150,.05) 100%);
-  border: 1px solid rgba(184,149,106,.2);
-  border-radius: 2px;
+  display:flex; align-items:center; gap:14px;
+  padding:clamp(18px,3vw,22px) clamp(18px,3vw,26px);
+  background:linear-gradient(135deg,rgba(184,149,106,.1),rgba(212,184,150,.04));
+  border:1px solid rgba(184,149,106,.2); border-radius:3px;
 }
 .ct-promise-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(184,149,106,.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--co-gold);
-  flex-shrink: 0;
+  width:38px; height:38px; border-radius:50%;
+  background:rgba(184,149,106,.15);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold); flex-shrink:0;
 }
-.ct-promise-text strong {
-  display: block;
-  font-size: 13px;
-  color: var(--co-ink);
-  margin-bottom: 3px;
-  letter-spacing: .02em;
-}
-.ct-promise-text span {
-  font-size: 12px;
-  color: var(--co-muted);
-}
+.ct-promise-text strong { display:block; font-size:13px; color:var(--ink); margin-bottom:2px; }
+.ct-promise-text span   { font-size:12px; color:var(--muted); }
 
-/* ════════════════════════════════════
-   FAQ SECTION
-════════════════════════════════════ */
-.ct-faq-section {
-  padding: 100px 0;
-  background: var(--co-ink);
+/* map */
+.ct-map-card {
+  border-radius:3px; overflow:hidden;
+  border:1px solid var(--line); background:#fff;
 }
-.ct-faq-wrap {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: grid;
-  grid-template-columns: .8fr 1.2fr;
-  gap: 80px;
-  align-items: start;
+.ct-map-card iframe {
+  display:block; width:100%;
+  height:clamp(200px,28vw,260px); border:none;
 }
-.ct-faq-left {
-  position: sticky;
-  top: 100px;
+.ct-map-footer {
+  padding:18px 22px;
+  display:flex; align-items:center;
+  justify-content:space-between; gap:12px;
 }
-.ct-faq-eye {
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  margin-bottom: 16px;
+.ct-map-addr { font-size:12px; color:var(--muted); line-height:1.6; }
+.ct-map-link {
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gold); white-space:nowrap;
+  border-bottom:1px solid rgba(184,149,106,.35);
+  padding-bottom:2px; transition:color .25s, border-color .25s;
 }
+.ct-map-link:hover { color:var(--ink); border-color:var(--ink); }
+
+/* socials */
+.ct-social-card {
+  padding:clamp(20px,3vw,28px);
+  background:#fff; border:1px solid var(--line); border-radius:3px;
+}
+.ct-social-label {
+  font-size:9px; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:16px;
+}
+.ct-socials { display:flex; gap:10px; flex-wrap:wrap; }
+.ct-social-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:clamp(9px,1.5vw,10px) clamp(14px,2vw,18px);
+  border:1px solid var(--line); border-radius:50px;
+  font-size:12px; letter-spacing:.08em; color:var(--ink);
+  transition:all .28s var(--ease);
+  /* tap target */
+  min-height:40px;
+}
+.ct-social-btn:hover { background:var(--ink); color:var(--white); border-color:var(--ink); transform:translateY(-2px); }
+
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
+.ct-faq {
+  background:var(--ink);
+  padding: var(--s5) var(--pad);
+}
+.ct-faq-inner {
+  max-width:var(--max); margin:0 auto;
+  display:grid; grid-template-columns:.75fr 1.25fr;
+  gap:clamp(40px,6vw,80px); align-items:start;
+}
+.ct-faq-left { position:sticky; top:90px; }
+.ct-faq-eye { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
 .ct-faq-title {
-  font-family: var(--co-serif);
-  font-size: clamp(40px, 5vw, 68px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -.02em;
-  color: #faf8f5;
-  margin-bottom: 20px;
+  font-family:var(--serif);
+  font-size:clamp(38px,6vw,68px); font-weight:300;
+  line-height:.97; letter-spacing:-.02em;
+  color:var(--white); margin-bottom:18px;
 }
-.ct-faq-title em { font-style: italic; color: var(--co-gold-lt); }
-.ct-faq-desc {
-  font-size: 14px;
-  color: rgba(250,248,245,.45);
-  line-height: 1.75;
-  margin-bottom: 36px;
-}
+.ct-faq-title em { font-style:italic; color:var(--gold-lt); }
+.ct-faq-desc { font-size:13px; color:rgba(250,248,245,.42); line-height:1.78; margin-bottom:28px; }
 .ct-faq-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(184,149,106,.3);
-  padding-bottom: 4px;
-  transition: color .25s, border-color .25s;
+  display:inline-flex; align-items:center; gap:9px;
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--gold);
+  border-bottom:1px solid rgba(184,149,106,.3); padding-bottom:4px;
+  transition:color .25s, border-color .25s;
 }
-.ct-faq-cta:hover { color: #faf8f5; border-color: rgba(250,248,245,.4); }
+.ct-faq-cta:hover { color:var(--white); border-color:rgba(250,248,245,.4); }
 
-/* FAQ accordion */
-.ct-faqs { display: flex; flex-direction: column; gap: 0; }
-.ct-faq-item {
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  overflow: hidden;
-}
-.ct-faq-item:first-child { border-top: 1px solid rgba(255,255,255,.07); }
+/* accordion */
+.ct-faqs { display:flex; flex-direction:column; }
+.ct-faq-item { border-bottom:1px solid rgba(255,255,255,.07); }
+.ct-faq-item:first-child { border-top:1px solid rgba(255,255,255,.07); }
+
 .ct-faq-q {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 26px 0;
-  cursor: pointer;
-  gap: 20px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:clamp(20px,3vw,26px) 0; cursor:pointer; gap:16px;
+  /* large tap target */
+  min-height:60px;
 }
 .ct-faq-q-text {
-  font-family: var(--co-serif);
-  font-size: 20px;
-  font-weight: 400;
-  color: rgba(250,248,245,.85);
-  transition: color .3s;
-  line-height: 1.2;
+  font-family:var(--serif);
+  font-size:clamp(17px,2.8vw,20px); font-weight:400;
+  color:rgba(250,248,245,.8); line-height:1.25;
+  transition:color .28s;
 }
-.ct-faq-item.open .ct-faq-q-text { color: #faf8f5; }
+.ct-faq-item.open .ct-faq-q-text { color:var(--white); }
+
 .ct-faq-toggle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,.4);
-  flex-shrink: 0;
-  transition: all .35s;
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.4); flex-shrink:0;
+  transition:all .3s;
 }
 .ct-faq-item.open .ct-faq-toggle {
-  background: var(--co-gold);
-  border-color: var(--co-gold);
-  color: #fff;
-  transform: rotate(45deg);
+  background:var(--gold); border-color:var(--gold); color:#fff;
+  transform:rotate(45deg);
 }
-.ct-faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .5s var(--ease-out);
-}
-.ct-faq-item.open .ct-faq-a { max-height: 300px; }
+.ct-faq-a { max-height:0; overflow:hidden; transition:max-height .45s var(--ease); }
+.ct-faq-item.open .ct-faq-a { max-height:260px; }
 .ct-faq-a-inner {
-  padding: 0 0 26px;
-  font-size: 14px;
-  color: rgba(250,248,245,.45);
-  line-height: 1.8;
+  padding:0 0 clamp(18px,3vw,26px);
+  font-size:clamp(12px,2vw,14px); color:rgba(250,248,245,.42); line-height:1.8;
 }
 
-/* ════════════════════════════════════
-   BOTTOM CTA BANNER
-════════════════════════════════════ */
-.ct-cta-section {
-  padding: 120px 0;
-  background: var(--co-bg);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+/* ══════════════════════════════════════
+   BOTTOM CTA
+══════════════════════════════════════ */
+.ct-cta {
+  padding: var(--s5) var(--pad);
+  background:var(--bg); text-align:center;
+  position:relative; overflow:hidden;
 }
-.ct-cta-section::before {
-  content: "SHENOVA";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  font-family: var(--co-serif);
-  font-size: clamp(80px, 16vw, 220px);
-  font-weight: 300;
-  color: rgba(10,9,8,.03);
-  letter-spacing: .1em;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
+.ct-cta::before {
+  content:"SHENOVA"; pointer-events:none; user-select:none;
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-family:var(--serif);
+  font-size:clamp(60px,14vw,200px); font-weight:300;
+  color:rgba(10,9,8,.03); letter-spacing:.1em; white-space:nowrap;
 }
-.ct-cta-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-.ct-cta-eye {
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--co-gold);
-  margin-bottom: 20px;
-}
+.ct-cta-inner { position:relative; z-index:1; max-width:660px; margin:0 auto; }
+.ct-cta-eye { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
 .ct-cta-title {
-  font-family: var(--co-serif);
-  font-size: clamp(44px, 6vw, 80px);
-  font-weight: 300;
-  letter-spacing: -.02em;
-  line-height: 1;
-  color: var(--co-ink);
-  margin-bottom: 20px;
+  font-family:var(--serif);
+  font-size:clamp(42px,7vw,82px); font-weight:300;
+  letter-spacing:-.02em; line-height:.97;
+  color:var(--ink); margin-bottom:18px;
 }
-.ct-cta-title em { font-style: italic; color: var(--co-gold); }
-.ct-cta-sub {
-  font-size: 14px;
-  color: var(--co-muted);
-  margin-bottom: 44px;
-  line-height: 1.7;
-}
-.ct-cta-btns {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.ct-btn-dark {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 17px 42px;
-  background: var(--co-ink);
-  color: #faf8f5;
-  border: 1px solid var(--co-ink);
-  border-radius: 50px;
-  font-family: var(--co-sans);
-  font-size: 11px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all .35s var(--ease-out);
-  cursor: pointer;
-}
-.ct-btn-dark:hover { transform: translateY(-3px); background: #1a1815; }
-.ct-btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 17px 42px;
-  background: transparent;
-  color: var(--co-ink);
-  border: 1px solid rgba(10,9,8,.2);
-  border-radius: 50px;
-  font-family: var(--co-sans);
-  font-size: 11px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all .35s var(--ease-out);
-  cursor: pointer;
-}
-.ct-btn-ghost:hover { border-color: var(--co-ink); transform: translateY(-3px); }
+.ct-cta-title em { font-style:italic; color:var(--gold); }
+.ct-cta-sub { font-size:13px; color:var(--muted); line-height:1.72; margin-bottom:var(--s3); }
+.ct-cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 
-/* ════════════════════════════════════
+.btn-dark, .btn-ghost {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:clamp(14px,2.5vw,17px) clamp(28px,5vw,42px);
+  border-radius:50px;
+  font-size:clamp(10px,1.8vw,11px); letter-spacing:.24em; text-transform:uppercase;
+  transition:all .35s var(--ease);
+  min-height:48px;
+}
+.btn-dark { background:var(--ink); color:var(--white); border:1px solid var(--ink); }
+.btn-dark:hover { background:#1a1815; transform:translateY(-3px); }
+.btn-ghost { background:transparent; color:var(--ink); border:1px solid rgba(10,9,8,.2); }
+.btn-ghost:hover { border-color:var(--ink); transform:translateY(-3px); }
+
+/* ══════════════════════════════════════
+   REVEAL UTILITY
+══════════════════════════════════════ */
+[data-reveal] {
+  opacity:0; transform:translateY(26px);
+  transition:opacity .75s var(--ease), transform .75s var(--ease);
+}
+[data-reveal].visible { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════════════
    KEYFRAMES
-════════════════════════════════════ */
-@keyframes ctFadeUp {
-  to { opacity: 1; transform: translateY(0); }
+══════════════════════════════════════ */
+@keyframes fadeUp {
+  to { opacity:1; transform:translateY(0); }
 }
 
-/* ════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════ */
-@media (max-width: 1100px) {
-  .ct-main-wrap { grid-template-columns: 1fr; gap: 60px; }
-  .ct-faq-wrap { grid-template-columns: 1fr; gap: 48px; }
-  .ct-right-col { position: static; }
-  .ct-faq-left { position: static; }
+/* ══════════════════════════════════════
+   ★  RESPONSIVE  ★
+══════════════════════════════════════ */
+
+/* --- Tablet (≤1024px) --- */
+@media(max-width:1024px) {
+  .ct-main-inner   { grid-template-columns:1fr; gap:48px; }
+  .ct-faq-inner    { grid-template-columns:1fr; gap:36px; }
+  .ct-sidebar      { position:static; }
+  .ct-faq-left     { position:static; }
+  .section-sub     { max-width:100%; }
+  .ct-ribbon-inner { grid-template-columns:1fr; gap:12px; }
+  /* Horizontal scroll ribbon on tablet - more visual variety */
+  .ct-ribbon-inner {
+    grid-template-columns:repeat(3,1fr);
+  }
 }
-@media (max-width: 768px) {
-  .ct-hero { padding: 140px 0 80px; }
-  .ct-hero-inner { padding: 0 24px; }
-  .ct-cards-wrap, .ct-main-wrap, .ct-faq-wrap, .ct-cta-inner { padding-left: 24px; padding-right: 24px; }
-  .ct-cards { grid-template-columns: 1fr; gap: 16px; }
-  .ct-row { grid-template-columns: 1fr; }
-  .ct-hero-trust { gap: 20px; }
-  .ct-faq-wrap { padding: 0 24px; }
-  .ct-card { padding: 32px 24px; }
-  .ct-social-card, .ct-promise { padding: 24px 20px; }
-  .ct-main-section { padding: 40px 0 80px; }
-  .ct-cta-section { padding: 80px 0; }
+
+/* --- Mobile (≤768px) --- */
+@media(max-width:768px) {
+  /* Cards: single column */
+  .ct-ribbon-inner  { grid-template-columns:1fr; }
+  .ct-card          { padding:24px 20px; }
+
+  /* Form: single column rows */
+  .ct-row           { grid-template-columns:1fr; gap:0; margin-bottom:20px; }
+
+  /* Promise block */
+  .ct-promise       { padding:16px 18px; gap:12px; }
+
+  /* Map slightly shorter */
+  .ct-map-card iframe { height:180px; }
+
+  /* Socials wrap nicely */
+  .ct-socials       { gap:8px; }
+  .ct-social-btn    { font-size:11px; }
+
+  /* CTA buttons vertical */
+  .ct-cta-btns      { flex-direction:column; align-items:center; }
+  .btn-dark,.btn-ghost { width:100%; max-width:300px; justify-content:center; }
+
+  /* Watermark — tone down on mobile */
+  .ct-hero-wm       { display:none; }
+
+  /* Hero trust — smaller text already handled via clamp */
+  .ct-hero-trust    { gap:14px; }
+
+  /* FAQ accordion bigger tap area already via min-height */
 }
-@media (max-width: 480px) {
-  .ct-hero-title { font-size: 58px; }
-  .ct-cta-btns { flex-direction: column; align-items: center; }
+
+/* --- Small mobile (≤400px) --- */
+@media(max-width:400px) {
+  .ct-hero-title  { font-size:clamp(48px,14vw,60px); }
+  .ct-faq-title   { font-size:clamp(34px,11vw,44px); }
+  .ct-cta-title   { font-size:clamp(38px,12vw,50px); }
+}
+
+/* ══════════════════════════════════════
+   SAFE-AREA INSETS  (notch / home bar)
+══════════════════════════════════════ */
+@supports(padding:max(0px)) {
+  .ct-hero   { padding-left:max(var(--pad), env(safe-area-inset-left)); padding-right:max(var(--pad), env(safe-area-inset-right)); }
+  .ct-ribbon,
+  .ct-main,
+  .ct-faq,
+  .ct-cta    { padding-left:max(var(--pad), env(safe-area-inset-left)); padding-right:max(var(--pad), env(safe-area-inset-right)); }
 }
 </style>
 </head>
 
-<body class="contact-page">
+<body>
 
-<!-- ═══════════════════════════════
-     NAV (unchanged — main.js hooks)
-═══════════════════════════════ -->
+<!-- NAV -->
 <nav class="nav scrolled">
   <div class="container nav-inner">
     <a class="nav-logo" href="index.html">SHENOVA</a>
@@ -827,7 +620,6 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     </div>
   </div>
 </nav>
-
 <div class="mobile-menu">
   <a href="index.html">Home</a>
   <a href="shop.html">Shop</a>
@@ -835,96 +627,80 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   <a href="contact.html">Contact</a>
 </div>
 
-<!-- ═══════════════════════════════
-     HERO BANNER
-═══════════════════════════════ -->
+<!-- ═══════════ HERO ═══════════ -->
 <section class="ct-hero">
-  <div class="ct-hero-wm">Contact</div>
+  <div class="ct-hero-wm" aria-hidden="true">Contact</div>
   <div class="ct-hero-inner">
     <div class="ct-hero-eye">Shenova · Customer Care</div>
     <h1 class="ct-hero-title">Let's <em>talk.</em></h1>
-    <p class="ct-hero-sub">We'd love to hear from you. Whether it's a question about an order, styling advice, or a collaboration — we're here.</p>
-    <div class="ct-hero-trust">
+    <p class="ct-hero-sub">Whether it's a question about an order, styling advice, or a collaboration — we're here for you.</p>
+    <div class="ct-hero-trust" aria-label="Trust indicators">
       <div class="ct-trust-item">
-        <div class="ct-trust-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="ct-trust-icon" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        Response within 24 hours
+        <span>Response within 24 hrs</span>
       </div>
       <div class="ct-trust-item">
-        <div class="ct-trust-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="ct-trust-icon" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        Secure & Confidential
+        <span>Secure &amp; Confidential</span>
       </div>
       <div class="ct-trust-item">
-        <div class="ct-trust-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div class="ct-trust-icon" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        Free Returns · 14 Days
+        <span>Free Returns · 14 Days</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     CONTACT INFO CARDS
-═══════════════════════════════ -->
-<section class="ct-cards-section">
-  <div class="ct-cards-wrap">
-    <div class="ct-cards">
+<!-- ═══════════ INFO CARDS ═══════════ -->
+<section class="ct-ribbon" aria-label="Contact information">
+  <div class="ct-ribbon-inner">
 
-      <!-- Email -->
-      <div class="ct-card" data-reveal>
-        <div class="ct-card-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        </div>
-        <div class="ct-card-label">Email Us</div>
-        <div class="ct-card-title">shenovaofficial<br>@gmail.com</div>
-        <div class="ct-card-val">
-          <a href="mailto:shenovaofficial@gmail.com">Send a message →</a>
-        </div>
+    <div class="ct-card" data-reveal>
+      <div class="ct-card-icon" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </div>
-
-      <!-- Phone -->
-      <div class="ct-card" data-reveal style="transition-delay:.1s">
-        <div class="ct-card-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 6 6l1.09-.89a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="ct-card-label">Call Us</div>
-        <div class="ct-card-title">+91 70417<br>02391</div>
-        <div class="ct-card-val">
-          <a href="tel:+917041702391">Mon – Sat, 10am – 7pm IST</a>
-        </div>
-      </div>
-
-      <!-- Location -->
-      <div class="ct-card" data-reveal style="transition-delay:.2s">
-        <div class="ct-card-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <div class="ct-card-label">Visit Us</div>
-        <div class="ct-card-title">Sarigam,<br>Gujarat</div>
-        <div class="ct-card-val">396155 · India</div>
-      </div>
-
+      <div class="ct-card-label">Email Us</div>
+      <div class="ct-card-title">shenovaofficial<br>@gmail.com</div>
+      <div class="ct-card-val"><a href="mailto:shenovaofficial@gmail.com">Send a message →</a></div>
     </div>
+
+    <div class="ct-card" data-reveal style="transition-delay:.08s">
+      <div class="ct-card-icon" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 6 6l1.09-.89a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div class="ct-card-label">Call Us</div>
+      <div class="ct-card-title">+91 70417<br>02391</div>
+      <div class="ct-card-val"><a href="tel:+917041702391">Mon – Sat, 10am – 7pm IST</a></div>
+    </div>
+
+    <div class="ct-card" data-reveal style="transition-delay:.16s">
+      <div class="ct-card-icon" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="ct-card-label">Visit Us</div>
+      <div class="ct-card-title">Sarigam,<br>Gujarat</div>
+      <div class="ct-card-val">396155 · India</div>
+    </div>
+
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     FORM + MAP
-═══════════════════════════════ -->
-<section class="ct-main-section">
-  <div class="ct-main-wrap">
+<!-- ═══════════ FORM + SIDEBAR ═══════════ -->
+<section class="ct-main" aria-labelledby="form-heading">
+  <div class="ct-main-inner">
 
-    <!-- FORM COLUMN -->
-    <div class="ct-form-col" data-reveal>
-      <div class="ct-section-eye">Send a Message</div>
-      <h2 class="ct-section-title">We'd love<br>to hear<br><em style="font-style:italic;color:var(--co-gold)">from you.</em></h2>
-      <p class="ct-section-sub">Fill in the form and our team will get back to you within 24 hours.</p>
+    <!-- FORM -->
+    <div data-reveal>
+      <div class="eyebrow">Send a Message</div>
+      <h2 class="section-title" id="form-heading">We'd love<br>to hear<br><em style="font-style:italic;color:var(--gold)">from you.</em></h2>
+      <p class="section-sub">Fill in the form and our team will get back to you within 24 hours.</p>
 
-      <!-- ✅ BACKEND INTACT — same id, name attrs, same API call in main.js -->
       <form id="contact-form" class="ct-form" novalidate>
 
         <div class="ct-row">
@@ -938,169 +714,154 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
           </div>
         </div>
 
-        <div class="ct-row full">
+        <div class="ct-row single">
           <div class="ct-field">
             <input type="text" name="subject" id="ct-subject" placeholder=" " autocomplete="off">
             <label for="ct-subject">Subject</label>
           </div>
         </div>
 
-        <div class="ct-row full">
+        <div class="ct-row single">
           <div class="ct-field">
             <textarea name="message" id="ct-message" placeholder=" " rows="6" required></textarea>
             <label for="ct-message">Your Message</label>
           </div>
         </div>
 
-        <button type="submit" class="ct-submit">
+        <button type="submit" class="ct-submit" aria-label="Send message">
           <span>Send Message</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
 
       </form>
 
-      <!-- Success state (shown by JS) -->
-      <div class="ct-success" id="ct-success">
-        <div class="ct-success-icon">✦</div>
+      <div class="ct-success" id="ct-success" role="status" aria-live="polite">
+        <div class="ct-success-icon" aria-hidden="true">✦</div>
         <h4>Message Sent</h4>
         <p>Thank you for reaching out. We'll be in touch within 24 hours.</p>
       </div>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="ct-right-col">
+    <!-- SIDEBAR -->
+    <aside class="ct-sidebar">
 
-      <!-- Response promise -->
       <div class="ct-promise" data-reveal>
-        <div class="ct-promise-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="ct-promise-icon" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
         <div class="ct-promise-text">
           <strong>Response within 24 hours</strong>
-          <span>Our team is available Mon–Sat, 10am–7pm IST</span>
+          <span>Mon–Sat, 10am–7pm IST</span>
         </div>
       </div>
 
-      <!-- Map -->
       <div class="ct-map-card" data-reveal>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27092.209996141166!2d72.83482393687524!3d20.29060724836419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0d3078e3a43cd%3A0x6eb0adc6577f3441!2sSarigam%2C%20Gujarat!5e1!3m2!1sen!2sin!4v1778068588539!5m2!1sen!2sin"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Shenova Studio Location"
-        ></iframe>
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Shenova Studio Location">
+        </iframe>
         <div class="ct-map-footer">
-          <div class="ct-map-addr">Sarigam, Gujarat · 396155<br>India</div>
-          <a
-            class="ct-map-link"
-            href="https://maps.google.com/?q=Sarigam,Gujarat"
-            target="_blank"
-            rel="noopener"
-          >Open in Maps →</a>
+          <address class="ct-map-addr" style="font-style:normal">Sarigam, Gujarat · 396155<br>India</address>
+          <a class="ct-map-link" href="https://maps.google.com/?q=Sarigam,Gujarat" target="_blank" rel="noopener noreferrer">Open in Maps →</a>
         </div>
       </div>
 
-      <!-- Social links -->
       <div class="ct-social-card" data-reveal>
-        <div class="ct-social-title">Follow Shenova</div>
+        <div class="ct-social-label">Follow Shenova</div>
         <div class="ct-socials">
-          <a class="ct-social-btn" href="https://www.instagram.com/shenova.official" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          <a class="ct-social-btn" href="https://www.instagram.com/shenova.official" target="_blank" rel="noopener noreferrer" aria-label="Shenova on Instagram">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
             Instagram
           </a>
-          <a class="ct-social-btn" href="https://wa.me/917041702391" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <a class="ct-social-btn" href="https://wa.me/917041702391" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             WhatsApp
           </a>
-          <a class="ct-social-btn" href="mailto:shenovaofficial@gmail.com">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a class="ct-social-btn" href="mailto:shenovaofficial@gmail.com" aria-label="Email Shenova">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Email
           </a>
         </div>
       </div>
 
-    </div>
-    <!-- end right col -->
-
+    </aside>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     FAQ SECTION
-═══════════════════════════════ -->
-<section class="ct-faq-section">
-  <div class="ct-faq-wrap">
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="ct-faq" aria-labelledby="faq-heading">
+  <div class="ct-faq-inner">
 
-    <div class="ct-faq-left" data-reveal-dark>
+    <div class="ct-faq-left" data-reveal>
       <div class="ct-faq-eye">Support</div>
-      <h2 class="ct-faq-title">Common<br><em>questions.</em></h2>
+      <h2 class="ct-faq-title" id="faq-heading">Common<br><em>questions.</em></h2>
       <p class="ct-faq-desc">Can't find the answer below? Our team is always happy to help directly.</p>
       <a href="mailto:shenovaofficial@gmail.com" class="ct-faq-cta">
         Email Support
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
 
-    <div class="ct-faqs" data-reveal-dark>
+    <div class="ct-faqs" data-reveal role="list">
 
-      <div class="ct-faq-item">
-        <div class="ct-faq-q">
+      <div class="ct-faq-item" role="listitem">
+        <button class="ct-faq-q" aria-expanded="false">
           <span class="ct-faq-q-text">How long does delivery take?</span>
-          <div class="ct-faq-toggle">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="ct-faq-toggle" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-        </div>
-        <div class="ct-faq-a">
+        </button>
+        <div class="ct-faq-a" role="region">
           <div class="ct-faq-a-inner">Standard delivery takes 5–7 business days across India. Express delivery (2–3 days) is available at checkout for select pin codes. All orders above ₹2,000 ship for free.</div>
         </div>
       </div>
 
-      <div class="ct-faq-item">
-        <div class="ct-faq-q">
+      <div class="ct-faq-item" role="listitem">
+        <button class="ct-faq-q" aria-expanded="false">
           <span class="ct-faq-q-text">What is the return and exchange policy?</span>
-          <div class="ct-faq-toggle">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="ct-faq-toggle" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-        </div>
-        <div class="ct-faq-a">
-          <div class="ct-faq-a-inner">We accept returns within 14 days of delivery. Items must be unworn, unwashed, and in original packaging with tags attached. To initiate a return, email us at shenovaofficial@gmail.com with your order number.</div>
+        </button>
+        <div class="ct-faq-a" role="region">
+          <div class="ct-faq-a-inner">We accept returns within 14 days of delivery. Items must be unworn, unwashed, and in original packaging with tags attached. To initiate a return, email us with your order number.</div>
         </div>
       </div>
 
-      <div class="ct-faq-item">
-        <div class="ct-faq-q">
+      <div class="ct-faq-item" role="listitem">
+        <button class="ct-faq-q" aria-expanded="false">
           <span class="ct-faq-q-text">How do I track my order?</span>
-          <div class="ct-faq-toggle">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="ct-faq-toggle" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-        </div>
-        <div class="ct-faq-a">
+        </button>
+        <div class="ct-faq-a" role="region">
           <div class="ct-faq-a-inner">Once your order ships, you'll receive a confirmation email with a tracking link. You can also WhatsApp us at +91 70417 02391 with your order number for real-time updates.</div>
         </div>
       </div>
 
-      <div class="ct-faq-item">
-        <div class="ct-faq-q">
+      <div class="ct-faq-item" role="listitem">
+        <button class="ct-faq-q" aria-expanded="false">
           <span class="ct-faq-q-text">Can I modify or cancel my order?</span>
-          <div class="ct-faq-toggle">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="ct-faq-toggle" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-        </div>
-        <div class="ct-faq-a">
-          <div class="ct-faq-a-inner">Orders can be modified or cancelled within 2 hours of placement. After that, the order enters our fulfilment process and cannot be changed. Please contact us immediately if you need to make any changes.</div>
+        </button>
+        <div class="ct-faq-a" role="region">
+          <div class="ct-faq-a-inner">Orders can be modified or cancelled within 2 hours of placement. After that, the order enters our fulfilment process. Please contact us immediately if you need to make changes.</div>
         </div>
       </div>
 
-      <div class="ct-faq-item">
-        <div class="ct-faq-q">
+      <div class="ct-faq-item" role="listitem">
+        <button class="ct-faq-q" aria-expanded="false">
           <span class="ct-faq-q-text">Do you offer custom sizing or alterations?</span>
-          <div class="ct-faq-toggle">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="ct-faq-toggle" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
-        </div>
-        <div class="ct-faq-a">
-          <div class="ct-faq-a-inner">We currently offer standard sizes as listed on each product page. For bespoke or alteration inquiries, please email us directly and our team will be happy to discuss options for you.</div>
+        </button>
+        <div class="ct-faq-a" role="region">
+          <div class="ct-faq-a-inner">We currently offer standard sizes as listed on each product page. For bespoke or alteration inquiries, please email us directly and our team will be happy to discuss options.</div>
         </div>
       </div>
 
@@ -1108,29 +869,23 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     BOTTOM CTA
-═══════════════════════════════ -->
-<section class="ct-cta-section">
+<!-- ═══════════ CTA ═══════════ -->
+<section class="ct-cta" aria-labelledby="cta-heading">
   <div class="ct-cta-inner" data-reveal>
     <div class="ct-cta-eye">Ready to Shop?</div>
-    <h2 class="ct-cta-title">Discover the<br><em>Collection.</em></h2>
+    <h2 class="ct-cta-title" id="cta-heading">Discover the<br><em>Collection.</em></h2>
     <p class="ct-cta-sub">Thoughtfully crafted luxury fashion — designed for those who move with intention.</p>
     <div class="ct-cta-btns">
-      <a href="shop.html" class="ct-btn-dark">
+      <a href="shop.html" class="btn-dark">
         Browse Collection
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="mailto:shenovaofficial@gmail.com" class="ct-btn-ghost">
-        Email Directly
-      </a>
+      <a href="mailto:shenovaofficial@gmail.com" class="btn-ghost">Email Directly</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     FOOTER
-═══════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="foot-bottom" style="border:none;margin-top:80px">
@@ -1139,32 +894,28 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   </div>
 </footer>
 
-<!-- CART DRAWER (unchanged — main.js hooks) -->
+<!-- CART DRAWER -->
 <div class="drawer-overlay" onclick="closeCart()"></div>
 <aside class="drawer">
   <div class="drawer-head">
     <h3>Your Bag</h3>
-    <button onclick="closeCart()" style="font-size:22px">×</button>
+    <button onclick="closeCart()" style="font-size:22px" aria-label="Close cart">×</button>
   </div>
   <div class="drawer-body"></div>
   <div class="drawer-foot">
-    <div class="total">
-      <span>Total</span>
-      <span>₹0</span>
-    </div>
+    <div class="total"><span>Total</span><span>₹0</span></div>
     <a class="btn" href="checkout.html">Checkout</a>
   </div>
 </aside>
 
 <div class="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card">
-    <h3></h3>
-    <p></p>
+    <h3></h3><p></p>
     <button class="btn" onclick="closeModal()">OK</button>
   </div>
 </div>
 
-<!-- SCRIPTS (load order preserved) -->
+<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/config.js"></script>
@@ -1172,84 +923,61 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 
 <script>
 /* ── SCROLL REVEAL ── */
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('visible');
-    revealObserver.unobserve(entry.target);
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    observer.unobserve(e.target);
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-document.querySelectorAll('[data-reveal]').forEach((el, i) => {
-  el.style.transitionDelay = el.style.transitionDelay || (i % 3 * 0.1) + 's';
-  revealObserver.observe(el);
-});
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 
-/* ── DARK SECTION REVEAL (FAQ) ── */
-const darkRevealObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.style.opacity = '1';
-    entry.target.style.transform = 'translateY(0)';
-    darkRevealObserver.unobserve(entry.target);
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('[data-reveal-dark]').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'opacity .8s cubic-bezier(.19,1,.22,1), transform .8s cubic-bezier(.19,1,.22,1)';
-  darkRevealObserver.observe(el);
-});
-
-/* ── FAQ ACCORDION ── */
-document.querySelectorAll('.ct-faq-q').forEach(q => {
-  q.addEventListener('click', () => {
-    const item = q.closest('.ct-faq-item');
+/* ── FAQ ACCORDION (button-based for a11y) ── */
+document.querySelectorAll('.ct-faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item   = btn.closest('.ct-faq-item');
     const isOpen = item.classList.contains('open');
-    // Close all
-    document.querySelectorAll('.ct-faq-item').forEach(i => i.classList.remove('open'));
-    // Open clicked (if it was closed)
-    if (!isOpen) item.classList.add('open');
+    document.querySelectorAll('.ct-faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.ct-faq-q').setAttribute('aria-expanded','false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+    }
   });
 });
 
-/* ── CONTACT FORM — preserves original backend API from main.js ──
-   main.js already listens on #contact-form submit and calls /api/contact.
-   We enhance only the UI: loading state + success panel. ── */
-(function enhanceContactForm() {
+/* ── CONTACT FORM ENHANCEMENT ── */
+(function() {
   const form    = document.getElementById('contact-form');
   const success = document.getElementById('ct-success');
   const submit  = form?.querySelector('.ct-submit');
   if (!form || !submit) return;
 
-  // Intercept BEFORE main.js fires (capture phase)
-  // We only touch the button state; actual submission is handled by main.js
   form.addEventListener('submit', () => {
     submit.disabled = true;
     submit.querySelector('span').textContent = 'Sending…';
-  }, true); // capture = true, fires before main.js bubble listener
+  }, true);
 
-  // Patch alert so we can show success panel instead of raw browser alert
-  const _origAlert = window.alert.bind(window);
+  const _alert = window.alert.bind(window);
   window.alert = function(msg) {
     if (typeof msg === 'string' && msg.includes('sent')) {
-      // Restore button
       submit.disabled = false;
       submit.querySelector('span').textContent = 'Send Message';
-      // Show inline success
       form.style.display = 'none';
-      if (success) success.classList.add('show');
-    } else if (typeof msg === 'string' && msg.includes('Error')) {
+      success?.classList.add('show');
+      success?.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    } else if (typeof msg === 'string' && msg.toLowerCase().includes('error')) {
       submit.disabled = false;
       submit.querySelector('span').textContent = 'Send Message';
-      _origAlert(msg);
+      _alert(msg);
     } else {
-      _origAlert(msg);
+      _alert(msg);
     }
   };
 })();
 </script>
-
 </body>
 </html>
