@@ -146,6 +146,40 @@ app.get('/api/stories', async (req, res) => {
   }
 
 });
+// ================= UPLOAD STORY =================
+
+app.post('/api/stories', async (req, res) => {
+
+  try {
+
+    const newStory = {
+      caption: req.body.caption || '',
+      ctaText: req.body.ctaText || '',
+      ctaLink: req.body.ctaLink || '',
+      mediaUrl: req.body.mediaUrl || '',
+      createdAt: new Date(),
+    };
+
+    await mongoose.connection.db
+      .collection('stories')
+      .insertOne(newStory);
+
+    res.json({
+      success: true,
+      message: 'Story uploaded',
+      story: newStory
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
 // ================= PRODUCTS =================
 
 app.get('/api/products', async (req, res) => {
