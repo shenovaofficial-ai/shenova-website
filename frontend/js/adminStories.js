@@ -143,9 +143,9 @@
     e.preventDefault();
     const form    = e.target;
     const fileIn  = form.querySelector('#storyFileInput');
-    const caption = form.querySelector('#storyCaption').value.trim();
-    const ctaText = form.querySelector('#storyCtaText').value.trim();
-    const ctaLink = form.querySelector('#storyCtaLink').value.trim();
+    const caption = form.querySelector('#storyAdminCaption').value.trim();
+    const ctaText = form.querySelector('#storyAdminCtaText').value.trim();
+    const ctaLink = form.querySelector('#storyAdminCtaLink').value.trim();
 
     if (!fileIn.files.length) {
       toast('Please select an image or video file.', 'error');

@@ -1364,20 +1364,19 @@ select{
         Messages
       </a>
     </div>
+    <div class="nav-section">
+      <span class="nav-label">Content</span>
+      <a onclick="showSection('stories')" id="nav-stories">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Stories
+        <span class="badge-count" id="side-story-count">—</span>
+      </a>
+    </div>
   </nav>
-<!-- ★ NEW — paste inside .side-nav, after the Messages nav-section -->
-<div class="nav-section">
-  <span class="nav-label">Content</span>
-  <a onclick="showSection('stories')" id="nav-stories">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10"/>
-      <circle cx="12" cy="12" r="3"/>
-    </svg>
-    Stories
-    <span class="badge-count" id="side-story-count">—</span>
-  </a>
-</div>
- 
+
   <div class="side-foot">
     <a onclick="logout()">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1764,7 +1763,7 @@ select{
             <label class="field-label">Caption <span style="color:var(--muted);font-weight:300">(optional)</span></label>
             <input
               type="text"
-              id="storyCaption"
+              id="storyAdminCaption"
               name="caption"
               placeholder="e.g. New Autumn Edit — Limited Pieces"
               maxlength="220"
@@ -1775,7 +1774,7 @@ select{
             <label class="field-label">CTA Button Text</label>
             <input
               type="text"
-              id="storyCtaText"
+              id="storyAdminCtaText"
               name="ctaText"
               placeholder="e.g. Shop Now"
               maxlength="60"
@@ -1786,7 +1785,7 @@ select{
             <label class="field-label">CTA Link URL</label>
             <input
               type="url"
-              id="storyCtaLink"
+              id="storyAdminCtaLink"
               name="ctaLink"
               placeholder="https://shenova.in/shop"
               style="margin-top:6px">
