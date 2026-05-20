@@ -966,3 +966,49 @@
   }
 
 }
+/* FORCE MOBILE HAMBURGER */
+
+@media(max-width:768px){
+
+  button[aria-label="Menu"],
+  .menu-btn,
+  .menu-toggle,
+  .hamburger,
+  .hamburger-menu,
+  .mobile-menu-btn,
+  .nav-toggle,
+  .toggle-menu,
+  .mobile-toggle{
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    width:42px !important;
+    height:42px !important;
+
+    position:relative !important;
+    z-index:999999 !important;
+  }
+
+  /* 3 lines create manually if hidden */
+
+  .menu-toggle::before,
+  .menu-toggle::after,
+  .hamburger::before,
+  .hamburger::after{
+
+    content:'' !important;
+
+    position:absolute !important;
+
+    width:18px !important;
+    height:2px !important;
+
+    background:#fff !important;
+  }
+
+}
