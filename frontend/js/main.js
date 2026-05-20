@@ -139,11 +139,28 @@ async function loadFeatured(retries = 3){
   if (!wrap) return;
 
   // Luxury loading state
-  wrap.innerHTML = `
-    <div class="luxury-loading">
-      Curating our latest collection...
+// Skeleton loading state
+wrap.innerHTML = `
+
+<div class="skeleton-grid">
+
+  ${Array(4).fill().map(()=>`
+
+    <div class="skeleton-card">
+
+      <div class="skeleton-image"></div>
+
+      <div class="skeleton-text"></div>
+
+      <div class="skeleton-price"></div>
+
     </div>
-  `;
+
+  `).join('')}
+
+</div>
+
+`;
 
   try{
 
