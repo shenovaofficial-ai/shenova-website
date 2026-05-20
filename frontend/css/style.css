@@ -3376,3 +3376,11 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
   border-radius:18px;
   display:block;
 }
+.luxury-loading{
+    padding:40px;
+    text-align:center;
+    font-size:14px;
+    letter-spacing:2px;
+    color:#8a7d6b;
+    font-family:serif;
+}

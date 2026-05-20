@@ -132,19 +132,53 @@ window.removeItem = (i) => {
 };
 
 // ================= PRODUCTS =================
-async function loadFeatured(){
+async function loadFeatured(retries = 3){
+
   const wrap = document.querySelector('#featured-grid');
+
   if (!wrap) return;
 
+  // Luxury loading state
+  wrap.innerHTML = `
+    <div class="luxury-loading">
+      Curating our latest collection...
+    </div>
+  `;
+
   try{
-    const products = await fetch(API + '/products').then(r => r.json());
+
+    const res = await fetch(API + '/products');
+
+    if(!res.ok){
+      throw new Error("Failed");
+    }
+
+    const products = await res.json();
 
     wrap.innerHTML = products
-  .slice(0, 4)
-  .map(p => productCard(p))
-  .join('');
-  }catch{
-    wrap.innerHTML = "<p>Failed to load products</p>";
+      .slice(0, 4)
+      .map(p => productCard(p))
+      .join('');
+
+  }catch(err){
+
+    console.log("Retrying product fetch...");
+
+    if(retries > 0){
+
+      setTimeout(() => {
+        loadFeatured(retries - 1);
+      }, 2000);
+
+    }else{
+
+      // Customer ko ugly error mat dikha
+      wrap.innerHTML = `
+        <div class="luxury-loading">
+          Our collection is loading...
+        </div>
+      `;
+    }
   }
 }
 
