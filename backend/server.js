@@ -10,7 +10,6 @@ const storyRoutes = require('./routes/storyRoutes');
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api/stories', storyRoutes);
 // ================= MODELS =================
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -371,7 +370,7 @@ app.use('/api/payment', paymentRoutes);
 // ⚠️ MUST be before app.listen — registered with all other routes
 
 const storyRoutes = require('./routes/storyRoutes');
-app.use('/api/stories', storyRoutes);
+
 
 // ================= START SERVER =================
 
