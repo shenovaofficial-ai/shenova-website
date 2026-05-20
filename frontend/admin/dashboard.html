@@ -1299,7 +1299,13 @@ select{
   background:rgba(12,11,9,.5);
   z-index:199;
 }
+@keyframes progress-pulse {
+  0%,100% { opacity:1 }
+  50%      { opacity:0.4 }
+}
 </style>
+<link rel="stylesheet" href="css/stories.css">
+
 </head>
 <body>
 
@@ -1359,7 +1365,19 @@ select{
       </a>
     </div>
   </nav>
-
+<!-- ★ NEW — paste inside .side-nav, after the Messages nav-section -->
+<div class="nav-section">
+  <span class="nav-label">Content</span>
+  <a onclick="showSection('stories')" id="nav-stories">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    Stories
+    <span class="badge-count" id="side-story-count">—</span>
+  </a>
+</div>
+ 
   <div class="side-foot">
     <a onclick="logout()">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1692,7 +1710,141 @@ select{
         </div>
       </div>
     </div>
-
+<div class="section" id="section-stories">
+ 
+  <!-- Upload Panel -->
+  <div class="panel" style="margin-bottom:24px">
+    <div class="panel-head">
+      <div>
+        <span class="panel-sub">Content</span>
+        <div class="panel-title">Upload New Story</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="adminCleanupStories()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+        </svg>
+        Purge Expired
+      </button>
+    </div>
+    <div class="panel-body">
+      <form onsubmit="adminUploadStory(event)" enctype="multipart/form-data">
+ 
+        <!-- File Upload Zone -->
+        <div class="form-group" style="margin-bottom:20px">
+          <label class="field-label" style="display:block;margin-bottom:10px">
+            Story Media (Image or Video)
+          </label>
+          <div class="story-upload-zone" id="storyUploadZone">
+            <input
+              type="file"
+              id="storyFileInput"
+              name="storyFile"
+              accept="image/*,video/*"
+              required>
+            <div class="story-upload-icon">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+            <div class="story-upload-label">
+              <strong>Click or drag</strong> an image or video<br>
+              <span>JPG, PNG, WEBP, MP4, MOV · Max 100MB</span>
+            </div>
+          </div>
+          <!-- Preview -->
+          <div id="storyFilePreview" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"></div>
+        </div>
+ 
+        <!-- Caption -->
+        <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="field-label">Caption <span style="color:var(--muted);font-weight:300">(optional)</span></label>
+            <input
+              type="text"
+              id="storyCaption"
+              name="caption"
+              placeholder="e.g. New Autumn Edit — Limited Pieces"
+              maxlength="220"
+              style="margin-top:6px">
+          </div>
+ 
+          <div class="form-group">
+            <label class="field-label">CTA Button Text</label>
+            <input
+              type="text"
+              id="storyCtaText"
+              name="ctaText"
+              placeholder="e.g. Shop Now"
+              maxlength="60"
+              style="margin-top:6px">
+          </div>
+ 
+          <div class="form-group">
+            <label class="field-label">CTA Link URL</label>
+            <input
+              type="url"
+              id="storyCtaLink"
+              name="ctaLink"
+              placeholder="https://shenova.in/shop"
+              style="margin-top:6px">
+          </div>
+        </div>
+ 
+        <!-- Progress bar (shown during upload) -->
+        <div id="storyUploadProgress" style="display:none;margin-bottom:16px">
+          <div style="height:2px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;background:var(--gold);width:60%;animation:progress-pulse 1.4s ease-in-out infinite"></div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px">
+            Uploading to Cloudinary…
+          </div>
+        </div>
+ 
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="storyUploadBtn">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Upload Story
+          </button>
+        </div>
+ 
+      </form>
+    </div>
+  </div>
+ 
+  <!-- Stories Grid Panel -->
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <span class="panel-sub">Active & Expired</span>
+        <div class="panel-title">All Stories</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">
+          Drag cards to reorder
+        </span>
+        <button class="btn btn-ghost btn-sm" onclick="loadAdminStories()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+          </svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="story-admin-grid" id="stories-admin-grid"></div>
+    </div>
+  </div>
+ 
+</div><!-- /section-stories -->
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /admin -->
@@ -1834,6 +1986,43 @@ select{
     </div>
   </div>
 </div>
+<!-- ★ NEW — Story Edit Modal -->
+<div class="story-edit-modal" id="storyEditModal">
+  <div class="modal-overlay" onclick="adminCloseEditStory()"></div>
+  <div class="story-edit-box">
+    <div class="story-edit-head">
+      <h3>Edit Story</h3>
+      <button class="btn btn-ghost btn-icon" onclick="adminCloseEditStory()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <form onsubmit="adminSaveEditStory(event)">
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="field-label">Caption</label>
+        <input type="text" id="editCaption" name="caption" maxlength="220" style="margin-top:6px">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="field-label">CTA Button Text</label>
+        <input type="text" id="editCtaText" name="ctaText" maxlength="60" style="margin-top:6px">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label class="field-label">CTA Link URL</label>
+        <input type="url" id="editCtaLink" name="ctaLink" style="margin-top:6px">
+      </div>
+      <div class="form-group" style="margin-bottom:24px">
+        <label class="field-label">Display Order (lower = shown first)</label>
+        <input type="number" id="editOrder" name="order" min="0" style="margin-top:6px">
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end">
+        <button type="button" class="btn btn-ghost" onclick="adminCloseEditStory()">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="editSaveBtn">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+ 
 
 <script>
 /* ─────────────────────────────────────────
@@ -2478,5 +2667,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   loadDash();
 });
 </script>
+<script src="js/stories.js"></script>
+<script src="js/adminStories.js"></script>
 </body>
 </html>

@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/luxury.css">
+<link rel="stylesheet" href="css/stories.css">
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -562,6 +563,37 @@ body.bar-off .lux-nav{top:0!important}
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
   .sr{opacity:1;transform:none}
 }
+/*
+  ★ NEW — Positions the story bubble correctly in SHENOVA's
+  lux-nav layout. The bubble sits right after the logo.
+*/
+ 
+/* Make nav-inner flex with centered logo */
+.nav-inner {
+  position: relative;
+}
+ 
+/* The story bubble auto-inserts after .lux-logo */
+/* Give it correct spacing on both desktop and mobile */
+.story-bubble-wrap {
+  /* On desktop nav, the logo is center-positioned absolutely.
+     We use flex order to place bubble just after the logo text. */
+  margin-left: 10px;
+}
+ 
+/* Ensure the nav-inner flex container respects the bubble */
+.container.nav-inner {
+  display: flex;
+  align-items: center;
+}
+ 
+/* On mobile, keep bubble visible but smaller */
+@media (max-width: 768px) {
+  .story-bubble {
+    width: 32px;
+    height: 32px;
+  }
+}
 </style>
 </head>
 <body class="lux-body">
@@ -594,19 +626,44 @@ body.bar-off .lux-nav{top:0!important}
   <button class="sh-bar-x" onclick="dismissBar()" aria-label="Close">×</button>
 </div>
 
-<!-- NAV — all classes preserved for main.js -->
+!-- NAV — all classes preserved for main.js -->
 <nav class="nav lux-nav" id="luxNav">
   <div class="container nav-inner">
     <div class="nav-left">
       <a href="shop.html" class="nav-link-sm">Shop</a>
       <a href="shop.html?cat=new" class="nav-link-sm">New In</a>
     </div>
+ 
+    <!-- Logo (unchanged) -->
     <a class="nav-logo lux-logo" href="index.html">SHENOVA</a>
+ 
+    <!--
+      ★ NEW — Story bubble (inserted immediately after logo,
+      before nav-right).  The JS (stories.js) also inserts it
+      dynamically; this is the declarative fallback for SSR/no-JS.
+      If you prefer pure JS insertion, remove this HTML and rely
+      solely on stories.js initBubble().
+    -->
+    <!-- stories.js auto-inserts the bubble via JS — no manual HTML needed -->
+ 
     <div class="nav-right">
       <a href="about.html" class="nav-link-sm">About</a>
       <div class="nav-icons">
-        <a href="wishlist.html"><button class="lux-icon-btn" aria-label="Wishlist"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></a>
-        <button class="cart-btn lux-icon-btn lux-cart-btn" aria-label="Cart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-count lux-cart-count">0</span></button>
+        <a href="wishlist.html">
+          <button class="lux-icon-btn" aria-label="Wishlist">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+        </a>
+        <button class="cart-btn lux-icon-btn lux-cart-btn" aria-label="Cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-count lux-cart-count">0</span>
+        </button>
         <button class="hamburger lux-hamburger" aria-label="Menu"><span></span><span></span></button>
       </div>
     </div>
@@ -1004,6 +1061,7 @@ body.bar-off .lux-nav{top:0!important}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
+
 
 <script>
 /* ================================================================
@@ -1415,5 +1473,7 @@ if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
 </script>
 <script src="js/config.js?v=3"></script>
 <script src="js/main.js?v=3"></script>
+<script src="js/stories.js"></script>
+
 </body>
 </html>
