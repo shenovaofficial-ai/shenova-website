@@ -163,7 +163,7 @@ wrap.innerHTML = `
 `;
 
   try{
-
+await new Promise(r => setTimeout(r, 3000));
     const res = await fetch(API + '/products');
 
     if(!res.ok){
