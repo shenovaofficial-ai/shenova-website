@@ -156,7 +156,8 @@ app.post('/api/stories', async (req, res) => {
       caption: req.body.caption || '',
       ctaText: req.body.ctaText || '',
       ctaLink: req.body.ctaLink || '',
-      mediaUrl: req.body.mediaUrl || '',
+      mediaUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c',
+      type: 'image',
       createdAt: new Date(),
     };
 
