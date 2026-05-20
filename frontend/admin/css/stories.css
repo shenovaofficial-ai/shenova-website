@@ -871,3 +871,98 @@
 .nav-right{
   gap:12px !important;
 }
+/* =========================================
+   FINAL STORY FIX
+========================================= */
+
+.story-bubble-wrap{
+
+  position:relative !important;
+
+  z-index:20 !important;
+
+  pointer-events:auto !important;
+}
+
+.story-bubble{
+
+  position:relative !important;
+
+  z-index:20 !important;
+}
+
+/* IMPORTANT */
+.story-viewer{
+  z-index:999999 !important;
+}
+
+/* CART / DRAWER / MENU ABOVE STORY */
+
+.cart-drawer,
+.cart-sidebar,
+.mobile-menu,
+.drawer,
+.sidebar,
+.nav-menu{
+
+  z-index:9999999 !important;
+}
+
+/* CLOSE BUTTON FIX */
+
+.cart-close,
+.close-cart,
+.drawer-close,
+.close-btn{
+
+  position:relative !important;
+
+  z-index:99999999 !important;
+
+  pointer-events:auto !important;
+}
+
+/* MOBILE NAV FIX */
+
+@media(max-width:768px){
+
+  .navbar,
+  .nav-wrapper,
+  .nav-container{
+
+    overflow:visible !important;
+  }
+
+  .story-bubble-wrap{
+    margin-left:10px !important;
+  }
+
+  .story-bubble{
+
+    width:46px !important;
+    height:46px !important;
+  }
+
+  .story-bubble-mark{
+    font-size:17px !important;
+  }
+
+  /* HAMBURGER FORCE SHOW */
+
+  .menu-toggle,
+  .hamburger,
+  .mobile-menu-btn,
+  .nav-toggle{
+
+    display:flex !important;
+
+    visibility:visible !important;
+
+    opacity:1 !important;
+
+    z-index:999999 !important;
+
+    position:relative !important;
+  }
+
+}
