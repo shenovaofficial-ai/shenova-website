@@ -10,6 +10,9 @@ const { multerUpload, uploadToCloudinary } = require('./middleware/upload');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 // ================= MODELS =================
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -148,7 +151,7 @@ app.get('/api/stories', async (req, res) => {
 });
 // ================= UPLOAD STORY =================
 
-app.post('/api/stories', async (req, res) => {
+app.post('/api/stories', upload.single('storyFile'), async (req, res) => {
 
   try {
 
@@ -156,7 +159,9 @@ app.post('/api/stories', async (req, res) => {
       caption: req.body.caption || '',
       ctaText: req.body.ctaText || '',
       ctaLink: req.body.ctaLink || '',
-      mediaUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c',
+      mediaUrl: req.file
+  ? `https://shenova-backend.onrender.com/uploads/${req.file.filename}`
+  : '',
       type: 'image',
       createdAt: new Date(),
     };
@@ -473,3 +478,4 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shenova')
     app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => { console.error('MongoDB error:', err); process.exit(1); });
+  app.use('/uploads', express.static('uploads'));
