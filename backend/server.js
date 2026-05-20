@@ -6,7 +6,7 @@ const cors     = require('cors');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const { multerUpload, uploadToCloudinary } = require('./middleware/upload');
-const storyRoutes = require('./routes/storyRoutes');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -119,7 +119,33 @@ async function processUploads(files) {
 
   return { images, videos };
 }
-app.use('/api/stories', storyRoutes);
+// ================= STORIES =================
+
+app.get('/api/stories', async (req, res) => {
+
+  try {
+
+    const stories = await mongoose.connection.db
+      .collection('stories')
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    res.json({
+      success: true,
+      stories
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
 // ================= PRODUCTS =================
 
 app.get('/api/products', async (req, res) => {
