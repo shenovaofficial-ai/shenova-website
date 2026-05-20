@@ -28,7 +28,7 @@
     grid.innerHTML = '<div style="padding:24px;color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase">Loading stories…</div>';
 
     try {
-      const res  = await fetch(STORY_API + '/admin');
+      const res = await fetch(STORY_API);
       const data = await res.json();
       allAdminStories = data.stories || [];
     } catch {
