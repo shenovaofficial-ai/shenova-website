@@ -6,11 +6,11 @@ const cors     = require('cors');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const { multerUpload, uploadToCloudinary } = require('./middleware/upload');
-
+const storyRoutes = require('./routes/storyRoutes');
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+app.use('/api/stories', storyRoutes);
 // ================= MODELS =================
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -120,7 +120,7 @@ async function processUploads(files) {
 
   return { images, videos };
 }
-
+app.use('/api/stories', storyRoutes);
 // ================= PRODUCTS =================
 
 app.get('/api/products', async (req, res) => {
