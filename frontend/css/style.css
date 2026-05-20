@@ -3437,3 +3437,61 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
   }
 
 }
+/* ===== MOBILE LUXURY BOTTOM CART ===== */
+
+@media (max-width:768px){
+
+  .drawer{
+
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+    height: 88vh !important;
+
+    border-radius: 28px 28px 0 0 !important;
+
+    transform: translateY(100%) !important;
+
+    border-left: none !important;
+    border-top: 1px solid rgba(0,0,0,.08) !important;
+
+  }
+
+  .drawer.open{
+
+    transform: translateY(0) !important;
+
+  }
+
+  .drawer::before{
+
+    content: '';
+
+    position: absolute;
+
+    top: 12px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 60px;
+    height: 5px;
+
+    border-radius: 999px;
+
+    background: rgba(0,0,0,.15);
+
+    z-index: 10;
+
+  }
+
+  .drawer-overlay{
+
+    backdrop-filter: blur(8px);
+
+  }
+
+}
