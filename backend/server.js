@@ -181,6 +181,31 @@ app.post('/api/stories', async (req, res) => {
   }
 
 });
+app.delete('/api/stories/:id', async (req, res) => {
+
+  try {
+
+    await mongoose.connection.db
+      .collection('stories')
+      .deleteOne({
+        _id: new mongoose.Types.ObjectId(req.params.id)
+      });
+
+    res.json({
+      success: true,
+      message: 'Story deleted'
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
 // ================= PRODUCTS =================
 
 app.get('/api/products', async (req, res) => {
