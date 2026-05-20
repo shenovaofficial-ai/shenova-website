@@ -53,7 +53,7 @@ const Message = mongoose.model('Message', new mongoose.Schema({
   name: String, email: String, message: String
 }, { timestamps: true }));
 
-// ✅ NEW — SpinLead model for spin wheel coupons
+// ✅ SpinLead model for spin wheel coupons
 const SpinLead = mongoose.model('SpinLead', new mongoose.Schema({
   email:    { type: String },
   coupon:   { type: String },
@@ -264,19 +264,15 @@ app.post('/api/newsletter', async (req, res) => {
 
 // ================= SPIN WHEEL =================
 
-// Legacy alias — main.js calls /api/spin (old code path)
 app.post('/api/spin', async (req, res) => {
   res.redirect(307, '/api/spin/save');
 });
 
-// Save coupon when user wins the spin wheel
 app.post('/api/spin/save', async (req, res) => {
   try {
     const { email, coupon, discount } = req.body;
     if (!email || !coupon) return res.status(400).json({ message: 'Email and coupon are required' });
 
-    // Always upsert — update existing record or create new one
-    // This handles re-spins and clears old broken/hardcoded codes
     await SpinLead.findOneAndUpdate(
       { email: email.toLowerCase() },
       {
@@ -298,7 +294,6 @@ app.post('/api/spin/save', async (req, res) => {
 
 // ================= COUPON =================
 
-// Validate coupon code
 app.post('/api/coupon/apply', async (req, res) => {
   try {
     const { coupon } = req.body;
@@ -317,7 +312,6 @@ app.post('/api/coupon/apply', async (req, res) => {
   }
 });
 
-// Mark coupon as used after order is placed
 app.post('/api/coupon/use', async (req, res) => {
   try {
     const { coupon } = req.body;
@@ -336,7 +330,6 @@ app.post('/api/coupon/use', async (req, res) => {
   }
 });
 
-// ── ADMIN: list all coupons ──
 app.get('/api/admin/coupons', async (req, res) => {
   try {
     const coupons = await SpinLead.find().sort('-createdAt');
@@ -346,7 +339,6 @@ app.get('/api/admin/coupons', async (req, res) => {
   }
 });
 
-// ── ADMIN: disable / re-enable a coupon ──
 app.put('/api/admin/coupons/:id', async (req, res) => {
   try {
     const updated = await SpinLead.findByIdAndUpdate(
@@ -361,7 +353,6 @@ app.put('/api/admin/coupons/:id', async (req, res) => {
   }
 });
 
-// ── ADMIN: delete a coupon ──
 app.delete('/api/admin/coupons/:id', async (req, res) => {
   try {
     await SpinLead.findByIdAndDelete(req.params.id);
@@ -376,9 +367,14 @@ app.delete('/api/admin/coupons/:id', async (req, res) => {
 const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payment', paymentRoutes);
 
-// ================= START =================
+// ================= STORIES ✅ =================
+// ⚠️ MUST be before app.listen — registered with all other routes
+
 const storyRoutes = require('./routes/storyRoutes');
 app.use('/api/stories', storyRoutes);
+
+// ================= START SERVER =================
+
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shenova')
