@@ -1251,75 +1251,252 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .drawer-foot .btn:hover::before { transform: translateX(0); }
 .drawer-foot .btn span { position: relative; z-index: 1; }
 
-/* ── SPIN POPUP ── */
+/* ══════════════════════════════════════════════════════════
+   SPIN POPUP — COMPLETE RESPONSIVE REBUILD
+   Fixes: wheel overflow, cropping, oversizing, mobile layout,
+   animation shift, viewport overflow, pointer clipping.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ── */
 #spin-popup {
-  position: fixed; inset: 0; background: rgba(12,11,10,.84);
+  position: fixed; inset: 0;
+  background: rgba(12,11,10,.86);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  z-index: 9998; display: none; align-items: center; justify-content: center; padding: 20px;
+  z-index: 9998;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: clamp(10px, 3vw, 24px);
+  overflow: hidden; /* viewport safety */
 }
-#spin-popup.show { display: flex; animation: qmFade .5s var(--ease-out); }
+#spin-popup.show {
+  display: flex;
+  animation: qmFade .5s var(--ease-out);
+}
+
+/* ── Box container ── */
 .sp-box {
-  background: var(--deep); max-width: min(860px, 95vw); width: 100%;
-  display: grid; grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(181,137,90,.12); position: relative;
+  background: var(--deep);
+  width: 100%;
+  max-width: min(880px, 96vw);
+  /* Use dvh so mobile browser chrome doesn't cause overflow */
+  max-height: calc(100dvh - clamp(20px, 6vw, 48px));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(181,137,90,.12);
+  position: relative;
   animation: qmSlide .55s var(--ease-out);
-  max-height: 92vh; overflow-y: auto;
+  /* Contain ALL children — no overflow escapes */
+  overflow: hidden;
 }
+
+/* ── Close button ── */
 .sp-x {
-  position: absolute; top: 16px; right: 16px;
-  font-size: 22px; color: rgba(245,240,232,.26); transition: color .3s; z-index: 2;
+  position: absolute; top: 14px; right: 14px;
+  font-size: 22px; line-height: 1;
+  color: rgba(245,240,232,.26);
+  transition: color .3s;
+  z-index: 20;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
 }
 .sp-x:hover { color: rgba(245,240,232,.7); }
+
+/* ── Left panel (wheel side) ── */
 .sp-left {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 52px 36px; gap: 20px; background: #0f0e0d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* clamp() padding scales with viewport */
+  padding: clamp(28px, 4.5vw, 56px) clamp(18px, 3.5vw, 36px) clamp(20px, 3vw, 36px);
+  gap: clamp(10px, 1.8vw, 20px);
+  background: #0f0e0d;
   border-right: 1px solid rgba(181,137,90,.08);
+  /* Critical: prevent grid column blowout */
+  min-width: 0;
+  overflow: hidden;
 }
-.sp-lh { font: 300 clamp(22px, 3vw, 32px)/1.2 var(--display); color: var(--ivory); text-align: center; }
+
+.sp-lh {
+  font: 300 clamp(15px, 2vw, 28px)/1.2 var(--display);
+  color: var(--ivory);
+  text-align: center;
+  /* Prevent heading from pushing width */
+  max-width: 100%;
+}
+
+/* ── Wheel wrapper — the key fix ──
+   Uses a square that's a % of its column width so it
+   always fits, never overflows, and stays perfectly circular. */
 .sp-wheel-wrap {
-  position: relative; width: 220px; height: 220px; margin: 4px auto;
+  position: relative;
+  /* Square: 78% of the left column, capped at 260px min 150px */
+  width: min(78%, 260px);
+  aspect-ratio: 1 / 1;
+  /* Ensure pointer arrow has room above */
+  margin-top: 14px;
+  /* Don't let it shrink past minimum */
+  flex-shrink: 0;
 }
+
+/* ── Canvas fills its wrapper exactly ── */
+#wheel {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(181,137,90,.15);
+}
+
+/* ── Pointer arrow — sits above the wheel ── */
 .sp-wptr {
-  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  position: absolute;
+  top: -13px; left: 50%;
+  transform: translateX(-50%);
   width: 0; height: 0;
-  border-left: 10px solid transparent; border-right: 10px solid transparent;
-  border-top: 16px solid var(--gold); z-index: 10;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 15px solid var(--gold);
+  z-index: 10;
+  pointer-events: none;
 }
+
+/* ── Center SPIN button — always perfectly centered ── */
 .sp-wcenter {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--gold); display: flex; align-items: center; justify-content: center;
-  font: 400 8px/1 var(--body); letter-spacing: .28em; color: var(--ivory);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  /* Scale with wheel: 18% of wrapper, min 32px, max 48px */
+  width: clamp(32px, 18%, 48px);
+  height: clamp(32px, 18%, 48px);
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font: 400 7px/1 var(--body); letter-spacing: .26em;
+  color: var(--ivory);
   cursor: pointer; z-index: 10;
   transition: transform .3s var(--spring), box-shadow .3s;
+  pointer-events: all;
+  white-space: nowrap;
 }
-.sp-wcenter:hover { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 20px rgba(181,137,90,.4); }
-.sp-lsub { font: 200 8px/1 var(--body); letter-spacing: .3em; text-transform: uppercase; color: rgba(245,240,232,.2); }
+.sp-wcenter:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 20px rgba(181,137,90,.4);
+}
+
+.sp-lsub {
+  font: 200 8px/1 var(--body);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,.2);
+  text-align: center;
+  max-width: 100%;
+}
+
+/* ── Right panel (form side) ── */
 .sp-right {
-  display: flex; flex-direction: column; gap: 16px;
-  padding: 52px 40px; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vw, 16px);
+  padding: clamp(28px, 4.5vw, 52px) clamp(18px, 3.5vw, 40px);
+  justify-content: center;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
 }
-.sp-right h2 { font: 300 clamp(26px, 3.2vw, 38px)/1.1 var(--display); color: var(--ivory); margin-top: 6px; }
+.sp-right::-webkit-scrollbar { display: none; }
+
+.sp-right h2 {
+  font: 300 clamp(18px, 2.4vw, 36px)/1.1 var(--display);
+  color: var(--ivory); margin-top: 4px;
+}
 .sp-right h2 em { font-style: italic; color: var(--gold-light); }
-.sp-right > p { font: 200 13px/1.8 var(--body); color: rgba(245,240,232,.35); }
+.sp-right > p {
+  font: 200 clamp(11px, 1.2vw, 13px)/1.8 var(--body);
+  color: rgba(245,240,232,.35);
+}
+
 .sp-inp {
-  background: rgba(245,240,232,.04); border: 1px solid rgba(245,240,232,.08);
-  color: var(--ivory); padding: 14px 18px;
-  font: 200 13px/1 var(--body); outline: none;
+  width: 100%;
+  background: rgba(245,240,232,.04);
+  border: 1px solid rgba(245,240,232,.08);
+  color: var(--ivory);
+  padding: clamp(10px, 1.3vw, 14px) clamp(12px, 1.5vw, 18px);
+  font: 200 13px/1 var(--body);
+  outline: none;
   transition: border-color .3s;
 }
 .sp-inp::placeholder { color: rgba(245,240,232,.2); }
 .sp-inp:focus { border-color: rgba(181,137,90,.4); }
-.sp-error { font: 200 9px/1 var(--body); letter-spacing: .2em; color: #e07070; display: none; }
+
+.sp-error {
+  font: 200 9px/1 var(--body); letter-spacing: .2em;
+  color: #e07070; display: none;
+}
 .sp-error.show { display: block; }
+
 .sp-submit {
-  padding: 15px 32px; background: var(--gold); color: var(--ivory);
+  width: 100%;
+  padding: clamp(12px, 1.5vw, 15px) 28px;
+  background: var(--gold); color: var(--ivory);
   font: 300 8.5px/1 var(--body); letter-spacing: .36em;
   text-transform: uppercase; transition: background .4s;
 }
 .sp-submit:hover { background: var(--gold-light); }
+
 #spin-result { font: 200 12px/1.6 var(--body); color: rgba(245,240,232,.4); }
 .sp-note { font: 200 9px/1.6 var(--body); color: rgba(245,240,232,.16); }
+
+/* ── RESPONSIVE: Tablet ≤ 900px — stack vertically ── */
+@media (max-width: 900px) {
+  .sp-box {
+    grid-template-columns: 1fr;
+    max-width: min(460px, 96vw);
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .sp-box::-webkit-scrollbar { display: none; }
+
+  .sp-left {
+    padding: clamp(28px, 5vw, 44px) clamp(20px, 5vw, 36px) clamp(16px, 3vw, 24px);
+    border-right: none;
+    border-bottom: 1px solid rgba(181,137,90,.08);
+  }
+
+  /* On single-column, wheel can use more width */
+  .sp-wheel-wrap {
+    width: min(72%, 280px);
+  }
+
+  .sp-right {
+    padding: clamp(18px, 4vw, 28px) clamp(20px, 5vw, 36px) clamp(28px, 5vw, 40px);
+  }
+}
+
+/* ── RESPONSIVE: Mobile ≤ 480px ── */
+@media (max-width: 480px) {
+  #spin-popup { padding: 8px; }
+
+  .sp-box {
+    max-width: 100%;
+    max-height: calc(100dvh - 16px);
+    border-radius: 0;
+  }
+
+  .sp-wheel-wrap {
+    width: min(68vw, 260px);
+  }
+
+  .sp-lh {
+    font-size: clamp(14px, 4.5vw, 20px);
+  }
+
+  .sp-right h2 { font-size: clamp(17px, 5.5vw, 26px); }
+  .sp-right > p { font-size: 11px; }
+}
 
 /* ── COUPON POPUP ── */
 #coupon-popup {
@@ -1391,9 +1568,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-rv.feat:hover { transform: translateY(-6px); }
   .sh-igrid { grid-template-columns: repeat(3, 1fr); }
   .sh-ii.tall { grid-row: auto; aspect-ratio: 1; }
-  .sp-box { grid-template-columns: 1fr; max-width: 440px; }
-  .sp-left { padding: 32px 28px 20px; }
-  .sp-right { padding: 24px 28px 36px; }
+  /* sp-box responsive overrides moved into dedicated spin popup block above */
 }
 @media (max-width: 768px) {
   :root { --gutter: 22px; }
@@ -2075,7 +2250,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <div class="sp-lh">Spin &amp; Win<br>Your Discount</div>
       <div class="sp-wheel-wrap">
         <div class="sp-wptr"></div>
-        <canvas id="wheel" width="220" height="220" onclick="spinWheel()" style="border-radius:50%;cursor:pointer;display:block;border:2px solid rgba(181,137,90,.15)"></canvas>
+        <canvas id="wheel" onclick="spinWheel()"></canvas>
         <div class="sp-wcenter" id="spin-center-btn" onclick="spinWheel()">SPIN</div>
       </div>
       <div class="sp-lsub">Enter details &amp; spin to win</div>
@@ -2244,7 +2419,13 @@ function unlockBody() {
 if(sp) {
   sp.classList.remove('show');
   unlockBody();
-  setTimeout(() => { sp.classList.add('show'); lockBody(); }, 5000);
+  setTimeout(() => {
+    sp.classList.add('show');
+    lockBody();
+    // Redraw wheel now that popup is visible and canvas has layout dimensions
+    if(typeof drawWheel === 'function') drawWheel(0);
+    else setTimeout(() => { if(typeof drawWheel === 'function') drawWheel(0); }, 50);
+  }, 5000);
 }
 
 /* ─ SPIN WHEEL ENGINE ─ */
@@ -2276,11 +2457,13 @@ if(sp) {
   let currentAngle = 0, spinning = false, spun = false;
 
   function syncCanvasSize() {
-    const rect = canvas.getBoundingClientRect();
-    const w = Math.round(rect.width) || 220;
-    const h = Math.round(rect.height) || 220;
-    if(canvas.width !== w || canvas.height !== h) {
-      canvas.width = w; canvas.height = h;
+    const wrap = canvas.parentElement;
+    // Use wrapper's rendered size as source of truth (CSS controls dimensions)
+    const w = Math.round(wrap ? wrap.getBoundingClientRect().width : canvas.getBoundingClientRect().width) || 220;
+    const h = w; // always square
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
     }
   }
 
@@ -2325,7 +2508,14 @@ if(sp) {
     ctx.stroke();
   }
   drawWheel(0);
-  window.addEventListener('resize', () => drawWheel(currentAngle));
+  // Expose so popup opener can trigger re-render after layout settles
+  window.drawWheel = drawWheel;
+  window.addEventListener('resize', () => {
+    // Only redraw if popup is visible (canvas has real dimensions)
+    if(document.getElementById('spin-popup')?.classList.contains('show')) {
+      drawWheel(currentAngle);
+    }
+  });
 
   window.spinWheel = function() {
     if(spinning || spun) return;
