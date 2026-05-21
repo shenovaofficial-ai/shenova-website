@@ -4161,3 +4161,204 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
 }
 
 /* ── END SHENOVA RESPONSIVE NAVBAR FIX ─────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════
+   SHENOVA · LUX MOBILE MENU COMPLETE STYLES
+   Fixes: X close button missing · hamburger icon proper display
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Mobile Menu Overlay ─────────────────────────────────────────── */
+.lux-mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: #0d0c0b;
+  z-index: 99998;
+  transform: translateX(100%);
+  transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lux-mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* ── Inner wrapper ───────────────────────────────────────────────── */
+.lux-mm-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+/* ── Top bar: logo + close button ───────────────────────────────── */
+.lux-mm-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 20px 28px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+
+.lux-mm-logo {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 20px;
+  letter-spacing: 0.42em;
+  color: rgba(250,247,242,0.55);
+  font-weight: 300;
+}
+
+/* ── CLOSE BUTTON (X) ────────────────────────────────────────────── */
+.lux-mm-close-btn,
+.lux-mobile-menu .lux-hamburger,
+.lux-mobile-menu .hamburger {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  gap: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 99999 !important;
+  transition: background 0.25s ease !important;
+}
+
+.lux-mm-close-btn:hover,
+.lux-mobile-menu .lux-hamburger:hover {
+  background: rgba(255,255,255,0.12) !important;
+}
+
+/* X icon — using the two spans as crossing lines */
+.lux-mm-close-btn span,
+.lux-mobile-menu .lux-hamburger span,
+.lux-mobile-menu .hamburger span {
+  display: block !important;
+  width: 18px !important;
+  height: 1.5px !important;
+  background: rgba(250,247,242,0.75) !important;
+  border-radius: 999px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: absolute !important;
+  transition: transform 0.3s ease !important;
+}
+
+.lux-mm-close-btn span:nth-child(1),
+.lux-mobile-menu .lux-hamburger span:nth-child(1),
+.lux-mobile-menu .hamburger span:nth-child(1) {
+  transform: rotate(45deg) !important;
+}
+
+.lux-mm-close-btn span:nth-child(2),
+.lux-mobile-menu .lux-hamburger span:nth-child(2),
+.lux-mobile-menu .hamburger span:nth-child(2) {
+  transform: rotate(-45deg) !important;
+}
+
+/* ── Nav links ───────────────────────────────────────────────────── */
+.lux-mm-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 28px 20px 36px;
+  gap: 0;
+  overflow-y: auto;
+}
+
+.lux-mm-nav a {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 16px !important;
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  font-size: clamp(36px, 9vw, 56px) !important;
+  font-weight: 300 !important;
+  color: rgba(250,247,242,0.88) !important;
+  text-decoration: none !important;
+  padding: 12px 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  opacity: 0 !important;
+  transform: translateY(18px) !important;
+  transition: opacity 0.45s ease, transform 0.45s ease, color 0.25s ease !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+}
+
+.lux-mm-nav a span {
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 0.22em !important;
+  color: rgba(184,149,106,0.7) !important;
+  font-weight: 300 !important;
+  margin-bottom: 2px !important;
+  flex-shrink: 0 !important;
+  transform: none !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+.lux-mobile-menu.open .lux-mm-nav a {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.lux-mobile-menu.open .lux-mm-nav a:nth-child(1) { transition-delay: 0.12s !important; }
+.lux-mobile-menu.open .lux-mm-nav a:nth-child(2) { transition-delay: 0.20s !important; }
+.lux-mobile-menu.open .lux-mm-nav a:nth-child(3) { transition-delay: 0.28s !important; }
+.lux-mobile-menu.open .lux-mm-nav a:nth-child(4) { transition-delay: 0.36s !important; }
+.lux-mobile-menu.open .lux-mm-nav a:nth-child(5) { transition-delay: 0.44s !important; }
+
+.lux-mm-nav a:hover {
+  color: var(--gold, #b8956a) !important;
+}
+
+.lux-mm-nav a:last-child {
+  border-bottom: none !important;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.lux-mm-foot {
+  padding: 20px 28px 36px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lux-mm-foot p {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(250,247,242,0.2);
+}
+
+/* ── Hamburger navbar icon fix (3 lines → proper bars) ─────────── */
+/* Override any legacy positioning that makes it look like = */
+.nav .hamburger span,
+.nav .lux-hamburger span,
+.lux-nav .hamburger span,
+.lux-nav .lux-hamburger span {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+/* ── END LUX MOBILE MENU STYLES ─────────────────────────────────── */
