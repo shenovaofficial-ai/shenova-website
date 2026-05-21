@@ -1012,3 +1012,67 @@
   }
 
 }
+/* FIX HAMBURGER ICON */
+
+.hamburger,
+.lux-hamburger{
+
+  width:42px !important;
+  height:42px !important;
+
+  display:flex !important;
+  flex-direction:column !important;
+
+  align-items:center !important;
+  justify-content:center !important;
+
+  gap:5px !important;
+
+  background:transparent !important;
+  border:none !important;
+
+  cursor:pointer !important;
+
+  position:relative !important;
+  z-index:999999 !important;
+}
+
+/* THE 2 LINES */
+
+.hamburger span,
+.lux-hamburger span{
+
+  display:block !important;
+
+  width:18px !important;
+  height:1.8px !important;
+
+  background:#fff !important;
+
+  border-radius:999px !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+
+  transition:all .3s ease !important;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .hamburger,
+  .lux-hamburger{
+
+    display:flex !important;
+    opacity:1 !important;
+    visibility:visible !important;
+  }
+
+  .hamburger span,
+  .lux-hamburger span{
+
+    background:#fff !important;
+  }
+
+}
