@@ -150,6 +150,9 @@ function renderMainMedia(idx) {
     vid.controls = true;
     vid.playsInline = true;
     vid.preload  = 'metadata';
+    vid.autoplay = true;
+vid.muted = true;
+vid.loop = true;
     Object.assign(vid.style, {
       width: '100%', height: '100%',
       objectFit: 'cover',
@@ -387,7 +390,9 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft')  window.prevImg?.();
   if (e.key === 'Escape')   { window.closeZoom?.(); }
 });
-
+document.querySelectorAll("video").forEach(video => {
+  video.play().catch(() => {});
+});vid.controls = false;
 /* ──── Size guide ──── */
 window.openSizeGuide  = () => document.getElementById('sizeGuide')?.classList.add('active');
 window.closeSizeGuide = () => document.getElementById('sizeGuide')?.classList.remove('active');
