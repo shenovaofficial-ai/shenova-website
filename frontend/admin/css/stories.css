@@ -1162,3 +1162,148 @@
   }
 
 }
+/* =========================
+   MOBILE NAVBAR FIX
+========================= */
+
+@media (max-width: 768px) {
+
+  .nav-container{
+
+    padding: 18px 16px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+
+    gap:10px !important;
+  }
+
+  .nav-left{
+
+    flex:1 !important;
+    min-width:0 !important;
+  }
+
+  .brand-logo{
+
+    font-size:2rem !important;
+    letter-spacing:7px !important;
+
+    white-space:nowrap !important;
+  }
+
+  .nav-right{
+
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+
+    flex-shrink:0 !important;
+  }
+
+  .nav-icons{
+
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+  }
+
+  /* STORY BUBBLE */
+
+  .story-bubble{
+
+    width:54px !important;
+    height:54px !important;
+
+    flex-shrink:0 !important;
+  }
+
+  .story-bubble-inner{
+
+    width:44px !important;
+    height:44px !important;
+  }
+
+  /* ICON BUTTONS */
+
+  .lux-icon-btn{
+
+    width:34px !important;
+    height:34px !important;
+
+    padding:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    flex-shrink:0 !important;
+  }
+
+  .lux-icon-btn svg{
+
+    width:17px !important;
+    height:17px !important;
+  }
+
+  /* CART COUNT */
+
+  .cart-count{
+
+    top:-4px !important;
+    right:-4px !important;
+
+    min-width:16px !important;
+    height:16px !important;
+
+    font-size:9px !important;
+  }
+
+  /* HAMBURGER */
+
+  .hamburger,
+  .lux-hamburger{
+
+    display:flex !important;
+
+    width:34px !important;
+    height:34px !important;
+
+    align-items:center !important;
+    justify-content:center !important;
+
+    flex-direction:column !important;
+
+    gap:4px !important;
+
+    background:transparent !important;
+    border:none !important;
+
+    flex-shrink:0 !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+  }
+
+  .hamburger span,
+  .lux-hamburger span{
+
+    width:18px !important;
+    height:2px !important;
+
+    background:#fff !important;
+
+    border-radius:999px !important;
+
+    display:block !important;
+  }
+
+  /* HIDE ABOUT */
+
+  .nav-link-sm{
+
+    display:none !important;
+  }
+
+}
