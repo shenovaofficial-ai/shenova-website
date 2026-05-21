@@ -3495,3 +3495,213 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
   }
 
 }
+/* =========================================
+   SHENOVA MOBILE NAVBAR FINAL FIX
+========================================= */
+
+@media (max-width: 768px){
+
+  /* NAVBAR */
+
+  .nav-container{
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+
+    padding:18px 16px !important;
+
+    gap:10px !important;
+
+    overflow:hidden !important;
+  }
+
+  /* LEFT */
+
+  .nav-left{
+
+    flex:1 !important;
+    min-width:0 !important;
+  }
+
+  .brand-logo{
+
+    font-size:1.9rem !important;
+    letter-spacing:7px !important;
+
+    white-space:nowrap !important;
+
+    display:block !important;
+  }
+
+  /* RIGHT SIDE */
+
+  .nav-right{
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+
+    gap:10px !important;
+
+    flex-shrink:0 !important;
+
+    transform:scale(.92) !important;
+    transform-origin:right center !important;
+  }
+
+  .nav-icons{
+
+    display:flex !important;
+    align-items:center !important;
+
+    gap:10px !important;
+  }
+
+  /* ABOUT HIDE */
+
+  .nav-link-sm{
+
+    display:none !important;
+  }
+
+  /* ICON BUTTONS */
+
+  .lux-icon-btn{
+
+    width:34px !important;
+    height:34px !important;
+
+    min-width:34px !important;
+    min-height:34px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    padding:0 !important;
+
+    background:transparent !important;
+    border:none !important;
+
+    position:relative !important;
+
+    flex-shrink:0 !important;
+  }
+
+  .lux-icon-btn svg{
+
+    width:17px !important;
+    height:17px !important;
+  }
+
+  /* CART COUNT */
+
+  .cart-count,
+  .lux-cart-count{
+
+    position:absolute !important;
+
+    top:-3px !important;
+    right:-3px !important;
+
+    min-width:16px !important;
+    height:16px !important;
+
+    font-size:9px !important;
+    line-height:16px !important;
+
+    border-radius:50% !important;
+  }
+
+  /* STORY */
+
+  .story-bubble{
+
+    width:56px !important;
+    height:56px !important;
+
+    min-width:56px !important;
+
+    position:relative !important;
+
+    flex-shrink:0 !important;
+
+    z-index:20 !important;
+  }
+
+  .story-bubble-inner{
+
+    width:46px !important;
+    height:46px !important;
+
+    border-width:3px !important;
+
+    overflow:hidden !important;
+  }
+
+  .story-bubble-mark{
+
+    width:100% !important;
+    height:100% !important;
+
+    object-fit:cover !important;
+
+    display:block !important;
+  }
+
+  /* STORY DOT */
+
+  .story-new-dot{
+
+    width:11px !important;
+    height:11px !important;
+
+    top:2px !important;
+    right:2px !important;
+
+    border:2px solid #c8a96b !important;
+  }
+
+  /* HAMBURGER */
+
+  .hamburger,
+  .lux-hamburger{
+
+    display:flex !important;
+
+    width:34px !important;
+    height:34px !important;
+
+    min-width:34px !important;
+
+    align-items:center !important;
+    justify-content:center !important;
+
+    flex-direction:column !important;
+
+    gap:4px !important;
+
+    background:transparent !important;
+    border:none !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    flex-shrink:0 !important;
+  }
+
+  .hamburger span,
+  .lux-hamburger span{
+
+    width:18px !important;
+    height:2px !important;
+
+    background:#fff !important;
+
+    border-radius:999px !important;
+
+    display:block !important;
+  }
+
+}
