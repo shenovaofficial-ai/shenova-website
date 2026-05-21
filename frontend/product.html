@@ -1111,10 +1111,20 @@ window.addEventListener('scroll', () => {
   document.getElementById('s-prog').style.width = (pct * 100) + '%';
 });
 
-/* ── Loader ───────────────────────────────────────────────────── */
-window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('pdp-loader')?.classList.add('hide'), 1800);
-});
+/* ── Loader fix ───────────────────────────────────────────────────
+   Production pe GSAP CDN slow hoti hai → window 'load' late fire
+   hota hai → loader screen block karta tha → clicks nahi milte the.
+   Ab: DOMContentLoaded pe hide + hard 3s max cap as safety net.
+─────────────────────────────────────────────────────────────────── */
+function hideLoader() {
+  const l = document.getElementById('pdp-loader');
+  if (!l) return;
+  l.classList.add('hide');
+  l.style.pointerEvents = 'none'; // clicks turant unblock
+}
+document.addEventListener('DOMContentLoaded', () => setTimeout(hideLoader, 1800));
+window.addEventListener('load', hideLoader);
+setTimeout(hideLoader, 3000); // hard cap — production safety net
 
 /* ── Nav scroll ───────────────────────────────────────────────── */
 window.addEventListener('scroll', () => {
