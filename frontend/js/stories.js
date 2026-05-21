@@ -516,14 +516,14 @@
     wrap.setAttribute('aria-label', 'Open SHENOVA Stories');
 
     wrap.innerHTML = `
-      <div class="story-bubble">
-        <div class="story-bubble-inner">
-          <span class="story-bubble-mark">S</span>
-        </div>
-      </div>
-      <span class="story-new-dot" id="storyNewDot" aria-hidden="true"></span>
-      <span class="story-tooltip">Stories</span>
-    `;
+<div class="story-bubble">
+  <div class="story-bubble-inner">
+    <img src="images/logo.png" class="story-logo-img" alt="Shenova">
+  </div>
+</div>
+<span class="story-new-dot" id="storyNewDot" aria-hidden="true"></span>
+<span class="story-tooltip">Stories</span>
+`;
 
     /* Insert AFTER the logo */
     logo.insertAdjacentElement('afterend', wrap);
