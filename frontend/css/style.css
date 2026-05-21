@@ -3753,54 +3753,55 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
     right: 0 !important;
   }
 
-  /* 1b · NAV-INNER — the single flex row */
+  /* 1b · NAV-INNER — 3-column grid: [hamburger+icons LEFT] [logo CENTER] [icons RIGHT] */
   .nav-inner,
   .container.nav-inner {
-    display: flex !important;
-    flex-direction: row !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
     align-items: center !important;
-    justify-content: space-between !important;
-    padding: 0 16px !important;
+    padding: 0 14px !important;
     min-height: 56px !important;
     box-sizing: border-box !important;
     gap: 0 !important;
     overflow: visible !important;
-    /* Prevent iOS Safari rubber-band gap */
     position: relative !important;
   }
 
-  /* 1c · LEFT LINKS (Shop / New In) — hidden, hamburger takes over */
+  /* 1c · LEFT LINKS hidden on mobile */
   .nav-left {
     display: none !important;
   }
 
-  /* 1d · LOGO — absolutely centred so it never competes for space */
+  /* 1d · LOGO — middle column, perfectly centred */
   .nav-logo,
   .lux-logo {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    font-size: clamp(16px, 4.8vw, 22px) !important;
-    letter-spacing: clamp(4px, 1.4vw, 8px) !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    justify-self: center !important;
+    grid-column: 2 !important;
+    font-size: clamp(15px, 4.5vw, 21px) !important;
+    letter-spacing: clamp(4px, 1.3vw, 8px) !important;
     white-space: nowrap !important;
     z-index: 2 !important;
     pointer-events: auto !important;
   }
 
-  /* 1e · RIGHT CLUSTER (story + icons + hamburger) */
+  /* 1e · RIGHT CLUSTER — col 3, right-aligned */
   .nav-right {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 6px !important;
+    gap: 4px !important;
     flex-shrink: 0 !important;
-    margin-left: auto !important;   /* always pushed to the right */
-    transform: none !important;     /* cancel any legacy scale() hacks */
+    margin-left: 0 !important;
+    transform: none !important;
     overflow: visible !important;
     position: relative !important;
     z-index: 3 !important;
+    grid-column: 3 !important;
   }
 
   /* 1f · ICONS ROW */
@@ -3970,16 +3971,17 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
 
   .nav-inner,
   .container.nav-inner {
-    padding: 0 12px !important;
+    padding: 0 10px !important;
     min-height: 52px !important;
+    grid-template-columns: 1fr auto 1fr !important;
   }
 
   .nav-right {
-    gap: 4px !important;
+    gap: 3px !important;
   }
 
   .nav-icons {
-    gap: 4px !important;
+    gap: 3px !important;
   }
 
   .lux-icon-btn {
@@ -4023,8 +4025,9 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
 
   .nav-inner,
   .container.nav-inner {
-    padding: 0 10px !important;
+    padding: 0 8px !important;
     min-height: 48px !important;
+    grid-template-columns: 1fr auto 1fr !important;
   }
 
   .nav-right {
@@ -4082,9 +4085,23 @@ transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezie
     transform: none !important;
     top: auto !important;
     left: auto !important;
+    justify-self: auto !important;
+    grid-column: auto !important;
     font-size: 26px !important;
     letter-spacing: .35em !important;
     white-space: nowrap !important;
+  }
+
+  /* Restore nav-inner to flex on desktop */
+  .nav-inner,
+  .container.nav-inner {
+    display: flex !important;
+    grid-template-columns: none !important;
+  }
+
+  .nav-right {
+    grid-column: auto !important;
+    margin-left: 0 !important;
   }
 
   /* Show left nav links */
