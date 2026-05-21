@@ -23,10 +23,18 @@
   .hamburger,
   .lux-hamburger,
   .mobile-menu,
-  .lux-mobile-menu {
+  .lux-mobile-menu,
+  button.hamburger,
+  button.lux-hamburger,
+  .nav-icons .hamburger,
+  .nav-icons .lux-hamburger {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
   }
 
   /* Push page content above the nav bar */
