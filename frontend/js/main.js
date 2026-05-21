@@ -138,28 +138,16 @@ async function loadFeatured(retries = 3){
 
   if (!wrap) return;
 
-  // Luxury loading state
-// Skeleton loading state
-wrap.innerHTML = `
-
+  wrap.innerHTML = `
 <div class="skeleton-grid">
-
   ${Array(4).fill().map(()=>`
-
     <div class="skeleton-card">
-
       <div class="skeleton-image"></div>
-
       <div class="skeleton-text"></div>
-
       <div class="skeleton-price"></div>
-
     </div>
-
   `).join('')}
-
 </div>
-
 `;
 
   try{
@@ -188,7 +176,6 @@ wrap.innerHTML = `
 
     }else{
 
-      // Customer ko ugly error mat dikha
       wrap.innerHTML = `
         <div class="luxury-loading">
           Our collection is loading...
@@ -201,61 +188,39 @@ wrap.innerHTML = `
 function productCard(p){
 
   return `
-
   <div class="product-card">
-
     <a href="product.html?id=${p._id}">
-
       <div class="product-image">
-
-  <img
-    class="main-img"
-    src="${
-      p.images?.[0]?.startsWith('http')
-      ? p.images[0]
-      : API_BASE + p.images?.[0]
-    }">
-
-  ${
-    p.images?.[1]
-    ? `
-    <img
-      class="hover-img"
-      src="${
-        p.images[1]?.startsWith('http')
-        ? p.images[1]
-        : API_BASE + p.images[1]
-      }">
-    `
-    : ''
-  }
-
-  <button
-  class="quick-btn"
-  onclick='openQuickView(event, ${JSON.stringify(p)})'>
-
-    QUICK VIEW
-
-  </button>
-
-</div>
-
+        <img
+          class="main-img"
+          src="${
+            p.images?.[0]?.startsWith('http')
+            ? p.images[0]
+            : API_BASE + p.images?.[0]
+          }">
+        ${
+          p.images?.[1]
+          ? `<img
+              class="hover-img"
+              src="${
+                p.images[1]?.startsWith('http')
+                ? p.images[1]
+                : API_BASE + p.images[1]
+              }">`
+          : ''
+        }
+        <button
+          class="quick-btn"
+          onclick='openQuickView(event, ${JSON.stringify(p)})'>
+          QUICK VIEW
+        </button>
+      </div>
     </a>
-
     <div class="product-info">
-
-      <div class="product-title">
-        ${p.name}
-      </div>
-
-      <div class="product-price">
-        ₹${p.price}
-      </div>
-
+      <div class="product-title">${p.name}</div>
+      <div class="product-price">₹${p.price}</div>
     </div>
-
   </div>
-
   `;
 }
 
@@ -318,6 +283,7 @@ document.querySelector('#contact-form')?.addEventListener('submit', async (e) =>
     alert("Error ❌");
   }
 });
+
 /* ================= QUICK VIEW ================= */
 
 let quickSelectedSize = null;
@@ -325,97 +291,78 @@ let quickSelectedSize = null;
 window.openQuickView = function(e, product){
 
   e.preventDefault();
-
   e.stopPropagation();
 
-  const modal =
-    document.getElementById('quick-modal');
+  // ── FIX: Agar quick-modal is page pe exist nahi karta
+  //         (jaise product.html pe), toh seedha product page pe bhejo
+  const modal = document.getElementById('quick-modal');
+
+  if(!modal){
+    window.location.href = 'product.html?id=' + (product._id || product.id);
+    return;
+  }
 
   modal.classList.add('show');
 
-  document.getElementById('quick-image').src =
-    product.images?.[0]?.startsWith('http')
-    ? product.images[0]
-    : API_BASE + product.images?.[0];
+  // ── FIX: Har element ko null-safe access karo
+  const imgEl    = document.getElementById('quick-image');
+  const titleEl  = document.getElementById('quick-title');
+  const priceEl  = document.getElementById('quick-price');
+  const descEl   = document.getElementById('quick-desc');
+  const wrap     = document.getElementById('quick-size-wrap');
+  const cartBtn  = document.getElementById('quick-cart-btn');
 
-  document.getElementById('quick-title')
-    .textContent = product.name;
+  if(imgEl){
+    imgEl.src = product.images?.[0]?.startsWith('http')
+      ? product.images[0]
+      : API_BASE + (product.images?.[0] || '');
+  }
 
-  document.getElementById('quick-price')
-    .textContent = '₹' + product.price;
+  if(titleEl) titleEl.textContent = product.name;
+  if(priceEl) priceEl.textContent = '₹' + product.price;
+  if(descEl)  descEl.textContent  = product.description || 'Luxury fashion piece from Shenova.';
 
-  document.getElementById('quick-desc')
-    .textContent =
-      product.description ||
-      'Luxury fashion piece from Shenova.';
+  // Size pills
+  if(wrap){
+    wrap.innerHTML = '';
+    quickSelectedSize = null;
 
-  const wrap =
-    document.getElementById('quick-size-wrap');
+    (product.sizes || ['S','M','L']).forEach(size => {
 
-  wrap.innerHTML = '';
+      const btn = document.createElement('button');
+      btn.className = 'size-pill';
+      btn.textContent = size;
 
-  quickSelectedSize = null;
+      btn.onclick = () => {
+        document.querySelectorAll('.size-pill').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        quickSelectedSize = size;
+      };
 
-  (product.sizes || ['S','M','L'])
-  .forEach(size=>{
-
-    const btn =
-      document.createElement('button');
-
-    btn.className = 'size-pill';
-
-    btn.textContent = size;
-
-    btn.onclick = ()=>{
-
-      document
-      .querySelectorAll('.size-pill')
-      .forEach(x=>x.classList.remove('active'));
-
-      btn.classList.add('active');
-
-      quickSelectedSize = size;
-    };
-
-    wrap.appendChild(btn);
-
-  });
-
-  document.getElementById('quick-cart-btn')
-  .onclick = ()=>{
-
-    if(!quickSelectedSize){
-
-      return showModal(
-        'Select Size',
-        'Please select a size.'
-      );
-    }
-
-    addToCart({
-      ...product,
-      size:quickSelectedSize,
-      qty:1
+      wrap.appendChild(btn);
     });
+  }
 
-    closeQuickView();
+  // Add to cart button
+  if(cartBtn){
+    cartBtn.onclick = () => {
 
-    showModal(
-      'Added to Bag',
-      product.name + ' added successfully.'
-    );
+      if(!quickSelectedSize){
+        return showModal('Select Size', 'Please select a size.');
+      }
 
-  };
+      addToCart({ ...product, size: quickSelectedSize, qty: 1 });
+      closeQuickView();
+      showModal('Added to Bag', product.name + ' added successfully.');
+    };
+  }
 
-}
+};
 
 window.closeQuickView = function(){
+  document.getElementById('quick-modal')?.classList.remove('show');
+};
 
-  document
-  .getElementById('quick-modal')
-  .classList.remove('show');
-
-}
 /* ================= REVEAL ================= */
 
 const revealEls =
@@ -443,6 +390,7 @@ revealEls.forEach(el=>{
   revealObserver.observe(el);
 
 });
+
 /* ================= GSAP ================= */
 
 if(window.gsap){
@@ -473,6 +421,7 @@ if(window.gsap){
   });
 
 }
+
 /* ================= PAGE TRANSITIONS ================= */
 
 /* PAGE ENTER */
@@ -531,10 +480,12 @@ document
   }
 
 });
+
 /* ================= SPIN WHEEL ================= */
 /* NOTE: spinWheel(), closeSpinPopup(), closeCouponPopup(), copyCoupon()
    are all defined in the inline <script> at the bottom of index.html.
    This section intentionally left empty to avoid duplicate declarations. */
+
 /* ================= NEWSLETTER ================= */
 
 document
