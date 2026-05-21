@@ -956,7 +956,7 @@ footer {
     <!-- Accordion -->
     <div class="pdp-acc">
       <div class="pdp-acc-item" id="acc-details">
-        <button class="pdp-acc-btn" onclick="toggleAcc('acc-details')">
+        <button class="pdp-acc-btn" data-acc="acc-details">
           <span>Product Details</span>
           <span class="pdp-acc-icon">+</span>
         </button>
@@ -974,7 +974,7 @@ footer {
       </div>
 
       <div class="pdp-acc-item" id="acc-care">
-        <button class="pdp-acc-btn" onclick="toggleAcc('acc-care')">
+        <button class="pdp-acc-btn" data-acc="acc-care">
           <span>Care Instructions</span>
           <span class="pdp-acc-icon">+</span>
         </button>
@@ -991,7 +991,7 @@ footer {
       </div>
 
       <div class="pdp-acc-item" id="acc-ship">
-        <button class="pdp-acc-btn" onclick="toggleAcc('acc-ship')">
+        <button class="pdp-acc-btn" data-acc="acc-ship">
           <span>Shipping &amp; Returns</span>
           <span class="pdp-acc-icon">+</span>
         </button>
@@ -1097,16 +1097,13 @@ footer {
     </a>
   </nav>
 
-</body>
-<!-- SCRIPTS -->
+<!-- SCRIPTS — inside body so they always execute -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
 <script src="js/product.js"></script>
 <script src="js/bottomnav.js"></script>
-<script src="js/flyToCart.js?v=1"></script>
-<script src="js/accordion.js"></script>
 <script>
 /* ── Scroll progress ──────────────────────────────────────────── */
 window.addEventListener('scroll', () => {
@@ -1127,19 +1124,22 @@ window.addEventListener('scroll', () => {
 /* ── Mobile hamburger ─────────────────────────────────────────── */
 const hamburger = document.querySelector('.hamburger');
 const mobileMenu = document.querySelector('.mobile-menu');
+if (hamburger) hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
 
-hamburger.addEventListener('click', () => {
-  mobileMenu.classList.toggle('open');
+/* ── Accordion — direct listeners, no onclick, no toggleAcc dependency ── */
+document.querySelectorAll('.pdp-acc-btn').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var accId = this.getAttribute('data-acc');
+    var item  = document.getElementById(accId);
+    if (!item) return;
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.pdp-acc-item').forEach(function(a) {
+      a.classList.remove('open');
+    });
+    if (!isOpen) item.classList.add('open');
+  });
 });
-
-/* ── Accordion ────────────────────────────────────────────────── */
-window.toggleAcc = function(id) {
-  const item = document.getElementById(id);
-  if (!item) return;
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.pdp-acc-item').forEach(a => a.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
-};
 
 /* ── Zoom ─────────────────────────────────────────────────────── */
 document.getElementById('pdp-main-img')?.addEventListener('click', function() {
