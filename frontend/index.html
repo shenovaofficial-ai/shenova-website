@@ -2531,7 +2531,33 @@ if(sp) {
     spun = true;
     const extraSpins = 6 + Math.floor(Math.random() * 4);
     const seg = Math.floor(Math.random() * N);
-    const targetAngle = -(extraSpins * 2 * Math.PI + seg * ARC + ARC / 2 + Math.random() * ARC * .5);
+
+    /*
+     * ROTATION MATH FIX — why +Math.PI/2 is required:
+     *
+     * Canvas draws segments starting at 0 rad (3 o'clock), increasing clockwise.
+     * Segment i occupies: [rot + i*ARC,  rot + (i+1)*ARC]
+     *
+     * The pointer (.sp-wptr) is at the TOP of the wheel (12 o'clock = -PI/2 rad).
+     *
+     * Wheel-relative angle under pointer after spin:
+     *   (-PI/2 - finalRot) mod 2PI
+     *
+     * For pointer to land on midpoint of segment `seg`:
+     *   (-PI/2 - finalRot) mod 2PI = seg*ARC + ARC/2
+     *   => finalRot = -(PI/2 + seg*ARC + ARC/2)  (ignoring full rotations)
+     *
+     * With startAngle = 0 (first and only spin):
+     *   targetAngle = -(extra*2PI + PI/2 + seg*ARC + ARC/2 + jitter)
+     *
+     * The OLD formula was missing +PI/2, causing a systematic 2-segment offset
+     * on every single spin (PI/2 / ARC = PI/2 / (PI/4) = 2 segments).
+     *
+     * Jitter is symmetric (+/-30% of segment width) so the wheel
+     * stops naturally near centre — never overshooting into adjacent segments.
+     */
+    const jitter = (Math.random() - 0.5) * ARC * 0.6;
+    const targetAngle = -(extraSpins * 2 * Math.PI + Math.PI / 2 + seg * ARC + ARC / 2 + jitter);
     const startAngle = currentAngle;
     const duration = 4200 + Math.random() * 800;
     const startTime = performance.now();
@@ -2544,6 +2570,19 @@ if(sp) {
       if(t < 1) { requestAnimationFrame(frame); return; }
       spinning = false;
       const finalSeg = SEGMENTS[seg];
+
+      /* ── Reward verification (check DevTools console) ── */
+      const pointerAngle = ((-Math.PI / 2 - currentAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      const displayedSegIdx = Math.floor(pointerAngle / ARC) % N;
+      console.group('%c[SpinWheel] Reward Verification', 'color:#b5895a;font-weight:bold;font-size:13px');
+      console.log(`Selected  : seg ${seg}  → "${SEGMENTS[seg].label}"`);
+      console.log(`Displayed : seg ${displayedSegIdx} → "${SEGMENTS[displayedSegIdx].label}"`);
+      console.log(displayedSegIdx === seg
+        ? '%c✅ MATCH — reward and visual are in sync'
+        : `%c❌ MISMATCH — displayed=${displayedSegIdx} awarded=${seg}`,
+        displayedSegIdx === seg ? 'color:green;font-weight:bold' : 'color:red;font-weight:bold'
+      );
+      console.groupEnd();
       const couponPopup = document.getElementById('coupon-popup');
       const spinPopup = document.getElementById('spin-popup');
       if(finalSeg.discount > 0) {
