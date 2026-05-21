@@ -1,5 +1,4 @@
-// ================= GLOBAL CONFIG CHECK =================
-/* ================= API CONFIG ================= */
+// ================= API CONFIG =================
 
 const API_BASE =
   window.location.hostname.includes('localhost')
@@ -9,62 +8,48 @@ const API_BASE =
 const API = API_BASE + '/api';
 
 // ================= LOADER =================
-/* ================= LOADER ================= */
 
-
-window.addEventListener('load', ()=>{
-
-const loader = document.querySelector('.lux-loader'); 
-
-  setTimeout(()=>{
-
-loader?.classList.add('hide');
-
-  }, 1800);
-
+window.addEventListener('load', () => {
+  const loader = document.querySelector('.lux-loader');
+  setTimeout(() => { loader?.classList.add('hide'); }, 1800);
 });
 
 // ================= NAV =================
+
 const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => {
   nav?.classList.toggle('scrolled', window.scrollY > 30);
 });
 
 // ================= MOBILE MENU =================
-/* ================= FULLSCREEN MENU ================= */
 
-const hamburger =
-document.querySelector('.hamburger');
+const hamburger  = document.querySelector('.hamburger');
+const mobileMenu = document.querySelector('.mobile-menu');
 
-const mobileMenu =
-document.querySelector('.mobile-menu');
-
-hamburger?.addEventListener('click',()=>{
-
+hamburger?.addEventListener('click', () => {
   hamburger.classList.toggle('active');
-
   mobileMenu.classList.toggle('open');
-
-}); 
+});
 
 // ================= CART =================
-function updateCartCount(){
-  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-  const c = cart.reduce((s,i)=>s+(i.qty||1),0);
+
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const c = cart.reduce((s, i) => s + (i.qty || 1), 0);
   document.querySelectorAll('.cart-count').forEach(el => el.textContent = c);
 }
 updateCartCount();
 
-function openCart(){
+function openCart() {
   renderCart();
   document.querySelector('.drawer')?.classList.add('open');
   document.querySelector('.drawer-overlay')?.classList.add('open');
 }
-function closeCart(){
+function closeCart() {
   document.querySelector('.drawer')?.classList.remove('open');
   document.querySelector('.drawer-overlay')?.classList.remove('open');
 }
-window.openCart = openCart;
+window.openCart  = openCart;
 window.closeCart = closeCart;
 
 document.querySelector('.cart-btn')?.addEventListener('click', e => {
@@ -73,30 +58,29 @@ document.querySelector('.cart-btn')?.addEventListener('click', e => {
 });
 
 // ================= CART RENDER =================
-function renderCart(){
-  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-  const body = document.querySelector('.drawer-body');
+
+function renderCart() {
+  const cart    = JSON.parse(localStorage.getItem('cart') || '[]');
+  const body    = document.querySelector('.drawer-body');
   const totalEl = document.querySelector('.drawer .total span:last-child');
 
   if (!body) return;
 
-  if (!cart.length){
+  if (!cart.length) {
     body.innerHTML = '<p style="text-align:center;color:#888;padding:40px 0">Your bag is empty</p>';
-    if(totalEl) totalEl.textContent='₹0';
+    if (totalEl) totalEl.textContent = '₹0';
     return;
   }
 
-  body.innerHTML = cart.map((it,i)=>{
-
+  body.innerHTML = cart.map((it, i) => {
     const raw = it.image || it.images?.[0] || '';
     const img = raw.startsWith('http') ? raw : API_BASE + raw;
-
     return `
     <div class="cart-item">
       <img src="${img}">
       <div>
         <h4>${it.name}</h4>
-        <div class="meta">Size: ${it.size || '-'}${it.color?' · '+it.color:''}</div>
+        <div class="meta">Size: ${it.size || '-'}${it.color ? ' · ' + it.color : ''}</div>
         <div class="qty">
           <button onclick="changeQty(${i},-1)">−</button>
           <span>${it.qty}</span>
@@ -104,509 +88,342 @@ function renderCart(){
         </div>
       </div>
       <div style="text-align:right">
-        <div>₹${(it.price*it.qty).toLocaleString()}</div>
+        <div>₹${(it.price * it.qty).toLocaleString()}</div>
         <button onclick="removeItem(${i})">REMOVE</button>
       </div>
     </div>`;
   }).join('');
 
-  const total = cart.reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
-  if (totalEl) totalEl.textContent = '₹'+total.toLocaleString();
+  const total = cart.reduce((s, i) => s + (i.price || 0) * (i.qty || 1), 0);
+  if (totalEl) totalEl.textContent = '₹' + total.toLocaleString();
 }
 
 // ================= CART ACTIONS =================
-window.changeQty = (i,d) => {
-  const c = JSON.parse(localStorage.getItem('cart')||'[]');
-  c[i].qty = Math.max(1, (c[i].qty||1) + d);
+
+window.changeQty = (i, d) => {
+  const c = JSON.parse(localStorage.getItem('cart') || '[]');
+  c[i].qty = Math.max(1, (c[i].qty || 1) + d);
   localStorage.setItem('cart', JSON.stringify(c));
   renderCart();
   updateCartCount();
 };
 
 window.removeItem = (i) => {
-  const c = JSON.parse(localStorage.getItem('cart')||'[]');
-  c.splice(i,1);
+  const c = JSON.parse(localStorage.getItem('cart') || '[]');
+  c.splice(i, 1);
   localStorage.setItem('cart', JSON.stringify(c));
   renderCart();
   updateCartCount();
 };
 
-// ================= PRODUCTS =================
-async function loadFeatured(retries = 3){
+// ================= VIDEO HELPERS =================
 
-  const wrap = document.querySelector('#featured-grid');
+const _VIDEO_EXT = /\.(mp4|webm|mov|avi|ogg)$/i;
 
-  if (!wrap) return;
-
-  // Luxury loading state
-// Skeleton loading state
-wrap.innerHTML = `
-
-<div class="skeleton-grid">
-
-  ${Array(4).fill().map(()=>`
-
-    <div class="skeleton-card">
-
-      <div class="skeleton-image"></div>
-
-      <div class="skeleton-text"></div>
-
-      <div class="skeleton-price"></div>
-
-    </div>
-
-  `).join('')}
-
-</div>
-
-`;
-
-  try{
-    const res = await fetch(API + '/products');
-
-    if(!res.ok){
-      throw new Error("Failed");
-    }
-
-    const products = await res.json();
-
-    wrap.innerHTML = products
-      .slice(0, 4)
-      .map(p => productCard(p))
-      .join('');
-
-  }catch(err){
-
-    console.log("Retrying product fetch...");
-
-    if(retries > 0){
-
-      setTimeout(() => {
-        loadFeatured(retries - 1);
-      }, 2000);
-
-    }else{
-
-      // Customer ko ugly error mat dikha
-      wrap.innerHTML = `
-        <div class="luxury-loading">
-          Our collection is loading...
-        </div>
-      `;
-    }
-  }
+function _isVideoSrc(src) {
+  return _VIDEO_EXT.test(src || '');
 }
 
-function productCard(p){
+function _resolveUrl(src) {
+  if (!src) return '';
+  return src.startsWith('http') ? src : API_BASE + src;
+}
 
-  return `
+// ================= CARD VIDEO AUTOPLAY ENGINE =================
+// IntersectionObserver plays videos when ≥25% visible, pauses when not.
+// Handles iPhone Safari (needs playsinline + webkit-playsinline attributes),
+// Android Chrome, and desktop. play() Promise catch prevents console errors.
 
-  <div class="product-card">
+let _cardVideoObserver = null;
 
-    <a href="product.html?id=${p._id}">
+function _observeCardVideo(vid) {
+  if (!_cardVideoObserver) {
+    _cardVideoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const v = entry.target;
+        if (entry.isIntersecting) {
+          const p = v.play();
+          if (p !== undefined) p.catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.25 });
+  }
+  _cardVideoObserver.observe(vid);
+}
 
-      <div class="product-image">
+// Call after any grid is populated to wire up all .card-video elements.
+// Safe to call multiple times — already-observed videos are skipped by
+// the browser's IntersectionObserver internally.
+window.initCardVideos = function(container) {
+  const root = container || document;
+  root.querySelectorAll('.card-video').forEach(vid => {
+    // Force-set every required attribute in JS as well as HTML,
+    // because some browsers strip boolean attributes from innerHTML.
+    vid.muted       = true;          // MUST be true for autoplay to work
+    vid.loop        = true;
+    vid.autoplay    = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline', '');          // iOS Safari
+    vid.setAttribute('webkit-playsinline', '');   // older iOS
+    vid.setAttribute('disablepictureinpicture', '');
+    vid.disableRemotePlayback = true;
 
-  <img
-    class="main-img"
-    src="${
-      p.images?.[0]?.startsWith('http')
-      ? p.images[0]
-      : API_BASE + p.images?.[0]
-    }">
+    _observeCardVideo(vid);
+  });
+};
 
-  ${
-    p.images?.[1]
-    ? `
-    <img
-      class="hover-img"
-      src="${
-        p.images[1]?.startsWith('http')
-        ? p.images[1]
-        : API_BASE + p.images[1]
-      }">
-    `
-    : ''
+// ================= PRODUCT CARD =================
+// If a product has videos, the first video becomes the card hero
+// (muted autoplay loop). The first image is used as the poster frame
+// so there's no flash of empty space while the video loads.
+// If no videos exist, the original image / hover-image behaviour is kept.
+
+function productCard(p) {
+  const firstVideo = p.videos?.[0];
+  const firstImage = p.images?.[0];
+  const hoverImage = p.images?.[1];
+
+  const videoSrc = firstVideo ? _resolveUrl(firstVideo) : null;
+  const imgSrc   = firstImage ? _resolveUrl(firstImage) : '';
+  const hoverSrc = hoverImage ? _resolveUrl(hoverImage) : null;
+
+  let mediaHtml;
+
+  if (videoSrc) {
+    // Video card — autoplay muted loop, poster = first product image
+    mediaHtml = `
+      <video
+        class="card-video"
+        src="${videoSrc}"
+        poster="${imgSrc}"
+        autoplay
+        muted
+        loop
+        playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        preload="none"
+      ></video>`;
+  } else {
+    // Image card — original hover-swap
+    mediaHtml = `
+      <img class="main-img" src="${imgSrc}" loading="lazy" alt="${p.name}">
+      ${hoverSrc ? `<img class="hover-img" src="${hoverSrc}" loading="lazy" alt="${p.name}">` : ''}`;
   }
 
-  <button
-  class="quick-btn"
-  onclick='openQuickView(event, ${JSON.stringify(p)})'>
-
-    QUICK VIEW
-
-  </button>
-
-</div>
-
+  return `
+  <div class="product-card">
+    <a href="product.html?id=${p._id}">
+      <div class="product-image">
+        ${mediaHtml}
+        <button class="quick-btn" onclick='openQuickView(event, ${JSON.stringify(p)})'>
+          QUICK VIEW
+        </button>
+      </div>
     </a>
-
     <div class="product-info">
-
-      <div class="product-title">
-        ${p.name}
-      </div>
-
-      <div class="product-price">
-        ₹${p.price}
-      </div>
-
+      <div class="product-title">${p.name}</div>
+      <div class="product-price">₹${p.price}</div>
     </div>
+  </div>`;
+}
 
-  </div>
+// ================= LOAD FEATURED =================
 
-  `;
+async function loadFeatured(retries = 3) {
+  const wrap = document.querySelector('#featured-grid');
+  if (!wrap) return;
+
+  wrap.innerHTML = `
+  <div class="skeleton-grid">
+    ${Array(4).fill().map(() => `
+      <div class="skeleton-card">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-price"></div>
+      </div>`).join('')}
+  </div>`;
+
+  try {
+    const res = await fetch(API + '/products');
+    if (!res.ok) throw new Error('Failed');
+    const products = await res.json();
+    wrap.innerHTML = products.slice(0, 4).map(p => productCard(p)).join('');
+    // Wire up IntersectionObserver for any video cards just injected
+    window.initCardVideos(wrap);
+  } catch (err) {
+    console.log('Retrying product fetch...');
+    if (retries > 0) {
+      setTimeout(() => loadFeatured(retries - 1), 2000);
+    } else {
+      wrap.innerHTML = `<div class="luxury-loading">Our collection is loading...</div>`;
+    }
+  }
 }
 
 loadFeatured();
 
 // ================= ADD TO CART =================
-function addToCart(product, imgEl){
 
+function addToCart(product) {
   let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-  const exists = cart.find(p => (p._id||p.id) === (product._id||product.id));
-
-  if(exists){
+  const exists = cart.find(p => (p._id || p.id) === (product._id || product.id));
+  if (exists) {
     exists.qty += 1;
   } else {
-    cart.push({
-      ...product,
-      qty:1,
-      image: product.images?.[0] || ''
-    });
+    cart.push({ ...product, qty: 1, image: product.images?.[0] || '' });
   }
-
   localStorage.setItem('cart', JSON.stringify(cart));
-
   renderCart();
   openCart();
   updateCartCount();
-
-  showToast("Added to bag 🛍️");
+  showToast('Added to bag 🛍️');
 }
 
 // ================= TOAST =================
-function showToast(msg){
-  alert(msg);
-}
+
+function showToast(msg) { alert(msg); }
 
 // ================= CONTACT =================
+
 document.querySelector('#contact-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const form = e.target;
-
   const data = {
-    name: form.name.value,
-    email: form.email.value,
+    name:    form.name.value,
+    email:   form.email.value,
     message: form.message.value
   };
-
   try {
     await fetch(API_BASE + '/api/contact', {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body:    JSON.stringify(data)
     });
-
-    alert("Message sent ✅");
+    alert('Message sent ✅');
     form.reset();
-
   } catch {
-    alert("Error ❌");
+    alert('Error ❌');
   }
 });
-/* ================= QUICK VIEW ================= */
+
+// ================= QUICK VIEW =================
 
 let quickSelectedSize = null;
 
-window.openQuickView = function(e, product){
-
+window.openQuickView = function(e, product) {
   e.preventDefault();
-
   e.stopPropagation();
 
-  const modal =
-    document.getElementById('quick-modal');
-
+  const modal = document.getElementById('quick-modal');
   modal.classList.add('show');
 
   document.getElementById('quick-image').src =
     product.images?.[0]?.startsWith('http')
-    ? product.images[0]
-    : API_BASE + product.images?.[0];
+      ? product.images[0]
+      : API_BASE + product.images?.[0];
 
-  document.getElementById('quick-title')
-    .textContent = product.name;
+  document.getElementById('quick-title').textContent = product.name;
+  document.getElementById('quick-price').textContent = '₹' + product.price;
+  document.getElementById('quick-desc').textContent  =
+    product.description || 'Luxury fashion piece from Shenova.';
 
-  document.getElementById('quick-price')
-    .textContent = '₹' + product.price;
-
-  document.getElementById('quick-desc')
-    .textContent =
-      product.description ||
-      'Luxury fashion piece from Shenova.';
-
-  const wrap =
-    document.getElementById('quick-size-wrap');
-
-  wrap.innerHTML = '';
-
+  const wrap = document.getElementById('quick-size-wrap');
+  wrap.innerHTML   = '';
   quickSelectedSize = null;
 
-  (product.sizes || ['S','M','L'])
-  .forEach(size=>{
-
-    const btn =
-      document.createElement('button');
-
-    btn.className = 'size-pill';
-
+  (product.sizes || ['S', 'M', 'L']).forEach(size => {
+    const btn = document.createElement('button');
+    btn.className   = 'size-pill';
     btn.textContent = size;
-
-    btn.onclick = ()=>{
-
-      document
-      .querySelectorAll('.size-pill')
-      .forEach(x=>x.classList.remove('active'));
-
+    btn.onclick = () => {
+      document.querySelectorAll('.size-pill').forEach(x => x.classList.remove('active'));
       btn.classList.add('active');
-
       quickSelectedSize = size;
     };
-
     wrap.appendChild(btn);
-
   });
 
-  document.getElementById('quick-cart-btn')
-  .onclick = ()=>{
-
-    if(!quickSelectedSize){
-
-      return showModal(
-        'Select Size',
-        'Please select a size.'
-      );
+  document.getElementById('quick-cart-btn').onclick = () => {
+    if (!quickSelectedSize) {
+      return showModal('Select Size', 'Please select a size.');
     }
-
-    addToCart({
-      ...product,
-      size:quickSelectedSize,
-      qty:1
-    });
-
+    addToCart({ ...product, size: quickSelectedSize, qty: 1 });
     closeQuickView();
-
-    showModal(
-      'Added to Bag',
-      product.name + ' added successfully.'
-    );
-
+    showModal('Added to Bag', product.name + ' added successfully.');
   };
+};
 
-}
+window.closeQuickView = function() {
+  document.getElementById('quick-modal').classList.remove('show');
+};
 
-window.closeQuickView = function(){
+// ================= REVEAL =================
 
-  document
-  .getElementById('quick-modal')
-  .classList.remove('show');
-
-}
-/* ================= REVEAL ================= */
-
-const revealEls =
-document.querySelectorAll('.reveal');
-
-const revealObserver =
-new IntersectionObserver(entries=>{
-
-  entries.forEach(entry=>{
-
-    if(entry.isIntersecting){
-
-      entry.target.classList.add('active');
-
-    }
-
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('active');
   });
+}, { threshold: .12 });
+revealEls.forEach(el => revealObserver.observe(el));
 
-},{
-  threshold:.12
-});
+// ================= GSAP =================
 
-revealEls.forEach(el=>{
-
-  revealObserver.observe(el);
-
-});
-/* ================= GSAP ================= */
-
-if(window.gsap){
-
+if (window.gsap) {
   gsap.registerPlugin(ScrollTrigger);
-
-  gsap.utils
-  .toArray('.gsap-reveal')
-  .forEach(el=>{
-
-    gsap.to(el,{
-
-      opacity:1,
-
-      y:0,
-
-      duration:1.4,
-
-      ease:'power4.out',
-
-      scrollTrigger:{
-        trigger:el,
-        start:'top 88%',
-      }
-
+  gsap.utils.toArray('.gsap-reveal').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 1.4, ease: 'power4.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
     });
-
   });
-
 }
-/* ================= PAGE TRANSITIONS ================= */
 
-/* PAGE ENTER */
+// ================= PAGE TRANSITIONS =================
 
-window.addEventListener('pageshow',()=>{
-
-  document.body.classList.remove(
-    'page-out'
-  );
-
-  document.body.classList.add(
-    'page-in'
-  );
-
-  setTimeout(()=>{
-
-    document.body.classList.remove(
-      'page-in'
-    );
-
-  },100);
-
+window.addEventListener('pageshow', () => {
+  document.body.classList.remove('page-out');
+  document.body.classList.add('page-in');
+  setTimeout(() => document.body.classList.remove('page-in'), 100);
 });
 
-/* PAGE LEAVE */
-
-document
-.querySelectorAll('a')
-.forEach(link=>{
-
-  const href =
-  link.getAttribute('href');
-
-  if(
-    href &&
-    !href.startsWith('#') &&
-    !href.startsWith('javascript')
-  ){
-
-    link.addEventListener('click',e=>{
-
+document.querySelectorAll('a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && !href.startsWith('#') && !href.startsWith('javascript')) {
+    link.addEventListener('click', e => {
       e.preventDefault();
-
-      document.body.classList.add(
-        'page-out'
-      );
-
-      setTimeout(()=>{
-
-        window.location = href;
-
-      },700);
-
+      document.body.classList.add('page-out');
+      setTimeout(() => { window.location = href; }, 700);
     });
-
   }
-
 });
-/* ================= SPIN WHEEL ================= */
+
+// ================= SPIN WHEEL =================
 /* NOTE: spinWheel(), closeSpinPopup(), closeCouponPopup(), copyCoupon()
-   are all defined in the inline <script> at the bottom of index.html.
-   This section intentionally left empty to avoid duplicate declarations. */
-/* ================= NEWSLETTER ================= */
+   are defined in the inline <script> in index.html.
+   Left empty here to avoid duplicate declarations. */
 
-document
-.querySelector('.newsletter-form')
-?.addEventListener('submit', async e => {
+// ================= NEWSLETTER =================
 
+document.querySelector('.newsletter-form')?.addEventListener('submit', async e => {
   e.preventDefault();
-
-  const email =
-  document
-  .getElementById('newsletter-email')
-  .value
-  .trim();
-
-  if(!email){
-
-    return alert(
-      'Please enter email'
-    );
-
-  }
-
-  try{
-
-    const r = await fetch(
-
-      API + '/newsletter',
-
-      {
-
-        method:'POST',
-
-        headers:{
-          'Content-Type':'application/json'
-        },
-
-        body:JSON.stringify({
-          email
-        })
-
-      }
-
-    );
-
-    const data =
-    await r.json();
-
-    if(!r.ok){
-
-      return alert(
-        data.message ||
-        'Something went wrong'
-      );
-
-    }
-
-    alert(
-      'Joined successfully 🎉'
-    );
-
-    document
-    .getElementById('newsletter-email')
-    .value = '';
-
-  }catch(err){
-
+  const email = document.getElementById('newsletter-email').value.trim();
+  if (!email) return alert('Please enter email');
+  try {
+    const r    = await fetch(API + '/newsletter', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email })
+    });
+    const data = await r.json();
+    if (!r.ok) return alert(data.message || 'Something went wrong');
+    alert('Joined successfully 🎉');
+    document.getElementById('newsletter-email').value = '';
+  } catch (err) {
     console.log(err);
-
-    alert(
-      'Server error'
-    );
-
+    alert('Server error');
   }
-
 });
