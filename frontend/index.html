@@ -29,7 +29,7 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
-
+<link rel="stylesheet" href="css/bottomnav.css">
 <style>
 /* ====================================================================
    SHENOVA · PREMIUM REDESIGN v6
@@ -2290,14 +2290,47 @@ span.lux-cart-count.cart-count { display: flex !important; }
     <p class="cp-note">Valid 7 days. One-time use. Apply at checkout.</p>
   </div>
 </div>
+<!-- existing cart drawer / modals above -->
 
+  <nav class="shn-bottom-nav" aria-label="Main navigation">
+    <a class="shn-nav-item" href="index.html" data-page="home">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Home</span>
+    </a>
+    <a class="shn-nav-item" href="shop.html" data-page="shop">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Shop</span>
+    </a>
+    <a class="shn-nav-item" href="about.html" data-page="about">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">About</span>
+    </a>
+    <a class="shn-nav-item" href="contact.html" data-page="contact">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Contact</span>
+    </a>
+  </nav>
+
+</body>
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
-
+<script src="js/bottomnav.js"></script>
 <script>
 /* ================================================================
    SHENOVA HOMEPAGE — inline JS v6 · Premium Redesign

@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SHENOVA — Premium Mobile Bottom Navigation
+   css/bottomnav.css
+   Load in ALL pages, after style.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Tokens ─────────────────────────────────────────────────────── */
+:root {
+  --bn-bg:         rgba(10, 10, 9, 0.88);
+  --bn-border:     rgba(255,255,255,0.07);
+  --bn-gold:       #c9a96e;
+  --bn-gold-glow:  rgba(201, 169, 110, 0.28);
+  --bn-muted:      rgba(255,255,255,0.38);
+  --bn-active:     #f5f0e8;
+  --bn-height:     66px;
+  --bn-radius:     20px 20px 0 0;
+  --bn-font:       'DM Sans', sans-serif;
+  --bn-ease:       cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Hide hamburger & old mobile menu on mobile ──────────────────── */
+@media (max-width: 768px) {
+  .hamburger,
+  .lux-hamburger,
+  .mobile-menu,
+  .lux-mobile-menu {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Push page content above the nav bar */
+  body {
+    padding-bottom: calc(var(--bn-height) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ── Bottom Nav Shell ────────────────────────────────────────────── */
+.shn-bottom-nav {
+  display: none; /* desktop hidden */
+}
+
+@media (max-width: 768px) {
+  .shn-bottom-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99998; /* below drawer (99999) but above everything else */
+
+    height: calc(var(--bn-height) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    background: var(--bn-bg);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+
+    border-top: 1px solid var(--bn-border);
+    border-radius: var(--bn-radius);
+
+    box-shadow:
+      0 -8px 40px rgba(0,0,0,0.45),
+      0 -1px 0   rgba(255,255,255,0.04),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+
+    /* Prevent horizontal overflow */
+    overflow: hidden;
+  }
+}
+
+/* ── Top glow accent line ────────────────────────────────────────── */
+.shn-bottom-nav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--bn-gold) 30%,
+    var(--bn-gold) 70%,
+    transparent
+  );
+  opacity: 0.35;
+  border-radius: 1px;
+}
+
+/* ── Nav Item ────────────────────────────────────────────────────── */
+.shn-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  text-decoration: none;
+  color: var(--bn-muted);
+  font-family: var(--bn-font);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  padding: 10px 4px 8px;
+  min-height: var(--bn-height);
+
+  position: relative;
+  cursor: pointer;
+
+  /* Tap highlight */
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Tap ripple feedback */
+.shn-nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 6px 4px;
+  border-radius: 12px;
+  background: var(--bn-gold-glow);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.shn-nav-item:active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Icon wrapper ────────────────────────────────────────────────── */
+.shn-nav-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: transform 0.35s var(--bn-ease);
+}
+
+.shn-nav-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.25s ease;
+}
+
+/* ── Label ───────────────────────────────────────────────────────── */
+.shn-nav-label {
+  transition: color 0.25s ease, opacity 0.25s ease;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+/* ── Active dot indicator ────────────────────────────────────────── */
+.shn-nav-dot {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--bn-gold);
+  box-shadow: 0 0 6px var(--bn-gold-glow);
+  transition: transform 0.35s var(--bn-ease), opacity 0.25s ease;
+  opacity: 0;
+}
+
+/* ── ACTIVE STATE ────────────────────────────────────────────────── */
+.shn-nav-item.shn-active {
+  color: var(--bn-active);
+}
+
+.shn-nav-item.shn-active .shn-nav-label {
+  color: var(--bn-gold);
+  opacity: 1;
+}
+
+.shn-nav-item.shn-active .shn-nav-icon {
+  transform: translateY(-3px) scale(1.08);
+}
+
+.shn-nav-item.shn-active .shn-nav-dot {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.shn-nav-item.shn-active .shn-nav-icon svg {
+  stroke: var(--bn-active);
+  filter: drop-shadow(0 0 6px rgba(245, 240, 232, 0.3));
+}
+
+/* ── Tap animation (non-active items) ───────────────────────────── */
+.shn-nav-item:not(.shn-active):active .shn-nav-icon {
+  transform: scale(0.9);
+}
+
+/* Cart badge on bottom nav ──────────────────────────────────────── */
+.shn-nav-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--bn-gold);
+  color: #0a0a09;
+  font-size: 7.5px;
+  font-weight: 600;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--bn-font);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s ease, transform 0.35s var(--bn-ease);
+}
+
+.shn-nav-cart-badge.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Drawer/Modal z-index guard ──────────────────────────────────── */
+/* Ensure drawers sit above bottom nav */
+.drawer,
+.drawer-overlay,
+.quick-modal,
+.modal,
+#quick-modal {
+  z-index: 99999 !important;
+}
+
+/* ── Prevent nav showing inside cart drawer on mobile ────────────── */
+@media (max-width: 768px) {
+  body.drawer-open .shn-bottom-nav {
+    /* Still show — just let drawer overlay cover it */
+    pointer-events: none;
+  }
+}
+
+/* ── Smooth page transition compatibility ────────────────────────── */
+body.page-out .shn-bottom-nav {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}

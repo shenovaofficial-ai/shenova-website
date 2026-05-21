@@ -1,22 +1,109 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Wishlist · Shenova</title>
-<link rel="icon" type="image/png" href="images/logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-</head><body>
-<nav class="nav scrolled"><div class="container nav-inner"><a class="nav-logo" href="index.html">SHENOVA</a><div class="nav-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div><div class="nav-icons"><button class="cart-btn">🛍 <span class="cart-count">0</span></button><button class="hamburger">≡</button></div></div></nav>
-<div class="mobile-menu"><a href="shop.html">Shop</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-<div class="container" style="padding-top:140px">
-  <div class="eyebrow">Saved</div>
-  <h1 class="serif" style="font-size:clamp(40px,6vw,72px);margin-bottom:40px">Wishlist</h1>
-  <div class="grid" id="wish-grid"></div>
-</div>
-<footer><div class="container"><div class="foot-bottom" style="border:none">© 2026 SHENOVA</div></div></footer>
-<div class="drawer-overlay" onclick="closeCart()"></div>
-<aside class="drawer"><div class="drawer-head"><h3>Your Bag</h3><button onclick="closeCart()" style="font-size:22px">×</button></div><div class="drawer-body"></div><div class="drawer-foot"><div class="total"><span>Total</span><span>₹0</span></div><a class="btn" href="checkout.html">Checkout</a></div></aside>
-<div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card"><h3></h3><p></p><button class="btn" onclick="closeModal()">OK</button></div></div>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wishlist · Shenova</title>
+    <link rel="icon" type="image/png" href="images/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bottomnav.css" />
+  </head>
+  <body>
+    <nav class="nav scrolled">
+      <div class="container nav-inner">
+        <a class="nav-logo" href="index.html">SHENOVA</a>
+        <div class="nav-menu">
+          <a href="shop.html">Shop</a><a href="about.html">About</a
+          ><a href="contact.html">Contact</a>
+        </div>
+        <div class="nav-icons">
+          <button class="cart-btn">🛍 <span class="cart-count">0</span></button
+          ><button class="hamburger">≡</button>
+        </div>
+      </div>
+    </nav>
+    <div class="mobile-menu">
+      <a href="shop.html">Shop</a><a href="about.html">About</a
+      ><a href="contact.html">Contact</a>
+    </div>
+    <div class="container" style="padding-top: 140px">
+      <div class="eyebrow">Saved</div>
+      <h1
+        class="serif"
+        style="font-size: clamp(40px, 6vw, 72px); margin-bottom: 40px"
+      >
+        Wishlist
+      </h1>
+      <div class="grid" id="wish-grid"></div>
+    </div>
+    <footer>
+      <div class="container">
+        <div class="foot-bottom" style="border: none">© 2026 SHENOVA</div>
+      </div>
+    </footer>
+    <div class="drawer-overlay" onclick="closeCart()"></div>
+    <aside class="drawer">
+      <div class="drawer-head">
+        <h3>Your Bag</h3>
+        <button onclick="closeCart()" style="font-size: 22px">×</button>
+      </div>
+      <div class="drawer-body"></div>
+      <div class="drawer-foot">
+        <div class="total"><span>Total</span><span>₹0</span></div>
+        <a class="btn" href="checkout.html">Checkout</a>
+      </div>
+    </aside>
+    <div class="modal" onclick="if (event.target === this) closeModal();">
+      <div class="modal-card">
+        <h3></h3>
+        <p></p>
+        <button class="btn" onclick="closeModal()">OK</button>
+      </div>
+    </div>
+    <!-- existing cart drawer / modals above -->
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="js/config.js"></script><script src="js/main.js"></script><script src="js/wishlist.js"></script>
-</body></html>
+  <nav class="shn-bottom-nav" aria-label="Main navigation">
+    <a class="shn-nav-item" href="index.html" data-page="home">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Home</span>
+    </a>
+    <a class="shn-nav-item" href="shop.html" data-page="shop">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Shop</span>
+    </a>
+    <a class="shn-nav-item" href="about.html" data-page="about">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">About</span>
+    </a>
+    <a class="shn-nav-item" href="contact.html" data-page="contact">
+      <div class="shn-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span class="shn-nav-dot"></span>
+      </div>
+      <span class="shn-nav-label">Contact</span>
+    </a>
+  </nav>
+
+</body>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/bottomnav.js"></script>
+  </body>
+</html>
