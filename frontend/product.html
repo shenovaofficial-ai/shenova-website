@@ -1132,9 +1132,14 @@ window.addEventListener('scroll', () => {
 });
 
 /* ── Mobile hamburger ─────────────────────────────────────────── */
-const hamburger = document.querySelector('.hamburger');
-const mobileMenu = document.querySelector('.mobile-menu');
-if (hamburger) hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+/* var used (not const/let) — main.js already declares 'hamburger', const redeclaration = SyntaxError */
+var pdpHamburger  = document.querySelector('.hamburger');
+var pdpMobileMenu = document.querySelector('.mobile-menu');
+if (pdpHamburger && pdpMobileMenu) {
+  pdpHamburger.addEventListener('click', function() {
+    pdpMobileMenu.classList.toggle('open');
+  });
+}
 
 /* ── Accordion — direct listeners, no onclick, no toggleAcc dependency ── */
 document.querySelectorAll('.pdp-acc-btn').forEach(function(btn) {
