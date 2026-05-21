@@ -1091,3 +1091,18 @@
 
   transform:scale(1.02);
 }
+.story-logo-img{
+
+  width:94% !important;
+  height:94% !important;
+
+  object-fit:contain !important;
+
+  border-radius:50% !important;
+
+  filter:
+  brightness(1.08)
+  contrast(1.05);
+
+  transform:scale(1.08) !important;
+}
