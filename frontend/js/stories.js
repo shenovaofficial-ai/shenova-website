@@ -27,6 +27,7 @@
   let touchStartY   = 0;
   let touchStartT   = 0;
   let currentMedia  = null;     // <img> or <video> element
+  let mediaRetries  = 0;        // per-story load retry count
 
   /* ── DOM refs (created in buildDOM) ─────────────────────── */
   let viewer, backdrop, card,
@@ -34,7 +35,8 @@
       mediaContainer, mediaEl,
       captionEl, ctaEl,
       muteBtn, closeBtn,
-      counterEl, loadingEl;
+      counterEl, loadingEl,
+      emptyEl, errorEl;
 
   /* ═══════════════════════════════════════════════════════════
      BUILD DOM
@@ -116,6 +118,17 @@
           <div class="story-empty-text">No stories available</div>
         </div>
 
+        <!-- Media error state -->
+        <div class="story-empty" id="storyError" style="display:none;background:rgba(0,0,0,.7);">
+          <div class="story-empty-icon" style="font-size:28px">⚠</div>
+          <div class="story-empty-text">Media could not be loaded</div>
+          <button
+            onclick="window.SHStories && window.SHStories.skipCurrent()"
+            style="margin-top:14px;padding:10px 22px;background:#fff;color:#111;border:none;border-radius:999px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer">
+            Skip
+          </button>
+        </div>
+
       </div><!-- /card -->
     `;
 
@@ -134,6 +147,8 @@
     closeBtn       = v.querySelector('#storyCloseBtn');
     counterEl      = v.querySelector('#storyCounter');
     loadingEl      = v.querySelector('#storyLoading');
+    emptyEl        = v.querySelector('#storyEmpty');
+    errorEl        = v.querySelector('#storyError');
 
     /* Events */
     backdrop.addEventListener('click', closeViewer);
@@ -165,11 +180,24 @@
   async function openViewer () {
     buildDOM();
     showLoading(true);
+    showEmpty(false);
+    showError(false);
     viewer.classList.add('open');
     document.body.style.overflow = 'hidden';
 
+    // Support admin preview override
+    if (window._storyPreviewOverride) {
+      stories = window._storyPreviewOverride;
+      showLoading(false);
+      buildProgressBars();
+      currentIndex = 0;
+      loadStory(currentIndex);
+      return;
+    }
+
     try {
       const res  = await fetch(API_STORIES);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       stories = data.stories || [];
     } catch (err) {
@@ -180,7 +208,7 @@
     showLoading(false);
 
     if (!stories.length) {
-      document.getElementById('storyEmpty').style.display = 'flex';
+      showEmpty(true);
       return;
     }
 
@@ -199,8 +227,11 @@
     document.body.style.overflow = '';
     // Reset for next open
     stories = [];
-    progressWrap.innerHTML = '';
+    mediaRetries = 0;
+    progressWrap.innerHTML  = '';
     mediaContainer.innerHTML = '';
+    showEmpty(false);
+    showError(false);
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -233,12 +264,23 @@
   ═══════════════════════════════════════════════════════════ */
   function loadStory (index) {
     cancelTimer();
+    showError(false);
 
-    if (index < 0) { closeViewer(); return; }
-    if (index >= stories.length) { closeViewer(); return; }
+    if (index < 0 || index >= stories.length) {
+      closeViewer();
+      return;
+    }
 
     currentIndex = index;
+    mediaRetries = 0;
     const story  = stories[currentIndex];
+
+    /* Validate story has a media URL */
+    if (!story || !story.mediaUrl) {
+      console.warn('[Stories] Story missing mediaUrl, skipping:', story);
+      handleMediaError(story, false);
+      return;
+    }
 
     /* Update counter */
     counterEl.textContent = `${currentIndex + 1} / ${stories.length}`;
@@ -287,6 +329,7 @@
 
     img.onload = () => {
       showLoading(false);
+      showError(false);
       mediaContainer.appendChild(img);
       currentMedia = img;
       duration = STORY_DURATION_MS;
@@ -295,7 +338,7 @@
 
     img.onerror = () => {
       showLoading(false);
-      navigate(1); // skip broken
+      handleMediaError(story, true);
     };
 
     img.src = story.mediaUrl;
@@ -314,9 +357,14 @@
 
     vid.addEventListener('loadeddata', () => {
       showLoading(false);
+      showError(false);
       mediaContainer.appendChild(vid);
       currentMedia = vid;
-      vid.play().catch(() => {});
+      vid.play().catch(() => {
+        // Autoplay blocked — start progress anyway (muted should work)
+        vid.muted = true;
+        vid.play().catch(() => {});
+      });
       duration = Math.min((vid.duration || 6) * 1000, VIDEO_MAX_MS);
       startProgress();
     }, { once: true });
@@ -325,10 +373,48 @@
 
     vid.onerror = () => {
       showLoading(false);
-      navigate(1);
+      handleMediaError(story, true);
     };
 
     vid.src = story.mediaUrl;
+  }
+
+  /* ── Media error handler ─────────────────────────────────── */
+  // Does NOT auto-close the viewer. Shows error state and lets user
+  // manually skip, or auto-advances only if there are more stories.
+  function handleMediaError (story, canSkip) {
+    console.warn('[Stories] Media load failed for story:', story?._id, story?.mediaUrl);
+
+    const hasNext = currentIndex < stories.length - 1;
+    const hasPrev = currentIndex > 0;
+
+    if (canSkip && stories.length > 1) {
+      // There are other stories — auto-advance after brief pause so
+      // the viewer doesn't flash/close without the user noticing.
+      showError(true);
+      setTimeout(() => {
+        showError(false);
+        if (hasNext) {
+          navigate(1);
+        } else if (hasPrev) {
+          // On the last story; just show error state; user can close
+          startFallbackTimer();
+        } else {
+          closeViewer();
+        }
+      }, 1500);
+    } else {
+      // Only 1 story and it failed — show error state, DO NOT close
+      showError(true);
+      // Still set a fallback so the viewer doesn't hang forever
+      startFallbackTimer();
+    }
+  }
+
+  /* Fallback timer used when no media loads (shows error state, then closes) */
+  function startFallbackTimer () {
+    cancelTimer();
+    timer = setTimeout(() => { closeViewer(); }, 8000);
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -361,7 +447,12 @@
   }
 
   function cancelTimer () {
-    if (timer) { cancelAnimationFrame(timer); timer = null; }
+    if (timer) {
+      // cancel both rAF and setTimeout handles
+      cancelAnimationFrame(timer);
+      clearTimeout(timer);
+      timer = null;
+    }
     startTime = null;
   }
 
@@ -420,20 +511,17 @@
   }
 
   function onTouchEnd (e) {
-    const dx   = e.changedTouches[0].clientX - touchStartX;
-    const dy   = e.changedTouches[0].clientY - touchStartY;
-    const dt   = Date.now() - touchStartT;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartT;
 
-    // Distinguish a swipe from a tap
     if (Math.abs(dx) > SWIPE_THRESHOLD_PX && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) navigate(1);   // swipe left → next
-      else         navigate(-1);  // swipe right → prev
+      if (dx < 0) navigate(1);
+      else         navigate(-1);
       return;
     }
 
-    // Short tap — nav handled by tap zones; resume if no nav
     if (dt < 250) {
-      // tap zones handle click, just resume here
       resumeProgress();
       return;
     }
@@ -442,10 +530,18 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     LOADING STATE
+     LOADING / EMPTY / ERROR STATE HELPERS
   ═══════════════════════════════════════════════════════════ */
   function showLoading (show) {
     if (loadingEl) loadingEl.style.display = show ? 'flex' : 'none';
+  }
+
+  function showEmpty (show) {
+    if (emptyEl) emptyEl.style.display = show ? 'flex' : 'none';
+  }
+
+  function showError (show) {
+    if (errorEl) errorEl.style.display = show ? 'flex' : 'none';
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -502,11 +598,9 @@
      NAVBAR BUBBLE INIT
   ═══════════════════════════════════════════════════════════ */
   async function initBubble () {
-    /* Find the nav-logo element */
     const logo = document.querySelector('.nav-logo, .lux-logo');
     if (!logo) return;
 
-    /* Create bubble */
     const wrap = document.createElement('div');
     wrap.className    = 'story-bubble-wrap';
     wrap.id           = 'storyBubbleWrap';
@@ -525,18 +619,17 @@
 <span class="story-tooltip">Stories</span>
 `;
 
-    /* Insert AFTER the logo */
     logo.insertAdjacentElement('afterend', wrap);
 
-    /* Click / Enter */
     wrap.addEventListener('click', openViewer);
     wrap.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(); }
     });
 
-    /* Check if active stories exist — to show/hide the glow */
+    /* Show glow ring only if active stories exist */
     try {
       const res  = await fetch(API_STORIES);
+      if (!res.ok) return;
       const data = await res.json();
       if (data.stories && data.stories.length > 0) {
         wrap.classList.add('has-stories');
@@ -556,7 +649,14 @@
   }
 
   /* Expose for use in admin preview */
-  global.SHStories = { open: openViewer, close: closeViewer };
+  global.SHStories = {
+    open        : openViewer,
+    close       : closeViewer,
+    skipCurrent : () => {
+      showError(false);
+      navigate(1);
+    },
+  };
 
   init();
 

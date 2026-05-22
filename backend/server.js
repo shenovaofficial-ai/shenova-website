@@ -11,9 +11,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
 // ================= MODELS =================
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -39,7 +36,6 @@ const Product = mongoose.model('Product', new mongoose.Schema({
   trending:     { type: Boolean, default: false }
 }, { timestamps: true }));
 
-// ── Updated Order schema with COD fields ──
 const Order = mongoose.model('Order', new mongoose.Schema({
   user:          { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   items:         Array,
@@ -51,20 +47,16 @@ const Order = mongoose.model('Order', new mongoose.Schema({
   shippingFee:   Number,
   discount:      { type: Number, default: 0 },
   status:        { type: String, default: 'pending' },
-
-  // ── COD fields ──
   isCOD:              { type: Boolean, default: false },
-  codAdvancePaid:     { type: Number, default: 0 },    // always 100 for COD
+  codAdvancePaid:     { type: Number, default: 0 },
   codAdvancePaidAt:   { type: Date,   default: null },
-  codRemainingAmount: { type: Number, default: 0 },    // subtotal - discount
-
-  // ── Razorpay payment proof ──
+  codRemainingAmount: { type: Number, default: 0 },
   razorpay: {
     payment_id: String,
     order_id:   String,
     signature:  String,
     amount:     Number,
-    type:       String   // 'cod_advance' | 'full_prepaid'
+    type:       String
   }
 }, { timestamps: true }));
 
@@ -134,41 +126,21 @@ async function processUploads(files) {
 }
 
 // ================= STORIES =================
+// ── The storyRoutes module handles all /api/stories/* endpoints.
+//    It uses Cloudinary (via storyUpload middleware) so media URLs are
+//    permanent, publicly accessible URLs — NOT local disk paths.
+//    Routes provided:
+//      GET    /api/stories              → live (non-expired) stories
+//      GET    /api/stories/admin        → ALL stories incl. expired
+//      POST   /api/stories              → upload new story (Cloudinary)
+//      PUT    /api/stories/reorder      → drag-to-reorder
+//      PUT    /api/stories/:id          → update caption / CTA / order
+//      DELETE /api/stories/cleanup      → purge expired + Cloudinary assets
+//      DELETE /api/stories/:id          → delete one story
+//      POST   /api/stories/:id/view     → increment view count
 
-app.get('/api/stories', async (req, res) => {
-  try {
-    const stories = await mongoose.connection.db.collection('stories').find({}).sort({ createdAt: -1 }).toArray();
-    res.json({ success: true, stories });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-app.post('/api/stories', upload.single('storyFile'), async (req, res) => {
-  try {
-    const newStory = {
-      caption:  req.body.caption  || '',
-      ctaText:  req.body.ctaText  || '',
-      ctaLink:  req.body.ctaLink  || '',
-      mediaUrl: req.file ? `https://shenova-backend.onrender.com/uploads/${req.file.filename}` : '',
-      type:     'image',
-      createdAt: new Date(),
-    };
-    await mongoose.connection.db.collection('stories').insertOne(newStory);
-    res.json({ success: true, message: 'Story uploaded', story: newStory });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-app.delete('/api/stories/:id', async (req, res) => {
-  try {
-    await mongoose.connection.db.collection('stories').deleteOne({ _id: new mongoose.Types.ObjectId(req.params.id) });
-    res.json({ success: true, message: 'Story deleted' });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
+const storyRoutes = require('./routes/storyRoutes');
+app.use('/api/stories', storyRoutes);
 
 // ================= PRODUCTS =================
 
@@ -254,40 +226,21 @@ app.delete('/api/products/:id', async (req, res) => {
 
 // ================= ORDERS =================
 
-// ── POST /api/orders — Create order (COD or Prepaid)
-// For COD: validates that razorpay.type === 'cod_advance' and amount === 100
-// For Prepaid: no change to existing logic
 app.post('/api/orders', async (req, res) => {
   try {
     const body = req.body;
 
-    // ── COD Validation ──
-    // Reject COD orders that didn't pay the ₹100 advance
     if (body.isCOD) {
       const rzp = body.razorpay || {};
-
-      // Must have a razorpay payment_id
       if (!rzp.payment_id) {
-        return res.status(400).json({
-          error: 'COD orders require a ₹100 advance payment. No payment proof received.'
-        });
+        return res.status(400).json({ error: 'COD orders require a ₹100 advance payment. No payment proof received.' });
       }
-
-      // Must be tagged as cod_advance
       if (rzp.type !== 'cod_advance') {
-        return res.status(400).json({
-          error: 'Invalid payment type for COD order.'
-        });
+        return res.status(400).json({ error: 'Invalid payment type for COD order.' });
       }
-
-      // Amount must equal ₹100
       if (Number(rzp.amount) !== 100) {
-        return res.status(400).json({
-          error: `COD advance must be ₹100. Received: ₹${rzp.amount}`
-        });
+        return res.status(400).json({ error: `COD advance must be ₹100. Received: ₹${rzp.amount}` });
       }
-
-      // Ensure COD fields are correctly populated
       body.codAdvancePaid     = 100;
       body.codAdvancePaidAt   = body.codAdvancePaidAt || new Date();
       body.codRemainingAmount = Math.max(0, (body.subtotal || 0) - (body.discount || 0));
@@ -295,9 +248,7 @@ app.post('/api/orders', async (req, res) => {
 
     const order = await Order.create(body);
 
-    // Mark coupon as used after successful order
-    const code  = (body.coupon || '').trim().toUpperCase();
-    const email = body.shipping?.email || null;
+    const code = (body.coupon || '').trim().toUpperCase();
     if (code) {
       await SpinLead.findOneAndUpdate({ coupon: code }, { used: true }).catch(() => {});
     }
@@ -431,6 +382,13 @@ app.delete('/api/admin/coupons/:id', async (req, res) => {
 const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payment', paymentRoutes);
 
+// ================= 404 CATCH-ALL (API) =================
+// Returns JSON for any unmatched /api/* route — prevents HTML error pages
+// reaching the frontend and causing "Unexpected token '<'" parse errors.
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ success: false, message: `API route not found: ${req.method} ${req.originalUrl}` });
+});
+
 // ================= START SERVER =================
 
 const PORT = process.env.PORT || 5000;
@@ -449,5 +407,3 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shenova')
     app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => { console.error('MongoDB error:', err); process.exit(1); });
-
-app.use('/uploads', express.static('uploads'));
