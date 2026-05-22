@@ -457,7 +457,7 @@ window.saveCustomSize = function(e) {
     } else {
       const num = parseFloat(val);
       if (isNaN(num) || num <= 0) {
-        errors.push(f.label + ' must be a valid number');
+        errors.push(f.label + ' must be a valid positive number');
         el.classList.add('csm-invalid');
       } else {
         data[f.key] = num;
