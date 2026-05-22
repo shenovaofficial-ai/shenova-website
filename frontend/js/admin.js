@@ -143,6 +143,22 @@ window.openDrawer = (o) => {
             <p>Size: ${i.size || '-'}</p>
           </div>
         </div>
+        ${i.customSize ? `
+        <div class="custom-size-block">
+          <div class="custom-size-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+            Custom Bespoke Measurements
+          </div>
+          <div class="custom-size-grid">
+            ${i.customSize.bust     ? `<div class="csm-item"><span>Bust</span><strong>${i.customSize.bust} cm</strong></div>` : ''}
+            ${i.customSize.waist    ? `<div class="csm-item"><span>Waist</span><strong>${i.customSize.waist} cm</strong></div>` : ''}
+            ${i.customSize.hip      ? `<div class="csm-item"><span>Hip</span><strong>${i.customSize.hip} cm</strong></div>` : ''}
+            ${i.customSize.shoulder ? `<div class="csm-item"><span>Shoulder</span><strong>${i.customSize.shoulder} cm</strong></div>` : ''}
+            ${i.customSize.length   ? `<div class="csm-item"><span>Length</span><strong>${i.customSize.length} cm</strong></div>` : ''}
+            ${i.customSize.sleeve   ? `<div class="csm-item"><span>Sleeve</span><strong>${i.customSize.sleeve} cm</strong></div>` : ''}
+          </div>
+          ${i.customSize.notes ? `<div class="csm-notes-row"><span>Notes:</span> ${i.customSize.notes}</div>` : ''}
+        </div>` : ''}
       `).join('')}
     </div>
     <div class="info-card">

@@ -4,7 +4,16 @@ const orderSchema = new mongoose.Schema({
   items: [{
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     name: String, image: String, price: Number,
-    size: String, color: String, qty: Number
+    size: String, color: String, qty: Number,
+    customSize: {
+      bust:     Number,
+      waist:    Number,
+      hip:      Number,
+      shoulder: Number,
+      length:   Number,
+      sleeve:   Number,
+      notes:    String
+    }
   }],
   shipping: {
     fullName: String, email: String, phone: String,

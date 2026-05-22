@@ -394,3 +394,104 @@ window.closeSizeGuide = () => document.getElementById('sizeGuide')?.classList.re
 
 /* ──── Init ──── */
 loadProduct();
+
+/* ══════════════════════════════════════════════════════════════════
+   CUSTOM SIZE MODAL
+   ══════════════════════════════════════════════════════════════════ */
+
+// In-memory store — survives page interactions, cleared if page reloads
+let _customMeasurements = null; // null = not set, object = measurements saved
+
+window.openCustomSizeModal = function() {
+  // Restore any previously saved values
+  if (_customMeasurements) {
+    const m = _customMeasurements;
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+    setVal('csm-bust',    m.bust);
+    setVal('csm-waist',   m.waist);
+    setVal('csm-hip',     m.hip);
+    setVal('csm-shoulder',m.shoulder);
+    setVal('csm-length',  m.length);
+    setVal('csm-sleeve',  m.sleeve);
+    setVal('csm-notes',   m.notes);
+  }
+  document.getElementById('csm-error').textContent = '';
+  document.getElementById('csm-overlay').classList.add('csm-open');
+  document.getElementById('csm-panel').classList.add('csm-open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeCustomSizeModal = function() {
+  document.getElementById('csm-overlay').classList.remove('csm-open');
+  document.getElementById('csm-panel').classList.remove('csm-open');
+  document.body.style.overflow = '';
+};
+
+window.saveCustomSize = function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const errEl = document.getElementById('csm-error');
+  errEl.textContent = '';
+
+  // Clear previous invalid states
+  form.querySelectorAll('input').forEach(i => i.classList.remove('csm-invalid'));
+
+  const fields = [
+    { id: 'csm-bust',     key: 'bust',     label: 'Bust' },
+    { id: 'csm-waist',    key: 'waist',    label: 'Waist' },
+    { id: 'csm-hip',      key: 'hip',      label: 'Hip' },
+    { id: 'csm-shoulder', key: 'shoulder', label: 'Shoulder' },
+    { id: 'csm-length',   key: 'length',   label: 'Length' },
+    { id: 'csm-sleeve',   key: 'sleeve',   label: 'Sleeve Length' },
+  ];
+
+  const data = {};
+  const errors = [];
+
+  fields.forEach(f => {
+    const el  = document.getElementById(f.id);
+    const val = el.value.trim();
+    if (!val) {
+      errors.push(f.label);
+      el.classList.add('csm-invalid');
+    } else {
+      const num = parseFloat(val);
+      if (isNaN(num) || num <= 0) {
+        errors.push(f.label + ' must be a valid number');
+        el.classList.add('csm-invalid');
+      } else {
+        data[f.key] = num;
+      }
+    }
+  });
+
+  if (errors.length) {
+    errEl.textContent = 'Please fill in: ' + errors.join(', ') + '.';
+    return;
+  }
+
+  data.notes = document.getElementById('csm-notes').value.trim();
+
+  _customMeasurements = data;
+
+  // Show saved badge
+  const badge = document.getElementById('pdp-custom-saved-badge');
+  if (badge) badge.style.display = 'inline-flex';
+
+  closeCustomSizeModal();
+};
+
+// Override addToCart to attach measurements
+const _origAddToCart = window.addToCart;
+window.addToCart = function() {
+  // Call original; it checks size selection
+  _origAddToCart();
+  // After cart is updated, patch the last item with measurements if present
+  if (_customMeasurements) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.length) {
+      cart[cart.length - 1].customSize = _customMeasurements;
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+};

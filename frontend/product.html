@@ -787,6 +787,290 @@ footer {
 .nav{
   z-index: 9999;
 }
+
+/* ══════════════════════════════════════════════════════
+   CUSTOM SIZE — button, modal, overlay
+   ══════════════════════════════════════════════════════ */
+
+/* Trigger button */
+.pdp-custom-size-wrap {
+  margin: 4px 0 20px;
+}
+.pdp-custom-size-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s, color .25s;
+}
+.pdp-custom-size-btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.pdp-custom-size-sub {
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: .01em;
+}
+.pdp-custom-saved-badge {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #2d7a50;
+  background: #edf7f1;
+  padding: 6px 14px;
+  border-radius: 2px;
+}
+.pdp-custom-saved-badge a {
+  color: var(--ink);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Overlay */
+.csm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,13,11,.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .45s cubic-bezier(.25,.46,.45,.94);
+}
+.csm-overlay.csm-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Panel */
+.csm-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -44%) scale(.96);
+  width: min(580px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--warm-white);
+  border-radius: 4px;
+  padding: 46px 44px 44px;
+  z-index: 1201;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .45s cubic-bezier(.25,.46,.45,.94), transform .45s cubic-bezier(.25,.46,.45,.94);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-mid) transparent;
+}
+.csm-panel.csm-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%,-50%) scale(1);
+}
+.csm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.csm-eyebrow {
+  font-size: 9.5px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.csm-title {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: .02em;
+}
+.csm-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink);
+  transition: background .2s, border-color .2s;
+  flex-shrink: 0;
+}
+.csm-close:hover {
+  background: var(--parchment);
+}
+.csm-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.csm-desc strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Form grid */
+.csm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.csm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.csm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.csm-field-full {
+  margin-bottom: 20px;
+}
+.csm-field label {
+  font-size: 9.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.csm-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.csm-input-wrap input {
+  width: 100%;
+  padding: 13px 40px 13px 16px;
+  border: 1px solid var(--line-mid);
+  border-radius: 2px;
+  background: #fff;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--ink);
+  transition: border-color .25s, box-shadow .25s;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.csm-input-wrap input::-webkit-outer-spin-button,
+.csm-input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.csm-input-wrap input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(168,134,90,.1);
+}
+.csm-input-wrap input.csm-invalid {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192,57,43,.08);
+}
+.csm-unit {
+  position: absolute;
+  right: 14px;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  color: var(--lighter);
+  pointer-events: none;
+}
+.csm-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line-mid);
+  border-radius: 2px;
+  background: #fff;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color .25s, box-shadow .25s;
+  line-height: 1.55;
+}
+.csm-field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(168,134,90,.1);
+}
+.csm-error {
+  font-size: 11.5px;
+  color: #c0392b;
+  letter-spacing: .05em;
+  margin-bottom: 14px;
+  min-height: 18px;
+}
+.csm-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 15px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s, transform .2s;
+}
+.csm-save-btn:hover {
+  background: var(--ink2);
+  transform: translateY(-1px);
+}
+.csm-save-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .csm-panel {
+    padding: 32px 22px 30px;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 14px 14px 0 0;
+    transform: translateY(100%);
+    max-height: 92vh;
+  }
+  .csm-panel.csm-open {
+    transform: translateY(0);
+  }
+  .csm-grid {
+    grid-template-columns: 1fr;
+  }
+  .csm-title {
+    font-size: 26px;
+  }
+}
 </style>
 </head>
 <body>  
@@ -902,6 +1186,90 @@ footer {
 </a>
       </div>
       <div class="pdp-sizes" id="pdp-sizes"></div>
+    </div>
+
+    <!-- Custom Size -->
+    <div class="pdp-custom-size-wrap">
+      <button class="pdp-custom-size-btn" onclick="openCustomSizeModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Enter Your Custom Size
+      </button>
+      <p class="pdp-custom-size-sub">We specialize in stitching outfits perfectly for your measurements.</p>
+      <div class="pdp-custom-saved-badge" id="pdp-custom-saved-badge" style="display:none">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Custom measurements saved &nbsp;·&nbsp;
+        <a href="javascript:void(0)" onclick="openCustomSizeModal()">Edit</a>
+      </div>
+    </div>
+
+    <!-- Custom Size Modal -->
+    <div class="csm-overlay" id="csm-overlay" onclick="closeCustomSizeModal()" aria-modal="true" role="dialog" aria-label="Custom size measurements"></div>
+    <div class="csm-panel" id="csm-panel">
+      <div class="csm-header">
+        <div>
+          <p class="csm-eyebrow">Bespoke Fit</p>
+          <h2 class="csm-title">Your Measurements</h2>
+        </div>
+        <button class="csm-close" onclick="closeCustomSizeModal()" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <p class="csm-desc">All measurements in <strong>centimetres (cm)</strong>. Our atelier team ensures a perfect fit crafted just for you.</p>
+      <form class="csm-form" id="csm-form" onsubmit="saveCustomSize(event)">
+        <div class="csm-grid">
+          <div class="csm-field">
+            <label for="csm-bust">Bust</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-bust" name="bust" placeholder="e.g. 86" min="40" max="200" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+          <div class="csm-field">
+            <label for="csm-waist">Waist</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-waist" name="waist" placeholder="e.g. 68" min="40" max="200" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+          <div class="csm-field">
+            <label for="csm-hip">Hip</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-hip" name="hip" placeholder="e.g. 92" min="40" max="200" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+          <div class="csm-field">
+            <label for="csm-shoulder">Shoulder</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-shoulder" name="shoulder" placeholder="e.g. 38" min="20" max="80" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+          <div class="csm-field">
+            <label for="csm-length">Length</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-length" name="length" placeholder="e.g. 140" min="40" max="200" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+          <div class="csm-field">
+            <label for="csm-sleeve">Sleeve Length</label>
+            <div class="csm-input-wrap">
+              <input type="number" id="csm-sleeve" name="sleeve" placeholder="e.g. 58" min="10" max="100" step="0.5">
+              <span class="csm-unit">cm</span>
+            </div>
+          </div>
+        </div>
+        <div class="csm-field csm-field-full">
+          <label for="csm-notes">Additional Notes</label>
+          <textarea id="csm-notes" name="notes" placeholder="Any special requests, alterations, or fitting preferences…" rows="3"></textarea>
+        </div>
+        <div class="csm-error" id="csm-error"></div>
+        <button type="submit" class="csm-save-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Save Measurements
+        </button>
+      </form>
     </div>
 
     <!-- Colour selector -->
