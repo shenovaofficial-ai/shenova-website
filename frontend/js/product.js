@@ -287,7 +287,8 @@ window.setColor = function(c, el) {
 
 /* ──── Add to cart ──── */
 window.addToCart = function() {
-  if (!selectedSize) {
+  // Skip size validation if customer has already saved custom measurements
+  if (!selectedSize && !_customMeasurements) {
     showModal('Select your size', 'Please choose a size before adding to your bag.');
     const sizesEl = document.querySelector('#pdp-sizes');
     if (sizesEl) {
@@ -307,7 +308,7 @@ window.addToCart = function() {
     name:  product.name,
     price: product.price,
     image: cartImage,
-    size:  selectedSize,
+    size:  selectedSize || (_customMeasurements ? 'Custom' : null),
     color: selectedColor,
     qty:   1
   });
