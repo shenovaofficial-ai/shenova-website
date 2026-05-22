@@ -13,6 +13,7 @@ app.use(express.json());
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+
 // ================= MODELS =================
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -38,6 +39,7 @@ const Product = mongoose.model('Product', new mongoose.Schema({
   trending:     { type: Boolean, default: false }
 }, { timestamps: true }));
 
+// ── Updated Order schema with COD fields ──
 const Order = mongoose.model('Order', new mongoose.Schema({
   user:          { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   items:         Array,
@@ -47,15 +49,29 @@ const Order = mongoose.model('Order', new mongoose.Schema({
   coupon:        String,
   subtotal:      Number,
   shippingFee:   Number,
-  discount:      Number,
-  status:        { type: String, default: 'pending' }
+  discount:      { type: Number, default: 0 },
+  status:        { type: String, default: 'pending' },
+
+  // ── COD fields ──
+  isCOD:              { type: Boolean, default: false },
+  codAdvancePaid:     { type: Number, default: 0 },    // always 100 for COD
+  codAdvancePaidAt:   { type: Date,   default: null },
+  codRemainingAmount: { type: Number, default: 0 },    // subtotal - discount
+
+  // ── Razorpay payment proof ──
+  razorpay: {
+    payment_id: String,
+    order_id:   String,
+    signature:  String,
+    amount:     Number,
+    type:       String   // 'cod_advance' | 'full_prepaid'
+  }
 }, { timestamps: true }));
 
 const Message = mongoose.model('Message', new mongoose.Schema({
   name: String, email: String, message: String
 }, { timestamps: true }));
 
-// ✅ SpinLead model for spin wheel coupons
 const SpinLead = mongoose.model('SpinLead', new mongoose.Schema({
   email:    { type: String },
   coupon:   { type: String },
@@ -112,105 +128,48 @@ function handleUpload(req, res, next) {
 async function processUploads(files) {
   const imageFiles = files?.images || [];
   const videoFiles = files?.videos || [];
-
-  const images = await Promise.all(
-    imageFiles.map(f => uploadToCloudinary(f.buffer, f.originalname))
-  );
-  const videos = await Promise.all(
-    videoFiles.map(f => uploadToCloudinary(f.buffer, f.originalname))
-  );
-
+  const images = await Promise.all(imageFiles.map(f => uploadToCloudinary(f.buffer, f.originalname)));
+  const videos = await Promise.all(videoFiles.map(f => uploadToCloudinary(f.buffer, f.originalname)));
   return { images, videos };
 }
+
 // ================= STORIES =================
 
 app.get('/api/stories', async (req, res) => {
-
   try {
-
-    const stories = await mongoose.connection.db
-      .collection('stories')
-      .find({})
-      .sort({ createdAt: -1 })
-      .toArray();
-
-    res.json({
-      success: true,
-      stories
-    });
-
+    const stories = await mongoose.connection.db.collection('stories').find({}).sort({ createdAt: -1 }).toArray();
+    res.json({ success: true, stories });
   } catch (err) {
-
-    res.status(500).json({
-      success: false,
-      message: err.message
-    });
-
+    res.status(500).json({ success: false, message: err.message });
   }
-
 });
-// ================= UPLOAD STORY =================
 
 app.post('/api/stories', upload.single('storyFile'), async (req, res) => {
-
   try {
-
     const newStory = {
-      caption: req.body.caption || '',
-      ctaText: req.body.ctaText || '',
-      ctaLink: req.body.ctaLink || '',
-      mediaUrl: req.file
-  ? `https://shenova-backend.onrender.com/uploads/${req.file.filename}`
-  : '',
-      type: 'image',
+      caption:  req.body.caption  || '',
+      ctaText:  req.body.ctaText  || '',
+      ctaLink:  req.body.ctaLink  || '',
+      mediaUrl: req.file ? `https://shenova-backend.onrender.com/uploads/${req.file.filename}` : '',
+      type:     'image',
       createdAt: new Date(),
     };
-
-    await mongoose.connection.db
-      .collection('stories')
-      .insertOne(newStory);
-
-    res.json({
-      success: true,
-      message: 'Story uploaded',
-      story: newStory
-    });
-
+    await mongoose.connection.db.collection('stories').insertOne(newStory);
+    res.json({ success: true, message: 'Story uploaded', story: newStory });
   } catch (err) {
-
-    res.status(500).json({
-      success: false,
-      message: err.message
-    });
-
+    res.status(500).json({ success: false, message: err.message });
   }
-
 });
+
 app.delete('/api/stories/:id', async (req, res) => {
-
   try {
-
-    await mongoose.connection.db
-      .collection('stories')
-      .deleteOne({
-        _id: new mongoose.Types.ObjectId(req.params.id)
-      });
-
-    res.json({
-      success: true,
-      message: 'Story deleted'
-    });
-
+    await mongoose.connection.db.collection('stories').deleteOne({ _id: new mongoose.Types.ObjectId(req.params.id) });
+    res.json({ success: true, message: 'Story deleted' });
   } catch (err) {
-
-    res.status(500).json({
-      success: false,
-      message: err.message
-    });
-
+    res.status(500).json({ success: false, message: err.message });
   }
-
 });
+
 // ================= PRODUCTS =================
 
 app.get('/api/products', async (req, res) => {
@@ -250,22 +209,13 @@ app.post('/api/products', handleUpload, async (req, res) => {
     body.colors   = body.colors   ? body.colors.split(',').map(s => s.trim()).filter(Boolean) : [];
     body.featured = body.featured === 'true';
     body.trending = body.trending === 'true';
-
     const { images, videos } = await processUploads(req.files);
     body.images = images;
     body.videos = videos;
-
     if (body.name) {
-      body.slug = body.name
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-') +
-        '-' + Date.now();
+      body.slug = body.name.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-') + '-' + Date.now();
     }
-
-    console.log(`POST /products — images: ${images.length}, videos: ${videos.length}`);
     const product = await Product.create(body);
     res.json(product);
   } catch (err) {
@@ -282,16 +232,13 @@ app.put('/api/products/:id', handleUpload, async (req, res) => {
     if (body.featured !== undefined) body.featured = body.featured === 'true';
     if (body.trending !== undefined) body.trending = body.trending === 'true';
     delete body.id;
-
     const { images, videos } = await processUploads(req.files);
     if (images.length > 0) body.images = images;
     if (videos.length > 0) body.videos = videos;
-
     const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
     if (!updated) return res.status(404).json({ error: 'Product not found' });
     res.json(updated);
   } catch (err) {
-    console.error('PUT /products error:', err);
     res.status(500).json({ error: err.message || 'Update failed' });
   }
 });
@@ -307,11 +254,58 @@ app.delete('/api/products/:id', async (req, res) => {
 
 // ================= ORDERS =================
 
+// ── POST /api/orders — Create order (COD or Prepaid)
+// For COD: validates that razorpay.type === 'cod_advance' and amount === 100
+// For Prepaid: no change to existing logic
 app.post('/api/orders', async (req, res) => {
   try {
-    const order = await Order.create(req.body);
+    const body = req.body;
+
+    // ── COD Validation ──
+    // Reject COD orders that didn't pay the ₹100 advance
+    if (body.isCOD) {
+      const rzp = body.razorpay || {};
+
+      // Must have a razorpay payment_id
+      if (!rzp.payment_id) {
+        return res.status(400).json({
+          error: 'COD orders require a ₹100 advance payment. No payment proof received.'
+        });
+      }
+
+      // Must be tagged as cod_advance
+      if (rzp.type !== 'cod_advance') {
+        return res.status(400).json({
+          error: 'Invalid payment type for COD order.'
+        });
+      }
+
+      // Amount must equal ₹100
+      if (Number(rzp.amount) !== 100) {
+        return res.status(400).json({
+          error: `COD advance must be ₹100. Received: ₹${rzp.amount}`
+        });
+      }
+
+      // Ensure COD fields are correctly populated
+      body.codAdvancePaid     = 100;
+      body.codAdvancePaidAt   = body.codAdvancePaidAt || new Date();
+      body.codRemainingAmount = Math.max(0, (body.subtotal || 0) - (body.discount || 0));
+    }
+
+    const order = await Order.create(body);
+
+    // Mark coupon as used after successful order
+    const code  = (body.coupon || '').trim().toUpperCase();
+    const email = body.shipping?.email || null;
+    if (code) {
+      await SpinLead.findOneAndUpdate({ coupon: code }, { used: true }).catch(() => {});
+    }
+
+    console.log(`✅ Order created — ${order._id} | ${body.isCOD ? 'COD (₹100 advance paid)' : 'PREPAID'} | ₹${order.total}`);
     res.json(order);
   } catch (err) {
+    console.error('Order create error:', err);
     res.status(500).json({ error: 'Failed to create order' });
   }
 });
@@ -322,6 +316,11 @@ app.get('/api/orders', async (req, res) => {
 
 app.put('/api/orders/:id', async (req, res) => {
   res.json(await Order.findByIdAndUpdate(req.params.id, req.body, { new: true }));
+});
+
+app.delete('/api/orders/:id', async (req, res) => {
+  await Order.findByIdAndDelete(req.params.id);
+  res.json({ ok: true });
 });
 
 // ================= CONTACT =================
@@ -362,22 +361,13 @@ app.post('/api/spin/save', async (req, res) => {
   try {
     const { email, coupon, discount } = req.body;
     if (!email || !coupon) return res.status(400).json({ message: 'Email and coupon are required' });
-
     await SpinLead.findOneAndUpdate(
       { email: email.toLowerCase() },
-      {
-        email:    email.toLowerCase(),
-        coupon:   coupon.toUpperCase(),
-        discount: Number(discount) || 0,
-        used:     false
-      },
+      { email: email.toLowerCase(), coupon: coupon.toUpperCase(), discount: Number(discount) || 0, used: false },
       { upsert: true, new: true }
     );
-
-    console.log(`✅ Spin coupon saved — ${coupon} (${discount}%) for ${email}`);
     res.json({ success: true });
   } catch (err) {
-    console.error('Spin save error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -388,16 +378,11 @@ app.post('/api/coupon/apply', async (req, res) => {
   try {
     const { coupon } = req.body;
     if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-
     const found = await SpinLead.findOne({ coupon: coupon.toUpperCase() });
-
     if (!found) return res.status(400).json({ message: 'Invalid coupon code' });
     if (found.used) return res.status(400).json({ message: 'This coupon has already been used' });
-
-    console.log(`✅ Coupon applied — ${coupon} (${found.discount}%)`);
     res.json({ success: true, discount: found.discount });
   } catch (err) {
-    console.error('Coupon apply error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -406,16 +391,9 @@ app.post('/api/coupon/use', async (req, res) => {
   try {
     const { coupon } = req.body;
     if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-
-    await SpinLead.findOneAndUpdate(
-      { coupon: coupon.toUpperCase() },
-      { used: true }
-    );
-
-    console.log(`🔒 Coupon marked used — ${coupon}`);
+    await SpinLead.findOneAndUpdate({ coupon: coupon.toUpperCase() }, { used: true });
     res.json({ success: true });
   } catch (err) {
-    console.error('Coupon use error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -431,11 +409,7 @@ app.get('/api/admin/coupons', async (req, res) => {
 
 app.put('/api/admin/coupons/:id', async (req, res) => {
   try {
-    const updated = await SpinLead.findByIdAndUpdate(
-      req.params.id,
-      { used: req.body.used },
-      { new: true }
-    );
+    const updated = await SpinLead.findByIdAndUpdate(req.params.id, { used: req.body.used }, { new: true });
     if (!updated) return res.status(404).json({ message: 'Coupon not found' });
     res.json(updated);
   } catch (err) {
@@ -457,9 +431,6 @@ app.delete('/api/admin/coupons/:id', async (req, res) => {
 const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payment', paymentRoutes);
 
-
-
-
 // ================= START SERVER =================
 
 const PORT = process.env.PORT || 5000;
@@ -478,4 +449,5 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shenova')
     app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => { console.error('MongoDB error:', err); process.exit(1); });
-  app.use('/uploads', express.static('uploads'));
+
+app.use('/uploads', express.static('uploads'));

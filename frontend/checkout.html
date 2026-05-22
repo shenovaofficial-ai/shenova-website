@@ -4,40 +4,124 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Checkout · Shenova</title>
-<link rel="icon" type="image/png" href="images/logo.png">
-  <!-- Fonts: Cormorant (editorial serif) + DM Sans (refined sans) -->
+  <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '26862489086743105');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-  <!-- Global site styles (nav, drawer, modal, utilities) -->
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '26862489086743105');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <link rel="stylesheet" href="css/style.css">
-  <!-- Luxury checkout overrides — NEW FILE -->
   <link rel="stylesheet" href="css/checkout-luxury.css">
   <link rel="stylesheet" href="css/bottomnav.css">
+
+  <!-- ── COD Panel Styles ── -->
+  <style>
+    /* ── COD Info Panel ── */
+    .cod-info-panel {
+      display: none;
+      margin-top: 18px;
+      border: 1.5px solid rgba(184,149,106,0.35);
+      border-radius: 14px;
+      background: rgba(184,149,106,0.06);
+      padding: 20px 22px;
+      font-family: var(--co-sans, 'DM Sans', sans-serif);
+    }
+    .cod-info-panel.visible { display: block; }
+
+    .cod-info-panel .cod-panel-title {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: #8a6a3a;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .cod-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(184,149,106,0.15);
+      font-size: 13px;
+    }
+    .cod-info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .cod-info-row .cod-lbl { color: #6e5c3a; }
+    .cod-info-row .cod-val { font-weight: 500; color: #3d2e12; }
+    .cod-info-row.cod-highlight .cod-val { color: #b8956a; font-weight: 600; }
+    .cod-info-row.cod-remaining .cod-val { color: #0a0a0a; font-size: 15px; font-family: 'Cormorant Garamond', serif; }
+
+    .cod-note {
+      margin-top: 12px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #8a6a3a;
+      background: rgba(184,149,106,0.08);
+      border-radius: 8px;
+      padding: 9px 12px;
+      letter-spacing: .01em;
+    }
+
+    /* ── Sidebar COD breakdown ── */
+    .co-cod-breakdown {
+      display: none;
+      margin-top: 10px;
+      border-top: 1px solid rgba(10,10,10,.08);
+      padding-top: 12px;
+    }
+    .co-cod-breakdown.visible { display: block; }
+    .co-cod-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      color: #7a7672;
+    }
+    .co-cod-row.cod-pay-now { color: #b8956a; font-weight: 600; font-size: 13px; }
+    .co-cod-row.cod-pay-now span:last-child { font-size: 14px; }
+
+    /* Payment method badge on COD card */
+    .cod-badge-tag {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      background: rgba(184,149,106,0.15);
+      color: #8a6a3a;
+      border-radius: 20px;
+      padding: 2px 8px;
+      vertical-align: middle;
+    }
+
+    /* Subtly highlight the COD pay card when selected */
+    #pay-cod.active {
+      border-color: rgba(184,149,106,0.5) !important;
+      background: rgba(184,149,106,0.04) !important;
+    }
+  </style>
 </head>
 <body class="checkout-page">
 
-
-
   <!-- ═══════════════════════════════
-       NAV (all classes intact for main.js)
+       NAV
   ═══════════════════════════════ -->
   <nav class="nav scrolled">
     <div class="container nav-inner">
@@ -54,7 +138,6 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     </div>
   </nav>
 
-  <!-- MOBILE MENU (existing structure) -->
   <div class="mobile-menu">
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
@@ -72,7 +155,7 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     <div class="co-hero-trust">
       <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Secure &amp; Encrypted</span>
       <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg> Free Returns · 14 Days</span>
-      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Free Delivery Above ₹2,000</span>
+      <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Free Delivery Above ₹2,000 (Prepaid)</span>
     </div>
   </div>
 
@@ -103,7 +186,7 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
           </div>
         </div>
 
-        <!-- ── CHECKOUT FORM (all name attrs identical to original) ── -->
+        <!-- ── CHECKOUT FORM ── -->
         <form id="checkout-form" novalidate>
 
           <!-- ── SECTION 1: SHIPPING ADDRESS ── -->
@@ -120,136 +203,61 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
             <div class="co-fields">
 
               <div class="co-field-row two">
-                <!-- Full Name -->
                 <div class="co-field">
-                  <input
-                    type="text"
-                    name="fullName"
-                    id="f-fullName"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="name"
-                  >
+                  <input type="text" name="fullName" id="f-fullName" class="co-input" placeholder=" " required autocomplete="name">
                   <label class="co-label" for="f-fullName">Full Name</label>
                   <span class="co-field-line"></span>
                 </div>
-                <!-- Email -->
                 <div class="co-field">
-                  <input
-                    type="email"
-                    name="email"
-                    id="f-email"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="email"
-                  >
+                  <input type="email" name="email" id="f-email" class="co-input" placeholder=" " required autocomplete="email">
                   <label class="co-label" for="f-email">Email Address</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
               <div class="co-field-row two">
-                <!-- Phone -->
                 <div class="co-field">
-                  <input
-                    type="tel"
-                    name="phone"
-                    id="f-phone"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="tel"
-                  >
+                  <input type="tel" name="phone" id="f-phone" class="co-input" placeholder=" " required autocomplete="tel">
                   <label class="co-label" for="f-phone">Phone Number</label>
                   <span class="co-field-line"></span>
                 </div>
-                <!-- Country -->
                 <div class="co-field">
-                  <input
-                    type="text"
-                    name="country"
-                    id="f-country"
-                    class="co-input"
-                    placeholder=" "
-                    value="India"
-                    required
-                    autocomplete="country-name"
-                  >
+                  <input type="text" name="country" id="f-country" class="co-input" placeholder=" " value="India" required autocomplete="country-name">
                   <label class="co-label" for="f-country">Country</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
-              <!-- Address (full width) -->
               <div class="co-field-row">
                 <div class="co-field">
-                  <input
-                    type="text"
-                    name="address"
-                    id="f-address"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="street-address"
-                  >
+                  <input type="text" name="address" id="f-address" class="co-input" placeholder=" " required autocomplete="street-address">
                   <label class="co-label" for="f-address">Street Address</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
               <div class="co-field-row two">
-                <!-- City -->
                 <div class="co-field">
-                  <input
-                    type="text"
-                    name="city"
-                    id="f-city"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="address-level2"
-                  >
+                  <input type="text" name="city" id="f-city" class="co-input" placeholder=" " required autocomplete="address-level2">
                   <label class="co-label" for="f-city">City</label>
                   <span class="co-field-line"></span>
                 </div>
-                <!-- State -->
                 <div class="co-field">
-                  <input
-                    type="text"
-                    name="state"
-                    id="f-state"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="address-level1"
-                  >
+                  <input type="text" name="state" id="f-state" class="co-input" placeholder=" " required autocomplete="address-level1">
                   <label class="co-label" for="f-state">State</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
-              <!-- ZIP (full width) -->
               <div class="co-field-row">
                 <div class="co-field co-field--half">
-                  <input
-                    type="text"
-                    name="zip"
-                    id="f-zip"
-                    class="co-input"
-                    placeholder=" "
-                    required
-                    autocomplete="postal-code"
-                  >
+                  <input type="text" name="zip" id="f-zip" class="co-input" placeholder=" " required autocomplete="postal-code">
                   <label class="co-label" for="f-zip">ZIP / Postal Code</label>
                   <span class="co-field-line"></span>
                 </div>
               </div>
 
             </div>
-            <!-- end .co-fields -->
-
           </div>
           <!-- end co-section-1 -->
 
@@ -267,30 +275,33 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
             <!-- Payment method cards -->
             <div class="co-pay-options">
 
+              <!-- COD -->
               <label class="co-pay-card active" id="pay-cod">
                 <input type="radio" name="payment" value="Cash on Delivery" checked>
                 <div class="co-pay-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                 </div>
                 <div class="co-pay-info">
-                  <span class="co-pay-name">Cash on Delivery</span>
-                  <span class="co-pay-desc">Pay when your order arrives</span>
+                  <span class="co-pay-name">Cash on Delivery <span class="cod-badge-tag">₹100 advance</span></span>
+                  <span class="co-pay-desc">Pay ₹100 now to confirm · rest at delivery</span>
                 </div>
                 <div class="co-pay-radio"></div>
               </label>
 
+              <!-- UPI / Prepaid -->
               <label class="co-pay-card" id="pay-upi">
                 <input type="radio" name="payment" value="UPI">
                 <div class="co-pay-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 </div>
                 <div class="co-pay-info">
-                  <span class="co-pay-name">UPI</span>
-                  <span class="co-pay-desc">Pay via any UPI app instantly</span>
+                  <span class="co-pay-name">UPI — Pay Full Amount</span>
+                  <span class="co-pay-desc">Pay via any UPI app instantly · Free shipping above ₹2k</span>
                 </div>
                 <div class="co-pay-radio"></div>
               </label>
 
+              <!-- Card / Prepaid -->
               <label class="co-pay-card" id="pay-card">
                 <input type="radio" name="payment" value="Credit / Debit Card">
                 <div class="co-pay-icon">
@@ -298,47 +309,67 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
                 </div>
                 <div class="co-pay-info">
                   <span class="co-pay-name">Credit / Debit Card</span>
-                  <span class="co-pay-desc">Visa, Mastercard, RuPay accepted</span>
+                  <span class="co-pay-desc">Visa, Mastercard, RuPay · Free shipping above ₹2k</span>
                 </div>
                 <div class="co-pay-radio"></div>
               </label>
 
             </div>
 
+            <!-- ── COD DETAILS PANEL (shown only when COD is selected) ── -->
+            <div class="cod-info-panel" id="cod-info-panel">
+              <div class="cod-panel-title">✦ Cash on Delivery — Payment Breakdown</div>
+              <div class="cod-info-row">
+                <span class="cod-lbl">COD Shipping Charge</span>
+                <span class="cod-val">₹100</span>
+              </div>
+              <div class="cod-info-row cod-highlight">
+                <span class="cod-lbl">Advance to Pay Now (Online)</span>
+                <span class="cod-val" id="cod-advance-display">₹100</span>
+              </div>
+              <div class="cod-info-row cod-remaining">
+                <span class="cod-lbl">Remaining Amount (Pay at Door)</span>
+                <span class="cod-val" id="cod-remaining-display">₹0</span>
+              </div>
+              <div class="cod-note">
+                💡 A non-refundable ₹100 delivery confirmation charge is collected online to secure your COD order. The remaining amount is paid in cash when your parcel arrives.
+              </div>
+            </div>
+
             <!-- Coupon -->
             <div class="co-coupon">
               <p class="co-coupon-label">Have a coupon code?</p>
-             <div class="co-coupon-row">
-  <div class="co-field co-coupon-field">
-    <input type="text" name="coupon" id="f-coupon" class="co-input"
-      placeholder=" " autocomplete="off" style="text-transform:uppercase">
-    <label class="co-label" for="f-coupon">Enter Coupon Code</label>
-    <span class="co-field-line"></span>
-  </div>
-  <button type="button" id="apply-coupon-btn" style="
-    padding: 10px 22px;
-    background: #0d0c0b;
-    color: #faf7f2;
-    border: none;
-    border-radius: 50px;
-    font: 400 9.5px/1 'DM Sans', sans-serif;
-    letter-spacing: .26em;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background .3s;
-    flex-shrink: 0;
-  ">Apply</button>
-</div>
+              <div class="co-coupon-row">
+                <div class="co-field co-coupon-field">
+                  <input type="text" name="coupon" id="f-coupon" class="co-input"
+                    placeholder=" " autocomplete="off" style="text-transform:uppercase">
+                  <label class="co-label" for="f-coupon">Enter Coupon Code</label>
+                  <span class="co-field-line"></span>
+                </div>
+                <button type="button" id="apply-coupon-btn" style="
+                  padding: 10px 22px;
+                  background: #0d0c0b;
+                  color: #faf7f2;
+                  border: none;
+                  border-radius: 50px;
+                  font: 400 9.5px/1 'DM Sans', sans-serif;
+                  letter-spacing: .26em;
+                  text-transform: uppercase;
+                  cursor: pointer;
+                  white-space: nowrap;
+                  transition: background .3s;
+                  flex-shrink: 0;
+                ">Apply</button>
+              </div>
 
-<!-- Coupon feedback message -->
-<div id="coupon-msg" style="
-  font: 300 11px/1 'DM Sans', sans-serif;
-  margin-top: 10px;
-  padding: 8px 14px;
-  border-radius: 6px;
-  display: none;
-"></div>
+              <!-- Coupon feedback -->
+              <div id="coupon-msg" style="
+                font: 300 11px/1 'DM Sans', sans-serif;
+                margin-top: 10px;
+                padding: 8px 14px;
+                border-radius: 6px;
+                display: none;
+              "></div>
             </div>
 
           </div>
@@ -347,7 +378,7 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
           <!-- ── PLACE ORDER CTA ── -->
           <div class="co-submit-wrap">
             <button class="co-submit-btn" type="submit" id="place-order-btn">
-              <span class="co-submit-text">Place Order</span>
+              <span class="co-submit-text" id="place-order-label">Place Order</span>
               <span class="co-submit-arrow">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </span>
@@ -370,21 +401,17 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 
         <div class="co-summary-sticky">
 
-          <!-- Summary header -->
           <div class="co-summary-head">
             <h3 class="co-summary-title">Your Order</h3>
             <a href="shop.html" class="co-summary-edit">Edit bag</a>
           </div>
 
-          <!-- Cart items (rendered by checkout.js → renderSummary) -->
-          <div class="co-items" id="summary-items">
-            <!-- Injected dynamically -->
-          </div>
+          <!-- Cart items -->
+          <div class="co-items" id="summary-items"></div>
 
-          <!-- Divider -->
           <div class="co-summary-rule"></div>
 
-          <!-- Coupon applied state (shown via JS) -->
+          <!-- Coupon discount row -->
           <div class="co-discount-row" id="co-discount-row" style="display:none">
             <span class="co-discount-label">Discount Applied</span>
             <span class="co-discount-val" id="co-discount-val">—</span>
@@ -406,6 +433,18 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
             </div>
           </div>
 
+          <!-- COD sidebar breakdown (visible only when COD selected) -->
+          <div class="co-cod-breakdown" id="co-cod-breakdown">
+            <div class="co-cod-row">
+              <span>💳 Pay Online Now (COD Advance)</span>
+              <span id="sidebar-cod-advance">₹100</span>
+            </div>
+            <div class="co-cod-row cod-pay-now">
+              <span>🏠 Pay at Delivery</span>
+              <span id="sidebar-cod-remaining">—</span>
+            </div>
+          </div>
+
           <!-- Trust badges -->
           <div class="co-trust-badges">
             <div class="co-badge">
@@ -418,18 +457,14 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
             </div>
             <div class="co-badge">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              <span>Free Delivery ₹2k+</span>
+              <span>COD Available</span>
             </div>
           </div>
 
         </div>
-        <!-- end .co-summary-sticky -->
-
       </aside>
-      <!-- end .co-summary-col -->
 
     </div>
-    <!-- end .co-inner -->
   </main>
 
   <!-- ═══════════════════════════════
@@ -448,9 +483,7 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════
-       CART DRAWER (all classes intact for main.js)
-  ═══════════════════════════════ -->
+  <!-- CART DRAWER -->
   <div class="drawer-overlay" onclick="closeCart()"></div>
   <aside class="drawer" role="dialog" aria-label="Shopping bag">
     <div class="drawer-head">
@@ -467,24 +500,17 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     </div>
   </aside>
 
-  <!-- ═══════════════════════════════
-       ORDER SUCCESS / ERROR MODAL
-       (class structure preserved — modal / modal-card)
-  ═══════════════════════════════ -->
+  <!-- ORDER SUCCESS/ERROR MODAL -->
   <div class="modal co-modal">
     <div class="modal-card co-modal-card">
-      <div class="co-modal-icon" id="co-modal-icon">
-        <!-- JS injects success or error icon -->
-      </div>
+      <div class="co-modal-icon" id="co-modal-icon"></div>
       <h3></h3>
       <p></p>
-      <button class="co-modal-btn" onclick="this.closest('.modal').classList.remove('show', 'open')">
-        Continue
-      </button>
+      <button class="co-modal-btn" onclick="this.closest('.modal').classList.remove('show', 'open')">Continue</button>
     </div>
   </div>
-<!-- existing cart drawer / modals above -->
 
+  <!-- BOTTOM NAV -->
   <nav class="shn-bottom-nav" aria-label="Main navigation">
     <a class="shn-nav-item" href="index.html" data-page="home">
       <div class="shn-nav-icon">
@@ -516,9 +542,8 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
     </a>
   </nav>
 
-</body>
   <!-- ═══════════════════════════════
-       SCRIPTS (load order preserved)
+       SCRIPTS
   ═══════════════════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -528,30 +553,49 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   <script src="js/checkout.js"></script>
   <script src="js/bottomnav.js"></script>
 
-  <!-- Inline enhancement: payment card toggle + page animations -->
   <script>
-    // Global discount tracker — updated by checkout.js coupon logic
-// (appliedDiscount initialized below in coupon block)
+    /* ══════════════════════════════════════════════════════
+       CHECKOUT INLINE SCRIPT — SHENOVA
+       Only COD logic is new. Prepaid flow is UNCHANGED.
+    ══════════════════════════════════════════════════════ */
+
+    const COD_ADVANCE  = 100;   // ₹100 non-refundable COD advance
+    const COD_SHIPPING = 100;   // COD shipping always ₹100
+
     /* ── Payment method card toggle ── */
     document.querySelectorAll('.co-pay-card').forEach(card => {
       card.addEventListener('click', () => {
         document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('active'));
         card.classList.add('active');
+        onPaymentMethodChange();
       });
     });
 
-    /* ── Input floating label support for pre-filled values ── */
+    /* ── Helper: is COD selected? ── */
+    function isCOD() {
+      const sel = document.querySelector('input[name="payment"]:checked');
+      return sel && sel.value === 'Cash on Delivery';
+    }
+
+    /* ── Called whenever payment method or totals change ── */
+    function onPaymentMethodChange() {
+      const cod = isCOD();
+      document.getElementById('cod-info-panel').classList.toggle('visible', cod);
+      document.getElementById('co-cod-breakdown').classList.toggle('visible', cod);
+      const labelEl = document.getElementById('place-order-label');
+      if (labelEl) labelEl.textContent = cod ? 'Pay ₹100 & Confirm COD' : 'Place Order';
+      refreshTotals();
+    }
+
+    /* ── Input floating label support ── */
     document.querySelectorAll('.co-input').forEach(inp => {
-      const check = () => {
-        if (inp.value) inp.classList.add('has-value');
-        else inp.classList.remove('has-value');
-      };
+      const check = () => inp.value ? inp.classList.add('has-value') : inp.classList.remove('has-value');
       inp.addEventListener('input', check);
       inp.addEventListener('change', check);
-      check(); /* fire on load for pre-filled country */
+      check();
     });
 
-    /* ── Stagger in form sections on load ── */
+    /* ── Stagger form sections on load ── */
     window.addEventListener('load', () => {
       const els = document.querySelectorAll('.co-section, .co-submit-wrap');
       els.forEach((el, i) => {
@@ -563,398 +607,344 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
           el.style.transform = 'translateY(0)';
         }));
       });
+      // Init COD panel visibility based on default selection
+      onPaymentMethodChange();
     });
 
-    /* ── Step indicator update when scrolling sections ── */
+    /* ── Step indicator ── */
     const updateStep = () => {
       const s1 = document.getElementById('co-section-1');
       const s2 = document.getElementById('co-section-2');
       if (!s1 || !s2) return;
-      const r1 = s1.getBoundingClientRect();
       const r2 = s2.getBoundingClientRect();
       const steps = document.querySelectorAll('.co-step');
       if (r2.top <= window.innerHeight * 0.5) {
-        steps[0].classList.add('done');
-        steps[1].classList.add('active');
+        steps[0].classList.add('done'); steps[1].classList.add('active');
       } else {
-        steps[0].classList.remove('done');
-        steps[1].classList.remove('active');
+        steps[0].classList.remove('done'); steps[1].classList.remove('active');
       }
     };
     window.addEventListener('scroll', updateStep, { passive: true });
-    /* ── LIVE COUPON APPLY ── */
-window.appliedDiscount    = 0;
-window.appliedCouponCode  = '';
-window.appliedDiscountPct = 0;
 
-/* ── Helper: compute cart subtotal ── */
-function cartSubtotal() {
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
-}
+    /* ══════════════════════════════
+       COUPON LOGIC (UNCHANGED)
+    ══════════════════════════════ */
+    window.appliedDiscount    = 0;
+    window.appliedCouponCode  = '';
+    window.appliedDiscountPct = 0;
 
-/* ── Helper: apply a known discount % and update UI ── */
-function applyDiscountPct(pct, code) {
-  const sub = cartSubtotal();
-  window.appliedDiscountPct = pct;
-  window.appliedDiscount    = Math.round(sub * pct / 100);
-  window.appliedCouponCode  = code;
-  // Persist so page refresh keeps it
-  localStorage.setItem('shenova_applied_coupon', JSON.stringify({
-    code, pct, ts: Date.now()
-  }));
-  refreshTotals();
-}
-
-/* ── Auto-fill coupon from spin win (localStorage) ── */
-(function autoFillCoupon() {
-  const saved = localStorage.getItem('shenova_coupon');
-  if (!saved) return;
-  try {
-    const { code, discount, ts } = JSON.parse(saved);
-    // Expire after 7 days
-    if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
-    const inp = document.getElementById('f-coupon');
-    if (inp && !inp.value) {
-      inp.value = code;
-      inp.classList.add('has-value');
-      showCouponMsg('✦ Your spin reward is ready — click Apply!', 'info');
+    function cartSubtotal() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      return cart.reduce((s, i) => s + i.price * i.qty, 0);
     }
-  } catch(e) {}
-})();
 
-/* ── Apply button ── */
-document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
-  const couponInput = document.getElementById('f-coupon');
-  const code = couponInput?.value.trim().toUpperCase();
+    function applyDiscountPct(pct, code) {
+      const sub = cartSubtotal();
+      window.appliedDiscountPct = pct;
+      window.appliedDiscount    = Math.round(sub * pct / 100);
+      window.appliedCouponCode  = code;
+      localStorage.setItem('shenova_applied_coupon', JSON.stringify({ code, pct, ts: Date.now() }));
+      refreshTotals();
+    }
 
-  if (!code) {
-    showCouponMsg('Please enter a coupon code.', 'error');
-    return;
-  }
+    (function autoFillCoupon() {
+      const saved = localStorage.getItem('shenova_coupon');
+      if (!saved) return;
+      try {
+        const { code, discount, ts } = JSON.parse(saved);
+        if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
+        const inp = document.getElementById('f-coupon');
+        if (inp && !inp.value) { inp.value = code; inp.classList.add('has-value'); showCouponMsg('✦ Your spin reward is ready — click Apply!', 'info'); }
+      } catch(e) {}
+    })();
 
-  const btn = document.getElementById('apply-coupon-btn');
-  btn.textContent = '…';
-  btn.disabled = true;
-
-  try {
-    const API_URL = (window.API_BASE || 'https://shenova-backend.onrender.com') + '/api/coupon/apply';
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ coupon: code })
+    document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
+      const couponInput = document.getElementById('f-coupon');
+      const code = couponInput?.value.trim().toUpperCase();
+      if (!code) { showCouponMsg('Please enter a coupon code.', 'error'); return; }
+      const btn = document.getElementById('apply-coupon-btn');
+      btn.textContent = '…'; btn.disabled = true;
+      try {
+        const API_URL = (window.API_BASE || 'https://shenova-backend.onrender.com') + '/api/coupon/apply';
+        const res  = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ coupon: code }) });
+        const data = await res.json();
+        if (!res.ok) {
+          showCouponMsg(data.message || 'Invalid coupon code.', 'error');
+          window.appliedDiscount = 0; window.appliedCouponCode = '';
+          localStorage.removeItem('shenova_applied_coupon');
+          refreshTotals(); return;
+        }
+        applyDiscountPct(data.discount, code);
+        const saved = Math.round(cartSubtotal() * data.discount / 100);
+        showCouponMsg(`✦ ${data.discount}% off applied! You save ₹${saved.toLocaleString()}`, 'success');
+        addRemoveCouponLink();
+      } catch (err) {
+        showCouponMsg('Could not validate coupon. Try again.', 'error');
+      } finally {
+        btn.textContent = 'Apply'; btn.disabled = false;
+      }
     });
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      showCouponMsg(data.message || 'Invalid coupon code.', 'error');
-      window.appliedDiscount = 0;
-      window.appliedCouponCode = '';
-      localStorage.removeItem('shenova_applied_coupon');
-      refreshTotals();
-      return;
-    }
-
-    // ✅ Valid — apply
-    applyDiscountPct(data.discount, code);
-    const saved = Math.round(cartSubtotal() * data.discount / 100);
-    showCouponMsg(`✦ ${data.discount}% off applied! You save ₹${saved.toLocaleString()}`, 'success');
-
-    // Add remove-coupon link
-    addRemoveCouponLink();
-
-  } catch (err) {
-    showCouponMsg('Could not validate coupon. Try again.', 'error');
-  } finally {
-    btn.textContent = 'Apply';
-    btn.disabled = false;
-  }
-});
-
-/* ── Remove coupon ── */
-function addRemoveCouponLink() {
-  if (document.getElementById('remove-coupon-link')) return;
-  const msgEl = document.getElementById('coupon-msg');
-  if (!msgEl) return;
-  const link = document.createElement('span');
-  link.id = 'remove-coupon-link';
-  link.textContent = '  ✕ Remove';
-  link.style.cssText = 'cursor:pointer;text-decoration:underline;margin-left:8px;font-size:11px;opacity:0.7';
-  link.onclick = () => {
-    window.appliedDiscount   = 0;
-    window.appliedCouponCode = '';
-    window.appliedDiscountPct = 0;
-    localStorage.removeItem('shenova_applied_coupon');
-    const inp = document.getElementById('f-coupon');
-    if (inp) { inp.value = ''; inp.classList.remove('has-value'); }
-    msgEl.style.display = 'none';
-    link.remove();
-    refreshTotals();
-  };
-  msgEl.appendChild(link);
-}
-
-/* ── Restore applied coupon after refresh ── */
-(function restoreAppliedCoupon() {
-  const raw = localStorage.getItem('shenova_applied_coupon');
-  if (!raw) return;
-  try {
-    const { code, pct, ts } = JSON.parse(raw);
-    if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
-    const inp = document.getElementById('f-coupon');
-    if (inp) { inp.value = code; inp.classList.add('has-value'); }
-    applyDiscountPct(pct, code);
-    showCouponMsg(`✦ ${pct}% off applied! You save ₹${window.appliedDiscount.toLocaleString()}`, 'success');
-    addRemoveCouponLink();
-  } catch(e) {}
-})();
-
-/* ── Enter key on coupon field ── */
-document.getElementById('f-coupon')?.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    document.getElementById('apply-coupon-btn')?.click();
-  }
-});
-
-/* ── Clear discount if code is manually wiped ── */
-document.getElementById('f-coupon')?.addEventListener('input', e => {
-  if (!e.target.value.trim()) {
-    window.appliedDiscount   = 0;
-    window.appliedCouponCode = '';
-    window.appliedDiscountPct = 0;
-    localStorage.removeItem('shenova_applied_coupon');
-    const msgEl = document.getElementById('coupon-msg');
-    if (msgEl) msgEl.style.display = 'none';
-    document.getElementById('remove-coupon-link')?.remove();
-    refreshTotals();
-  }
-});
-
-function showCouponMsg(msg, type) {
-  const el = document.getElementById('coupon-msg');
-  if (!el) return;
-  // Remove old remove link text before setting message
-  const existingLink = document.getElementById('remove-coupon-link');
-  if (existingLink) existingLink.remove();
-  el.textContent = msg;
-  el.style.display = 'block';
-  if (type === 'success') {
-    el.style.background = 'rgba(184,149,106,0.12)';
-    el.style.color = '#8a6a3a';
-    el.style.border = '1px solid rgba(184,149,106,0.3)';
-  } else if (type === 'error') {
-    el.style.background = 'rgba(192,57,43,0.08)';
-    el.style.color = '#c0392b';
-    el.style.border = '1px solid rgba(192,57,43,0.2)';
-  } else {
-    el.style.background = 'rgba(184,149,106,0.07)';
-    el.style.color = '#7a6040';
-    el.style.border = '1px solid rgba(184,149,106,0.2)';
-  }
-}
-
-function refreshTotals() {
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  const sub      = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ship     = sub > 2000 ? 0 : 69;
-  const discount = window.appliedDiscount || 0;
-  const total    = Math.max(0, sub + ship - discount);
-
-  document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
-  document.querySelector('#ship').textContent = ship ? '₹' + ship : 'Free';
-  document.querySelector('#tot').textContent  = '₹' + total.toLocaleString();
-
-  // Discount row in sidebar
-  const discRow = document.getElementById('co-discount-row');
-  const discVal = document.getElementById('co-discount-val');
-  if (discRow) discRow.style.display = discount > 0 ? 'flex' : 'none';
-  if (discVal) discVal.textContent = '−₹' + discount.toLocaleString();
-
-  // "You saved" banner
-  let savedBanner = document.getElementById('co-saved-banner');
-  if (discount > 0) {
-    if (!savedBanner) {
-      savedBanner = document.createElement('div');
-      savedBanner.id = 'co-saved-banner';
-      savedBanner.style.cssText = `
-        margin-top: 10px; padding: 9px 14px; border-radius: 2px;
-        background: rgba(184,149,106,0.10); border: 1px solid rgba(184,149,106,0.25);
-        font-size: 12px; letter-spacing: 0.08em; color: #8a6a3a;
-        text-align: center; font-family: "DM Sans", sans-serif;
-      `;
-      const totRow = document.querySelector('#tot')?.closest('.co-total-row') || document.querySelector('#tot')?.parentElement;
-      totRow?.parentElement?.insertBefore(savedBanner, totRow.nextSibling);
-    }
-    savedBanner.textContent = `✦ You're saving ₹${discount.toLocaleString()} on this order`;
-  } else if (savedBanner) {
-    savedBanner.remove();
-  }
-}
-    /* ─────────────────────────────
-   RAZORPAY PAYMENT
-───────────────────────────── */
-
-document
-  .getElementById("place-order-btn")
-  .addEventListener("click", async function (e) {
-e.preventDefault();
-e.stopPropagation();
-
-    try {
-
-      // customer details
-      const customerName =
-        document.getElementById("f-fullName").value;
-
-      const customerEmail =
-        document.getElementById("f-email").value;
-
-      const customerPhone =
-        document.getElementById("f-phone").value;
-
-      // total amount — recalculate server-side to include coupon discount
-      const _cart   = JSON.parse(localStorage.getItem('cart') || '[]');
-      const _sub    = _cart.reduce((s, i) => s + i.price * i.qty, 0);
-      const _ship   = _sub > 2000 ? 0 : 69;
-      const _disc   = window.appliedDiscount || 0;
-      const totalPrice = Math.max(1, _sub + _ship - _disc); // Razorpay minimum ₹1
-
-      // selected payment method
-      const paymentMethod =
-        document.querySelector(
-          'input[name="payment"]:checked'
-        ).value;
-
-      // Razorpay order create
-      const response = await fetch(
-        "https://shenova-backend.onrender.com/api/payment/create-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: totalPrice,
-          }),
-        }
-      );
-
-      const order = await response.json();
-
-      const options = {
-
-        key: "rzp_live_SrBfy3qYGJaxKG",
-
-        amount: order.amount,
-
-        currency: "INR",
-
-        name: "SHENOVA",
-
-        description: "Order Payment",
-
-        order_id: order.id,
-
- handler: async function (response) {
-
-  console.log(response);
-
-  // Recalculate with discount
-  const cart2 = JSON.parse(localStorage.getItem('cart') || '[]');
-  const sub2   = cart2.reduce((s, i) => s + i.price * i.qty, 0);
-  const ship2  = sub2 > 2000 ? 0 : 69;
-  const disc2  = window.appliedDiscount || 0;
-  const total2 = Math.max(0, sub2 + ship2 - disc2);
-
-  const orderData = {
-    shipping: {
-      fullName: customerName,
-      email:    customerEmail,
-      phone:    customerPhone,
-      address:  document.getElementById("f-address").value,
-      city:     document.getElementById("f-city").value,
-      state:    document.getElementById("f-state").value,
-      zip:      document.getElementById("f-zip").value,
-      country:  document.getElementById("f-country").value,
-    },
-    paymentMethod: paymentMethod,
-    coupon:        window.appliedCouponCode || '',
-    subtotal:      sub2,
-    shippingFee:   ship2,
-    discount:      disc2,
-    total:         total2,
-    status:        "pending",
-    items:         JSON.parse(localStorage.getItem("cart")) || [],
-    razorpay: {
-      payment_id: response.razorpay_payment_id,
-      order_id:   response.razorpay_order_id,
-      signature:  response.razorpay_signature
-    }
-  };
-
-  // Save order
-  const saveRes = await fetch(
-    "https://shenova-backend.onrender.com/api/orders",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
-    }
-  );
-  const saved = await saveRes.json();
-  console.log(saved);
-
-  // ✅ Mark coupon as used (one-time use)
-  if (window.appliedCouponCode) {
-    await fetch(
-      "https://shenova-backend.onrender.com/api/coupon/use",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ coupon: window.appliedCouponCode, email: customerEmail })
-      }
-    ).catch(() => {});
-    // Clear coupon from localStorage
-    localStorage.removeItem('shenova_coupon');
-    localStorage.removeItem('shenova_applied_coupon');
-  }
-
-  // Clear cart
-  localStorage.removeItem("cart");
-  document.getElementById("checkout-form")?.reset();
-
-  alert("Payment Successful & Order Placed!");
-
-  setTimeout(() => { window.location.href = "index.html"; }, 2000);
-},
-
-        prefill: {
-          name: customerName,
-          email: customerEmail,
-          contact: customerPhone,
-        },
-
-        theme: {
-          color: "#000000",
-        },
+    function addRemoveCouponLink() {
+      if (document.getElementById('remove-coupon-link')) return;
+      const msgEl = document.getElementById('coupon-msg');
+      if (!msgEl) return;
+      const link = document.createElement('span');
+      link.id = 'remove-coupon-link';
+      link.textContent = '  ✕ Remove';
+      link.style.cssText = 'cursor:pointer;text-decoration:underline;margin-left:8px;font-size:11px;opacity:0.7';
+      link.onclick = () => {
+        window.appliedDiscount = 0; window.appliedCouponCode = ''; window.appliedDiscountPct = 0;
+        localStorage.removeItem('shenova_applied_coupon');
+        const inp = document.getElementById('f-coupon');
+        if (inp) { inp.value = ''; inp.classList.remove('has-value'); }
+        msgEl.style.display = 'none'; link.remove(); refreshTotals();
       };
-
-const rzp = new Razorpay(options);
-
-      rzp.open();
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Payment Failed");
-
+      msgEl.appendChild(link);
     }
 
-});
-  </script>
+    (function restoreAppliedCoupon() {
+      const raw = localStorage.getItem('shenova_applied_coupon');
+      if (!raw) return;
+      try {
+        const { code, pct, ts } = JSON.parse(raw);
+        if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
+        const inp = document.getElementById('f-coupon');
+        if (inp) { inp.value = code; inp.classList.add('has-value'); }
+        applyDiscountPct(pct, code);
+        showCouponMsg(`✦ ${pct}% off applied! You save ₹${window.appliedDiscount.toLocaleString()}`, 'success');
+        addRemoveCouponLink();
+      } catch(e) {}
+    })();
 
+    document.getElementById('f-coupon')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('apply-coupon-btn')?.click(); }
+    });
+
+    document.getElementById('f-coupon')?.addEventListener('input', e => {
+      if (!e.target.value.trim()) {
+        window.appliedDiscount = 0; window.appliedCouponCode = ''; window.appliedDiscountPct = 0;
+        localStorage.removeItem('shenova_applied_coupon');
+        const msgEl = document.getElementById('coupon-msg');
+        if (msgEl) msgEl.style.display = 'none';
+        document.getElementById('remove-coupon-link')?.remove();
+        refreshTotals();
+      }
+    });
+
+    function showCouponMsg(msg, type) {
+      const el = document.getElementById('coupon-msg');
+      if (!el) return;
+      const existingLink = document.getElementById('remove-coupon-link');
+      if (existingLink) existingLink.remove();
+      el.textContent = msg;
+      el.style.display = 'block';
+      if (type === 'success') { el.style.background='rgba(184,149,106,0.12)'; el.style.color='#8a6a3a'; el.style.border='1px solid rgba(184,149,106,0.3)'; }
+      else if (type === 'error') { el.style.background='rgba(192,57,43,0.08)'; el.style.color='#c0392b'; el.style.border='1px solid rgba(192,57,43,0.2)'; }
+      else { el.style.background='rgba(184,149,106,0.07)'; el.style.color='#7a6040'; el.style.border='1px solid rgba(184,149,106,0.2)'; }
+    }
+
+    /* ══════════════════════════════
+       REFRESH TOTALS
+       — COD: shipping always ₹100, no free shipping
+       — Prepaid: ₹69 below ₹2000, free above ₹2000
+    ══════════════════════════════ */
+    function refreshTotals() {
+      const cart     = JSON.parse(localStorage.getItem('cart') || '[]');
+      const sub      = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const cod      = isCOD();
+      const ship     = cod ? COD_SHIPPING : (sub > 2000 ? 0 : 69);
+      const discount = window.appliedDiscount || 0;
+      const total    = Math.max(0, sub + ship - discount);
+
+      document.querySelector('#sub').textContent  = '₹' + sub.toLocaleString();
+      document.querySelector('#ship').textContent = ship === 0 ? 'Free' : '₹' + ship;
+      document.querySelector('#tot').textContent  = '₹' + total.toLocaleString();
+
+      // Discount row
+      const discRow = document.getElementById('co-discount-row');
+      const discVal = document.getElementById('co-discount-val');
+      if (discRow) discRow.style.display = discount > 0 ? 'flex' : 'none';
+      if (discVal) discVal.textContent = '−₹' + discount.toLocaleString();
+
+      // COD breakdown
+      if (cod) {
+        const remaining = Math.max(0, sub - discount); // COD shipping is the ₹100 advance, remaining = subtotal
+        document.getElementById('cod-advance-display').textContent   = '₹' + COD_ADVANCE.toLocaleString();
+        document.getElementById('cod-remaining-display').textContent = '₹' + remaining.toLocaleString();
+        document.getElementById('sidebar-cod-advance').textContent   = '₹' + COD_ADVANCE.toLocaleString();
+        document.getElementById('sidebar-cod-remaining').textContent = '₹' + remaining.toLocaleString();
+      }
+
+      // Saved banner
+      let savedBanner = document.getElementById('co-saved-banner');
+      if (discount > 0) {
+        if (!savedBanner) {
+          savedBanner = document.createElement('div');
+          savedBanner.id = 'co-saved-banner';
+          savedBanner.style.cssText = `margin-top:10px;padding:9px 14px;border-radius:2px;background:rgba(184,149,106,0.10);border:1px solid rgba(184,149,106,0.25);font-size:12px;letter-spacing:.08em;color:#8a6a3a;text-align:center;font-family:"DM Sans",sans-serif;`;
+          const totRow = document.querySelector('#tot')?.closest('.co-total-row') || document.querySelector('#tot')?.parentElement;
+          totRow?.parentElement?.insertBefore(savedBanner, totRow.nextSibling);
+        }
+        savedBanner.textContent = `✦ You're saving ₹${discount.toLocaleString()} on this order`;
+      } else if (savedBanner) {
+        savedBanner.remove();
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       PLACE ORDER BUTTON — Razorpay
+       COD:     Opens Razorpay for ₹100 advance only, then saves order
+       Prepaid: Opens Razorpay for full amount (UNCHANGED)
+    ══════════════════════════════════════════════════════════════ */
+    document.getElementById('place-order-btn').addEventListener('click', async function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const customerName  = document.getElementById('f-fullName').value.trim();
+      const customerEmail = document.getElementById('f-email').value.trim();
+      const customerPhone = document.getElementById('f-phone').value.trim();
+
+      // Basic validation
+      if (!customerName || !customerEmail || !customerPhone ||
+          !document.getElementById('f-address').value.trim() ||
+          !document.getElementById('f-city').value.trim() ||
+          !document.getElementById('f-state').value.trim() ||
+          !document.getElementById('f-zip').value.trim()) {
+        alert('Please fill in all required shipping details.');
+        return;
+      }
+
+      const cart2   = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (!cart2.length) { alert('Your cart is empty.'); return; }
+
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      const cod     = paymentMethod === 'Cash on Delivery';
+
+      const sub2    = cart2.reduce((s, i) => s + i.price * i.qty, 0);
+      const ship2   = cod ? COD_SHIPPING : (sub2 > 2000 ? 0 : 69);
+      const disc2   = window.appliedDiscount || 0;
+      const total2  = Math.max(0, sub2 + ship2 - disc2);
+
+      /* ── Amount to charge via Razorpay ── */
+      // COD: only ₹100 advance | Prepaid: full total
+      const razorpayAmount = cod ? COD_ADVANCE : Math.max(1, total2);
+
+      try {
+        /* 1. Create Razorpay order on backend */
+        const orderRes = await fetch('https://shenova-backend.onrender.com/api/payment/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: razorpayAmount })
+        });
+        const rzpOrder = await orderRes.json();
+
+        /* 2. Open Razorpay */
+        const options = {
+          key:         'rzp_live_SrBfy3qYGJaxKG',
+          amount:      rzpOrder.amount,
+          currency:    'INR',
+          name:        'SHENOVA',
+          description: cod
+            ? 'COD Confirmation Charge — ₹100 Advance'
+            : 'Order Payment — Full Amount',
+          order_id: rzpOrder.id,
+
+          handler: async function(response) {
+            /* 3. On payment success — build order payload */
+            const orderData = {
+              shipping: {
+                fullName: customerName,
+                email:    customerEmail,
+                phone:    customerPhone,
+                address:  document.getElementById('f-address').value,
+                city:     document.getElementById('f-city').value,
+                state:    document.getElementById('f-state').value,
+                zip:      document.getElementById('f-zip').value,
+                country:  document.getElementById('f-country').value,
+              },
+              paymentMethod: paymentMethod,
+              coupon:        window.appliedCouponCode || '',
+              subtotal:      sub2,
+              shippingFee:   ship2,
+              discount:      disc2,
+              total:         total2,
+              status:        'pending',
+              items:         cart2,
+
+              /* ── COD-specific fields ── */
+              isCOD:            cod,
+              codAdvancePaid:   cod ? COD_ADVANCE : 0,
+              codAdvancePaidAt: cod ? new Date().toISOString() : null,
+              codRemainingAmount: cod ? Math.max(0, sub2 - disc2) : 0,
+
+              /* ── Razorpay payment proof ── */
+              razorpay: {
+                payment_id: response.razorpay_payment_id,
+                order_id:   response.razorpay_order_id,
+                signature:  response.razorpay_signature,
+                amount:     razorpayAmount,
+                type:       cod ? 'cod_advance' : 'full_prepaid'
+              }
+            };
+
+            /* 4. Save order to backend */
+            const saveRes = await fetch('https://shenova-backend.onrender.com/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(orderData)
+            });
+            const saved = await saveRes.json();
+            console.log('Order saved:', saved);
+
+            /* 5. Mark coupon used */
+            if (window.appliedCouponCode) {
+              await fetch('https://shenova-backend.onrender.com/api/coupon/use', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ coupon: window.appliedCouponCode, email: customerEmail })
+              }).catch(() => {});
+              localStorage.removeItem('shenova_coupon');
+              localStorage.removeItem('shenova_applied_coupon');
+            }
+
+            /* 6. Clear cart & redirect */
+            localStorage.removeItem('cart');
+            document.getElementById('checkout-form')?.reset();
+
+            if (cod) {
+              const remaining = Math.max(0, sub2 - disc2);
+              alert(`✅ COD Order Confirmed!\n\n₹100 advance paid successfully.\nPay ₹${remaining.toLocaleString()} at delivery.\n\nThank you for shopping with Shenova!`);
+            } else {
+              alert('✅ Payment Successful & Order Placed!\n\nThank you for shopping with Shenova!');
+            }
+
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+          },
+
+          prefill: {
+            name:    customerName,
+            email:   customerEmail,
+            contact: customerPhone,
+          },
+          theme: { color: '#000000' },
+
+          modal: {
+            ondismiss: function() {
+              console.log('Razorpay modal dismissed');
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+      } catch (error) {
+        console.error('Payment error:', error);
+        alert('Payment failed. Please try again.');
+      }
+    });
+
+  </script>
 </body>
 </html>

@@ -540,6 +540,60 @@ tbody tr:last-child td{border-bottom:none}
 .badge-shipped,.badge-delivered{background:var(--success-bg);color:var(--success)}
 .badge-cancelled{background:var(--error-bg);color:var(--error)}
 
+/* ── COD / Prepaid payment badges ── */
+.badge-cod{
+  background:#fef9ec;
+  color:#92600a;
+  border:1px solid rgba(146,96,10,.18);
+}
+.badge-prepaid{
+  background:#ecfdf5;
+  color:#166534;
+  border:1px solid rgba(22,101,52,.18);
+}
+
+/* ── COD payment summary card in drawer ── */
+.cod-payment-card{
+  border:1.5px solid rgba(184,149,106,.3);
+  border-radius:14px;
+  background:rgba(184,149,106,.05);
+  overflow:hidden;
+}
+.cod-payment-card .info-card-head{
+  background:rgba(184,149,106,.1);
+  border-bottom:1px solid rgba(184,149,106,.2);
+}
+.cod-payment-card .info-card-head h4{
+  color:#7a5a20;
+}
+.cod-advance-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px;
+  border-radius:20px;
+  background:#d1fae5;
+  color:#065f46;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  border:1px solid rgba(6,95,70,.14);
+}
+.cod-remaining-highlight{
+  font-family:"Cormorant Garamond",serif;
+  font-size:22px;
+  font-weight:400;
+  color:var(--ink);
+}
+.order-payment-badges{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+
 /* ══════════════════════════════
    FORMS
 ══════════════════════════════ */
@@ -1696,6 +1750,11 @@ select{
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
+            <select class="filter-select" id="paymentTypeFilter" onchange="filterOrders()">
+              <option value="">All Payment Types</option>
+              <option value="cod">COD Only</option>
+              <option value="prepaid">Prepaid Only</option>
+            </select>
           </div>
         </div>
         <div class="panel-body">
@@ -2286,12 +2345,28 @@ function renderOrderCards(container, orders){
     container.innerHTML='<p style="color:var(--muted);text-align:center;padding:32px">No orders to show</p>';
     return;
   }
-  container.innerHTML = orders.map(o=>`
+  container.innerHTML = orders.map(o=>{
+    const isCOD = o.isCOD || o.paymentMethod === 'Cash on Delivery';
+    const payBadge = isCOD
+      ? `<span class="badge badge-cod">COD</span>`
+      : `<span class="badge badge-prepaid">Prepaid ✓</span>`;
+    const codMeta = isCOD
+      ? `<div class="order-meta-item">
+           <span>COD Advance</span>
+           <span style="color:#166534">₹${(o.codAdvancePaid||100).toLocaleString('en-IN')} Paid</span>
+         </div>
+         <div class="order-meta-item">
+           <span>Pay at Door</span>
+           <span>₹${(o.codRemainingAmount||(o.subtotal||0)-(o.discount||0)).toLocaleString('en-IN')}</span>
+         </div>`
+      : '';
+    return `
     <div class="order-card" onclick='openDrawer(${JSON.stringify(o).replace(/'/g,"&#39;")})'>
       <div>
         <div class="order-id">#${o._id.slice(-6).toUpperCase()}</div>
         <div class="order-customer">${o.shipping?.fullName||'Unknown Customer'}</div>
-        <div class="order-meta-row">
+        <div class="order-payment-badges">${payBadge}</div>
+        <div class="order-meta-row" style="margin-top:10px">
           <div class="order-meta-item">
             <span>Total</span>
             <span>₹${(o.total||0).toLocaleString('en-IN')}</span>
@@ -2308,13 +2383,14 @@ function renderOrderCards(container, orders){
             <span>Date</span>
             <span>${new Date(o.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>
           </div>
+          ${codMeta}
         </div>
       </div>
       <div>
         <span class="badge badge-${o.status}">${o.status}</span>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderAllOrders(){
@@ -2327,12 +2403,15 @@ function renderAllOrders(){
 }
 
 function getFilteredOrders(){
-  const q      = (document.getElementById('orderSearch')?.value||'').toLowerCase();
-  const status = (document.getElementById('statusFilter')?.value||'').toLowerCase();
+  const q           = (document.getElementById('orderSearch')?.value||'').toLowerCase();
+  const status      = (document.getElementById('statusFilter')?.value||'').toLowerCase();
+  const payType     = (document.getElementById('paymentTypeFilter')?.value||'').toLowerCase();
   return allOrders.filter(o=>{
-    const matchQ = !q || (o.shipping?.fullName||'').toLowerCase().includes(q) || o._id.toLowerCase().includes(q);
-    const matchS = !status || o.status===status;
-    return matchQ && matchS;
+    const matchQ    = !q || (o.shipping?.fullName||'').toLowerCase().includes(q) || o._id.toLowerCase().includes(q);
+    const matchS    = !status || o.status===status;
+    const isCOD     = o.isCOD || o.paymentMethod==='Cash on Delivery';
+    const matchP    = !payType || (payType==='cod' && isCOD) || (payType==='prepaid' && !isCOD);
+    return matchQ && matchS && matchP;
   });
 }
 
@@ -2344,7 +2423,77 @@ function filterOrders(){ renderAllOrders(); }
 window.openDrawer = function(o){
   document.getElementById('order-drawer').classList.add('active');
   document.getElementById('drawer-order-id').textContent = '#'+o._id.slice(-6).toUpperCase();
+
+  const isCOD = o.isCOD || o.paymentMethod === 'Cash on Delivery';
+  const codAdvance   = o.codAdvancePaid   || (isCOD ? 100 : 0);
+  const codRemaining = o.codRemainingAmount != null
+    ? o.codRemainingAmount
+    : (isCOD ? Math.max(0, (o.subtotal||0) - (o.discount||0)) : 0);
+  const advancePaidAt = o.codAdvancePaidAt
+    ? new Date(o.codAdvancePaidAt).toLocaleString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
+    : '—';
+
+  const paymentInfoCard = isCOD
+    ? `<div class="info-card cod-payment-card">
+        <div class="info-card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <h4>💰 COD Payment Details</h4>
+          <span class="cod-advance-badge">✓ ₹${codAdvance.toLocaleString('en-IN')} Advance Paid</span>
+        </div>
+        <div class="info-card-body">
+          <div class="info-row">
+            <span class="lbl">Payment Type</span>
+            <span class="val"><span class="badge badge-cod">Cash on Delivery</span></span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">COD Shipping</span>
+            <span class="val">₹100</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Advance Paid Online</span>
+            <span class="val" style="color:#166534;font-weight:600">₹${codAdvance.toLocaleString('en-IN')} ✓</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Advance Paid At</span>
+            <span class="val" style="font-size:12px">${advancePaidAt}</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Remaining at Delivery</span>
+            <span class="val cod-remaining-highlight">₹${codRemaining.toLocaleString('en-IN')}</span>
+          </div>
+          <div class="info-row" style="border:none;margin-top:4px;padding-top:4px">
+            <span class="lbl">Razorpay Payment ID</span>
+            <span class="val" style="font-size:11px;word-break:break-all">${o.razorpay?.payment_id||'—'}</span>
+          </div>
+        </div>
+      </div>`
+    : `<div class="info-card">
+        <div class="info-card-head" style="display:flex;justify-content:space-between;align-items:center">
+          <h4>💳 Payment Details</h4>
+          <span class="badge badge-prepaid">Prepaid ✓</span>
+        </div>
+        <div class="info-card-body">
+          <div class="info-row">
+            <span class="lbl">Payment Type</span>
+            <span class="val">${o.paymentMethod||'—'}</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Amount Paid</span>
+            <span class="val" style="color:#166534;font-weight:600">₹${(o.total||0).toLocaleString('en-IN')} ✓</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Shipping</span>
+            <span class="val">${(o.shippingFee===0)?'Free':'₹'+(o.shippingFee||69).toLocaleString('en-IN')}</span>
+          </div>
+          <div class="info-row" style="border:none">
+            <span class="lbl">Razorpay Payment ID</span>
+            <span class="val" style="font-size:11px;word-break:break-all">${o.razorpay?.payment_id||'—'}</span>
+          </div>
+        </div>
+      </div>`;
+
   document.getElementById('drawer-body').innerHTML = `
+    ${paymentInfoCard}
+
     <div class="info-card">
       <div class="info-card-head"><h4>Customer Details</h4></div>
       <div class="info-card-body">
@@ -2358,7 +2507,7 @@ window.openDrawer = function(o){
       <div class="info-card-head">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <h4>Shipping Address</h4>
-          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${(o.shipping?.address||'').replace(/'/g,"'")}');toast('Address copied','success')">Copy</button>
+          <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('${(o.shipping?.address||'').replace(/'/g,"\'")}');toast('Address copied','success')">Copy</button>
         </div>
       </div>
       <div class="info-card-body">
@@ -2379,8 +2528,27 @@ window.openDrawer = function(o){
             </div>
           </div>
         `).join('')}
-        <div style="padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-weight:600">
-          <span>Total</span><span>₹${(o.total||0).toLocaleString('en-IN')}</span>
+        <div style="padding-top:12px;border-top:1px solid var(--border);margin-top:4px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px">
+            <span>Subtotal</span><span>₹${(o.subtotal||0).toLocaleString('en-IN')}</span>
+          </div>
+          ${(o.discount||0)>0?`<div style="display:flex;justify-content:space-between;font-size:12px;color:#8a6a3a;margin-bottom:6px">
+            <span>Discount (${o.coupon||''})</span><span>−₹${(o.discount||0).toLocaleString('en-IN')}</span>
+          </div>`:''}
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px">
+            <span>Shipping</span><span>${(o.shippingFee===0)?'Free':'₹'+(o.shippingFee||0).toLocaleString('en-IN')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-weight:600;font-size:15px">
+            <span>Order Total</span><span>₹${(o.total||0).toLocaleString('en-IN')}</span>
+          </div>
+          ${isCOD?`<div style="margin-top:10px;padding:10px 14px;background:rgba(184,149,106,.08);border-radius:10px;border:1px solid rgba(184,149,106,.2)">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#8a6a3a;margin-bottom:4px">
+              <span>💳 Paid Online (COD Advance)</span><span style="font-weight:600">₹${codAdvance.toLocaleString('en-IN')}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--ink)">
+              <span>🏠 Collect at Delivery</span><span>₹${codRemaining.toLocaleString('en-IN')}</span>
+            </div>
+          </div>`:''}
         </div>
       </div>
     </div>
@@ -2399,8 +2567,7 @@ window.openDrawer = function(o){
       </div>
     </div>
   `;
-};
-
+}
 window.closeDrawer = function(){
   document.getElementById('order-drawer').classList.remove('active');
 };
