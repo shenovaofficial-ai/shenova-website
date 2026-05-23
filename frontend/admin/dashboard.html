@@ -1358,7 +1358,113 @@ select{
   50%      { opacity:0.4 }
 }
 
-/* ── Stories integration safety (ensures modal is hidden even if stories.css fails to load) ── */
+/* ── Spin Leads controls ── */
+.sl-controls{
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.sl-controls .search-field{
+  flex:1;
+  min-width:200px;
+}
+.sl-loading,.sl-empty{
+  text-align:center;
+  padding:48px 0;
+  color:var(--muted);
+  font-size:14px;
+  letter-spacing:.08em;
+}
+.sl-meta{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:14px;
+  letter-spacing:.06em;
+}
+.sl-table-wrap{
+  overflow-x:auto;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+.sl-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.sl-table thead th{
+  background:var(--parchment);
+  padding:12px 16px;
+  font-size:9.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.sl-table td{
+  padding:13px 16px;
+  border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.sl-table tbody tr:last-child td{border-bottom:none}
+.sl-table tbody tr:hover{background:var(--parchment)}
+.sl-num{color:var(--muted);font-size:11px;width:32px}
+.sl-email{font-size:12px;color:var(--muted)}
+.sl-date{font-size:11px;color:var(--muted);white-space:nowrap}
+.sl-coupon{
+  font-family:monospace;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.08em;
+  background:var(--parchment);
+  padding:3px 8px;
+  border-radius:6px;
+}
+.sl-copy{
+  background:none;border:none;cursor:pointer;
+  color:var(--muted);font-size:14px;padding:2px 4px;
+  border-radius:4px;margin-left:4px;transition:color .2s;
+  letter-spacing:0;text-transform:none;
+}
+.sl-copy:hover{color:var(--ink)}
+.sl-badge{
+  padding:4px 10px;border-radius:999px;
+  font-size:10px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+}
+.sl-used td{opacity:.62}
+.sl-actions{display:flex;gap:8px;align-items:center}
+.sl-toggle{
+  font-size:10px;padding:6px 12px;
+  border-radius:999px;border:none;cursor:pointer;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+}
+.sl-mark-used{background:var(--warn-bg);color:var(--warn)}
+.sl-mark-active{background:var(--success-bg);color:var(--success)}
+.sl-del{
+  font-size:10px;padding:6px 12px;
+  border-radius:999px;background:var(--error-bg);
+  color:var(--error);border:none;cursor:pointer;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.sl-pagination{
+  display:flex;align-items:center;gap:16px;
+  justify-content:center;margin-top:20px;
+  font-size:13px;color:var(--muted);
+}
+.sl-pagination button{
+  background:var(--parchment);color:var(--ink);
+  border:1px solid var(--border);padding:8px 18px;
+  border-radius:999px;font-size:12px;cursor:pointer;
+  letter-spacing:.1em;
+}
+@media(max-width:768px){
+  .sl-controls{flex-direction:column}
+  .sl-controls .search-field,.sl-controls .filter-select{width:100%}
+}
 .story-edit-modal{
   display:none;
   position:fixed;
@@ -1450,6 +1556,14 @@ select{
         </svg>
         Stories
         <span class="badge-count" id="side-story-count">—</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <span class="nav-label">Marketing</span>
+      <a onclick="showSection('spin-leads')" id="nav-spin-leads">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20"/><path d="M12 2v10l5 3"/></svg>
+        Spin Leads
+        <span class="badge-count" id="side-spin-count">—</span>
       </a>
     </div>
   </nav>
@@ -1791,6 +1905,40 @@ select{
         </div>
       </div>
     </div>
+<div class="section" id="section-spin-leads">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <span class="panel-sub">Marketing</span>
+        <div class="panel-title">Spin Wheel Leads</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="renderSpinLeads()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div class="panel-body">
+      <!-- Controls: search + filter -->
+      <div class="sl-controls">
+        <div class="search-field" style="flex:1;min-width:200px">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="sl-search" placeholder="Search by name, email, phone or coupon…" oninput="slSearchDebounce(this.value)">
+        </div>
+        <select id="sl-status-filter" class="filter-select" onchange="slStatusChange(this.value)">
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="used">Used</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+      <!-- Table -->
+      <div id="spin-leads-wrap">
+        <div class="sl-loading">Loading spin leads…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="section" id="section-stories">
  
   <!-- Upload Panel -->
@@ -2151,7 +2299,8 @@ const sectionTitles = {
   add:'Add Product',
   orders:'Orders',
   messages:'Messages',
-  stories:'Stories'
+  stories:'Stories',
+  'spin-leads':'Spin Leads'
 };
 
 function showSection(id){
@@ -2161,10 +2310,11 @@ function showSection(id){
   document.getElementById('nav-'+id)?.classList.add('active');
   document.getElementById('page-title').textContent = sectionTitles[id]||id;
   closeSidebar();
-  if(id==='products') renderAllProducts();
-  if(id==='orders')   renderAllOrders();
-  if(id==='messages') loadMessages();
-  if(id==='stories')  typeof loadAdminStories==='function' && loadAdminStories();
+  if(id==='products')    renderAllProducts();
+  if(id==='orders')      renderAllOrders();
+  if(id==='messages')    loadMessages();
+  if(id==='stories')     typeof loadAdminStories==='function' && loadAdminStories();
+  if(id==='spin-leads')  typeof renderSpinLeads==='function' && renderSpinLeads();
 }
 
 /* ─────────────────────────────────────────
@@ -2828,6 +2978,173 @@ function renderPreviews(files, previewEl, type){
     }
   });
 }
+
+/* ─────────────────────────────────────────
+   SPIN LEADS
+───────────────────────────────────────── */
+(function(){
+  let slPage=1, slSearch='', slStatus='all', slTimer=null, slAutoRefresh=null;
+
+  function fmtDate(iso){
+    if(!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-IN',{
+      day:'2-digit',month:'short',year:'numeric',
+      hour:'2-digit',minute:'2-digit',hour12:true
+    });
+  }
+
+  function slStatusBadge(lead){
+    const map={
+      active:{bg:'var(--success-bg)',color:'var(--success)',label:'Active'},
+      used:{bg:'var(--error-bg)',color:'var(--error)',label:'Used'},
+      expired:{bg:'#f0f0f0',color:'#666',label:'Expired'}
+    };
+    const s=map[lead.status]||map.active;
+    return `<span class="sl-badge" style="background:${s.bg};color:${s.color}">${s.label}</span>`;
+  }
+
+  async function fetchSpinLeads(){
+    const params=new URLSearchParams({page:slPage,limit:50});
+    if(slSearch) params.set('search',slSearch);
+    if(slStatus&&slStatus!=='all') params.set('status',slStatus);
+    try{
+      const r=await fetch(`${API}/admin/spin-leads?${params}`);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){
+      console.error('[SpinLeads]',e);
+      return {leads:[],total:0,page:1,pages:1};
+    }
+  }
+
+  window.renderSpinLeads=async function(){
+    const wrap=document.getElementById('spin-leads-wrap');
+    if(!wrap) return;
+    wrap.innerHTML='<div class="sl-loading">Loading spin leads…</div>';
+    const {leads,total,page,pages}=await fetchSpinLeads();
+    // Update sidebar badge
+    const badge=document.getElementById('side-spin-count');
+    if(badge) badge.textContent=total;
+    if(!leads||!leads.length){
+      wrap.innerHTML='<div class="sl-empty">No spin leads found. Submissions from the spin wheel will appear here.</div>';
+      return;
+    }
+    wrap.innerHTML=`
+      <div class="sl-meta">
+        Showing <strong>${leads.length}</strong> of <strong>${total}</strong> leads
+        ${pages>1?`— Page ${page} of ${pages}`:''}
+      </div>
+      <div class="sl-table-wrap">
+        <table class="sl-table">
+          <thead><tr>
+            <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
+            <th>Prize</th><th>Coupon</th><th>Submitted</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody>
+            ${leads.map((l,i)=>`
+              <tr class="${l.used?'sl-used':''}">
+                <td class="sl-num">${(page-1)*50+i+1}</td>
+                <td>${l.name||'<span style="color:var(--muted)">—</span>'}</td>
+                <td class="sl-email">${l.email||'—'}</td>
+                <td>${l.phone||'<span style="color:var(--muted)">—</span>'}</td>
+                <td><strong>${l.prize||(l.discount?l.discount+'% OFF':'—')}</strong></td>
+                <td>
+                  <span class="sl-coupon">${l.coupon||'—'}</span>
+                  ${l.coupon?`<button class="sl-copy" onclick="slCopyCode('${l.coupon}',this)" title="Copy">⧉</button>`:''}
+                </td>
+                <td class="sl-date">${fmtDate(l.createdAt)}</td>
+                <td>${slStatusBadge(l)}</td>
+                <td>
+                  <div class="sl-actions">
+                    <button class="sl-toggle ${l.used?'sl-mark-active':'sl-mark-used'}"
+                      onclick="slToggleUsed('${l._id}',${l.used})">
+                      ${l.used?'Mark Active':'Mark Used'}
+                    </button>
+                    <button class="sl-del" onclick="slDeleteLead('${l._id}')">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      ${pages>1?`
+        <div class="sl-pagination">
+          ${page>1?`<button onclick="slGoPage(${page-1})">← Prev</button>`:''}
+          <span>Page ${page} / ${pages}</span>
+          ${page<pages?`<button onclick="slGoPage(${page+1})">Next →</button>`:''}
+        </div>
+      `:''}
+    `;
+  };
+
+  window.slCopyCode=function(code,btn){
+    navigator.clipboard.writeText(code).then(()=>{
+      const orig=btn.textContent;
+      btn.textContent='✓'; btn.style.color='var(--success)';
+      setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1500);
+    }).catch(()=>toast('Press Ctrl+C to copy: '+code,'info'));
+  };
+
+  window.slDeleteLead=async function(id){
+    if(!confirm('Delete this spin lead?')) return;
+    try{
+      const r=await fetch(`${API}/admin/spin-leads/${id}`,{method:'DELETE'});
+      if(!r.ok) throw new Error('Delete failed');
+      toast('Lead deleted','success');
+      renderSpinLeads();
+    }catch(e){ toast('Failed to delete: '+e.message,'error'); }
+  };
+
+  window.slToggleUsed=async function(id,currentUsed){
+    const newUsed=!currentUsed;
+    try{
+      const r=await fetch(`${API}/admin/spin-leads/${id}`,{
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({used:newUsed,status:newUsed?'used':'active'})
+      });
+      if(!r.ok) throw new Error('Update failed');
+      toast(newUsed?'Marked as used':'Marked as active','success');
+      renderSpinLeads();
+    }catch(e){ toast('Failed to update: '+e.message,'error'); }
+  };
+
+  window.slGoPage=function(p){
+    slPage=p;
+    renderSpinLeads();
+    document.getElementById('section-spin-leads')?.scrollIntoView({behavior:'smooth'});
+  };
+
+  // Debounced search handler (called from oninput)
+  let slDebounce;
+  window.slSearchDebounce=function(val){
+    clearTimeout(slDebounce);
+    slDebounce=setTimeout(()=>{
+      slSearch=val.trim();
+      slPage=1;
+      renderSpinLeads();
+    },400);
+  };
+
+  window.slStatusChange=function(val){
+    slStatus=val;
+    slPage=1;
+    renderSpinLeads();
+  };
+
+  // Auto-refresh every 30s when panel is visible
+  function startSlAutoRefresh(){
+    if(slAutoRefresh) clearInterval(slAutoRefresh);
+    slAutoRefresh=setInterval(()=>{
+      const sec=document.getElementById('section-spin-leads');
+      if(sec&&sec.classList.contains('active')) renderSpinLeads();
+    },30000);
+  }
+
+  // Kick off auto-refresh on page load
+  document.addEventListener('DOMContentLoaded',startSlAutoRefresh);
+})();
 
 /* ─────────────────────────────────────────
    LOGOUT

@@ -2272,6 +2272,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <span class="sh-ey" style="color:rgba(245,240,232,.24)">SHENOVA EXCLUSIVE</span>
       <h2><em>Unlock</em> Your Exclusive Offer</h2>
       <p>Enter your details and spin the wheel to reveal a special discount on your next order.</p>
+      <input id="spin-name" type="text" class="sp-inp" placeholder="Your full name" autocomplete="name">
       <input id="spin-email" type="email" class="sp-inp" placeholder="Your email address" autocomplete="email">
       <input id="spin-phone" type="tel" class="sp-inp" placeholder="Your phone number" autocomplete="tel">
       <div id="spin-error" class="sp-error"></div>
@@ -2566,11 +2567,17 @@ if(sp) {
 
   window.spinWheel = function() {
     if(spinning || spun) return;
+    const spinName = document.getElementById('spin-name')?.value?.trim();
     const email = document.getElementById('spin-email')?.value?.trim();
     const phone = document.getElementById('spin-phone')?.value?.trim();
     const errEl = document.getElementById('spin-error');
-    if(!email || !phone) {
-      if(errEl) { errEl.textContent = 'Please enter your email and phone to spin.'; errEl.classList.add('show'); }
+    if(!spinName || !email || !phone) {
+      if(errEl) { errEl.textContent = 'Please enter your name, email and phone to spin.'; errEl.classList.add('show'); }
+      return;
+    }
+    // Basic email check
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if(errEl) { errEl.textContent = 'Please enter a valid email address.'; errEl.classList.add('show'); }
       return;
     }
     if(errEl) errEl.classList.remove('show');
@@ -2638,11 +2645,24 @@ if(sp) {
         const codeEl = document.getElementById('coupon-code-text');
         if(discEl) discEl.textContent = finalSeg.pct;
         if(codeEl) codeEl.textContent = wonCode;
+        // ── FIX: include all lead fields so the backend stores a complete record ──
+        const spinName = document.getElementById('spin-name')?.value?.trim() || '';
         fetch((window.API_BASE || '') + '/api/spin/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, coupon: wonCode, discount: finalSeg.discount })
-        }).catch(e => console.error('Spin save:', e));
+          body: JSON.stringify({
+            name:     spinName,
+            email:    email,
+            phone:    phone,
+            coupon:   wonCode,
+            discount: finalSeg.discount,
+            prize:    finalSeg.label || (finalSeg.discount + '% OFF'),
+            spinResult: finalSeg.label || (finalSeg.discount + '% OFF')
+          })
+        })
+        .then(r => r.json())
+        .then(d => { if(!d.success) console.error('[Spin] Save response:', d); })
+        .catch(e => console.error('[Spin] Save error:', e));
         localStorage.setItem('shenova_coupon', JSON.stringify({ code: wonCode, discount: finalSeg.discount, ts: Date.now() }));
         const wonLabel = couponPopup?.querySelector('.sh-ey');
         if(wonLabel) wonLabel.textContent = 'YOU WON';
@@ -2674,7 +2694,7 @@ if(sp) {
       }
     };
     requestAnimationFrame(frame);
-    ['spin-email','spin-phone'].forEach(id => {
+    ['spin-name','spin-email','spin-phone'].forEach(id => {
       document.getElementById(id)?.addEventListener('input', () => {
         document.getElementById('spin-error')?.classList.remove('show');
       });

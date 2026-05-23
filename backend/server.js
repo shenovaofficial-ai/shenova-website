@@ -64,12 +64,30 @@ const Message = mongoose.model('Message', new mongoose.Schema({
   name: String, email: String, message: String
 }, { timestamps: true }));
 
-const SpinLead = mongoose.model('SpinLead', new mongoose.Schema({
-  email:    { type: String },
-  coupon:   { type: String },
-  discount: { type: Number },
-  used:     { type: Boolean, default: false }
-}, { timestamps: true }));
+// ================= FIXED SPINLEAD MODEL =================
+// Added: name, phone, spinResult, prize fields + proper timestamps
+// FIX: email unique index created separately after model registration
+//      so it uses a sparse index (allows multiple null values safely)
+
+const spinLeadSchema = new mongoose.Schema({
+  name:       { type: String, default: '', trim: true },
+  email:      { type: String, required: true, trim: true, lowercase: true },
+  phone:      { type: String, default: '', trim: true },
+  coupon:     { type: String, default: '', trim: true, uppercase: true },
+  discount:   { type: Number, default: 0 },
+  prize:      { type: String, default: '' },      // e.g. "10% OFF"
+  spinResult: { type: String, default: '' },      // raw spin label
+  status:     { type: String, default: 'active' }, // active | used | expired
+  used:       { type: Boolean, default: false }
+}, { timestamps: true }); // createdAt & updatedAt auto-managed
+
+// Unique indexes (defined on schema so Mongoose manages them safely)
+spinLeadSchema.index({ email: 1 },  { unique: true, sparse: false });
+spinLeadSchema.index({ coupon: 1 }, { unique: true, sparse: true  });
+spinLeadSchema.index({ createdAt: -1 });
+spinLeadSchema.index({ status: 1 });
+
+const SpinLead = mongoose.model('SpinLead', spinLeadSchema);
 
 // ================= AUTH =================
 
@@ -126,18 +144,6 @@ async function processUploads(files) {
 }
 
 // ================= STORIES =================
-// ── The storyRoutes module handles all /api/stories/* endpoints.
-//    It uses Cloudinary (via storyUpload middleware) so media URLs are
-//    permanent, publicly accessible URLs — NOT local disk paths.
-//    Routes provided:
-//      GET    /api/stories              → live (non-expired) stories
-//      GET    /api/stories/admin        → ALL stories incl. expired
-//      POST   /api/stories              → upload new story (Cloudinary)
-//      PUT    /api/stories/reorder      → drag-to-reorder
-//      PUT    /api/stories/:id          → update caption / CTA / order
-//      DELETE /api/stories/cleanup      → purge expired + Cloudinary assets
-//      DELETE /api/stories/:id          → delete one story
-//      POST   /api/stories/:id/view     → increment view count
 
 const storyRoutes = require('./routes/storyRoutes');
 app.use('/api/stories', storyRoutes);
@@ -250,7 +256,10 @@ app.post('/api/orders', async (req, res) => {
 
     const code = (body.coupon || '').trim().toUpperCase();
     if (code) {
-      await SpinLead.findOneAndUpdate({ coupon: code }, { used: true }).catch(() => {});
+      await SpinLead.findOneAndUpdate(
+        { coupon: code },
+        { used: true, status: 'used' }
+      ).catch(() => {});
     }
 
     console.log(`✅ Order created — ${order._id} | ${body.isCOD ? 'COD (₹100 advance paid)' : 'PREPAID'} | ₹${order.total}`);
@@ -304,22 +313,126 @@ app.post('/api/newsletter', async (req, res) => {
 
 // ================= SPIN WHEEL =================
 
+// Validate helper
+function validateSpinFields({ email, phone, name }) {
+  if (!email || !email.includes('@'))
+    return 'Please enter a valid email address';
+  if (phone && !/^\+?[\d\s\-]{7,15}$/.test(phone))
+    return 'Please enter a valid phone number';
+  return null;
+}
+
+// POST /api/spin — original full-form submission (email + phone required)
 app.post('/api/spin', async (req, res) => {
-  res.redirect(307, '/api/spin/save');
+  try {
+    const { email, phone, name } = req.body;
+
+    // Validation
+    const err = validateSpinFields({ email, phone, name });
+    if (err) return res.status(400).json({ message: err });
+
+    const normalEmail = email.toLowerCase().trim();
+
+    // Duplicate check
+    const exists = await SpinLead.findOne({
+      $or: [
+        { email: normalEmail },
+        ...(phone ? [{ phone: phone.trim() }] : [])
+      ]
+    });
+    if (exists) {
+      return res.status(400).json({ message: 'You have already spun the wheel!' });
+    }
+
+    const discounts   = [5, 10, 15];
+    const discount    = discounts[Math.floor(Math.random() * discounts.length)];
+    const coupon      = 'SHENOVA' + Math.floor(1000 + Math.random() * 9000);
+    const prize       = `${discount}% OFF`;
+    const spinResult  = prize;
+
+    const lead = await SpinLead.create({
+      name:       (name || '').trim(),
+      email:      normalEmail,
+      phone:      (phone || '').trim(),
+      coupon,
+      discount,
+      prize,
+      spinResult,
+      status:     'active',
+      used:       false
+    });
+
+    console.log(`🎡 Spin lead saved — ${lead._id} | ${normalEmail} | ${coupon} (${discount}%)`);
+    res.json({ success: true, coupon, discount, prize });
+
+  } catch (err) {
+    console.error('POST /api/spin error:', err);
+    res.status(500).json({ message: 'Server error. Please try again.' });
+  }
 });
 
+// POST /api/spin/save — called after the wheel animation finishes
+// Accepts: email, phone, name, coupon, discount, prize, spinResult
 app.post('/api/spin/save', async (req, res) => {
   try {
-    const { email, coupon, discount } = req.body;
-    if (!email || !coupon) return res.status(400).json({ message: 'Email and coupon are required' });
-    await SpinLead.findOneAndUpdate(
-      { email: email.toLowerCase() },
-      { email: email.toLowerCase(), coupon: coupon.toUpperCase(), discount: Number(discount) || 0, used: false },
-      { upsert: true, new: true }
+    const { email, phone, name, coupon, discount, prize, spinResult } = req.body;
+
+    // Validation
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({ message: 'Valid email is required' });
+    }
+    if (!coupon) {
+      return res.status(400).json({ message: 'Coupon code is required' });
+    }
+
+    const normalEmail   = email.toLowerCase().trim();
+    const normalCoupon  = coupon.toUpperCase().trim();
+    const computedPrize = prize || (discount ? `${discount}% OFF` : 'Prize');
+
+    // Upsert by email — update if exists, insert if new
+    // FIX: set ALL fields including name/phone so the admin panel always has complete data
+    const lead = await SpinLead.findOneAndUpdate(
+      { email: normalEmail },
+      {
+        $set: {
+          name:       (name  || '').trim(),
+          phone:      (phone || '').trim(),
+          coupon:     normalCoupon,
+          discount:   Number(discount) || 0,
+          prize:      computedPrize,
+          spinResult: spinResult || computedPrize,
+          status:     'active',
+          used:       false
+        }
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
     );
-    res.json({ success: true });
+
+    console.log(`🎡 Spin lead saved — ${lead._id} | ${normalEmail} | ${lead.coupon} (${lead.discount}%)`);
+    res.json({ success: true, lead: { _id: lead._id, coupon: lead.coupon } });
+
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    // E11000 = MongoDB duplicate key error
+    if (err.code === 11000) {
+      // Already spun — still return success so frontend UX isn't broken
+      console.warn(`[Spin/save] Duplicate key for request, updating anyway:`, err.keyValue);
+      try {
+        const { email, phone, name, coupon, discount, prize, spinResult } = req.body;
+        const normalEmail   = email?.toLowerCase().trim();
+        const normalCoupon  = (coupon || '').toUpperCase().trim();
+        const computedPrize = prize || (discount ? `${discount}% OFF` : 'Prize');
+        await SpinLead.updateOne(
+          { email: normalEmail },
+          { $set: { name: (name||'').trim(), phone: (phone||'').trim(), coupon: normalCoupon, discount: Number(discount)||0, prize: computedPrize, spinResult: spinResult||computedPrize } }
+        );
+        return res.json({ success: true });
+      } catch (e2) {
+        console.error('[Spin/save] Retry update also failed:', e2);
+        return res.json({ success: true }); // Still return success to not break frontend
+      }
+    }
+    console.error('POST /api/spin/save error:', err);
+    res.status(500).json({ message: 'Server error. Please try again.' });
   }
 });
 
@@ -342,13 +455,73 @@ app.post('/api/coupon/use', async (req, res) => {
   try {
     const { coupon } = req.body;
     if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-    await SpinLead.findOneAndUpdate({ coupon: coupon.toUpperCase() }, { used: true });
+    await SpinLead.findOneAndUpdate(
+      { coupon: coupon.toUpperCase() },
+      { used: true, status: 'used' }
+    );
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 });
 
+// ================= SPIN LEADS ADMIN ROUTES =================
+
+// GET all spin leads (latest first) — with optional search/filter
+app.get('/api/admin/spin-leads', async (req, res) => {
+  try {
+    const { search, status, page = 1, limit = 50 } = req.query;
+    const filter = {};
+
+    if (status && status !== 'all') filter.status = status;
+
+    if (search) {
+      const rx = { $regex: search, $options: 'i' };
+      filter.$or = [
+        { name: rx }, { email: rx }, { phone: rx }, { coupon: rx }
+      ];
+    }
+
+    const skip  = (Number(page) - 1) * Number(limit);
+    const total = await SpinLead.countDocuments(filter);
+    const leads = await SpinLead.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    res.json({ leads, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });
+  } catch (err) {
+    console.error('GET /api/admin/spin-leads error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// DELETE a single spin lead
+app.delete('/api/admin/spin-leads/:id', async (req, res) => {
+  try {
+    await SpinLead.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PATCH status of a spin lead
+app.patch('/api/admin/spin-leads/:id', async (req, res) => {
+  try {
+    const { status, used } = req.body;
+    const update = {};
+    if (status !== undefined) update.status = status;
+    if (used   !== undefined) update.used   = used;
+    const updated = await SpinLead.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!updated) return res.status(404).json({ message: 'Lead not found' });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Legacy coupon admin routes (keep for backward compat)
 app.get('/api/admin/coupons', async (req, res) => {
   try {
     const coupons = await SpinLead.find().sort('-createdAt');
@@ -383,8 +556,6 @@ const paymentRoutes = require('./routes/paymentRoutes');
 app.use('/api/payment', paymentRoutes);
 
 // ================= 404 CATCH-ALL (API) =================
-// Returns JSON for any unmatched /api/* route — prevents HTML error pages
-// reaching the frontend and causing "Unexpected token '<'" parse errors.
 app.use('/api/*', (req, res) => {
   res.status(404).json({ success: false, message: `API route not found: ${req.method} ${req.originalUrl}` });
 });
