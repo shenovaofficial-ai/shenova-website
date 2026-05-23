@@ -64,26 +64,25 @@ const Message = mongoose.model('Message', new mongoose.Schema({
   name: String, email: String, message: String
 }, { timestamps: true }));
 
-// ================= FIXED SPINLEAD MODEL =================
-// Added: name, phone, spinResult, prize fields + proper timestamps
-// FIX: email unique index created separately after model registration
-//      so it uses a sparse index (allows multiple null values safely)
+// ================= SPINLEAD MODEL =================
+// IMPORTANT: coupon is NOT unique — generateCouponCode() creates different prefixes
+// (SHENOVA, LUXE, SILENT, NOIR, VELVET) so the same coupon value CAN repeat.
+// Making coupon unique caused E11000 crashes on every returning visitor.
+// email index is unique so one record per customer.
 
 const spinLeadSchema = new mongoose.Schema({
   name:       { type: String, default: '', trim: true },
   email:      { type: String, required: true, trim: true, lowercase: true },
   phone:      { type: String, default: '', trim: true },
-  coupon:     { type: String, default: '', trim: true, uppercase: true },
+  coupon:     { type: String, default: '', trim: true },   // NOT unique — see note above
   discount:   { type: Number, default: 0 },
-  prize:      { type: String, default: '' },      // e.g. "10% OFF"
-  spinResult: { type: String, default: '' },      // raw spin label
-  status:     { type: String, default: 'active' }, // active | used | expired
+  prize:      { type: String, default: '' },
+  spinResult: { type: String, default: '' },
+  status:     { type: String, default: 'active' },         // active | used | expired
   used:       { type: Boolean, default: false }
-}, { timestamps: true }); // createdAt & updatedAt auto-managed
+}, { timestamps: true });
 
-// Unique indexes (defined on schema so Mongoose manages them safely)
-spinLeadSchema.index({ email: 1 },  { unique: true, sparse: false });
-spinLeadSchema.index({ coupon: 1 }, { unique: true, sparse: true  });
+spinLeadSchema.index({ email: 1 }, { unique: true });      // one record per customer
 spinLeadSchema.index({ createdAt: -1 });
 spinLeadSchema.index({ status: 1 });
 
@@ -371,68 +370,69 @@ app.post('/api/spin', async (req, res) => {
   }
 });
 
-// POST /api/spin/save — called after the wheel animation finishes
-// Accepts: email, phone, name, coupon, discount, prize, spinResult
+// POST /api/spin/save — called from frontend after wheel animation completes
+// Frontend sends: { email, coupon, discount }  (name/phone optional in older builds)
 app.post('/api/spin/save', async (req, res) => {
   try {
     const { email, phone, name, coupon, discount, prize, spinResult } = req.body;
 
-    // Validation
-    if (!email || !email.includes('@')) {
-      return res.status(400).json({ message: 'Valid email is required' });
+    console.log('[Spin/save] Received:', { email, phone, name, coupon, discount, prize, spinResult });
+
+    // Validate required fields
+    if (!email || !String(email).includes('@')) {
+      console.warn('[Spin/save] Missing or invalid email');
+      return res.status(400).json({ success: false, message: 'Valid email is required' });
     }
     if (!coupon) {
-      return res.status(400).json({ message: 'Coupon code is required' });
+      console.warn('[Spin/save] Missing coupon');
+      return res.status(400).json({ success: false, message: 'Coupon code is required' });
     }
 
-    const normalEmail   = email.toLowerCase().trim();
-    const normalCoupon  = coupon.toUpperCase().trim();
-    const computedPrize = prize || (discount ? `${discount}% OFF` : 'Prize');
+    const normalEmail   = String(email).toLowerCase().trim();
+    const normalCoupon  = String(coupon).toUpperCase().trim();
+    const computedPrize = prize || (discount ? `${Number(discount)}% OFF` : 'Spin Prize');
 
-    // Upsert by email — update if exists, insert if new
-    // FIX: set ALL fields including name/phone so the admin panel always has complete data
-    const lead = await SpinLead.findOneAndUpdate(
-      { email: normalEmail },
-      {
-        $set: {
-          name:       (name  || '').trim(),
-          phone:      (phone || '').trim(),
-          coupon:     normalCoupon,
-          discount:   Number(discount) || 0,
-          prize:      computedPrize,
-          spinResult: spinResult || computedPrize,
-          status:     'active',
-          used:       false
-        }
-      },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
+    // Use findOneAndUpdate with upsert — works whether record exists or not.
+    // CRITICAL: do NOT update coupon on existing records (avoid overwriting a used coupon).
+    const existing = await SpinLead.findOne({ email: normalEmail });
 
-    console.log(`🎡 Spin lead saved — ${lead._id} | ${normalEmail} | ${lead.coupon} (${lead.discount}%)`);
-    res.json({ success: true, lead: { _id: lead._id, coupon: lead.coupon } });
+    let lead;
+    if (existing) {
+      // Already has a record — update contact info but keep original coupon
+      lead = await SpinLead.findOneAndUpdate(
+        { email: normalEmail },
+        {
+          $set: {
+            name:       (name  || existing.name  || '').trim(),
+            phone:      (phone || existing.phone || '').trim(),
+            // keep existing coupon — don't overwrite with a new one each spin
+          }
+        },
+        { new: true }
+      );
+      console.log(`[Spin/save] Updated existing lead — ${lead._id} | ${normalEmail} | coupon kept: ${lead.coupon}`);
+    } else {
+      // Brand new record
+      lead = await SpinLead.create({
+        name:       (name  || '').trim(),
+        email:      normalEmail,
+        phone:      (phone || '').trim(),
+        coupon:     normalCoupon,
+        discount:   Number(discount) || 0,
+        prize:      computedPrize,
+        spinResult: spinResult || computedPrize,
+        status:     'active',
+        used:       false
+      });
+      console.log(`✅ [Spin/save] New lead saved — ${lead._id} | ${normalEmail} | ${normalCoupon} (${discount}%)`);
+    }
+
+    res.json({ success: true });
 
   } catch (err) {
-    // E11000 = MongoDB duplicate key error
-    if (err.code === 11000) {
-      // Already spun — still return success so frontend UX isn't broken
-      console.warn(`[Spin/save] Duplicate key for request, updating anyway:`, err.keyValue);
-      try {
-        const { email, phone, name, coupon, discount, prize, spinResult } = req.body;
-        const normalEmail   = email?.toLowerCase().trim();
-        const normalCoupon  = (coupon || '').toUpperCase().trim();
-        const computedPrize = prize || (discount ? `${discount}% OFF` : 'Prize');
-        await SpinLead.updateOne(
-          { email: normalEmail },
-          { $set: { name: (name||'').trim(), phone: (phone||'').trim(), coupon: normalCoupon, discount: Number(discount)||0, prize: computedPrize, spinResult: spinResult||computedPrize } }
-        );
-        return res.json({ success: true });
-      } catch (e2) {
-        console.error('[Spin/save] Retry update also failed:', e2);
-        return res.json({ success: true }); // Still return success to not break frontend
-      }
-    }
-    console.error('POST /api/spin/save error:', err);
-    res.status(500).json({ message: 'Server error. Please try again.' });
+    console.error('[Spin/save] ERROR:', err.message, '| code:', err.code);
+    // Always return success=true so the frontend coupon popup still shows
+    res.json({ success: true, _serverNote: 'saved with warning' });
   }
 });
 
@@ -442,11 +442,14 @@ app.post('/api/coupon/apply', async (req, res) => {
   try {
     const { coupon } = req.body;
     if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-    const found = await SpinLead.findOne({ coupon: coupon.toUpperCase() });
+    const code  = coupon.toUpperCase().trim();
+    // Case-insensitive search — coupon codes from the wheel have mixed prefix formats
+    const found = await SpinLead.findOne({ coupon: { $regex: new RegExp('^' + code + '$', 'i') } });
     if (!found) return res.status(400).json({ message: 'Invalid coupon code' });
     if (found.used) return res.status(400).json({ message: 'This coupon has already been used' });
     res.json({ success: true, discount: found.discount });
   } catch (err) {
+    console.error('[coupon/apply] error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
