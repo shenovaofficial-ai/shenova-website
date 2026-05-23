@@ -389,14 +389,14 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-hov1 {
   position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(165deg,
-    rgba(12,11,10,.04) 0%,
-    rgba(12,11,10,.18) 28%,
-    rgba(12,11,10,.58) 68%,
-    rgba(12,11,10,.97) 100%);
+    rgba(8,7,6,.30) 0%,
+    rgba(8,7,6,.55) 32%,
+    rgba(8,7,6,.84) 65%,
+    rgba(8,7,6,.98) 100%);
 }
 .sh-hov2 {
   position: absolute; inset: 0; z-index: 2;
-  background: radial-gradient(ellipse at 72% 42%, transparent 28%, rgba(12,11,10,.45) 100%);
+  background: radial-gradient(ellipse at 68% 38%, rgba(8,7,6,.08) 0%, rgba(8,7,6,.60) 100%);
 }
 
 /* Sophisticated grain overlay */
@@ -416,16 +416,20 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-htape {
   position: absolute; bottom: 130px; left: 0; right: 0; z-index: 4;
   overflow: hidden; pointer-events: none;
-  border-top: 1px solid rgba(255,255,255,.06);
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  padding: 10px 0;
+  border-top: 1px solid rgba(181,137,90,.22);
+  border-bottom: 1px solid rgba(181,137,90,.22);
+  padding: 11px 0;
+  background: rgba(6,5,4,.38);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .sh-htape-t {
-  display: flex; gap: 48px; white-space: nowrap;
+  display: flex; gap: 52px; white-space: nowrap;
   animation: tapeScroll 22s linear infinite;
-  font: 200 8px/1 var(--body); letter-spacing: .38em;
-  text-transform: uppercase; color: rgba(255,255,255,.22);
+  font: 300 8.5px/1 var(--body); letter-spacing: .42em;
+  text-transform: uppercase; color: rgba(255,255,255,.72);
 }
+.sh-htape-t span[style] { color: var(--gold) !important; opacity: 1 !important; font-size: 6px; }
 @keyframes tapeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 /* Hero body content */
@@ -441,7 +445,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-eyebrow {
   display: flex; align-items: center; gap: 16px;
   font: 200 8.5px/1 var(--body); letter-spacing: .44em;
-  text-transform: uppercase; color: rgba(245,240,232,.32);
+  text-transform: uppercase; color: rgba(255,255,255,.55);
   margin-bottom: 28px;
 }
 .sh-eyebrow-line {
@@ -453,20 +457,24 @@ span.lux-cart-count.cart-count { display: flex !important; }
 /* HERO TITLE — massive editorial */
 .sh-htitle {
   font: 300 clamp(78px, 14vw, 176px)/.86 var(--display);
-  letter-spacing: -.04em; color: var(--ivory);
+  letter-spacing: -.04em; color: #ffffff;
   margin-bottom: 34px;
+  text-shadow: 0 2px 48px rgba(0,0,0,.55), 0 0 80px rgba(0,0,0,.30);
 }
 .sh-htitle span { display: block; }
 .sh-htitle em {
   font-style: italic; color: transparent;
-  -webkit-text-stroke: 1px rgba(245,240,232,.55);
+  -webkit-text-stroke: 1.8px rgba(255,255,255,.82);
   font-weight: 300;
+  text-shadow: none;
+  filter: drop-shadow(0 0 22px rgba(181,137,90,.30));
 }
 
 .sh-hsub {
-  font: 200 13px/1.9 var(--body); letter-spacing: .14em;
-  color: rgba(245,240,232,.32); margin-bottom: 52px;
+  font: 200 13px/1.9 var(--body); letter-spacing: .18em;
+  color: rgba(255,255,255,.65); margin-bottom: 52px;
   max-width: 360px;
+  text-shadow: 0 1px 16px rgba(0,0,0,.60);
 }
 
 /* Hero CTAs */
