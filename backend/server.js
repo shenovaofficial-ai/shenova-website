@@ -6,10 +6,12 @@ const cors     = require('cors');
 const bcrypt   = require('bcryptjs');
 const jwt      = require('jsonwebtoken');
 const { multerUpload, uploadToCloudinary } = require('./middleware/upload');
+const metaRoutes = require("./routes/metaRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/meta", metaRoutes);
 
 // ================= MODELS =================
 
