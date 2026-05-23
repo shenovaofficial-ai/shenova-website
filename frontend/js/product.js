@@ -79,7 +79,8 @@ function render() {
                title="Video ${i + 1}">
             <video class="pdp-thumb-video"
                    src="${imgUrl(m.src)}"
-                   muted preload="metadata"
+                   autoplay muted loop playsinline
+                   preload="auto"
                    style="width:80px;height:106px;object-fit:cover;border-radius:4px;display:block;pointer-events:none"></video>
             <div class="pdp-thumb-play-icon">▶</div>
           </div>`;
@@ -143,23 +144,58 @@ function renderMainMedia(idx) {
   ).forEach(el => el.remove());
 
   if (item.type === 'video') {
-    // Build video element
+    // Build video element — fully controlled autoplay, no user interaction
     const vid = document.createElement('video');
-    vid.id       = 'pdp-main-video';
-    vid.src      = imgUrl(item.src);
-    vid.controls = true;
-    vid.playsInline = true;
-    vid.preload  = 'metadata';
+    vid.id          = 'pdp-main-video';
+    vid.src         = imgUrl(item.src);
+    vid.controls    = false;        // hide all controls
+    vid.autoplay    = true;
+    vid.muted       = true;         // required for autoplay on all browsers
+    vid.loop        = true;
+    vid.playsInline = true;         // required for iOS Safari autoplay
+    vid.preload     = 'auto';
+    vid.setAttribute('playsinline', '');          // belt-and-suspenders for older iOS
+    vid.setAttribute('webkit-playsinline', '');   // legacy Safari
+    vid.setAttribute('disablepictureinpicture', '');
+    vid.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback');
     Object.assign(vid.style, {
       width: '100%', height: '100%',
       objectFit: 'cover',
       borderRadius: '3px',
       display: 'block',
-      cursor: 'default'
+      cursor: 'default',
+      pointerEvents: 'none'         // block ALL user interaction with the video element
     });
+
+    // Block right-click context menu on video
+    vid.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Ensure video plays and recovers if interrupted (e.g. tab visibility change)
+    function ensurePlaying() {
+      if (vid.paused) {
+        vid.play().catch(() => {});
+      }
+    }
+    vid.addEventListener('pause', ensurePlaying);
+    vid.addEventListener('ended', ensurePlaying); // belt-and-suspenders alongside loop
+
+    // Autoplay via IntersectionObserver — plays when visible, keeps looping
+    if (window._pdpVidObserver) window._pdpVidObserver.disconnect();
+    window._pdpVidObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play().catch(() => {});
+        }
+        // Do NOT pause when out of view — loop continues silently
+      });
+    }, { threshold: 0.25 });
+    window._pdpVidObserver.observe(vid);
 
     // Insert before badges/arrows (first child)
     frame.insertBefore(vid, frame.firstChild);
+
+    // Attempt immediate play (handles cases before observer fires)
+    vid.play().catch(() => {});
 
     // Hide zoom cursor on the frame while video is active
     frame.style.cursor = 'default';
@@ -200,9 +236,12 @@ window.setMedia = function(i) {
   const media = getMedia();
   if (i < 0 || i >= media.length) return;
 
-  // Pause any playing video before switching away
+  // Stop any playing video and clean up observer before switching away
   const prevVid = document.getElementById('pdp-main-video');
-  if (prevVid) prevVid.pause();
+  if (prevVid) {
+    if (window._pdpVidObserver) { window._pdpVidObserver.disconnect(); window._pdpVidObserver = null; }
+    prevVid.pause();
+  }
 
   currentIdx = i;
 
