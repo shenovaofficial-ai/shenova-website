@@ -175,7 +175,7 @@
     const bar = qs('#shn-progress');
     if (!bar) return;
 
-    // Only reveal bar after the page loader has exited
+    // Only reveal announce bar + progress bar after loader exits
     function activateBar() {
       document.body.classList.add('loader-done');
     }
@@ -184,17 +184,22 @@
     // product.html loader → #pdp-loader gets class "hide"
     const loader = qs('#sh-ld, #pdp-loader');
     if (loader) {
-      new MutationObserver((mutations) => {
-        for (const m of mutations) {
-          if (m.target.classList.contains('out') || m.target.classList.contains('hide')) {
-            setTimeout(activateBar, 300);
-            break;
+      // If loader already exited before our script ran
+      if (loader.classList.contains('out') || loader.classList.contains('hide')) {
+        activateBar();
+      } else {
+        new MutationObserver((mutations) => {
+          for (const m of mutations) {
+            if (m.target.classList.contains('out') || m.target.classList.contains('hide')) {
+              setTimeout(activateBar, 50);
+              break;
+            }
           }
-        }
-      }).observe(loader, { attributes: true, attributeFilter: ['class'] });
+        }).observe(loader, { attributes: true, attributeFilter: ['class'] });
+      }
     } else {
-      // No loader on this page — show after first scroll paint
-      setTimeout(activateBar, 400);
+      // No loader on this page — activate immediately
+      activateBar();
     }
 
     let ticking = false;

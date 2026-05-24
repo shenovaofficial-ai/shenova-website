@@ -422,17 +422,16 @@ img[loading="lazy"].loaded { opacity: 1; }
   50%       { transform: translateX(8px); opacity: 0.8; }
 }
 
-/* ── AMBIENT PAGE BACKGROUND GLOW ───────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(181,137,90,0.025) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 30% at 85% 80%, rgba(181,137,90,0.018) 0%, transparent 55%);
+/* ── ANNOUNCE BAR — hide during loader ───────────────────────────── */
+/* Prevent announce bar bleeding through the loader overlay */
+body:not(.loader-done) #sh-bar {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: none !important;
+}
+body.loader-done #sh-bar {
   opacity: 1;
+  transition: opacity 0.5s ease 0.1s;
 }
 
 /* ── SELECTION COLOR ─────────────────────────────────────────────── */
