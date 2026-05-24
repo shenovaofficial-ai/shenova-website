@@ -38,29 +38,12 @@ require('dotenv').config();
     trending:     { type: Boolean, default: false }
   }, { timestamps: true }));
 
-  const Order = mongoose.model('Order', new mongoose.Schema({
-    user:          { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    items:         Array,
-    total:         Number,
-    shipping:      Object,
-    paymentMethod: String,
-    coupon:        String,
-    subtotal:      Number,
-    shippingFee:   Number,
-    discount:      { type: Number, default: 0 },
-    status:        { type: String, default: 'pending' },
-    isCOD:              { type: Boolean, default: false },
-    codAdvancePaid:     { type: Number, default: 0 },
-    codAdvancePaidAt:   { type: Date,   default: null },
-    codRemainingAmount: { type: Number, default: 0 },
-    razorpay: {
-      payment_id: String,
-      order_id:   String,
-      signature:  String,
-      amount:     Number,
-      type:       String
-    }
-  }, { timestamps: true }));
+  // ── Order model: single source of truth in models/Order.js ──────
+  // Previously a duplicate schema was defined inline here, which caused
+  // Mongoose to silently ignore the full schema when models/Order.js was
+  // registered first — resulting in "Cast to string failed" for the
+  // razorpay nested object. Now we always use the canonical model file.
+  const Order = require('./models/Order');
 
   const Message = mongoose.model('Message', new mongoose.Schema({
     name: String, email: String, message: String
