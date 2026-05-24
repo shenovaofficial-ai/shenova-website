@@ -26,17 +26,17 @@ html {
   top: 0; left: 0;
   height: 1.5px;
   width: 0%;
-  background: linear-gradient(90deg, #b5895a 0%, #e8cca0 50%, #b5895a 100%);
-  background-size: 200% 100%;
-  z-index: 9999;
+  background: linear-gradient(90deg, #b5895a, #e8cca0, #b5895a);
+  z-index: 9000; /* below loader overlay */
   pointer-events: none;
   will-change: width;
-  animation: progressShimmer 3s linear infinite;
   transform: translateZ(0);
+  opacity: 0; /* hidden until loader exits */
+  transition: opacity 0.4s ease;
 }
-@keyframes progressShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+/* Only show after loader is gone */
+body.loader-done #shn-progress {
+  opacity: 1;
 }
 
 /* ── CUSTOM CURSOR (desktop only) ────────────────────────────────── */

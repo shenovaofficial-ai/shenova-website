@@ -175,6 +175,28 @@
     const bar = qs('#shn-progress');
     if (!bar) return;
 
+    // Only reveal bar after the page loader has exited
+    function activateBar() {
+      document.body.classList.add('loader-done');
+    }
+
+    // index.html loader → #sh-ld gets class "out"
+    // product.html loader → #pdp-loader gets class "hide"
+    const loader = qs('#sh-ld, #pdp-loader');
+    if (loader) {
+      new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.target.classList.contains('out') || m.target.classList.contains('hide')) {
+            setTimeout(activateBar, 300);
+            break;
+          }
+        }
+      }).observe(loader, { attributes: true, attributeFilter: ['class'] });
+    } else {
+      // No loader on this page — show after first scroll paint
+      setTimeout(activateBar, 400);
+    }
+
     let ticking = false;
     function updateProgress() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
