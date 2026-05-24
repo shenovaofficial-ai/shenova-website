@@ -375,14 +375,42 @@ span.lux-cart-count.cart-count { display: flex !important; }
   background: var(--obsidian);
 }
 
-/* Hero image — cinematic ken burns */
+/* Hero video — cinematic fullscreen */
+.sh-hvid {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 15%;
+  z-index: 0; display: block;
+  transition: opacity 1.2s var(--silk);
+}
+.sh-hvid-btn {
+  position: absolute; bottom: 200px; right: var(--gutter);
+  z-index: 6; display: flex; align-items: center; gap: 10px;
+  font: 200 8px/1 var(--body); letter-spacing: .36em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  transition: color .4s; background: none; border: none; cursor: pointer;
+  padding: 0;
+}
+.sh-hvid-btn:hover { color: rgba(255,255,255,.85); }
+.sh-hvid-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .4s, background .4s;
+  flex-shrink: 0;
+}
+.sh-hvid-btn:hover .sh-hvid-icon { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.07); }
+.sh-hvid-icon svg { transition: opacity .3s; }
+
+/* Hero image — cinematic ken burns (fallback / mobile) */
 .sh-hbg {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; object-position: center 15%;
   transform: scale(1.1); transition: transform 14s var(--silk);
   will-change: transform; z-index: 0;
+  display: none; /* hidden when video present */
 }
 .sh-hbg.z { transform: scale(1); }
+.sh-hbg.no-vid { display: block; } /* shown as fallback if video fails */
 .sh-hmob { display: none; }
 
 /* Multi-layer overlay for depth */
@@ -1587,6 +1615,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
     transform: scale(1.1); transition: transform 14s var(--silk);
   }
   .sh-hmob.z { transform: scale(1); }
+  .sh-hvid-btn { bottom: 140px; right: 22px; }
   .sh-hbody { padding: 0 22px 80px; flex-direction: column; align-items: flex-start; gap: 20px; }
   .sh-hright { display: none; }
   .sh-htitle { font-size: clamp(60px, 15vw, 90px); }
@@ -1780,11 +1809,47 @@ span.lux-cart-count.cart-count { display: flex !important; }
      HERO — Full cinematic immersion
 ══════════════════════════════════ -->
 <section class="sh-hero" id="sh-hero">
+
+  <!-- ── HERO VIDEO (autoplay, muted, loop) ── -->
+  <video
+    class="sh-hvid"
+    id="heroVid"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="images/hero1.png"
+    aria-hidden="true"
+  >
+    <source src="videos/hero.mp4" type="video/mp4">
+    <source src="videos/hero.webm" type="video/webm">
+  </video>
+
+  <!-- Fallback image shown if video fails to load -->
   <img src="images/hero1.png" alt="" class="sh-hbg" id="heroImg" loading="eager" fetchpriority="high">
   <img src="images/hero1a.png" alt="" class="sh-hmob" id="heroImgMob" loading="eager" fetchpriority="high">
+
   <div class="sh-hov1"></div>
   <div class="sh-hov2"></div>
   <div class="sh-hgrain" aria-hidden="true"></div>
+
+  <!-- Mute / Unmute toggle -->
+  <button class="sh-hvid-btn" id="heroVidMute" aria-label="Toggle sound" onclick="toggleHeroSound()">
+    <span class="sh-hvid-icon" id="heroVidIcon">
+      <!-- Muted icon (default) -->
+      <svg id="iconMuted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+      <!-- Unmuted icon (hidden by default) -->
+      <svg id="iconSound" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="display:none;">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+    </span>
+    <span id="heroVidLabel">Sound Off</span>
+  </button>
 
   <!-- Ticker tape -->
   <div class="sh-htape" aria-hidden="true">
@@ -2809,7 +2874,43 @@ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 
 })();
 
-/* ─ BODY LOCK helpers exposed globally ─ */
+/* ── HERO VIDEO ── */
+(function() {
+  const vid = document.getElementById('heroVid');
+  const img = document.getElementById('heroImg');
+  if (!vid) return;
+
+  /* If video can't load, fall back to the static image */
+  vid.addEventListener('error', function() {
+    vid.style.display = 'none';
+    if (img) img.classList.add('no-vid');
+  }, { once: true });
+
+  /* Also trigger ken-burns on fallback image if needed */
+  vid.addEventListener('canplay', function() {
+    vid.style.opacity = '1';
+  }, { once: true });
+
+  /* Mute / Unmute */
+  window.toggleHeroSound = function() {
+    if (!vid) return;
+    vid.muted = !vid.muted;
+    const iconMuted = document.getElementById('iconMuted');
+    const iconSound  = document.getElementById('iconSound');
+    const label      = document.getElementById('heroVidLabel');
+    if (vid.muted) {
+      if (iconMuted) iconMuted.style.display = '';
+      if (iconSound)  iconSound.style.display  = 'none';
+      if (label)      label.textContent = 'Sound Off';
+    } else {
+      if (iconMuted) iconMuted.style.display = 'none';
+      if (iconSound)  iconSound.style.display  = '';
+      if (label)      label.textContent = 'Sound On';
+    }
+  };
+})();
+
+
 function lockBody() {
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
