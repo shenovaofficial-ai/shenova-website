@@ -414,6 +414,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
 }
 
 /* Horizontal ticker tape */
+.sh-htape { opacity: 0; transition: opacity 0.8s ease; }
+body.loader-done .sh-htape { opacity: 1; }
 .sh-htape {
   position: absolute; bottom: 130px; left: 0; right: 0; z-index: 4;
   overflow: hidden; pointer-events: none;
