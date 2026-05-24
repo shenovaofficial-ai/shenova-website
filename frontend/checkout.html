@@ -964,18 +964,54 @@
               localStorage.removeItem('shenova_applied_coupon');
             }
 
-            /* 6. Clear cart & redirect — only after confirmed save */
+/* 6. Clear cart & redirect — only after confirmed save */
             localStorage.removeItem('cart');
             document.getElementById('checkout-form')?.reset();
-
+ 
             if (cod) {
               const remaining = Math.max(0, sub2 - disc2);
               alert(`✅ COD Order Confirmed!\n\n₹100 advance paid successfully.\nPay ₹${remaining.toLocaleString()} at delivery.\n\nThank you for shopping with Shenova!`);
             } else {
               alert('✅ Payment Successful & Order Placed!\n\nThank you for shopping with Shenova!');
             }
-
+ 
             setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+ 
+ 
+
+ 
+            /* 6. Clear cart — only after confirmed save */
+            localStorage.removeItem('cart');
+            document.getElementById('checkout-form')?.reset();
+ 
+            /* 7. Build elegant display Order ID */
+            const _year = new Date().getFullYear();
+            const _rand = Math.floor(10000 + Math.random() * 89999);
+            const displayOrderId = saved._id
+              ? 'SHN-' + String(saved._id).slice(-8).toUpperCase()
+              : `SHN-${_year}-${_rand}`;
+ 
+            /* 8. Store order payload for success page */
+            const successPayload = {
+              orderId:            displayOrderId,
+              backendId:          saved._id || '',
+              shipping:           orderData.shipping,
+              items:              cart2,
+              subtotal:           sub2,
+              shippingFee:        ship2,
+              discount:           disc2,
+              total:              total2,
+              paymentMethod:      paymentMethod,
+              isCOD:              cod,
+              codAdvancePaid:     cod ? COD_ADVANCE : 0,
+              codRemainingAmount: cod ? Math.max(0, sub2 - disc2) : 0,
+              razorpayPaymentId:  response.razorpay_payment_id,
+            };
+ 
+            sessionStorage.setItem('shnova_last_order', JSON.stringify(successPayload));
+ 
+            /* 9. Redirect to luxury success page */
+            window.location.href = 'order-success.html';
           },
 
           prefill: {

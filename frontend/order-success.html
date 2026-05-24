@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Confirmed · Shenova</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '26862489086743105');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/order-success.css">
+</head>
+<body class="success-page">
+
+  <!-- ══ CANVAS: Particle confetti ══ -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- ══ NAV ══ -->
+  <nav class="nav scrolled">
+    <div class="container nav-inner">
+      <a class="nav-logo" href="index.html">SHENOVA</a>
+      <div class="nav-menu">
+        <a href="shop.html">Shop</a>
+      </div>
+      <div class="nav-icons">
+        <button class="cart-btn" aria-label="Open bag">
+          🛍 <span class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN SUCCESS CONTENT ══ -->
+  <main class="sc-main">
+
+    <!-- HERO SECTION -->
+    <section class="sc-hero">
+      <div class="sc-hero-bg-text" aria-hidden="true">CONFIRMED</div>
+
+      <!-- Animated checkmark -->
+      <div class="sc-check-wrap">
+        <div class="sc-check-ring sc-ring-1"></div>
+        <div class="sc-check-ring sc-ring-2"></div>
+        <div class="sc-check-circle">
+          <svg class="sc-check-svg" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle class="sc-check-bg" cx="26" cy="26" r="25"/>
+            <path class="sc-check-mark" d="M14 26L22 34L38 18" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="sc-hero-text">
+        <p class="sc-eyebrow">Payment Verified &middot; Order Confirmed</p>
+        <h1 class="sc-headline">Thank You,<br><span id="sc-customer-name">Valued Customer</span></h1>
+        <p class="sc-subline">Your order has been received and our atelier team is preparing your pieces with the utmost care.</p>
+      </div>
+
+      <!-- Order ID pill -->
+      <div class="sc-order-pill">
+        <span class="sc-order-pill-label">Order Reference</span>
+        <span class="sc-order-pill-id" id="sc-order-id">SHN-——</span>
+        <button class="sc-copy-btn" id="sc-copy-btn" aria-label="Copy order ID" title="Copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- CONTENT GRID -->
+    <div class="sc-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="sc-left">
+
+        <!-- ORDER STATUS TRACK -->
+        <div class="sc-card sc-status-card">
+          <div class="sc-card-head">
+            <span class="sc-card-eyebrow">Live Order Status</span>
+            <h2 class="sc-card-title">Tracking Your Order</h2>
+          </div>
+
+          <div class="sc-timeline">
+            <div class="sc-timeline-step done" id="tl-confirmed">
+              <div class="sc-tl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="sc-tl-bar"></div>
+              <div class="sc-tl-content">
+                <span class="sc-tl-label">Order Confirmed</span>
+                <span class="sc-tl-sub">Payment received &amp; verified</span>
+              </div>
+            </div>
+            <div class="sc-timeline-step active" id="tl-processing">
+              <div class="sc-tl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="sc-tl-bar"></div>
+              <div class="sc-tl-content">
+                <span class="sc-tl-label">Processing</span>
+                <span class="sc-tl-sub">Our atelier team is preparing your order</span>
+              </div>
+            </div>
+            <div class="sc-timeline-step" id="tl-packed">
+              <div class="sc-tl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+              </div>
+              <div class="sc-tl-bar"></div>
+              <div class="sc-tl-content">
+                <span class="sc-tl-label">Packed</span>
+                <span class="sc-tl-sub">Luxury packaging &amp; quality check</span>
+              </div>
+            </div>
+            <div class="sc-timeline-step" id="tl-shipping">
+              <div class="sc-tl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              </div>
+              <div class="sc-tl-bar"></div>
+              <div class="sc-tl-content">
+                <span class="sc-tl-label">Shipping Soon</span>
+                <span class="sc-tl-sub">On its way to your doorstep</span>
+              </div>
+            </div>
+            <div class="sc-timeline-step" id="tl-delivered">
+              <div class="sc-tl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <div class="sc-tl-bar sc-tl-bar--last"></div>
+              <div class="sc-tl-content">
+                <span class="sc-tl-label">Delivered</span>
+                <span class="sc-tl-sub">Estimated: <span id="sc-eta">5–7 business days</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDER ITEMS -->
+        <div class="sc-card sc-items-card">
+          <div class="sc-card-head">
+            <span class="sc-card-eyebrow">Your Selection</span>
+            <h2 class="sc-card-title">Items Ordered</h2>
+          </div>
+          <div class="sc-items-list" id="sc-items-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- LUXURY REASSURANCE -->
+        <div class="sc-reassure">
+          <div class="sc-reassure-item">
+            <div class="sc-reassure-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <p class="sc-reassure-title">Secure &amp; Verified Payment</p>
+              <p class="sc-reassure-sub">Your transaction was encrypted end-to-end via Razorpay PCI-DSS Level 1 gateway.</p>
+            </div>
+          </div>
+          <div class="sc-reassure-item">
+            <div class="sc-reassure-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <div>
+              <p class="sc-reassure-title">Crafted with Care</p>
+              <p class="sc-reassure-sub">Every piece is quality-checked by our team before luxury packaging &amp; dispatch.</p>
+            </div>
+          </div>
+          <div class="sc-reassure-item">
+            <div class="sc-reassure-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div>
+              <p class="sc-reassure-title">Shipping Updates Incoming</p>
+              <p class="sc-reassure-sub">You'll receive real-time updates via email &amp; SMS once your order ships.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: ORDER SUMMARY -->
+      <div class="sc-right">
+
+        <!-- PAYMENT CONFIRMATION CARD -->
+        <div class="sc-card sc-payment-card">
+          <div class="sc-payment-verified">
+            <div class="sc-payment-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>Payment Verified Successfully</span>
+          </div>
+
+          <div class="sc-card-head">
+            <span class="sc-card-eyebrow">Payment Summary</span>
+            <h2 class="sc-card-title">Order Breakdown</h2>
+          </div>
+
+          <div class="sc-summary-rows">
+            <div class="sc-summary-row">
+              <span>Subtotal</span>
+              <span id="sc-subtotal">—</span>
+            </div>
+            <div class="sc-summary-row">
+              <span>Shipping</span>
+              <span id="sc-shipping">—</span>
+            </div>
+            <div class="sc-summary-row sc-summary-discount" id="sc-discount-row" style="display:none">
+              <span>Coupon Savings</span>
+              <span id="sc-discount" style="color:var(--co-success)">—</span>
+            </div>
+            <div class="sc-summary-row" id="sc-cod-row" style="display:none">
+              <span>COD Advance Paid</span>
+              <span id="sc-cod-advance">₹100</span>
+            </div>
+            <div class="sc-summary-row" id="sc-remaining-row" style="display:none">
+              <span>Pay at Delivery</span>
+              <span id="sc-cod-remaining">—</span>
+            </div>
+            <div class="sc-summary-row sc-summary-total">
+              <span>Total</span>
+              <span id="sc-total">—</span>
+            </div>
+          </div>
+
+          <!-- Payment method chip -->
+          <div class="sc-pay-method" id="sc-pay-method">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span id="sc-pay-method-label">Payment Method</span>
+          </div>
+        </div>
+
+        <!-- DELIVERY DETAILS CARD -->
+        <div class="sc-card sc-delivery-card">
+          <div class="sc-card-head">
+            <span class="sc-card-eyebrow">Ships To</span>
+            <h2 class="sc-card-title">Delivery Details</h2>
+          </div>
+          <div class="sc-delivery-info" id="sc-delivery-info">
+            <!-- Populated by JS -->
+          </div>
+          <div class="sc-delivery-eta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Estimated delivery: <strong id="sc-eta-2">5–7 business days</strong></span>
+          </div>
+        </div>
+
+        <!-- CTA BUTTONS -->
+        <div class="sc-actions">
+          <a href="shop.html" class="sc-btn sc-btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            Continue Shopping
+          </a>
+          <a href="mailto:support@shenova.com?subject=Track%20Order%20Request" class="sc-btn sc-btn-ghost" id="sc-track-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Track Order
+          </a>
+          <a href="mailto:support@shenova.com" class="sc-btn sc-btn-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Contact Support
+          </a>
+        </div>
+
+        <!-- SHENOVA SIGN-OFF -->
+        <div class="sc-signoff">
+          <div class="sc-signoff-logo">SHENOVA</div>
+          <p class="sc-signoff-text">Luxury crafted with love — exclusively for you.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/order-success.js"></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
