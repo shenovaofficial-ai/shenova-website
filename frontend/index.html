@@ -386,7 +386,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* Mute / unmute button */
 .sh-hvid-btn {
-  position: absolute; bottom: 200px; right: var(--gutter);
+  position: absolute; top: 120px; right: var(--gutter);
   z-index: 6; display: flex; align-items: center; gap: 10px;
   font: 200 8px/1 var(--body); letter-spacing: .36em;
   text-transform: uppercase; color: rgba(255,255,255,.45);
@@ -1617,10 +1617,36 @@ span.lux-cart-count.cart-count { display: flex !important; }
     transform: scale(1.1); transition: transform 14s var(--silk);
   }
   .sh-hmob.z { transform: scale(1); }
-  .sh-hvid-btn { bottom: 130px; right: 22px; }
-  .sh-hbody { padding: 0 22px 80px; flex-direction: column; align-items: flex-start; gap: 20px; }
+
+  /* ── Mobile sound button — top-right, icon only, no label text ── */
+  .sh-hvid-btn {
+    bottom: auto;
+    top: 100px;         /* clears announce bar (34px) + nav (62px) + gap */
+    right: 18px;
+    gap: 0;
+    flex-direction: column;
+  }
+  #heroVidLabel { display: none; }  /* hide "Sound Off" text on mobile */
+  .sh-hvid-icon {
+    width: 32px; height: 32px;
+    background: rgba(12,11,10,.42);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-color: rgba(255,255,255,.12);
+  }
+
+  /* ── Hero body — enough padding above ticker ── */
+  .sh-hbody {
+    padding: 0 22px 170px;   /* 170px clears ticker (108px) + CTA row */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
   .sh-hright { display: none; }
-  .sh-htitle { font-size: clamp(60px, 15vw, 90px); }
+  .sh-htitle { font-size: clamp(56px, 14vw, 88px); margin-bottom: 16px; }
+  .sh-hsub { margin-bottom: 28px; }
+  .sh-hctas { gap: 18px; }
+
   .sh-scue, .sh-etag { display: none; }
   .sh-mob-s { display: flex; }
   .sh-htape { bottom: 108px; }
@@ -1656,9 +1682,9 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .nav-icons .nav-link-sm { display: none; }
 }
 @media (max-width: 480px) {
-  .sh-htitle { font-size: clamp(48px, 13.5vw, 68px); }
-  .sh-hbody { padding: 0 18px 60px; }
-  .sh-hsub { font-size: 12px; }
+  .sh-htitle { font-size: clamp(46px, 13vw, 64px); }
+  .sh-hbody { padding: 0 18px 160px; }
+  .sh-hsub { font-size: 12px; margin-bottom: 24px; }
   .sh-stitle { font-size: 28px !important; }
   .sh-nl-h { font-size: 34px !important; }
   .sh-nl-form { flex-direction: column; border: none; }
