@@ -1,4 +1,4 @@
-  require('dotenv').config();
+require('dotenv').config();
 
   const express  = require('express');
   const mongoose = require('mongoose');
@@ -237,23 +237,49 @@
     try {
       const body = req.body;
 
+      // ── DEBUG: Log every incoming order request ──────────────────
+      console.log('\n📦 [POST /api/orders] Incoming request:', {
+        isCOD:         body.isCOD,
+        paymentMethod: body.paymentMethod,
+        total:         body.total,
+        subtotal:      body.subtotal,
+        customer:      body.shipping?.fullName || 'unknown',
+        email:         body.shipping?.email    || 'unknown',
+        items:         (body.items || []).length + ' item(s)',
+        razorpay: body.razorpay
+          ? { payment_id: body.razorpay.payment_id, type: body.razorpay.type, amount: body.razorpay.amount }
+          : 'none'
+      });
+
       if (body.isCOD) {
         const rzp = body.razorpay || {};
+
+        // Validate payment proof exists
         if (!rzp.payment_id) {
+          console.error('[POST /api/orders] ❌ COD order missing payment_id:', rzp);
           return res.status(400).json({ error: 'COD orders require a ₹100 advance payment. No payment proof received.' });
         }
+
         if (rzp.type !== 'cod_advance') {
-          return res.status(400).json({ error: 'Invalid payment type for COD order.' });
+          console.error('[POST /api/orders] ❌ Wrong payment type for COD:', rzp.type);
+          return res.status(400).json({ error: 'Invalid payment type for COD order. Expected cod_advance, got: ' + rzp.type });
         }
-        if (Number(rzp.amount) !== 100) {
-          return res.status(400).json({ error: `COD advance must be ₹100. Received: ₹${rzp.amount}` });
+
+        // FIX: Accept ₹100 ± ₹1 tolerance (Razorpay paise rounding edge case)
+        const advanceAmount = Number(rzp.amount);
+        if (advanceAmount < 99 || advanceAmount > 101) {
+          console.error('[POST /api/orders] ❌ COD advance amount wrong:', advanceAmount);
+          return res.status(400).json({ error: `COD advance must be ₹100. Received: ₹${advanceAmount}` });
         }
+
         body.codAdvancePaid     = 100;
         body.codAdvancePaidAt   = body.codAdvancePaidAt || new Date();
         body.codRemainingAmount = Math.max(0, (body.subtotal || 0) - (body.discount || 0));
       }
 
+      console.log('[POST /api/orders] Attempting Order.create...');
       const order = await Order.create(body);
+      console.log('[POST /api/orders] ✅ Order.create SUCCESS — _id:', order._id);
 // ================= META CAPI PURCHASE EVENT =================
 
 try {
@@ -340,11 +366,15 @@ try {
         ).catch(() => {});
       }
 
-      console.log(`✅ Order created — ${order._id} | ${body.isCOD ? 'COD (₹100 advance paid)' : 'PREPAID'} | ₹${order.total}`);
+      console.log(`✅ [POST /api/orders] Order confirmed — ${order._id} | ${body.isCOD ? 'COD (₹100 advance paid)' : 'PREPAID'} | Total: ₹${order.total} | Customer: ${body.shipping?.email || 'unknown'}`);
       res.json(order);
     } catch (err) {
-      console.error('Order create error:', err);
-      res.status(500).json({ error: 'Failed to create order' });
+      console.error('[POST /api/orders] ❌ Order.create FAILED:', err.name, err.message);
+      if (err.name === 'ValidationError') {
+        console.error('[POST /api/orders] Validation errors:', JSON.stringify(err.errors, null, 2));
+        return res.status(400).json({ error: 'Order validation failed: ' + err.message });
+      }
+      res.status(500).json({ error: 'Failed to create order: ' + err.message });
     }
   });
 

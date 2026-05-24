@@ -855,6 +855,8 @@
 
           handler: async function(response) {
             /* 3. On payment success — build order payload */
+            console.log('[Shenova] Razorpay payment success:', response);
+
             const orderData = {
               shipping: {
                 fullName: customerName,
@@ -876,9 +878,9 @@
               items:         cart2,
 
               /* ── COD-specific fields ── */
-              isCOD:            cod,
-              codAdvancePaid:   cod ? COD_ADVANCE : 0,
-              codAdvancePaidAt: cod ? new Date().toISOString() : null,
+              isCOD:              cod,
+              codAdvancePaid:     cod ? COD_ADVANCE : 0,
+              codAdvancePaidAt:   cod ? new Date().toISOString() : null,
               codRemainingAmount: cod ? Math.max(0, sub2 - disc2) : 0,
 
               /* ── Razorpay payment proof ── */
@@ -891,14 +893,50 @@
               }
             };
 
-            /* 4. Save order to backend */
-            const saveRes = await fetch('https://shenova-backend.onrender.com/api/orders', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(orderData)
+            console.log('[Shenova] Saving order to backend...', {
+              isCOD: orderData.isCOD,
+              total: orderData.total,
+              razorpayType: orderData.razorpay.type,
+              razorpayAmount: orderData.razorpay.amount
             });
-            const saved = await saveRes.json();
-            console.log('Order saved:', saved);
+
+            /* 4. Save order to backend — with full error handling */
+            let saved;
+            try {
+              const saveRes = await fetch('https://shenova-backend.onrender.com/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+              });
+
+              saved = await saveRes.json();
+              console.log('[Shenova] Backend response status:', saveRes.status, saved);
+
+              if (!saveRes.ok) {
+                // Backend rejected the order — log details and alert user
+                console.error('[Shenova] ❌ Order save FAILED:', saveRes.status, saved);
+                alert(
+                  '⚠️ Payment was received but order could not be saved.\n\n' +
+                  'Error: ' + (saved?.error || 'Unknown error') + '\n\n' +
+                  'Please contact us at support@shenova.com with your payment ID:\n' +
+                  response.razorpay_payment_id
+                );
+                return; // Do NOT clear cart or redirect — customer needs their info
+              }
+
+              console.log('[Shenova] ✅ Order saved successfully:', saved._id);
+
+            } catch (fetchErr) {
+              // Network error — order may or may not have saved
+              console.error('[Shenova] ❌ Network error saving order:', fetchErr);
+              alert(
+                '⚠️ Payment was received but we could not confirm your order due to a network error.\n\n' +
+                'Please contact us at support@shenova.com with your payment ID:\n' +
+                response.razorpay_payment_id +
+                '\n\nYour order will be confirmed manually.'
+              );
+              return;
+            }
 
             /* 5. Mark coupon used */
             if (window.appliedCouponCode) {
@@ -906,12 +944,12 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ coupon: window.appliedCouponCode, email: customerEmail })
-              }).catch(() => {});
+              }).catch((e) => console.warn('[Shenova] Coupon mark-used failed (non-critical):', e));
               localStorage.removeItem('shenova_coupon');
               localStorage.removeItem('shenova_applied_coupon');
             }
 
-            /* 6. Clear cart & redirect */
+            /* 6. Clear cart & redirect — only after confirmed save */
             localStorage.removeItem('cart');
             document.getElementById('checkout-form')?.reset();
 
