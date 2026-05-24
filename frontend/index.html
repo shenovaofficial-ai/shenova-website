@@ -1279,6 +1279,47 @@ body {
   font-family: var(--body);
   color: var(--umber);
 }
+/* HERO VIDEO FULLSCREEN FIX */
+
+.sh-hero{
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.sh-hbg,
+.sh-mob{
+  position: absolute !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+
+  z-index: -2 !important;
+}
+
+/* desktop */
+.sh-hbg{
+  display: block !important;
+}
+
+/* mobile */
+.sh-mob{
+  display: none !important;
+}
+
+@media (max-width: 768px){
+
+  .sh-hbg{
+    display: none !important;
+  }
+
+  .sh-mob{
+    display: block !important;
+  }
+
+}
 </style>
   <link rel="stylesheet" href="css/luxury-motion.css">
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.1/dist/lenis.min.js"></script>
