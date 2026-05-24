@@ -3053,7 +3053,14 @@ function renderPreviews(files, previewEl, type){
               <tr class="${l.used?'sl-used':''} ${l.status==='no_prize'?'sl-no-prize':''}">
                 <td class="sl-num">${(page-1)*50+i+1}</td>
                 <td>${l.name||'<span style="color:var(--muted)">—</span>'}</td>
-                <td class="sl-email">${l.email||'—'}</td>
+                <td class="sl-email">${
+                  // Returning user Better Luck records use email+spin_TIMESTAMP@domain format
+                  // Extract and show the original email for admin readability
+                  l.email && l.email.includes('+spin_')
+                    ? '<span style="color:var(--muted);font-size:11px">↩ returning user</span><br>' +
+                      l.email.replace(/\+spin_\d+@/, '@')
+                    : (l.email || '—')
+                }</td>
                 <td>${l.phone||'<span style="color:var(--muted)">—</span>'}</td>
                 <td><strong>${
                   l.status==='no_prize'
