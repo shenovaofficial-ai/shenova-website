@@ -198,7 +198,7 @@ body.bar-off .sh-nav { top: 0 !important; }
 #lx-c {
   position: fixed; width: 28px; height: 28px;
   border: 1px solid rgba(181,137,90,.4); border-radius: 50%;
-  pointer-events: none; z-index: 10000;
+  pointer-events: none; z-index: 999999;
   transform: translate(-50%, -50%);
   transition: width .5s var(--ease-out), height .5s var(--ease-out),
               background .4s, border-color .4s, opacity .4s;
@@ -213,7 +213,7 @@ body.bar-off .sh-nav { top: 0 !important; }
 #lx-d {
   position: fixed; width: 4px; height: 4px;
   background: var(--gold); border-radius: 50%;
-  pointer-events: none; z-index: 10001;
+  pointer-events: none; z-index: 999999;
   transform: translate(-50%, -50%);
   opacity: 0; transition: opacity .3s;
 }
@@ -1745,10 +1745,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 <body class="lux-body">
 
-<!-- CURSOR -->
-<div id="lx-c"></div>
-<div id="lx-d"></div>
-
 <!-- SCROLL PROGRESS -->
 <div id="sh-prog"></div>
 
@@ -2946,6 +2942,10 @@ function unlockBody() {
 <script src="js/config.js?v=3"></script>
 <script src="js/main.js?v=3"></script>
 <script src="js/stories.js"></script>
+
+<!-- CURSOR — placed last in DOM so stacking order is always on top -->
+<div id="lx-c"></div>
+<div id="lx-d"></div>
 
 </body>
 </html>
