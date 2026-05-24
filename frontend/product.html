@@ -1214,6 +1214,23 @@ html,body{
     justify-content: center;
   }
 
+}/* FIX MODAL INTERNAL SCROLL */
+
+.csm-overlay{
+  overflow: hidden !important;
+}
+
+.csm-panel{
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+
+  height: 90vh !important;
+  max-height: 90vh !important;
+}
+
+/* prevent body/page scroll when modal open */
+body.csm-open{
+  overflow: hidden !important;
 }
 .csm-fields{
   overflow: visible !important;
