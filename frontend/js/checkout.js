@@ -49,7 +49,7 @@ function renderSummary() {
 
   /* Pricing */
   const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ship = sub > 2000 ? 0 : 69;
+  const ship = sub > 2000 ? 0 : 0;
   const disc = window.appliedDiscount || 0;
   const tot  = Math.max(0, sub + ship - disc);
 
