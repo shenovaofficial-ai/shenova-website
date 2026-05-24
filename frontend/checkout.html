@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/checkout-luxury.css">
   <link rel="stylesheet" href="css/bottomnav.css">
+   <link rel="stylesheet" href="css/stock.css">
 
   <!-- ── COD Panel Styles ── -->
   <style>
@@ -820,7 +821,21 @@
 
       const cart2   = JSON.parse(localStorage.getItem('cart') || '[]');
       if (!cart2.length) { alert('Your cart is empty.'); return; }
-
+/*
+  Add this block AFTER the cart empty check and BEFORE the Razorpay order creation.
+  Exact insertion point — add after:
+      if (!cart2.length) { alert('Your cart is empty.'); return; }
+ 
+  ─── PASTE START ───────────────────────────────────────────── */
+ 
+      /* ── Pre-payment stock validation ── */
+      if (window.validateCartStock) {
+        const stockCheck = await validateCartStock();
+        if (!stockCheck.ok) {
+          alert(stockCheck.message);
+          return;
+        }
+      }
       const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
       const cod     = paymentMethod === 'Cash on Delivery';
 
@@ -988,5 +1003,6 @@
 
   </script>
   <script src="js/luxury-motion.js" defer></script>
+   <script src="js/stock.js"></script>
 </body>
 </html>

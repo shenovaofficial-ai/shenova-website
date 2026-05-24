@@ -263,6 +263,45 @@ require('dotenv').config();
       console.log('[POST /api/orders] Attempting Order.create...');
       const order = await Order.create(body);
       console.log('[POST /api/orders] ✅ Order.create SUCCESS — _id:', order._id);
+      (async () => {
+  try {
+    const itemsToReduce = (body.items || []).map(i => ({
+      id:  i.id || i._id,
+      qty: Number(i.qty) || 1
+    })).filter(i => i.id);
+ 
+    if (!itemsToReduce.length) return;
+ 
+    console.log(`\n📦 [Stock] Reducing stock for Order ${order._id} | ${itemsToReduce.length} product(s):`);
+    itemsToReduce.forEach(i => console.log(`   → productId: ${i.id} | qty: ${i.qty}`));
+ 
+    // Atomic per-product reduction using mongoose model already in scope
+    for (const item of itemsToReduce) {
+      const updated = await Product.findOneAndUpdate(
+        { _id: item.id, stock: { $gte: item.qty } }, // guard: only if enough stock
+        { $inc: { stock: -item.qty } },               // atomic decrement
+        { new: true }
+      ).select('name stock').lean();
+ 
+      if (updated) {
+        console.log(`   ✅ [Stock] "${updated.name}" | stock after: ${updated.stock}`);
+      } else {
+        // Product not found OR stock was already too low
+        const current = await Product.findById(item.id).select('name stock').lean();
+        if (current) {
+          console.error(`   ❌ [Stock] "${current.name}" insufficient stock (has: ${current.stock}, needed: ${item.qty})`);
+        } else {
+          console.error(`   ❌ [Stock] Product ${item.id} not found during stock reduction`);
+        }
+      }
+    }
+ 
+    console.log(`✅ [Stock] Reduction complete for Order ${order._id}`);
+  } catch (stockErr) {
+    // Log but never crash the order response
+    console.error(`❌ [Stock] Reduction error for Order ${order._id}:`, stockErr.message);
+  }
+})();
 // ================= META CAPI PURCHASE EVENT =================
 
 try {
@@ -671,7 +710,7 @@ try {
 
   const paymentRoutes = require('./routes/paymentRoutes');
   app.use('/api/payment', paymentRoutes);
-
+app.use('/api/stock', require('./routes/stockRoutes'));
   // ================= 404 CATCH-ALL (API) =================
   app.use('/api/*', (req, res) => {
     res.status(404).json({ success: false, message: `API route not found: ${req.method} ${req.originalUrl}` });

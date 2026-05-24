@@ -61,37 +61,51 @@ async function loadDash() {
     orders.filter(o => o.status === 'pending').length;
 
   // ── Products table ────────────────────────────────────────────────
-  document.querySelector('#products-table tbody').innerHTML =
-    products.map(p => {
-      // Show first image or first video thumbnail in the table
-      const firstMedia = (p.images?.[0]) || (p.videos?.[0]) || '';
-      const thumbHtml = firstMedia
-        ? isVideo(firstMedia)
-          ? `<video class="thumb" src="${mediaUrl(firstMedia)}" muted playsinline preload="metadata"></video>`
-          : `<img class="thumb" src="${mediaUrl(firstMedia)}" alt="">`
-        : `<div class="thumb" style="background:#f0ede8"></div>`;
-
-      const hasVideos = p.videos?.length > 0;
-
-      return `
-        <tr>
-          <td>${thumbHtml}</td>
-          <td>
-            ${p.name}
-            ${hasVideos ? `<span class="media-badge">🎬 ${p.videos.length} video${p.videos.length > 1 ? 's' : ''}</span>` : ''}
-          </td>
-          <td>${p.category || '-'}</td>
-          <td>₹${p.price}</td>
-          <td>${p.stock}</td>
-          <td>
-            <div style="display:flex;gap:10px">
-              <button class="edit-btn" onclick="openEditModal('${p._id}')">EDIT</button>
-              <button onclick="delProduct('${p._id}')">DELETE</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
+document.querySelector('#products-table tbody').innerHTML =
+  products.map(p => {
+    const firstMedia = (p.images?.[0]) || (p.videos?.[0]) || '';
+    const thumbHtml = firstMedia
+      ? isVideo(firstMedia)
+        ? `<video class="thumb" src="${mediaUrl(firstMedia)}" muted playsinline preload="metadata"></video>`
+        : `<img class="thumb" src="${mediaUrl(firstMedia)}" alt="">`
+      : `<div class="thumb" style="background:#f0ede8"></div>`;
+ 
+    const hasVideos = p.videos?.length > 0;
+ 
+    /* ── STOCK MANAGEMENT ADDITION: colour-code the stock cell ── */
+    const stockNum   = Number(p.stock) || 0;
+    const stockClass = stockNum === 0
+      ? 'stock-critical'          /* red  — out of stock   */
+      : stockNum <= 3
+        ? 'stock-warn'            /* amber — low stock     */
+        : '';                     /* normal                */
+ 
+    const stockLabel = stockNum === 0
+      ? '⚠ Out of Stock'
+      : stockNum <= 3
+        ? `⚡ Only ${stockNum} left`
+        : stockNum;
+    /* ── END STOCK MANAGEMENT ADDITION ── */
+ 
+    return `
+      <tr>
+        <td>${thumbHtml}</td>
+        <td>
+          ${p.name}
+          ${hasVideos ? `<span class="media-badge">🎬 ${p.videos.length} video${p.videos.length > 1 ? 's' : ''}</span>` : ''}
+        </td>
+        <td>${p.category || '-'}</td>
+        <td>₹${p.price}</td>
+        <td class="${stockClass}">${stockLabel}</td>
+        <td>
+          <div style="display:flex;gap:10px">
+            <button class="edit-btn" onclick="openEditModal('${p._id}')">EDIT</button>
+            <button onclick="delProduct('${p._id}')">DELETE</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
 
   // ── Orders ────────────────────────────────────────────────────────
   document.querySelector('#orders-grid').innerHTML =
