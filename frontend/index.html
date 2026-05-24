@@ -1618,22 +1618,13 @@ span.lux-cart-count.cart-count { display: flex !important; }
   }
   .sh-hmob.z { transform: scale(1); }
 
-  /* ── Mobile sound button — top-right, icon only, no label text ── */
-  .sh-hvid-btn {
-    bottom: auto;
-    top: 100px;         /* clears announce bar (34px) + nav (62px) + gap */
-    right: 18px;
-    gap: 0;
-    flex-direction: column;
-  }
-  #heroVidLabel { display: none; }  /* hide "Sound Off" text on mobile */
-  .sh-hvid-icon {
-    width: 32px; height: 32px;
-    background: rgba(12,11,10,.42);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-color: rgba(255,255,255,.12);
-  }
+  /* ── Video plays on mobile; sh-hmob is fallback only (shown via JS if video errors) ── */
+  .sh-hmob { display: none !important; }
+  .sh-hmob.no-vid { display: block !important; position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+
+  /* ── Hide sound button completely on mobile ── */
+  .sh-hvid-btn { display: none !important; }
 
   /* ── Hero body — enough padding above ticker ── */
   .sh-hbody {
@@ -2902,7 +2893,8 @@ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 /* ── HERO VIDEO LOGIC ── */
 (function() {
   const vid = document.getElementById('heroVid');
-  const imgFb = document.getElementById('heroImg');
+  const imgFb  = document.getElementById('heroImg');    // desktop fallback
+  const imgMob = document.getElementById('heroImgMob'); // mobile fallback
   if (!vid) return;
 
   // Show video smoothly on first frame
@@ -2910,10 +2902,11 @@ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     vid.classList.add('ready');
   }, { once: true });
 
-  // Fallback to static image if video errors
+  // Fallback to static image if video errors (desktop or mobile)
   vid.addEventListener('error', function() {
     vid.style.display = 'none';
-    if (imgFb) imgFb.classList.add('no-vid');
+    if (imgFb)  imgFb.classList.add('no-vid');
+    if (imgMob) imgMob.classList.add('no-vid');
   }, { once: true });
 
   window.toggleHeroSound = function() {
