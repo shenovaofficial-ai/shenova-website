@@ -95,7 +95,60 @@ ul{list-style:none}
   --max: 1480px;
   --gutter: clamp(22px, 5vw, 72px);
 }
+/* HERO VIDEO FULL FIX */
 
+.sh-hero{
+  position: relative;
+  overflow: hidden;
+}
+
+/* desktop video */
+.sh-hbg{
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* mobile video */
+.sh-hmob{
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  z-index: 0;
+
+  display: none;
+}
+
+/* overlays upar rahe */
+.sh-hov1,
+.sh-hov2,
+.sh-hgrain,
+.sh-hbody{
+  position: relative;
+  z-index: 2;
+}
+
+/* mobile */
+@media (max-width:768px){
+
+  .sh-hbg{
+    display:none;
+  }
+
+  .sh-hmob{
+    display:block;
+  }
+
+}
 /* ── SCROLL REVEAL ── */
 .sr {
   opacity: 0;
@@ -1426,30 +1479,13 @@ body {
 <section class="sh-hero" id="sh-hero">
 
   <!-- DESKTOP VIDEO -->
-  <video
-    class="sh-hbg"
-    id="heroVideo"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-  >
-    <source src="images/video.mp4" type="video/mp4">
-  </video>
+  <video class="sh-hbg" autoplay muted loop playsinline>
+  <source src="images/video.mp4" type="video/mp4">
+</video>
 
-  <!-- MOBILE VIDEO -->
-  <video
-    class="sh-mob"
-    id="heroVideoMob"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-  >
-    <source src="videos/hero-mobile.mp4" type="video/mp4">
-  </video>
+<video class="sh-hmob" autoplay muted loop playsinline>
+  <source src="images/video.mp4" type="video/mp4">
+</video>
 
   <div class="sh-hov1"></div>
   <div class="sh-hov2"></div>
