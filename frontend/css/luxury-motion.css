@@ -1,0 +1,470 @@
+/* ════════════════════════════════════════════════════════════════════
+   SHENOVA · LUXURY MOTION SYSTEM v1.0
+   Apple-level smooth UI — injected globally across all pages
+   No existing classes broken. Purely additive enhancements.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── GLOBAL SMOOTH SCROLL BASE ──────────────────────────────────── */
+html {
+  scroll-behavior: auto !important; /* Lenis takes over */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* GPU-accelerate compositing layer for Lenis */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ── SCROLL PROGRESS BAR ─────────────────────────────────────────── */
+#shn-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 1.5px;
+  width: 0%;
+  background: linear-gradient(90deg, #b5895a 0%, #e8cca0 50%, #b5895a 100%);
+  background-size: 200% 100%;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: width;
+  animation: progressShimmer 3s linear infinite;
+  transform: translateZ(0);
+}
+@keyframes progressShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── CUSTOM CURSOR (desktop only) ────────────────────────────────── */
+#shn-cursor {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(181, 137, 90, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition:
+    width  0.45s cubic-bezier(0.16,1,0.3,1),
+    height 0.45s cubic-bezier(0.16,1,0.3,1),
+    background 0.35s,
+    border-color 0.35s,
+    opacity 0.3s;
+  opacity: 0;
+  will-change: transform;
+  mix-blend-mode: normal;
+  backdrop-filter: none;
+}
+#shn-cursor-dot {
+  position: fixed;
+  width: 4px; height: 4px;
+  background: #b5895a;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s, width 0.2s, height 0.2s;
+  will-change: transform;
+}
+#shn-cursor.visible    { opacity: 1; }
+#shn-cursor-dot.visible { opacity: 1; }
+#shn-cursor.hovered {
+  width: 56px; height: 56px;
+  background: rgba(181,137,90,0.07);
+  border-color: rgba(181,137,90,0.4);
+}
+#shn-cursor.clicking {
+  width: 22px; height: 22px;
+  background: rgba(181,137,90,0.12);
+}
+#shn-cursor.text-mode {
+  width: 2px; height: 28px;
+  border-radius: 1px;
+  background: rgba(181,137,90,0.6);
+  border: none;
+}
+@media (hover: none), (pointer: coarse) {
+  #shn-cursor, #shn-cursor-dot { display: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none !important; }
+  a, button, [role="button"], label, select, input[type="submit"],
+  input[type="button"], input[type="checkbox"], input[type="radio"],
+  .product-card, .sh-cc, .sh-gc { cursor: none !important; }
+  input[type="text"], input[type="email"], input[type="tel"],
+  textarea { cursor: none !important; }
+}
+
+/* ── PAGE TRANSITION OVERLAY ─────────────────────────────────────── */
+#shn-transition {
+  position: fixed;
+  inset: 0;
+  background: #0c0b0a;
+  z-index: 99998;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  will-change: transform, opacity;
+}
+#shn-transition.entering {
+  animation: pageEnter 0.55s cubic-bezier(0.76,0,0.24,1) forwards;
+}
+#shn-transition.leaving {
+  animation: pageLeave 0.45s cubic-bezier(0.76,0,0.24,1) forwards;
+}
+@keyframes pageEnter {
+  0%   { transform: scaleY(0); transform-origin: bottom center; opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: bottom center; opacity: 1; }
+}
+@keyframes pageLeave {
+  0%   { transform: scaleY(1); transform-origin: top center; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: top center; opacity: 0; }
+}
+
+/* ── SCROLL REVEAL — universal ──────────────────────────────────── */
+[data-shn-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition:
+    opacity  0.95s cubic-bezier(0.16,1,0.3,1),
+    transform 0.95s cubic-bezier(0.16,1,0.3,1);
+}
+[data-shn-reveal="fade-up"]    { transform: translateY(50px); }
+[data-shn-reveal="fade-down"]  { transform: translateY(-30px); }
+[data-shn-reveal="fade-left"]  { transform: translateX(40px); }
+[data-shn-reveal="fade-right"] { transform: translateX(-40px); }
+[data-shn-reveal="scale-up"]   { transform: scale(0.92); }
+[data-shn-reveal="clip"]       {
+  transform: translateY(30px);
+  clip-path: inset(0 0 100% 0);
+  transition:
+    opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+    transform 0.9s cubic-bezier(0.16,1,0.3,1),
+    clip-path 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+[data-shn-reveal].shn-visible {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0% 0);
+}
+/* stagger delays */
+[data-shn-delay="1"] { transition-delay: 0.08s !important; }
+[data-shn-delay="2"] { transition-delay: 0.18s !important; }
+[data-shn-delay="3"] { transition-delay: 0.28s !important; }
+[data-shn-delay="4"] { transition-delay: 0.40s !important; }
+[data-shn-delay="5"] { transition-delay: 0.52s !important; }
+[data-shn-delay="6"] { transition-delay: 0.65s !important; }
+
+/* ── MAGNETIC BUTTON EFFECT ──────────────────────────────────────── */
+.shn-magnetic {
+  display: inline-flex;
+  position: relative;
+  will-change: transform;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ── NAV GLASS EFFECT — elevates existing .nav.scrolled ─────────── */
+.nav.scrolled,
+.nav.lux-nav.scrolled {
+  background: rgba(12,11,10,0.82) !important;
+  backdrop-filter: blur(28px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.4) !important;
+  border-bottom: 1px solid rgba(181,137,90,0.10) !important;
+}
+
+/* Smoother nav hide/show */
+.nav {
+  transition:
+    transform 0.5s cubic-bezier(0.16,1,0.3,1),
+    background 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+    border-color 0.5s,
+    backdrop-filter 0.5s !important;
+}
+.nav.nav-hidden {
+  transform: translateY(-110%) !important;
+}
+
+/* ── AMBIENT GLOW CURSOR TRAIL ───────────────────────────────────── */
+#shn-glow {
+  position: fixed;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(181,137,90,0.06) 0%, transparent 65%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.8s ease;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+#shn-glow.visible { opacity: 1; }
+@media (hover: none) { #shn-glow { display: none; } }
+
+/* ── CART DRAWER — silky smooth ─────────────────────────────────── */
+.drawer {
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) !important;
+  will-change: transform;
+  border-left: 1px solid rgba(181,137,90,0.08);
+  box-shadow: -24px 0 80px rgba(0,0,0,0.3);
+}
+.drawer-overlay {
+  transition: opacity 0.45s cubic-bezier(0.25,0.46,0.45,0.94) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ── MODAL — cinematic enter ─────────────────────────────────────── */
+.modal.open .modal-card {
+  animation: modalSlideUp 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards !important;
+}
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(32px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── PRODUCT CARD — micro-interactions ──────────────────────────── */
+.product-card,
+.sh-cc, .sh-gc {
+  transition:
+    transform 0.5s cubic-bezier(0.16,1,0.3,1),
+    box-shadow 0.5s cubic-bezier(0.16,1,0.3,1) !important;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.product-card:hover,
+.sh-cc:hover, .sh-gc:hover {
+  transform: translateY(-6px) scale(1.012) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(181,137,90,0.08) !important;
+}
+
+/* Product card image zoom */
+.product-card img,
+.sh-cc img, .sh-gc img,
+.product-img-wrap img {
+  transition: transform 0.8s cubic-bezier(0.16,1,0.3,1) !important;
+  will-change: transform;
+}
+.product-card:hover img,
+.sh-cc:hover img, .sh-gc:hover img,
+.product-img-wrap:hover img {
+  transform: scale(1.07) !important;
+}
+
+/* ── BUTTON INTERACTIONS ─────────────────────────────────────────── */
+.btn,
+button.btn,
+a.btn,
+.add-to-cart,
+[class*="btn-"] {
+  transition:
+    transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease !important;
+  will-change: transform;
+  position: relative;
+  overflow: hidden;
+}
+.btn:hover,
+.add-to-cart:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.2) !important;
+}
+.btn:active,
+.add-to-cart:active {
+  transform: scale(0.97) !important;
+  transition-duration: 0.1s !important;
+}
+
+/* Button ripple on click */
+.btn::after,
+.add-to-cart::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.18) 0%, transparent 65%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.btn.ripple::after { opacity: 1; }
+
+/* ── HERO IMAGE — cinematic parallax wrapper ─────────────────────── */
+.product-hero-img,
+.ab-hero-img,
+[class*="hero-img"] {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* ── LINK HOVER UNDERLINE — silk draw ───────────────────────────── */
+.nav-menu a,
+.nav-link-sm,
+.foot-links a {
+  position: relative;
+}
+.nav-menu a::after,
+.nav-link-sm::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: #b5895a;
+  transition: width 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-menu a:hover::after,
+.nav-link-sm:hover::after { width: 100%; }
+
+/* ── FLOATING BOTTOM NAV — glass premium ────────────────────────── */
+.shn-bottom-nav {
+  backdrop-filter: blur(32px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.5) !important;
+  background: rgba(12,11,10,0.78) !important;
+  border: 1px solid rgba(181,137,90,0.12) !important;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(181,137,90,0.06) inset !important;
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1) !important;
+  will-change: transform;
+}
+.shn-bottom-nav.hidden {
+  transform: translateY(calc(100% + 20px)) !important;
+}
+.shn-nav-item {
+  transition: color 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+.shn-nav-item:active {
+  transform: scale(0.88) !important;
+}
+
+/* ── INPUT FOCUS — luxury feel ───────────────────────────────────── */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+textarea, select {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease !important;
+}
+input:not([type="checkbox"]):focus,
+textarea:focus, select:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 1.5px rgba(181,137,90,0.4), 0 4px 20px rgba(181,137,90,0.08) !important;
+  border-color: rgba(181,137,90,0.5) !important;
+}
+
+/* ── TOAST — premium slide-in ────────────────────────────────────── */
+#sh-toast,
+.toast,
+[id*="toast"] {
+  transition:
+    transform 0.5s cubic-bezier(0.34,1.56,0.64,1),
+    opacity 0.4s ease !important;
+}
+
+/* ── IMAGE LAZY LOAD FADE ────────────────────────────────────────── */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.6s ease !important;
+}
+img[loading="lazy"].loaded { opacity: 1; }
+
+/* ── SECTION DIVIDERS — luxury animated line ────────────────────── */
+.shn-divider {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(181,137,90,0.4), transparent);
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  margin: 0 auto;
+}
+.shn-divider.on { width: 100%; }
+
+/* ── PARALLAX SECTION ────────────────────────────────────────────── */
+[data-parallax] {
+  will-change: transform;
+}
+
+/* ── PREFERS REDUCED MOTION ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  #shn-cursor, #shn-cursor-dot, #shn-glow { display: none !important; }
+  [data-shn-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* ── MOBILE TOUCH OPTIMIZATIONS ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .product-card:hover,
+  .sh-cc:hover, .sh-gc:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .product-card img:hover,
+  .sh-cc:hover img { transform: none !important; }
+  /* Faster transitions on mobile for responsiveness */
+  .drawer {
+    transition: transform 0.42s cubic-bezier(0.16,1,0.3,1) !important;
+  }
+}
+
+/* ── SWIPE HINT ANIMATION ─────────────────────────────────────────── */
+@keyframes shnSwipeHint {
+  0%, 100% { transform: translateX(0); opacity: 0.4; }
+  50%       { transform: translateX(8px); opacity: 0.8; }
+}
+
+/* ── AMBIENT PAGE BACKGROUND GLOW ───────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(181,137,90,0.025) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 85% 80%, rgba(181,137,90,0.018) 0%, transparent 55%);
+  opacity: 1;
+}
+
+/* ── SELECTION COLOR ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(181,137,90,0.22);
+  color: inherit;
+}
+::-moz-selection {
+  background: rgba(181,137,90,0.22);
+  color: inherit;
+}
+
+/* ── SCROLLBAR STYLING ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(181,137,90,0.25);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(181,137,90,0.45);
+}
+
+/* ── FOCUS VISIBLE (accessibility) ──────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(181,137,90,0.6) !important;
+  outline-offset: 3px !important;
+}
+:focus:not(:focus-visible) { outline: none !important; }
