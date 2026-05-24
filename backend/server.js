@@ -470,53 +470,57 @@ try {
 
       console.log('[Spin/save] Received:', { email, phone, name, coupon, discount, prize, spinResult });
 
-      // Validate required fields
+      // Validate email only — coupon can be empty for "Better Luck Next Time"
       if (!email || !String(email).includes('@')) {
         console.warn('[Spin/save] Missing or invalid email');
         return res.status(400).json({ success: false, message: 'Valid email is required' });
       }
-      if (!coupon) {
-        console.warn('[Spin/save] Missing coupon');
-        return res.status(400).json({ success: false, message: 'Coupon code is required' });
-      }
 
-      const normalEmail   = String(email).toLowerCase().trim();
-      const normalCoupon  = String(coupon).toUpperCase().trim();
-      const computedPrize = prize || (discount ? `${Number(discount)}% OFF` : 'Spin Prize');
+      const normalEmail  = String(email).toLowerCase().trim();
+      const normalCoupon = coupon ? String(coupon).toUpperCase().trim() : '';
 
-      // Use findOneAndUpdate with upsert — works whether record exists or not.
-      // CRITICAL: do NOT update coupon on existing records (avoid overwriting a used coupon).
+      // Detect "Better Luck Next Time" — no coupon, no discount
+      const isBetterLuck = !normalCoupon || Number(discount) === 0;
+
+      const computedPrize  = isBetterLuck
+        ? 'Better Luck Next Time'
+        : (prize || `${Number(discount)}% OFF`);
+      const computedStatus = isBetterLuck ? 'no_prize' : 'active';
+
+      console.log(`[Spin/save] Type: ${isBetterLuck ? '🍀 Better Luck Next Time' : '🎁 Prize: ' + computedPrize} | ${normalEmail}`);
+
+      // CRITICAL: do NOT overwrite an existing prize-winner record with a new spin.
       const existing = await SpinLead.findOne({ email: normalEmail });
 
       let lead;
       if (existing) {
-        // Already has a record — update contact info but keep original coupon
+        // Already has a record — only update contact info, keep everything else
         lead = await SpinLead.findOneAndUpdate(
           { email: normalEmail },
           {
             $set: {
-              name:       (name  || existing.name  || '').trim(),
-              phone:      (phone || existing.phone || '').trim(),
-              // keep existing coupon — don't overwrite with a new one each spin
+              name:  (name  || existing.name  || '').trim(),
+              phone: (phone || existing.phone || '').trim(),
+              // keep original coupon, status, prize — don't overwrite
             }
           },
           { new: true }
         );
-        console.log(`[Spin/save] Updated existing lead — ${lead._id} | ${normalEmail} | coupon kept: ${lead.coupon}`);
+        console.log(`[Spin/save] Existing record kept — ${lead._id} | ${normalEmail} | status: ${lead.status}`);
       } else {
-        // Brand new record
+        // Brand new spin — save everything including Better Luck case
         lead = await SpinLead.create({
           name:       (name  || '').trim(),
           email:      normalEmail,
           phone:      (phone || '').trim(),
-          coupon:     normalCoupon,
-          discount:   Number(discount) || 0,
+          coupon:     normalCoupon,      // empty string for Better Luck
+          discount:   isBetterLuck ? 0 : (Number(discount) || 0),
           prize:      computedPrize,
           spinResult: spinResult || computedPrize,
-          status:     'active',
+          status:     computedStatus,    // 'no_prize' or 'active'
           used:       false
         });
-        console.log(`✅ [Spin/save] New lead saved — ${lead._id} | ${normalEmail} | ${normalCoupon} (${discount}%)`);
+        console.log(`✅ [Spin/save] New lead saved — ${lead._id} | ${normalEmail} | ${computedStatus} | prize: ${computedPrize}`);
       }
 
       res.json({ success: true });

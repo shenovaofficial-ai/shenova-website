@@ -1436,6 +1436,7 @@ select{
   letter-spacing:.12em;text-transform:uppercase;
 }
 .sl-used td{opacity:.62}
+.sl-no-prize td{background:rgba(254,249,236,0.55)}
 .sl-actions{display:flex;gap:8px;align-items:center}
 .sl-toggle{
   font-size:10px;padding:6px 12px;
@@ -1929,6 +1930,7 @@ select{
           <option value="active">Active</option>
           <option value="used">Used</option>
           <option value="expired">Expired</option>
+          <option value="no_prize">🍀 Better Luck Next Time</option>
         </select>
       </div>
       <!-- Table -->
@@ -2995,9 +2997,10 @@ function renderPreviews(files, previewEl, type){
 
   function slStatusBadge(lead){
     const map={
-      active:{bg:'var(--success-bg)',color:'var(--success)',label:'Active'},
-      used:{bg:'var(--error-bg)',color:'var(--error)',label:'Used'},
-      expired:{bg:'#f0f0f0',color:'#666',label:'Expired'}
+      active:   {bg:'var(--success-bg)',color:'var(--success)',  label:'Active'},
+      used:     {bg:'var(--error-bg)',  color:'var(--error)',    label:'Used'},
+      expired:  {bg:'#f0f0f0',         color:'#666',            label:'Expired'},
+      no_prize: {bg:'#fef9ec',         color:'#92400e',         label:'🍀 Better Luck'}
     };
     const s=map[lead.status]||map.active;
     return `<span class="sl-badge" style="background:${s.bg};color:${s.color}">${s.label}</span>`;
@@ -3033,6 +3036,11 @@ function renderPreviews(files, previewEl, type){
       <div class="sl-meta">
         Showing <strong>${leads.length}</strong> of <strong>${total}</strong> leads
         ${pages>1?`— Page ${page} of ${pages}`:''}
+        ${leads.filter(l=>l.status==='no_prize').length>0
+          ?`<span style="margin-left:12px;font-size:11px;color:#92400e;background:#fef9ec;padding:2px 10px;border-radius:20px;border:1px solid #fde68a">
+              🍀 ${leads.filter(l=>l.status==='no_prize').length} Better Luck
+            </span>`
+          :''}
       </div>
       <div class="sl-table-wrap">
         <table class="sl-table">
@@ -3042,24 +3050,29 @@ function renderPreviews(files, previewEl, type){
           </tr></thead>
           <tbody>
             ${leads.map((l,i)=>`
-              <tr class="${l.used?'sl-used':''}">
+              <tr class="${l.used?'sl-used':''} ${l.status==='no_prize'?'sl-no-prize':''}">
                 <td class="sl-num">${(page-1)*50+i+1}</td>
                 <td>${l.name||'<span style="color:var(--muted)">—</span>'}</td>
                 <td class="sl-email">${l.email||'—'}</td>
                 <td>${l.phone||'<span style="color:var(--muted)">—</span>'}</td>
-                <td><strong>${l.prize||(l.discount?l.discount+'% OFF':'—')}</strong></td>
+                <td><strong>${
+                  l.status==='no_prize'
+                    ? '<span style="color:#92400e">Better Luck Next Time</span>'
+                    : (l.prize||(l.discount?l.discount+'% OFF':'—'))
+                }</strong></td>
                 <td>
-                  <span class="sl-coupon">${l.coupon||'—'}</span>
+                  <span class="sl-coupon">${l.coupon||'<span style="color:var(--muted);font-size:11px">No coupon</span>'}</span>
                   ${l.coupon?`<button class="sl-copy" onclick="slCopyCode('${l.coupon}',this)" title="Copy">⧉</button>`:''}
                 </td>
                 <td class="sl-date">${fmtDate(l.createdAt)}</td>
                 <td>${slStatusBadge(l)}</td>
                 <td>
                   <div class="sl-actions">
+                    ${l.status!=='no_prize'?`
                     <button class="sl-toggle ${l.used?'sl-mark-active':'sl-mark-used'}"
                       onclick="slToggleUsed('${l._id}',${l.used})">
                       ${l.used?'Mark Active':'Mark Used'}
-                    </button>
+                    </button>`:``}
                     <button class="sl-del" onclick="slDeleteLead('${l._id}')">Delete</button>
                   </div>
                 </td>

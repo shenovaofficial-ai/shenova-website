@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 // ── SpinLead — stores every wheel-spin submission
-// Fields: name, email, phone, coupon, discount, prize, spinResult, status, used
-// Timestamps: createdAt (submission time) + updatedAt auto-managed by Mongoose
+// Includes both prize winners (coupon present) and
+// "Better Luck Next Time" users (coupon = '', prize = 'no_prize')
 
 const spinLeadSchema = new mongoose.Schema({
 
@@ -13,10 +13,10 @@ const spinLeadSchema = new mongoose.Schema({
   },
 
   email: {
-    type:     String,
-    required: [true, 'Email is required'],
-    unique:   true,
-    trim:     true,
+    type:      String,
+    required:  [true, 'Email is required'],
+    unique:    true,          // one record per email
+    trim:      true,
     lowercase: true
   },
 
@@ -26,22 +26,23 @@ const spinLeadSchema = new mongoose.Schema({
     trim:    true
   },
 
+  // Empty string = Better Luck Next Time (no prize)
+  // NOT unique — same "no coupon" value shouldn't block saves
   coupon: {
-    type:     String,
-    required: [true, 'Coupon code is required'],
-    unique:   true,
-    trim:     true,
+    type:    String,
+    default: '',
+    trim:    true,
     uppercase: true
   },
 
   discount: {
     type:    Number,
-    required: true,
+    default: 0,
     min:     0,
     max:     100
   },
 
-  // Human-readable prize label e.g. "10% OFF", "Free Shipping"
+  // Human-readable prize label e.g. "10% OFF", "Better Luck Next Time"
   prize: {
     type:    String,
     default: ''
@@ -53,12 +54,13 @@ const spinLeadSchema = new mongoose.Schema({
     default: ''
   },
 
-  // active → coupon is valid and unused
-  // used   → coupon was redeemed at checkout
-  // expired → past expiry date (can be set by a cron/cleanup job)
+  // active     → coupon is valid and unused
+  // used       → coupon was redeemed at checkout
+  // expired    → past expiry date
+  // no_prize   → Better Luck Next Time segment — no coupon issued
   status: {
     type:    String,
-    enum:    ['active', 'used', 'expired'],
+    enum:    ['active', 'used', 'expired', 'no_prize'],
     default: 'active'
   },
 
@@ -68,7 +70,7 @@ const spinLeadSchema = new mongoose.Schema({
   }
 
 }, {
-  timestamps: true   // adds createdAt + updatedAt automatically
+  timestamps: true
 });
 
 // Index for fast admin searches
@@ -77,4 +79,4 @@ spinLeadSchema.index({ coupon: 1 });
 spinLeadSchema.index({ createdAt: -1 });
 spinLeadSchema.index({ status: 1 });
 
-module.exports = mongoose.model('SpinLead', spinLeadSchema);
+module.exports = mongoose.models.SpinLead || mongoose.model('SpinLead', spinLeadSchema);
