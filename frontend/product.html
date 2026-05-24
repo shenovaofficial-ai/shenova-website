@@ -1011,6 +1011,37 @@ footer {
   transition: border-color .25s, box-shadow .25s;
   line-height: 1.55;
 }
+/* FIX CUSTOM SIZE MODAL SCROLL + SUBMIT BUTTON */
+.csm-panel{
+  overflow-y: auto;
+  padding-bottom: 120px !important;
+  scrollbar-width: thin;
+}
+
+/* mobile fix */
+@media (max-width: 600px){
+
+  .csm-panel{
+    height: 92vh !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+
+    padding:
+      32px 22px
+      140px !important; /* bottom extra space */
+  }
+
+  .csm-form{
+    padding-bottom: 60px;
+  }
+
+  .csm-save-btn{
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+  }
+
+}
 .csm-field textarea:focus {
   outline: none;
   border-color: var(--gold);
