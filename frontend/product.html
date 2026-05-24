@@ -1105,6 +1105,70 @@ html,body{
     font-size: 26px;
   }
 }
+/* FORCE SHOW CUSTOM SIZE SUBMIT BUTTON */
+
+.csm-panel{
+  height: 90vh !important;
+  overflow-y: auto !important;
+  padding-bottom: 140px !important;
+}
+
+.csm-form{
+  padding-bottom: 100px !important;
+}
+
+.csm-save-btn{
+  display: flex !important;
+  width: 100% !important;
+  min-height: 56px !important;
+  margin-top: 24px !important;
+  margin-bottom: 40px !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+@media (max-width:600px){
+
+  .csm-panel{
+    height: 92vh !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+
+    padding-bottom: 180px !important;
+  }
+
+  .csm-save-btn{
+    margin-bottom: 80px !important;
+  }
+
+}
+/* DESKTOP ONLY FIX */
+
+@media (min-width: 601px){
+
+  .csm-panel{
+    overflow-y: auto !important;
+    max-height: 88vh !important;
+    padding-bottom: 160px !important;
+  }
+
+  .csm-form{
+    padding-bottom: 120px !important;
+  }
+
+  .csm-save-btn{
+    display: flex !important;
+    width: 100% !important;
+    min-height: 58px !important;
+
+    position: sticky !important;
+    bottom: 0 !important;
+
+    margin-top: 30px !important;
+    z-index: 50 !important;
+  }
+
+}
 </style>
   <link rel="stylesheet" href="css/luxury-motion.css">
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.1/dist/lenis.min.js"></script>
