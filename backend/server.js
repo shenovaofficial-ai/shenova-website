@@ -1,3 +1,4 @@
+import { sendOrderConfirmationEmail } from "./services/emailService.js";
 require('dotenv').config();
 
   const express  = require('express');
@@ -262,6 +263,40 @@ require('dotenv').config();
 
       console.log('[POST /api/orders] Attempting Order.create...');
       const order = await Order.create(body);
+      try {
+  console.log("📧 Sending confirmation email...");
+
+  await sendOrderConfirmationEmail({
+    customerName:
+      order.shippingAddress?.fullName || "Customer",
+
+    customerEmail:
+      order.email ||
+      order.shippingAddress?.email,
+
+    orderId: order._id,
+
+    items: order.items || [],
+
+    totalAmount:
+      order.total || order.totalAmount,
+
+    shippingAddress: `
+      ${order.shippingAddress?.address || ""}
+      ${order.shippingAddress?.city || ""}
+      ${order.shippingAddress?.state || ""}
+      ${order.shippingAddress?.pincode || ""}
+    `,
+  });
+
+  console.log("✅ Confirmation email sent");
+
+} catch (emailError) {
+  console.error(
+    "❌ Email failed but order saved:",
+    emailError
+  );
+}
       console.log('[POST /api/orders] ✅ Order.create SUCCESS — _id:', order._id);
       (async () => {
   try {
