@@ -47,9 +47,9 @@ function applyStockState(stock) {
   /* Remove any existing badge so we don't duplicate */
   document.getElementById('shenova-stock-badge')?.remove();
 
-  const addBtn  = document.querySelector('.pdp-add-btn');
+  const addBtn  = document.querySelector('#pdp-bag-btn') || document.querySelector('.pdp-add-btn');
   const buyBtn  = document.querySelector('.pdp-buy-btn');   // Buy Now if exists
-  const wishBtn = document.querySelector('.pdp-wish-btn');
+  const wishBtn = document.querySelector('#pdp-wish') || document.querySelector('.pdp-wish-btn');
   const qtyWrap = document.querySelector('#pdp-sizes');
 
   const badge = document.createElement('div');
