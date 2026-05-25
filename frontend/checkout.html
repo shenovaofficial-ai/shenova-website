@@ -117,8 +117,63 @@
       border-color: rgba(184,149,106,0.5) !important;
       background: rgba(184,149,106,0.04) !important;
     }
+    /* ══ LUXURY COUPON SECTION ══ */
+    .co-coupon {
+      margin-top: 24px;
+      padding: 20px 0 0;
+      border-top: 1px solid rgba(10,10,10,0.07);
+    }
+    .co-coupon-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .co-coupon-header svg { color: #b8956a; flex-shrink: 0; }
+    .co-coupon-label {
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #7a7672;
+      margin: 0;
+    }
+    .co-coupon-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .co-coupon-field { flex: 1; }
+    .co-coupon-apply-btn {
+      padding: 12px 24px;
+      background: #0d0c0b;
+      color: #faf7f2;
+      border: 1px solid #0d0c0b;
+      border-radius: 50px;
+      font: 500 9.5px/1 'DM Sans', sans-serif;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .25s, transform .2s;
+      flex-shrink: 0;
+      min-width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .co-coupon-apply-btn:hover { background: #2a2825; transform: translateY(-1px); }
+    .co-coupon-apply-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .co-coupon-msg {
+      margin-top: 10px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font: 300 11.5px/1.5 'DM Sans', sans-serif;
+      letter-spacing: .04em;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
   </style>
-  <link rel="stylesheet" href="css/luxury-motion.css">
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.1/dist/lenis.min.js"></script>
 </head>
 <body class="checkout-page">
@@ -339,41 +394,44 @@
               </div>
             </div>
 
-            <!-- Coupon -->
-            <div class="co-coupon">
-              <p class="co-coupon-label">Have a coupon code?</p>
+            <!-- ══ COUPON SECTION — SHENOVA LUXURY ══ -->
+            <div class="co-coupon" id="co-coupon-wrap">
+
+              <div class="co-coupon-header">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                <p class="co-coupon-label">Have a promo code?</p>
+              </div>
+
               <div class="co-coupon-row">
                 <div class="co-field co-coupon-field">
                   <input type="text" name="coupon" id="f-coupon" class="co-input"
-                    placeholder=" " autocomplete="off" style="text-transform:uppercase">
-                  <label class="co-label" for="f-coupon">Enter Coupon Code</label>
+                    placeholder=" " autocomplete="off" spellcheck="false"
+                    style="text-transform:uppercase;letter-spacing:.1em;">
+                  <label class="co-label" for="f-coupon">Enter Code</label>
                   <span class="co-field-line"></span>
                 </div>
-                <button type="button" id="apply-coupon-btn" style="
-                  padding: 10px 22px;
-                  background: #0d0c0b;
-                  color: #faf7f2;
-                  border: none;
-                  border-radius: 50px;
-                  font: 400 9.5px/1 'DM Sans', sans-serif;
-                  letter-spacing: .26em;
-                  text-transform: uppercase;
-                  cursor: pointer;
-                  white-space: nowrap;
-                  transition: background .3s;
-                  flex-shrink: 0;
-                ">Apply</button>
+                <button type="button" id="apply-coupon-btn" class="co-coupon-apply-btn">
+                  <span id="coupon-btn-text">Apply</span>
+                </button>
               </div>
 
               <!-- Coupon feedback -->
-              <div id="coupon-msg" style="
-                font: 300 11px/1 'DM Sans', sans-serif;
-                margin-top: 10px;
-                padding: 8px 14px;
-                border-radius: 6px;
-                display: none;
-              "></div>
+              <div id="coupon-msg" class="co-coupon-msg" style="display:none"></div>
+
+              <!-- Applied badge -->
+              <div id="coupon-applied-badge" style="display:none;margin-top:12px;padding:12px 16px;background:rgba(184,149,106,0.10);border:1px solid rgba(184,149,106,0.35);border-radius:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8a6a3a" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <div style="flex:1">
+                    <div style="font-size:12px;font-weight:500;color:#6b4e23;letter-spacing:.05em;">Coupon Applied Successfully ✨</div>
+                    <div id="coupon-badge-detail" style="font-size:11px;color:#8a6a3a;margin-top:2px;letter-spacing:.04em;"></div>
+                  </div>
+                  <button type="button" id="remove-coupon-btn" style="background:none;border:none;cursor:pointer;color:#b8956a;font-size:16px;line-height:1;padding:2px 4px;opacity:.7;" title="Remove coupon">✕</button>
+                </div>
+              </div>
+
             </div>
+            <!-- ══ END COUPON SECTION ══ -->
 
           </div>
           <!-- end co-section-2 -->
@@ -630,9 +688,12 @@
     };
     window.addEventListener('scroll', updateStep, { passive: true });
 
-    /* ══════════════════════════════
-       COUPON LOGIC (UNCHANGED)
-    ══════════════════════════════ */
+    /* ══════════════════════════════════════════════════════
+       COUPON LOGIC  —  SHENOVA SECURE EDITION
+       Backend validates the code + recalculates the amount.
+       SPECIAL10 = 10% unlimited promo, no expiry.
+    ══════════════════════════════════════════════════════ */
+
     window.appliedDiscount    = 0;
     window.appliedCouponCode  = '';
     window.appliedDiscountPct = 0;
@@ -651,61 +712,110 @@
       refreshTotals();
     }
 
-    (function autoFillCoupon() {
-      const saved = localStorage.getItem('shenova_coupon');
-      if (!saved) return;
-      try {
-        const { code, discount, ts } = JSON.parse(saved);
-        if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
-        const inp = document.getElementById('f-coupon');
-        if (inp && !inp.value) { inp.value = code; inp.classList.add('has-value'); showCouponMsg('✦ Your spin reward is ready — click Apply!', 'info'); }
-      } catch(e) {}
-    })();
+    function resetCoupon() {
+      window.appliedDiscount    = 0;
+      window.appliedCouponCode  = '';
+      window.appliedDiscountPct = 0;
+      localStorage.removeItem('shenova_applied_coupon');
+      const inp = document.getElementById('f-coupon');
+      if (inp) { inp.value = ''; inp.classList.remove('has-value'); }
+      const msg = document.getElementById('coupon-msg');
+      if (msg) msg.style.display = 'none';
+      const badge = document.getElementById('coupon-applied-badge');
+      if (badge) badge.style.display = 'none';
+      refreshTotals();
+    }
+
+    function showCouponMsg(msg, type) {
+      const el = document.getElementById('coupon-msg');
+      if (!el) return;
+      el.textContent = msg;
+      el.style.cssText = 'display:block;margin-top:10px;padding:9px 14px;border-radius:8px;font:300 11.5px/1.5 "DM Sans",sans-serif;letter-spacing:.04em;';
+      if (type === 'success') {
+        el.style.background = 'rgba(184,149,106,0.12)';
+        el.style.color = '#8a6a3a';
+        el.style.border = '1px solid rgba(184,149,106,0.35)';
+      } else if (type === 'error') {
+        el.style.background = 'rgba(192,57,43,0.08)';
+        el.style.color = '#c0392b';
+        el.style.border = '1px solid rgba(192,57,43,0.22)';
+      } else {
+        el.style.background = 'rgba(184,149,106,0.07)';
+        el.style.color = '#7a6040';
+        el.style.border = '1px solid rgba(184,149,106,0.2)';
+      }
+    }
+
+    function showAppliedBadge(pct, savedAmount) {
+      const badge  = document.getElementById('coupon-applied-badge');
+      const detail = document.getElementById('coupon-badge-detail');
+      if (!badge) return;
+      if (detail) detail.textContent = pct + '% off · You save ₹' + savedAmount.toLocaleString() + ' on this order';
+      badge.style.display = 'block';
+      const msg = document.getElementById('coupon-msg');
+      if (msg) msg.style.display = 'none';
+    }
 
     document.getElementById('apply-coupon-btn')?.addEventListener('click', async () => {
       const couponInput = document.getElementById('f-coupon');
-      const code = couponInput?.value.trim().toUpperCase();
+      const code = (couponInput?.value || '').trim().toUpperCase();
       if (!code) { showCouponMsg('Please enter a coupon code.', 'error'); return; }
-      const btn = document.getElementById('apply-coupon-btn');
-      btn.textContent = '…'; btn.disabled = true;
+      if (window.appliedCouponCode && window.appliedCouponCode === code) {
+        showCouponMsg('This coupon is already applied.', 'info'); return;
+      }
+      const btnText  = document.getElementById('coupon-btn-text');
+      const applyBtn = document.getElementById('apply-coupon-btn');
+      if (btnText)  btnText.textContent = '...';
+      if (applyBtn) applyBtn.disabled = true;
+      const sub = cartSubtotal();
       try {
+        console.log('[Coupon] Apply request | code="' + code + '" | subtotal=₹' + sub);
         const API_URL = (window.API_BASE || 'https://shenova-backend.onrender.com') + '/api/coupon/apply';
-        const res  = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ coupon: code }) });
+        const res  = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ coupon: code, subtotal: sub })
+        });
         const data = await res.json();
         if (!res.ok) {
           showCouponMsg(data.message || 'Invalid coupon code.', 'error');
+          document.getElementById('coupon-applied-badge').style.display = 'none';
           window.appliedDiscount = 0; window.appliedCouponCode = '';
           localStorage.removeItem('shenova_applied_coupon');
           refreshTotals(); return;
         }
+        console.log('[Coupon] Server validated ✅ | ' + data.discount + '% | discount=₹' + data.discountAmount);
         applyDiscountPct(data.discount, code);
-        const saved = Math.round(cartSubtotal() * data.discount / 100);
-        showCouponMsg(`✦ ${data.discount}% off applied! You save ₹${saved.toLocaleString()}`, 'success');
-        addRemoveCouponLink();
+        showAppliedBadge(data.discount, window.appliedDiscount);
       } catch (err) {
-        showCouponMsg('Could not validate coupon. Try again.', 'error');
+        console.error('[Coupon] Network error:', err);
+        showCouponMsg('Could not validate coupon. Please try again.', 'error');
       } finally {
-        btn.textContent = 'Apply'; btn.disabled = false;
+        if (btnText)  btnText.textContent = 'Apply';
+        if (applyBtn) applyBtn.disabled = false;
       }
     });
 
-    function addRemoveCouponLink() {
-      if (document.getElementById('remove-coupon-link')) return;
-      const msgEl = document.getElementById('coupon-msg');
-      if (!msgEl) return;
-      const link = document.createElement('span');
-      link.id = 'remove-coupon-link';
-      link.textContent = '  ✕ Remove';
-      link.style.cssText = 'cursor:pointer;text-decoration:underline;margin-left:8px;font-size:11px;opacity:0.7';
-      link.onclick = () => {
-        window.appliedDiscount = 0; window.appliedCouponCode = ''; window.appliedDiscountPct = 0;
-        localStorage.removeItem('shenova_applied_coupon');
+    document.getElementById('remove-coupon-btn')?.addEventListener('click', () => { resetCoupon(); });
+
+    document.getElementById('f-coupon')?.addEventListener('input', e => {
+      if (!e.target.value.trim() && window.appliedCouponCode) resetCoupon();
+    });
+
+    document.getElementById('f-coupon')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('apply-coupon-btn')?.click(); }
+    });
+
+    (function autoFillSpinCoupon() {
+      const saved = localStorage.getItem('shenova_coupon');
+      if (!saved) return;
+      try {
+        const { code, ts } = JSON.parse(saved);
+        if (!code || Date.now() - ts > 7 * 24 * 3600 * 1000) return;
         const inp = document.getElementById('f-coupon');
-        if (inp) { inp.value = ''; inp.classList.remove('has-value'); }
-        msgEl.style.display = 'none'; link.remove(); refreshTotals();
-      };
-      msgEl.appendChild(link);
-    }
+        if (inp && !inp.value) { inp.value = code; inp.classList.add('has-value'); showCouponMsg('❆ Your spin reward is ready — click Apply!', 'info'); }
+      } catch(e) {}
+    })();
 
     (function restoreAppliedCoupon() {
       const raw = localStorage.getItem('shenova_applied_coupon');
@@ -716,37 +826,10 @@
         const inp = document.getElementById('f-coupon');
         if (inp) { inp.value = code; inp.classList.add('has-value'); }
         applyDiscountPct(pct, code);
-        showCouponMsg(`✦ ${pct}% off applied! You save ₹${window.appliedDiscount.toLocaleString()}`, 'success');
-        addRemoveCouponLink();
+        showAppliedBadge(pct, window.appliedDiscount);
       } catch(e) {}
     })();
 
-    document.getElementById('f-coupon')?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('apply-coupon-btn')?.click(); }
-    });
-
-    document.getElementById('f-coupon')?.addEventListener('input', e => {
-      if (!e.target.value.trim()) {
-        window.appliedDiscount = 0; window.appliedCouponCode = ''; window.appliedDiscountPct = 0;
-        localStorage.removeItem('shenova_applied_coupon');
-        const msgEl = document.getElementById('coupon-msg');
-        if (msgEl) msgEl.style.display = 'none';
-        document.getElementById('remove-coupon-link')?.remove();
-        refreshTotals();
-      }
-    });
-
-    function showCouponMsg(msg, type) {
-      const el = document.getElementById('coupon-msg');
-      if (!el) return;
-      const existingLink = document.getElementById('remove-coupon-link');
-      if (existingLink) existingLink.remove();
-      el.textContent = msg;
-      el.style.display = 'block';
-      if (type === 'success') { el.style.background='rgba(184,149,106,0.12)'; el.style.color='#8a6a3a'; el.style.border='1px solid rgba(184,149,106,0.3)'; }
-      else if (type === 'error') { el.style.background='rgba(192,57,43,0.08)'; el.style.color='#c0392b'; el.style.border='1px solid rgba(192,57,43,0.2)'; }
-      else { el.style.background='rgba(184,149,106,0.07)'; el.style.color='#7a6040'; el.style.border='1px solid rgba(184,149,106,0.2)'; }
-    }
 
     /* ══════════════════════════════
        REFRESH TOTALS

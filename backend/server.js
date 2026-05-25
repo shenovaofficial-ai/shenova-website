@@ -590,36 +590,11 @@ try {
   });
 
   // ================= COUPON =================
+  // Handles both unlimited promo codes (SPECIAL10) and spin-wheel single-use codes.
+  // Routes defined in ./routes/coupon.js — do NOT add inline coupon routes here.
 
-  app.post('/api/coupon/apply', async (req, res) => {
-    try {
-      const { coupon } = req.body;
-      if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-      const code  = coupon.toUpperCase().trim();
-      // Case-insensitive search — coupon codes from the wheel have mixed prefix formats
-      const found = await SpinLead.findOne({ coupon: { $regex: new RegExp('^' + code + '$', 'i') } });
-      if (!found) return res.status(400).json({ message: 'Invalid coupon code' });
-      if (found.used) return res.status(400).json({ message: 'This coupon has already been used' });
-      res.json({ success: true, discount: found.discount });
-    } catch (err) {
-      console.error('[coupon/apply] error:', err);
-      res.status(500).json({ message: 'Server error' });
-    }
-  });
-
-  app.post('/api/coupon/use', async (req, res) => {
-    try {
-      const { coupon } = req.body;
-      if (!coupon) return res.status(400).json({ message: 'No coupon provided' });
-      await SpinLead.findOneAndUpdate(
-        { coupon: coupon.toUpperCase() },
-        { used: true, status: 'used' }
-      );
-      res.json({ success: true });
-    } catch (err) {
-      res.status(500).json({ message: 'Server error' });
-    }
-  });
+  const couponRoutes = require('./routes/coupon');
+  app.use('/api/coupon', couponRoutes);
 
   // ================= SPIN LEADS ADMIN ROUTES =================
 
@@ -730,6 +705,24 @@ app.use('/api/stock', require('./routes/stockRoutes'));
           password: await bcrypt.hash('admin123', 10), role: 'admin'
         });
         console.log('👤 Admin seeded');
+      }
+
+      // ── Auto-seed SPECIAL10 unlimited promo coupon ──────────────────
+      const CouponModel = require('./models/Coupon');
+      const special10 = await CouponModel.findOne({ code: 'SPECIAL10' });
+      if (!special10) {
+        await CouponModel.create({
+          code:            'SPECIAL10',
+          discountPercent: 10,
+          discount:        10,
+          usageLimit:      null,   // unlimited
+          usageCount:      0,
+          used:            false,
+          active:          true,
+          expiresAt:       null,   // no expiry
+          label:           'Flat 10% off — unlimited promo code'
+        });
+        console.log('🎟️  SPECIAL10 coupon seeded');
       }
       app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
     })
