@@ -1,4 +1,4 @@
-export const orderConfirmationTemplate = (order) => {
+const orderConfirmationTemplate = (order) => {
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -300,4 +300,7 @@ export const orderConfirmationTemplate = (order) => {
   </body>
   </html>
   `;
+};
+module.exports = {
+  orderConfirmationTemplate,
 };

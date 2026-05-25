@@ -1,12 +1,14 @@
-import { Resend } from "resend";
-import { orderConfirmationTemplate } from "../templates/orderConfirmationTemplate.js";
+
+
+const { Resend } = require("resend");
+const {
+  orderConfirmationTemplate,
+} = require("../templates/orderConfirmationTemplate");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendOrderConfirmationEmail = async (order) => {
+const sendOrderConfirmationEmail = async (order) => {
   try {
-    console.log("📧 Starting confirmation email...");
-
     const html = orderConfirmationTemplate(order);
 
     const response = await resend.emails.send({
@@ -16,11 +18,15 @@ export const sendOrderConfirmationEmail = async (order) => {
       html,
     });
 
-    console.log("✅ Email sent:", response);
+    console.log("✅ Email sent");
 
     return response;
+
   } catch (error) {
-    console.error("❌ Email failed:", error);
-    throw error;
+    console.error("❌ Email error:", error);
   }
+};
+
+module.exports = {
+  sendOrderConfirmationEmail,
 };

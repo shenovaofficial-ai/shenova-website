@@ -1,7 +1,7 @@
-import { sendOrderConfirmationEmail } from "./services/emailService.js";
-import dotenv from "dotenv";
-dotenv.config();
-
+const {
+  sendOrderConfirmationEmail,
+} = require("./services/emailService");
+require("dotenv").config();
   const express  = require('express');
   const mongoose = require('mongoose');
   const cors     = require('cors');
