@@ -631,7 +631,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── MARQUEE STRIP ── */
 .sh-marq {
-  background: var(--deep); overflow: hidden; padding: 14px 0;
+    background: #000000 !important;
+ overflow: hidden; padding: 14px 0;
   user-select: none; border-top: 1px solid rgba(181,137,90,.06);
   border-bottom: 1px solid rgba(181,137,90,.06);
 }
@@ -639,7 +640,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
   display: flex; gap: 56px; white-space: nowrap;
   animation: marqScroll 38s linear infinite;
   font: 200 7.5px/1 var(--body); letter-spacing: .38em;
-  text-transform: uppercase; color: rgba(245,240,232,.24);
+  text-transform: uppercase;   color: rgba(255,255,255,0.45) !important;
+
 }
 @keyframes marqScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 .sh-dot { font-size: 4px; color: var(--gold); opacity: .6; vertical-align: middle; }
