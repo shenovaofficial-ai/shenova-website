@@ -262,6 +262,29 @@ const {
         body.codRemainingAmount = Math.max(0, (body.subtotal || 0) - (body.discount || 0));
       }
 
+      // ── STOCK VALIDATION (before order creation) ──────────────────
+      // Rejects order if any item is out of stock or qty exceeds stock.
+      // Runs even if frontend validation was bypassed.
+      const cartItems = body.items || [];
+      const stockErrors = [];
+      for (const item of cartItems) {
+        const productId = item.product || item.id || item._id;
+        if (!productId) continue;
+        const p = await Product.findById(productId).select('name stock').lean();
+        if (!p) { stockErrors.push(`Product "${item.name || productId}" not found`); continue; }
+        const reqQty = Number(item.qty) || 1;
+        const stock  = Number(p.stock)  || 0;
+        console.log(`[Stock/validate] "${p.name}" | stock: ${stock} | requested: ${reqQty}`);
+        if (stock <= 0)       stockErrors.push(`"${p.name}" is out of stock`);
+        else if (reqQty > stock) stockErrors.push(`"${p.name}" — only ${stock} left (you requested ${reqQty})`);
+      }
+      if (stockErrors.length) {
+        console.warn('[POST /api/orders] ❌ Stock validation failed:', stockErrors);
+        return res.status(409).json({ error: 'Stock validation failed', stockErrors, message: stockErrors.join('; ') });
+      }
+      console.log('[POST /api/orders] ✅ Stock validated');
+      // ── END STOCK VALIDATION ───────────────────────────────────────
+
       console.log('[POST /api/orders] Attempting Order.create...');
       const order = await Order.create(body);
       // ── EMAIL CONFIRMATION ─────────────────────────────────────────

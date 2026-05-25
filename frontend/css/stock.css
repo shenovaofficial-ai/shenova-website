@@ -1,12 +1,11 @@
 /* ============================================================
-   stock.css — SHENOVA Stock Badge & Disabled State Styles
+   stock.css — SHENOVA Stock Badge & State Styles
    ============================================================
-   Link in product.html and checkout.html:
+   Link AFTER pdp.css / style.css in product.html and checkout.html:
        <link rel="stylesheet" href="css/stock.css">
-   Add AFTER pdp.css / style.css.
    ============================================================ */
 
-/* ── Stock Badge — base ── */
+/* ── PDP Stock Badge — base ────────────────────────────────── */
 .stock-badge {
   display: inline-flex;
   align-items: center;
@@ -23,7 +22,7 @@
   width: fit-content;
 }
 
-/* ── Animated status dot ── */
+/* ── Animated pulse dot ─────────────────────────────────────── */
 .stock-dot {
   width: 7px;
   height: 7px;
@@ -31,7 +30,7 @@
   flex-shrink: 0;
 }
 
-/* ── IN STOCK ── */
+/* ── IN STOCK ───────────────────────────────────────────────── */
 .stock-ok {
   background: rgba(16, 120, 70, 0.07);
   color: #0a6040;
@@ -39,11 +38,10 @@
 }
 .stock-dot-ok {
   background: #22c55e;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
   animation: stockPulseGreen 2s ease-in-out infinite;
 }
 
-/* ── LOW STOCK ── */
+/* ── LOW STOCK ──────────────────────────────────────────────── */
 .stock-low {
   background: rgba(194, 120, 3, 0.07);
   color: #854d0e;
@@ -51,11 +49,10 @@
 }
 .stock-dot-low {
   background: #f59e0b;
-  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
   animation: stockPulseAmber 1.4s ease-in-out infinite;
 }
 
-/* ── OUT OF STOCK ── */
+/* ── OUT OF STOCK ───────────────────────────────────────────── */
 .stock-oos {
   background: rgba(185, 28, 28, 0.06);
   color: #991b1b;
@@ -63,10 +60,10 @@
 }
 .stock-dot-oos {
   background: #ef4444;
-  /* No pulse — static to signal finality */
+  /* No pulse — static signals finality */
 }
 
-/* ── Pulse animations ── */
+/* ── Pulse keyframes ────────────────────────────────────────── */
 @keyframes stockPulseGreen {
   0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
   50%       { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
@@ -77,7 +74,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   DISABLED STATE — Add to Cart button when out of stock
+   DISABLED STATE — Add to Cart when out of stock
 ══════════════════════════════════════════════════════════════ */
 .pdp-add-btn--disabled,
 .pdp-add-btn[disabled] {
@@ -94,7 +91,7 @@
   display: none;
 }
 
-/* ── Disabled size grid — greyed out ── */
+/* ── Disabled size grid ─────────────────────────────────────── */
 .pdp-sizes--disabled .size {
   opacity: 0.35;
   cursor: not-allowed;
@@ -105,23 +102,100 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   Admin dashboard — stock column highlight
-   (optional: add class 'stock-critical' to <td> in admin table)
+   PRODUCT CARD BADGES  (listing pages, related products)
 ══════════════════════════════════════════════════════════════ */
-td.stock-critical {
-  color: #b91c1c;
-  font-weight: 600;
-}
-td.stock-warn {
-  color: #92400e;
+.card-stock-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   font-weight: 500;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+  pointer-events: none;
+}
+.card-stock-oos {
+  background: rgba(185, 28, 28, 0.82);
+  color: #fff;
+}
+.card-stock-low {
+  background: rgba(194, 120, 3, 0.85);
+  color: #fff;
 }
 
-/* ── Responsive ── */
+/* Make card image wrapper position: relative if it isn't */
+.prod-img,
+.card-img-wrap,
+figure {
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ADMIN DASHBOARD — stock column highlights
+══════════════════════════════════════════════════════════════ */
+.stock-badge-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  white-space: nowrap;
+}
+.stock-badge-admin.ok  { background: rgba(16,120,70,0.1);  color: #0a6040; }
+.stock-badge-admin.low { background: rgba(194,120,3,0.1);  color: #854d0e; }
+.stock-badge-admin.oos { background: rgba(185,28,28,0.1);  color: #991b1b; }
+
+/* Legacy support: direct td coloring used in existing dashboard */
+td.stock-critical { color: #b91c1c; font-weight: 600; }
+td.stock-warn     { color: #92400e; font-weight: 500; }
+
+/* ── Admin stock summary card ─────────────────────────────── */
+.stock-summary-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.stock-summary-card {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  border: 1px solid transparent;
+}
+.stock-summary-card .ssc-count {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stock-summary-card .ssc-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.stock-summary-card.ok  { background: rgba(16,120,70,0.06); border-color: rgba(16,120,70,0.15); color: #0a6040; }
+.stock-summary-card.low { background: rgba(194,120,3,0.06); border-color: rgba(194,120,3,0.18); color: #854d0e; }
+.stock-summary-card.oos { background: rgba(185,28,28,0.06); border-color: rgba(185,28,28,0.15); color: #991b1b; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .stock-badge {
     font-size: 10px;
     padding: 8px 14px;
     letter-spacing: 0.14em;
   }
+  .stock-summary-cards { flex-direction: column; }
 }
