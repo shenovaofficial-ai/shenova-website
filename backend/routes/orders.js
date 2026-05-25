@@ -1,3 +1,4 @@
+import { sendOrderConfirmationEmail } from "../services/emailService.js";
 const router   = require('express').Router();
 const Order    = require('../models/Order');
 const Coupon   = require('../models/Coupon');
@@ -6,7 +7,41 @@ const { protect, admin } = require('../middleware/auth');
 
 router.post('/', async (req, res) => {
   const order = await Order.create(req.body);
+try {
+  console.log("📧 Sending confirmation email...");
 
+  await sendOrderConfirmationEmail({
+    customerName:
+      order.shippingAddress?.fullName ||
+      order.customer?.name ||
+      "Customer",
+
+    customerEmail:
+      order.email ||
+      order.shippingAddress?.email,
+
+    orderId: order._id,
+
+    items: order.items || [],
+
+    totalAmount: order.total || order.totalAmount,
+
+    shippingAddress: `
+      ${order.shippingAddress?.address || ""}
+      ${order.shippingAddress?.city || ""}
+      ${order.shippingAddress?.state || ""}
+      ${order.shippingAddress?.pincode || ""}
+    `,
+  });
+
+  console.log("✅ Confirmation email sent");
+
+} catch (emailError) {
+  console.error(
+    "❌ Email failed but order saved:",
+    emailError
+  );
+}
   // Mark coupon as used in both collections after a successful order
   const code  = (req.body.coupon || '').trim().toUpperCase();
   const email = req.body.shipping?.email || null;

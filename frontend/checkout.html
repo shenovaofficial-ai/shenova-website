@@ -840,7 +840,7 @@
       const cart     = JSON.parse(localStorage.getItem('cart') || '[]');
       const sub      = cart.reduce((s, i) => s + i.price * i.qty, 0);
       const cod      = isCOD();
-      const ship     = cod ? COD_SHIPPING : (sub > 2000 ? 0 :69);
+      const ship     = cod ? COD_SHIPPING : (sub > 2000 ? 0 :0);
       const discount = window.appliedDiscount || 0;
       const total    = Math.max(0, sub + ship - discount);
 
@@ -923,7 +923,7 @@
       const cod     = paymentMethod === 'Cash on Delivery';
 
       const sub2    = cart2.reduce((s, i) => s + i.price * i.qty, 0);
-      const ship2   = cod ? COD_SHIPPING : (sub2 > 2000 ? 0 : 69);
+      const ship2   = cod ? COD_SHIPPING : (sub2 > 2000 ? 0 : 0);
       const disc2   = window.appliedDiscount || 0;
       const total2  = Math.max(0, sub2 + ship2 - disc2);
 
