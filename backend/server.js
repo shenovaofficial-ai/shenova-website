@@ -1,7 +1,7 @@
+require("dotenv").config();
 const {
   sendOrderConfirmationEmail,
 } = require("./services/emailService");
-require("dotenv").config();
   const express  = require('express');
   const mongoose = require('mongoose');
   const cors     = require('cors');
@@ -264,40 +264,55 @@ require("dotenv").config();
 
       console.log('[POST /api/orders] Attempting Order.create...');
       const order = await Order.create(body);
-      try {
-  console.log("📧 Sending confirmation email...");
+      // ── EMAIL CONFIRMATION ─────────────────────────────────────────
+      // NOTE: Order schema uses `shipping` (not `shippingAddress`)
+      // Fields: shipping.fullName, shipping.email, shipping.address,
+      //         shipping.city, shipping.state, shipping.zip, shipping.phone
+      console.log('🔥 [POST /api/orders] EMAIL BLOCK REACHED');
 
-  await sendOrderConfirmationEmail({
-    customerName:
-      order.shippingAddress?.fullName || "Customer",
+      (async () => {
+        try {
+          console.log('📧 [POST /api/orders] Preparing confirmation email...');
 
-    customerEmail:
-      order.email ||
-      order.shippingAddress?.email,
+          const emailData = {
+            customerName:  order.shipping?.fullName   || body.shipping?.fullName || 'Valued Customer',
+            customerEmail: order.shipping?.email       || body.shipping?.email    || '',
+            orderId:       order._id,
+            items:         order.items || [],
+            totalAmount:   order.total || 0,
+            isCOD:         order.isCOD || false,
+            codAdvancePaid:     order.codAdvancePaid     || 0,
+            codRemainingAmount: order.codRemainingAmount || 0,
+            shippingAddress: [
+              order.shipping?.fullName  || '',
+              order.shipping?.address   || '',
+              order.shipping?.city      || '',
+              order.shipping?.state     || '',
+              order.shipping?.zip       || '',
+              order.shipping?.country   || 'India',
+              order.shipping?.phone ? `📞 ${order.shipping.phone}` : ''
+            ].filter(Boolean).join(', '),
+          };
 
-    orderId: order._id,
+          console.log('📧 [POST /api/orders] Email recipient :', emailData.customerEmail);
+          console.log('📧 [POST /api/orders] Customer name   :', emailData.customerName);
+          console.log('📧 [POST /api/orders] Total amount    : ₹' + emailData.totalAmount);
+          console.log('📧 [POST /api/orders] Items count     :', emailData.items.length);
 
-    items: order.items || [],
+          if (!emailData.customerEmail) {
+            console.warn('⚠️  [POST /api/orders] No email found in order.shipping — skipping email.');
+            return;
+          }
 
-    totalAmount:
-      order.total || order.totalAmount,
+          await sendOrderConfirmationEmail(emailData);
+          console.log('✅ [POST /api/orders] Confirmation email dispatched to:', emailData.customerEmail);
 
-    shippingAddress: `
-      ${order.shippingAddress?.address || ""}
-      ${order.shippingAddress?.city || ""}
-      ${order.shippingAddress?.state || ""}
-      ${order.shippingAddress?.pincode || ""}
-    `,
-  });
-
-  console.log("✅ Confirmation email sent");
-
-} catch (emailError) {
-  console.error(
-    "❌ Email failed but order saved:",
-    emailError
-  );
-}
+        } catch (emailError) {
+          // CRITICAL: email failure must NEVER crash the order response
+          console.error('❌ [POST /api/orders] Email failed — order still saved — error:', emailError.message);
+        }
+      })();
+      // ── END EMAIL BLOCK ────────────────────────────────────────────
       console.log('[POST /api/orders] ✅ Order.create SUCCESS — _id:', order._id);
       (async () => {
   try {
