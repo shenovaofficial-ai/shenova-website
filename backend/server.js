@@ -491,7 +491,10 @@ app.put('/api/orders/:id', async (req, res) => {
     }
 
     Object.assign(order, req.body);
-
+order.trackingId = req.body.trackingId || "";
+order.courierName = req.body.courierName || "";
+order.trackingUrl = req.body.trackingUrl || "";
+order.estimatedDate = req.body.estimatedDate || "";
     await order.save();
 
     console.log("📦 Order status updated:", order.status);
@@ -566,17 +569,20 @@ await sendShippedEmail({
 });
 // ================= TRACK ORDER =================
 
+// ================= TRACK ORDER =================
+
 app.get('/api/track-order/:id', async (req, res) => {
 
   try {
 
-    const id = req.params.id;
+    const id = req.params.id.trim();
 
-    const order = await Order.findOne({
+    let order = null;
+
+    // Search by tracking ID first
+    order = await Order.findOne({
 
       $or: [
-
-        { _id: id },
 
         { trackingId: id },
 
@@ -585,6 +591,19 @@ app.get('/api/track-order/:id', async (req, res) => {
       ]
 
     });
+
+    // If not found, try MongoDB order ID
+    if (!order) {
+
+      const mongoose = require("mongoose");
+
+      if (mongoose.Types.ObjectId.isValid(id)) {
+
+        order = await Order.findById(id);
+
+      }
+
+    }
 
     if (!order) {
 
