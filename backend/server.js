@@ -498,7 +498,8 @@ order.estimatedDate = req.body.estimatedDate || "";
     await order.save();
 
     console.log("📦 Order status updated:", order.status);
-
+console.log("TRACKING ID:", req.body.trackingId);
+console.log("COURIER:", req.body.courierName);
     // ═══════════════════════════════════
     // SHIPPING EMAIL
     // ═══════════════════════════════════
