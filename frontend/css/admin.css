@@ -940,3 +940,484 @@ td{
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* ================================================================
+   admin.shipping.css — SHENOVA Shipping Modal & Status Styles
+   ================================================================
+   ADD THIS TO YOUR EXISTING admin.css (append at bottom)
+   Or include as a separate <link> in dashboard.html
+   ================================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   SHIPPING MODAL OVERLAY
+══════════════════════════════════════════════════════════════ */
+
+.shipping-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shipping-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.shipping-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.shipping-modal__box {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border-radius: 28px;
+  width: min(560px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.shipping-modal.active .shipping-modal__box {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Modal header ─────────────────────────────────────────── */
+.shipping-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 30px 32px 20px;
+  border-bottom: 1px solid #f0ede8;
+}
+
+.shipping-modal__header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shipping-modal__icon {
+  width: 48px;
+  height: 48px;
+  background: #0a0a0a;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.shipping-modal__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #0a0a0a;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.shipping-modal__subtitle {
+  font-size: 11px;
+  color: #999;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.shipping-modal__close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  background: #fafafa;
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0;
+}
+
+.shipping-modal__close:hover {
+  background: #0a0a0a;
+  color: #fff;
+  border-color: #0a0a0a;
+}
+
+/* ── Modal body ───────────────────────────────────────────── */
+.shipping-modal__body {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── Order info strip ─────────────────────────────────────── */
+.shipping-modal__order-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #faf8f5;
+  border: 1px solid #ede8e0;
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+
+.shipping-modal__order-strip-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 4px;
+}
+
+.shipping-modal__order-strip-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: #111;
+  font-weight: 600;
+}
+
+/* ── Form field group ─────────────────────────────────────── */
+.sfield {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sfield label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 600;
+}
+
+.sfield label span.required {
+  color: #c8b89a;
+  margin-left: 3px;
+}
+
+.sfield input,
+.sfield select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #e8e4de;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #111;
+  background: #fafaf9;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin: 0;
+}
+
+.sfield input:focus,
+.sfield select:focus {
+  border-color: #0a0a0a;
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.06);
+  background: #fff;
+}
+
+.sfield input.error {
+  border-color: #e74c3c;
+}
+
+.srow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── Optional badge ───────────────────────────────────────── */
+.optional-badge {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #c8b89a;
+  background: #faf5ec;
+  border: 1px solid #ede0c8;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Modal footer ─────────────────────────────────────────── */
+.shipping-modal__footer {
+  padding: 20px 32px 30px;
+  display: flex;
+  gap: 12px;
+}
+
+.shipping-modal__btn-cancel {
+  flex: 1;
+  padding: 14px;
+  border: 1.5px solid #e0dbd4;
+  border-radius: 999px;
+  background: transparent;
+  color: #555;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.shipping-modal__btn-cancel:hover {
+  border-color: #0a0a0a;
+  color: #0a0a0a;
+}
+
+.shipping-modal__btn-confirm {
+  flex: 2;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  background: #0a0a0a;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.shipping-modal__btn-confirm:hover {
+  background: #222;
+  transform: translateY(-1px);
+}
+
+.shipping-modal__btn-confirm:active {
+  transform: translateY(0);
+}
+
+.shipping-modal__btn-confirm:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Spinner in button ────────────────────────────────────── */
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+.shipping-modal__btn-confirm.loading .btn-spinner { display: block; }
+.shipping-modal__btn-confirm.loading .btn-label   { display: none;  }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════════════════════
+   UPDATED STATUS BADGES (adds out_for_delivery)
+══════════════════════════════════════════════════════════ */
+
+.badge.out_for_delivery,
+.out_for_delivery {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Overrides for the admin select in order drawer */
+.status-select-wrap {
+  position: relative;
+}
+
+.status-select-wrap select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #e8e4de;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14px;
+  appearance: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 16px center, #fafaf9;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.status-select-wrap select:focus {
+  border-color: #0a0a0a;
+  outline: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SHIPPING INFO CARD in order drawer
+══════════════════════════════════════════════════════════ */
+
+.shipping-info-card {
+  background: #faf8f5;
+  border: 1px solid #ede8e0;
+  border-radius: 18px;
+  padding: 22px;
+  margin-top: 0;
+}
+
+.shipping-info-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 16px;
+}
+
+.shipping-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ede8e0;
+  gap: 12px;
+}
+
+.shipping-info-row:last-child { border-bottom: none; }
+
+.shipping-info-row .sir-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+.shipping-info-row .sir-value {
+  font-size: 14px;
+  color: #111;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+.track-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 14px;
+  transition: background 0.2s;
+}
+
+.track-link-btn:hover { background: #333; }
+
+/* ══════════════════════════════════════════════════════════
+   TOAST NOTIFICATION
+══════════════════════════════════════════════════════════ */
+
+.shenova-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0a0a0a;
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.3s;
+  pointer-events: none;
+  max-width: 360px;
+}
+
+.shenova-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.shenova-toast.success { background: #111; border-left: 3px solid #c8b89a; }
+.shenova-toast.error   { background: #1a0505; border-left: 3px solid #e74c3c; }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+  .shipping-modal__box {
+    border-radius: 20px 20px 0 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 88vh;
+    transform: translateY(100%);
+  }
+
+  .shipping-modal.active .shipping-modal__box {
+    transform: translateY(0);
+  }
+
+  .shipping-modal {
+    align-items: flex-end;
+  }
+
+  .srow2 { grid-template-columns: 1fr; }
+
+  .shipping-modal__header,
+  .shipping-modal__body,
+  .shipping-modal__footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .shipping-modal__footer {
+    flex-direction: column-reverse;
+  }
+
+  .shenova-toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: unset;
+  }
+}

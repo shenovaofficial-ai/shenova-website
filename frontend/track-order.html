@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order — SHENOVA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f0ea;
+      --card:      #ffffff;
+      --ink:       #0a0a0a;
+      --muted:     #888;
+      --light:     #f0ebe2;
+      --gold:      #c8b89a;
+      --gold-dark: #a8935a;
+      --green:     #27a35a;
+      --border:    #ede8e0;
+      --radius:    24px;
+      --ff-serif:  'Cormorant Garamond', Georgia, serif;
+      --ff-sans:   'Inter', Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--ff-sans);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+    }
+
+    .nav-brand {
+      font-family: var(--ff-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 8px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-sub {
+      font-size: 10px;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── Page layout ─────────────────────────────────────────── */
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 20px 80px;
+    }
+
+    /* ── Page heading ─────────────────────────────────────────── */
+    .page-head {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-head .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 10px;
+    }
+
+    .page-head h1 {
+      font-family: var(--ff-serif);
+      font-size: clamp(36px, 6vw, 54px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .page-head p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ── Search card ─────────────────────────────────────────── */
+    .search-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 36px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .field-group label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field-group input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: var(--ff-sans);
+      font-size: 14px;
+      color: var(--ink);
+      background: #fafaf9;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .field-group input:focus {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 3px rgba(10,10,10,0.06);
+      background: #fff;
+    }
+
+    .track-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-family: var(--ff-sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .track-btn:hover { background: #222; transform: translateY(-1px); }
+    .track-btn:active { transform: translateY(0); }
+    .track-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+    /* ── Spinner ──────────────────────────────────────────────── */
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .track-btn.loading .spinner { display: block; }
+    .track-btn.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Error state ─────────────────────────────────────────── */
+    .error-box {
+      display: none;
+      background: #fff5f5;
+      border: 1px solid #ffc8c8;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #b42318;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .error-box.show { display: block; }
+
+    /* ── Result card ──────────────────────────────────────────── */
+    #result-card {
+      display: none;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      animation: fadeUp 0.5s cubic-bezier(0.34,1.3,0.64,1) both;
+    }
+
+    #result-card.show { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Result header ────────────────────────────────────────── */
+    .result-header {
+      background: var(--ink);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .result-header-left .rh-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 4px;
+    }
+
+    .result-header-left .rh-id {
+      font-family: var(--ff-serif);
+      font-size: 26px;
+      color: #fff;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+
+    .status-pill {
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .sp-pending        { background: #fff3e6; color: #9a6700; }
+    .sp-processing     { background: #e7f0ff; color: #1d4ed8; }
+    .sp-shipped        { background: #e7f7ee; color: #067647; }
+    .sp-out_for_delivery { background: #e8f5e9; color: #2e7d32; }
+    .sp-delivered      { background: #f0e8ff; color: #6d28d9; }
+    .sp-cancelled      { background: #ffe8e8; color: #b42318; }
+
+    /* ── Timeline ─────────────────────────────────────────────── */
+    .timeline-section {
+      padding: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline-section .tl-title {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 28px;
+    }
+
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: calc(10% + 20px);
+      right: calc(10% + 20px);
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--gold);
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .tl-step.done .tl-dot {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(10,10,10,0.2);
+    }
+
+    .tl-step.current .tl-dot {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(10,10,10,0.1), 0 4px 12px rgba(10,10,10,0.2);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(10,10,10,0.1), 0 4px 12px rgba(10,10,10,0.2); }
+      50%       { box-shadow: 0 0 0 8px rgba(10,10,10,0.05), 0 4px 12px rgba(10,10,10,0.2); }
+    }
+
+    .tl-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .tl-step.done .tl-label,
+    .tl-step.current .tl-label { color: var(--ink); }
+
+    .tl-step.current .tl-label::after {
+      content: '● NOW';
+      display: block;
+      font-size: 9px;
+      color: var(--gold-dark);
+      margin-top: 3px;
+      font-weight: 700;
+    }
+
+    /* ── Shipping details ─────────────────────────────────────── */
+    .details-section {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ds-title {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 20px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .detail-item {
+      background: var(--light);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+
+    .detail-item .di-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .detail-item .di-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .detail-item.full { grid-column: 1 / -1; }
+    .detail-item.est { }
+    .detail-item.est .di-value { color: var(--green); }
+
+    .track-external-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 20px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .track-external-btn:hover { background: #333; transform: translateY(-1px); }
+
+    /* ── Items section ────────────────────────────────────────── */
+    .items-section {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .is-title {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 20px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-item:last-child { border-bottom: none; }
+
+    .order-item img {
+      width: 64px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: var(--light);
+      flex-shrink: 0;
+    }
+
+    .oi-img-placeholder {
+      width: 64px;
+      height: 80px;
+      border-radius: 10px;
+      background: var(--light);
+      flex-shrink: 0;
+    }
+
+    .oi-info { flex: 1; }
+    .oi-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+    .oi-meta { font-size: 12px; color: var(--muted); }
+    .oi-price { font-size: 15px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+
+    /* ── Summary section ──────────────────────────────────────── */
+    .summary-section {
+      padding: 24px 32px;
+      background: #faf8f5;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .summary-row.total {
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+      padding-top: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* ── Help footer ──────────────────────────────────────────── */
+    .help-footer {
+      text-align: center;
+      padding: 32px 20px;
+    }
+
+    .help-footer p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .help-footer a {
+      color: var(--ink);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .help-footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .page { padding: 36px 16px 60px; }
+      .search-card { padding: 24px 20px; }
+      .timeline-section,
+      .details-section,
+      .items-section,
+      .summary-section { padding: 22px 20px; }
+      .result-header { padding: 22px 20px; }
+      .details-grid { grid-template-columns: 1fr; }
+      .detail-item.full { grid-column: 1; }
+      .tl-dot { width: 34px; height: 34px; font-size: 13px; }
+      .tl-label { font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand">SHENOVA</a>
+    <span class="nav-sub">Track Order</span>
+  </nav>
+
+  <div class="page">
+
+    <!-- Heading -->
+    <div class="page-head">
+      <div class="eyebrow">Real-Time Tracking</div>
+      <h1>Track Your Order</h1>
+      <p>Enter your Order ID to see live tracking updates, shipping details, and estimated delivery.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-card">
+      <div class="field-group">
+        <label>Order ID</label>
+        <input
+          id="order-id-input"
+          type="text"
+          placeholder="e.g. 6849a1f3e2b4c0001234abcd"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+      </div>
+      <button class="track-btn" id="track-btn" onclick="trackOrder()">
+        <div class="spinner"></div>
+        <span class="btn-text">Track Order</span>
+      </button>
+      <div class="error-box" id="error-box">Order not found. Please check your Order ID and try again.</div>
+    </div>
+
+    <!-- Result -->
+    <div id="result-card"></div>
+
+    <!-- Help footer -->
+    <div class="help-footer">
+      <p>Need help with your order?</p>
+      <a href="mailto:shenova@shenovaofficial.com">shenova@shenovaofficial.com</a>
+      &nbsp;·&nbsp;
+      <a href="tel:+917041702391">+91 70417 02391</a>
+    </div>
+
+  </div>
+
+  <script>
+    /* ── Config ────────────────────────────────────────────────── */
+    // Adjust API_BASE to match your backend URL
+    const API_BASE = (function () {
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:5000/api';
+      return '/api';  // production: same-origin
+    })();
+
+    /* ── Status map ─────────────────────────────────────────────── */
+    const STATUS_STEPS = {
+      pending:          0,
+      processing:       1,
+      shipped:          2,
+      out_for_delivery: 3,
+      delivered:        4,
+      cancelled:        -1,
+    };
+
+    const TIMELINE_STEPS = [
+      { icon: '🛍', label: 'Ordered'          },
+      { icon: '✓',  label: 'Confirmed'         },
+      { icon: '✈',  label: 'Shipped'           },
+      { icon: '🚚', label: 'Out For Delivery'  },
+      { icon: '❤',  label: 'Delivered'         },
+    ];
+
+    /* ── Track on Enter key ─────────────────────────────────────── */
+    document.getElementById('order-id-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') trackOrder();
+    });
+
+    /* ── Pre-fill from URL params ───────────────────────────────── */
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('orderId') || params.get('id') || '';
+      if (id) {
+        document.getElementById('order-id-input').value = id;
+        trackOrder();
+      }
+    });
+
+    /* ── Main track function ──────────────────────────────────────── */
+    async function trackOrder() {
+      const input   = document.getElementById('order-id-input');
+      const btn     = document.getElementById('track-btn');
+      const errBox  = document.getElementById('error-box');
+      const resultCard = document.getElementById('result-card');
+
+      const orderId = input.value.trim();
+      if (!orderId) { input.focus(); return; }
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      errBox.classList.remove('show');
+      resultCard.classList.remove('show');
+      resultCard.innerHTML = '';
+
+      try {
+        const res = await fetch(`${API_BASE}/orders/${orderId}`);
+        if (!res.ok) throw new Error('Not found');
+        const order = await res.json();
+        renderResult(order);
+        resultCard.classList.add('show');
+
+        // Smooth scroll to result
+        setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+      } catch (err) {
+        errBox.classList.add('show');
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
+    /* ── Render result ─────────────────────────────────────────── */
+    function renderResult(o) {
+      const card    = document.getElementById('result-card');
+      const shortId = String(o._id).slice(-8).toUpperCase();
+      const step    = STATUS_STEPS[o.status] ?? 0;
+      const si      = o.shippingInfo || {};
+
+      const statusLabel = (o.status || 'pending').replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+
+      /* ── Timeline HTML ─── */
+      const timelineHtml = TIMELINE_STEPS.map((s, i) => {
+        let cls = '';
+        if (o.status === 'cancelled') {
+          cls = i === 0 ? 'done' : '';
+        } else {
+          if (i < step)  cls = 'done';
+          if (i === step) cls = 'current';
+        }
+        return `
+          <div class="tl-step ${cls}">
+            <div class="tl-dot">${s.icon}</div>
+            <div class="tl-label">${s.label}</div>
+          </div>
+        `;
+      }).join('');
+
+      /* ── Shipping details ─── */
+      let shippingHtml = '';
+      if (si.courierName || si.trackingId) {
+        const trackBtn = si.trackingUrl
+          ? `<a href="${si.trackingUrl}" target="_blank" rel="noopener" class="track-external-btn">🔗 Track on ${si.courierName || 'Courier'} Website</a>`
+          : '';
+        shippingHtml = `
+          <div class="details-section">
+            <div class="ds-title">Shipping Details</div>
+            <div class="details-grid">
+              ${si.courierName  ? `<div class="detail-item"><div class="di-label">Courier Partner</div><div class="di-value">${si.courierName}</div></div>` : ''}
+              ${si.trackingId   ? `<div class="detail-item"><div class="di-label">Tracking ID / AWB</div><div class="di-value" style="font-family:monospace;letter-spacing:0.05em;">${si.trackingId}</div></div>` : ''}
+              ${si.estimatedDate ? `<div class="detail-item est"><div class="di-label">Estimated Delivery</div><div class="di-value">${si.estimatedDate}</div></div>` : ''}
+              ${si.shippedAt    ? `<div class="detail-item"><div class="di-label">Shipped On</div><div class="di-value">${fmtDate(si.shippedAt)}</div></div>` : ''}
+              ${si.deliveredAt  ? `<div class="detail-item est full"><div class="di-label">Delivered On</div><div class="di-value">✅ ${fmtDate(si.deliveredAt)}</div></div>` : ''}
+            </div>
+            ${trackBtn}
+          </div>
+        `;
+      }
+
+      /* ── Items ─── */
+      const itemsHtml = (o.items || []).map(item => `
+        <div class="order-item">
+          ${item.image ? `<img src="${item.image}" alt="${item.name || ''}">` : '<div class="oi-img-placeholder"></div>'}
+          <div class="oi-info">
+            <div class="oi-name">${item.name || 'Item'}</div>
+            <div class="oi-meta">Size: ${item.size || '—'} · Qty: ${item.qty || 1}</div>
+          </div>
+          <div class="oi-price">₹${(Number(item.price || 0) * (item.qty || 1)).toLocaleString('en-IN')}</div>
+        </div>
+      `).join('');
+
+      /* ── Summary ─── */
+      const discount = o.discount > 0 ? `<div class="summary-row"><span>Discount</span><span style="color:#27a35a;">−₹${Number(o.discount).toLocaleString('en-IN')}</span></div>` : '';
+      const shipping = o.shippingFee > 0 ? `<div class="summary-row"><span>Shipping</span><span>₹${Number(o.shippingFee).toLocaleString('en-IN')}</span></div>` : `<div class="summary-row"><span>Shipping</span><span style="color:#27a35a;">Free</span></div>`;
+
+      /* ── Assemble ─── */
+      card.innerHTML = `
+        <!-- Header -->
+        <div class="result-header">
+          <div class="result-header-left">
+            <div class="rh-label">Order ID</div>
+            <div class="rh-id">#${shortId}</div>
+          </div>
+          <span class="status-pill sp-${o.status || 'pending'}">${statusLabel}</span>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-section">
+          <div class="tl-title">Order Progress</div>
+          <div class="timeline">${timelineHtml}</div>
+          ${o.status === 'cancelled' ? `<div style="text-align:center;margin-top:24px;font-size:13px;color:#b42318;">This order has been cancelled. Please contact us if you have questions.</div>` : ''}
+        </div>
+
+        <!-- Shipping details (only if available) -->
+        ${shippingHtml}
+
+        <!-- Items -->
+        <div class="items-section">
+          <div class="is-title">Your Order (${(o.items||[]).length} item${(o.items||[]).length!==1?'s':''})</div>
+          ${itemsHtml || '<div style="color:#888;font-size:14px;">No items found.</div>'}
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+          ${o.subtotal > 0 ? `<div class="summary-row"><span>Subtotal</span><span>₹${Number(o.subtotal).toLocaleString('en-IN')}</span></div>` : ''}
+          ${discount}
+          ${shipping}
+          <div class="summary-row total"><span>Total</span><span>₹${Number(o.total || 0).toLocaleString('en-IN')}</span></div>
+          ${o.isCOD ? `<div class="summary-row" style="color:#b07d00;font-size:12px;"><span>Payment Method</span><span>Cash on Delivery</span></div>` : ''}
+        </div>
+      `;
+    }
+
+    function fmtDate(d) {
+      return d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+    }
+  </script>
+</body>
+</html>
