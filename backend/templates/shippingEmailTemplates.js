@@ -234,7 +234,7 @@ const shippedTemplate = (data) => {
   } = data;
 
   const shortId       = String(orderId).slice(-8).toUpperCase();
-  const trackOrderUrl = trackingUrl || `${FE_URL()}/track-order?orderId=${orderId}`;
+  const trackOrderUrl = trackingUrl || `${FE_URL()}/track-order.html?orderId=${orderId}`;
   const estDateHtml   = estimatedDate
     ? `<tr><td style="padding:0 40px 16px;font-family:Arial,sans-serif;font-size:14px;color:#555;text-align:center;">
         📅 <strong>Estimated Delivery:</strong> ${estimatedDate}
@@ -339,7 +339,7 @@ const outForDeliveryTemplate = (data) => {
   } = data;
 
   const shortId       = String(orderId).slice(-8).toUpperCase();
-  const trackOrderUrl = trackingUrl || `${FE_URL()}/track-order?orderId=${orderId}`;
+  const trackOrderUrl = trackingUrl || `${FE_URL()}/track-order.html?orderId=${orderId}`;
 
   const courierMini = (courierName || trackingId) ? `
     <tr>
