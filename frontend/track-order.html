@@ -583,7 +583,7 @@
     // Adjust API_BASE to match your backend URL
     const API_BASE = (function () {
       const host = window.location.hostname;
-      if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:5000/api';
+      if (host === 'localhost' || host === '127.0.0.1') return 'https://shenova-backend.onrender.com/api';
       return '/api';  // production: same-origin
     })();
 
