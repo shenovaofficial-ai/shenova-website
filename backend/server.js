@@ -507,10 +507,10 @@ app.put('/api/orders/:id', async (req, res) => {
       try {
 
         const {
-          sendShippingConfirmationEmail
+          sendShippedEmail
         } = require("./services/emailService");
 
-        await sendShippingConfirmationEmail({
+        await sendShippedEmail({
 
           customerName:
             order.shipping?.fullName || "Customer",
