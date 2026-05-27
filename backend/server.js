@@ -564,7 +564,49 @@ await sendShippedEmail({
   }
 
 });
+// ================= TRACK ORDER =================
 
+app.get('/api/track-order/:id', async (req, res) => {
+
+  try {
+
+    const id = req.params.id;
+
+    const order = await Order.findOne({
+
+      $or: [
+
+        { _id: id },
+
+        { trackingId: id },
+
+        { "shippingDetails.trackingId": id }
+
+      ]
+
+    });
+
+    if (!order) {
+
+      return res.status(404).json({
+        error: "Order not found"
+      });
+
+    }
+
+    res.json(order);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
   app.delete('/api/orders/:id', async (req, res) => {
     await Order.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
