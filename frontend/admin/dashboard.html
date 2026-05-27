@@ -2712,7 +2712,7 @@ window.openDrawer = function(o){
         <div class="status-select-wrap">
           <label>Update Status</label>
           <select onchange="updOrder('${o._id}',this.value)" style="max-width:220px">
-            ${['pending','processing','shipped','delivered','cancelled'].map(s=>
+            ${['pending','processing','shipped','out for delivery','delivered','cancelled'].map(s=>
               `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
             ).join('')}
           </select>
