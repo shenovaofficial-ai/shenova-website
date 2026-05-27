@@ -510,30 +510,36 @@ app.put('/api/orders/:id', async (req, res) => {
           sendShippedEmail
         } = require("./services/emailService");
 
-        await sendShippedEmail({
+await sendShippedEmail({
 
-          customerName:
-            order.shipping?.fullName || "Customer",
+  customerName:
+    order.shipping?.fullName || "Customer",
 
-          customerEmail:
-            order.shipping?.email,
+  customerEmail:
+    order.shipping?.email,
 
-          orderId:
-            order._id,
+  orderId:
+    order._id,
 
-          courierName:
-            req.body.courierName || "",
+  items:
+    order.items || [],
 
-          trackingId:
-            req.body.trackingId || "",
+  totalAmount:
+    order.totalAmount || order.total || 0,
 
-          trackingUrl:
-            req.body.trackingUrl || "",
+  courierName:
+    req.body.courierName || "",
 
-          estimatedDate:
-            req.body.estimatedDate || ""
+  trackingId:
+    req.body.trackingId || "",
 
-        });
+  trackingUrl:
+    req.body.trackingUrl || "",
+
+  estimatedDate:
+    req.body.estimatedDate || ""
+
+});
 
         console.log("✅ Shipping email sent");
 
