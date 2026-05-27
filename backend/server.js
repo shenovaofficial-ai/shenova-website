@@ -478,9 +478,86 @@ try {
     res.json(await Order.find().sort('-createdAt'));
   });
 
-  app.put('/api/orders/:id', async (req, res) => {
-    res.json(await Order.findByIdAndUpdate(req.params.id, req.body, { new: true }));
-  });
+app.put('/api/orders/:id', async (req, res) => {
+
+  try {
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        error: "Order not found"
+      });
+    }
+
+    Object.assign(order, req.body);
+
+    await order.save();
+
+    console.log("📦 Order status updated:", order.status);
+
+    // ═══════════════════════════════════
+    // SHIPPING EMAIL
+    // ═══════════════════════════════════
+
+    if (req.body.status === "shipped") {
+
+      console.log("📧 SHIPPING EMAIL TRIGGERED");
+
+      try {
+
+        const {
+          sendShippingConfirmationEmail
+        } = require("./services/emailService");
+
+        await sendShippingConfirmationEmail({
+
+          customerName:
+            order.shipping?.fullName || "Customer",
+
+          customerEmail:
+            order.shipping?.email,
+
+          orderId:
+            order._id,
+
+          courierName:
+            req.body.courierName || "",
+
+          trackingId:
+            req.body.trackingId || "",
+
+          trackingUrl:
+            req.body.trackingUrl || "",
+
+          estimatedDate:
+            req.body.estimatedDate || ""
+
+        });
+
+        console.log("✅ Shipping email sent");
+
+      } catch (emailErr) {
+
+        console.log("❌ Shipping email failed:", emailErr.message);
+
+      }
+
+    }
+
+    res.json(order);
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
 
   app.delete('/api/orders/:id', async (req, res) => {
     await Order.findByIdAndDelete(req.params.id);
