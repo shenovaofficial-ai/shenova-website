@@ -49,12 +49,38 @@ const orderSchema = new mongoose.Schema({
   discount:      { type: Number, default: 0 },
   total:         Number,
 
-  status: {
-    type:    String,
-    enum:    ['pending', 'processing', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'],
-    default: 'pending'
-  },
+  trackingId: {
+  type: String,
+  default: ""
+},
 
+courierName: {
+  type: String,
+  default: ""
+},
+
+trackingUrl: {
+  type: String,
+  default: ""
+},
+
+estimatedDate: {
+  type: String,
+  default: ""
+},
+
+status: {
+  type: String,
+  enum: [
+    'pending',
+    'processing',
+    'shipped',
+    'out_for_delivery',
+    'delivered',
+    'cancelled'
+  ],
+  default: 'pending'
+},
   // ── COD fields ──────────────────────────────────────────────────
   isCOD:              { type: Boolean, default: false },
   codAdvancePaid:     { type: Number,  default: 0 },
