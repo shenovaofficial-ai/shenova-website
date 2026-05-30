@@ -159,7 +159,19 @@ async function loadFeatured(retries = 3){
 
     const products = await res.json();
 
-    wrap.innerHTML = products
+    // Sirf clothing dikhao Trending Now mein
+    // Essentials/jewellery/accessories/earrings → sirf SHENOVA Essentials section mein
+    const BLOCK_KEYWORDS = [
+      'essentials','jewellery','jewelry','accessories','accessory',
+      'earring','necklace','ring','bracelet','anklet','pendant',
+      'hair','scrunchie','clip','pin'
+    ];
+    const clothingOnly = products.filter(p => {
+      const cat = (p.category || '').toLowerCase().trim();
+      return !BLOCK_KEYWORDS.some(kw => cat.includes(kw));
+    });
+
+    wrap.innerHTML = clothingOnly
       .slice(0, 4)
       .map(p => productCard(p))
       .join('');

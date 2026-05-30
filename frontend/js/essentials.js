@@ -6,7 +6,11 @@
 (function () {
   'use strict';
 
-  const ESSENTIALS_CATS = ['essentials', 'jewellery', 'accessories'];
+  const ESSENTIALS_CATS = [
+    'essentials','jewellery','jewelry','accessories','accessory',
+    'earring','necklace','ring','bracelet','anklet','pendant',
+    'hair','scrunchie','clip','pin'
+  ];
 
   function imgUrl(src) {
     if (!src) return '';
@@ -73,7 +77,10 @@
 
       const products = await r.json();
       const ess = products
-        .filter(p => ESSENTIALS_CATS.includes((p.category || '').toLowerCase()))
+        .filter(p => {
+          const cat = (p.category || '').toLowerCase().trim();
+          return ESSENTIALS_CATS.some(kw => cat.includes(kw));
+        })
         .slice(0, 4); // sirf 4 homepage par
 
       if (ess.length > 0) {
