@@ -159,13 +159,7 @@ async function loadFeatured(retries = 3){
 
     const products = await res.json();
 
-    // Essentials/jewellery/accessories belong only in SHENOVA Essentials section
-    const ESSENTIALS_CATS = ['essentials', 'jewellery', 'accessories'];
-    const clothingOnly = products.filter(
-      p => !ESSENTIALS_CATS.includes((p.category || '').toLowerCase())
-    );
-
-    wrap.innerHTML = clothingOnly
+    wrap.innerHTML = products
       .slice(0, 4)
       .map(p => productCard(p))
       .join('');
@@ -310,6 +304,11 @@ window.openQuickView = function(e, product){
 
   modal.classList.add('show');
 
+  // ── Cursor fix: restore native cursor inside modal
+  // (custom cursor has z-index:10000 which is above modal z-index:9999
+  //  but mousemove tracking breaks inside modal backdrop)
+  document.body.style.cursor = 'auto';
+
   // ── FIX: Har element ko null-safe access karo
   const imgEl    = document.getElementById('quick-image');
   const titleEl  = document.getElementById('quick-title');
@@ -367,6 +366,8 @@ window.openQuickView = function(e, product){
 
 window.closeQuickView = function(){
   document.getElementById('quick-modal')?.classList.remove('show');
+  // Restore custom cursor (cursor:none) after modal closes
+  document.body.style.cursor = '';
 };
 
 /* ================= REVEAL ================= */
