@@ -1693,6 +1693,9 @@ select{
               <option value="tops">Tops</option>
               <option value="kurti">Kurti</option>
               <option value="co-ord set">Co-ord Sets</option>
+              <option value="essentials">Essentials ✦</option>
+              <option value="jewellery">Jewellery ✦</option>
+              <option value="accessories">Accessories ✦</option>
             </select>
             <button class="btn btn-primary btn-sm" onclick="showSection('add')">
               <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1747,10 +1750,17 @@ select{
                 <label class="field-label">Category</label>
                 <select name="category">
                   <option value="">Select category</option>
-                  <option value="dress">Dress</option>
-                  <option value="tops">Tops</option>
-                  <option value="kurti">Kurti</option>
-                  <option value="co-ord set">Co-ord Set</option>
+                  <optgroup label="── Clothing ──">
+                    <option value="dress">Dress</option>
+                    <option value="tops">Tops</option>
+                    <option value="kurti">Kurti</option>
+                    <option value="co-ord set">Co-ord Set</option>
+                  </optgroup>
+                  <optgroup label="── SHENOVA Essentials ──">
+                    <option value="essentials">Essentials</option>
+                    <option value="jewellery">Jewellery</option>
+                    <option value="accessories">Accessories</option>
+                  </optgroup>
                 </select>
               </div>
 
@@ -1862,7 +1872,6 @@ select{
               <option value="pending">Pending</option>
               <option value="processing">Processing</option>
               <option value="shipped">Shipped</option>
-                <option value="out_for_delivery">Out For Delivery</option>
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -2126,10 +2135,17 @@ select{
             <label class="field-label">Category</label>
             <select name="category">
               <option value="">Select category</option>
-              <option value="dress">Dress</option>
-              <option value="tops">Tops</option>
-              <option value="kurti">Kurti</option>
-              <option value="co-ord set">Co-ord Set</option>
+              <optgroup label="── Clothing ──">
+                <option value="dress">Dress</option>
+                <option value="tops">Tops</option>
+                <option value="kurti">Kurti</option>
+                <option value="co-ord set">Co-ord Set</option>
+              </optgroup>
+              <optgroup label="── SHENOVA Essentials ──">
+                <option value="essentials">Essentials</option>
+                <option value="jewellery">Jewellery</option>
+                <option value="accessories">Accessories</option>
+              </optgroup>
             </select>
           </div>
 
@@ -2711,13 +2727,9 @@ window.openDrawer = function(o){
       <div class="info-card-body">
         <div class="status-select-wrap">
           <label>Update Status</label>
-          <select
-            data-current-value="${o.status}"
-            data-prev-value="${o.status}"
-            onchange="updOrder('${o._id}',this.value,${JSON.stringify(o).replace(/'/g,"&#39;").replace(/"/g,'&quot;')},this)"
-            style="max-width:220px">
-            ${['pending','processing','shipped','out_for_delivery','delivered','cancelled'].map(s=>
-              `<option value="${s}" ${o.status===s?'selected':''}>${s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</option>`
+          <select onchange="updOrder('${o._id}',this.value)" style="max-width:220px">
+            ${['pending','processing','shipped','delivered','cancelled'].map(s=>
+              `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
             ).join('')}
           </select>
         </div>
@@ -2901,17 +2913,13 @@ window.saveEditProduct = async function(e){
 /* ─────────────────────────────────────────
    UPDATE ORDER STATUS
 ───────────────────────────────────────── */
-window.updOrder = async function(id, status, orderData, selectEl){
-  // NOTE: admin.shipping.js overrides this function at runtime.
-  // This base version runs only if admin.shipping.js is not loaded.
-  if(selectEl) selectEl.dataset.prevValue = selectEl.dataset.currentValue || status;
+window.updOrder = async function(id, status){
   await api('/orders/'+id,{
     method:'PUT',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({status})
   });
   toast('Order status updated to: '+status,'success');
-  if(selectEl) selectEl.dataset.currentValue = status;
   await loadDash();
   renderAllOrders();
 };
@@ -3204,7 +3212,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   loadDash();
 });
 </script>
-<script src="/frontend/js/admin.shipping.js"></script>
 <script src="js/adminStories.js"></script>
 </body>
 </html>

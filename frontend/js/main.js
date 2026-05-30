@@ -159,7 +159,13 @@ async function loadFeatured(retries = 3){
 
     const products = await res.json();
 
-    wrap.innerHTML = products
+    // Essentials/jewellery/accessories belong only in SHENOVA Essentials section
+    const ESSENTIALS_CATS = ['essentials', 'jewellery', 'accessories'];
+    const clothingOnly = products.filter(
+      p => !ESSENTIALS_CATS.includes((p.category || '').toLowerCase())
+    );
+
+    wrap.innerHTML = clothingOnly
       .slice(0, 4)
       .map(p => productCard(p))
       .join('');

@@ -8,15 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2X2Q0P2JM8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-2X2Q0P2JM8');
-</script><!-- Meta Pixel Code -->
+<!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -192,6 +184,17 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
       <button class="chip" data-cat="tops">Tops</button>
       <button class="chip" data-cat="kurti">Kurti</button>
       <button class="chip" data-cat="co-ord set">Co-ord Sets</button>
+      <!-- SHENOVA Essentials categories -->
+      <button class="chip chip--ess" data-cat="essentials">Essentials</button>
+      <button class="chip chip--ess" data-cat="jewellery">Jewellery</button>
+      <button class="chip chip--ess" data-cat="accessories">Accessories</button>
+    </div>
+
+    <!-- ── Essentials category banner (shown when essentials filter selected) ── -->
+    <div class="ess-shop-banner" id="ess-shop-banner">
+      <span class="ess-shop-banner-eye">SHENOVA</span>
+      <h2 class="ess-shop-banner-title">The <em>Essentials</em> Edit</h2>
+      <p class="ess-shop-banner-sub">Curated Accessories · Minimal Details · Maximum Presence</p>
     </div>
 
     <!-- ── Product grid (filled by shop.js + main.js) ── -->
@@ -336,7 +339,52 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   </nav>
 
   <script src="js/luxury-motion.js" defer></script>
-</body>
+<script src="js/essentials.js" defer></script>
+<style>
+/* ── Essentials chip accent ── */
+.chip--ess {
+  border-color: rgba(181,137,90,.4) !important;
+  color: #9a7c4e;
+}
+.chip--ess.active {
+  background: #0c0b0a;
+  color: #d4a874;
+  border-color: #0c0b0a !important;
+}
+
+/* ── Essentials banner (shown when essentials/jewellery/accessories filter active) ── */
+.ess-shop-banner {
+  display: none;
+  text-align: center;
+  padding: 48px 0 32px;
+  border-bottom: 1px solid rgba(181,137,90,.15);
+  margin-bottom: 40px;
+}
+.ess-shop-banner.visible { display: block; }
+.ess-shop-banner-eye {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: #9a7c4e;
+  margin-bottom: 12px;
+  display: block;
+}
+.ess-shop-banner-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 300;
+  color: #0c0b0a;
+  letter-spacing: .04em;
+}
+.ess-shop-banner-title em { font-style: italic; color: #9a7c4e; }
+.ess-shop-banner-sub {
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: #7a7060;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+</style>
 
 <!-- ═══════════════════════════════
      SCRIPTS — load order preserved
