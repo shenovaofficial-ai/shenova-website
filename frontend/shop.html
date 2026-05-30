@@ -75,29 +75,51 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
 ═══════════════════════════════ -->
 <section class="product-hero" id="hero-top">
 
-  <!-- ── Slideshow images — add/remove src as needed ── -->
+  <!-- ══════════════════════════════════════════════════════════
+       HERO SLIDESHOW IMAGES
+       ──────────────────────────────────────────────────────────
+       Har slide mein:
+         data-desktop = "images/..."   ← PC / laptop image
+         data-mobile  = "images/..."   ← Phone image (portrait)
+
+       Naya slide add karna ho toh ek aur .hero-slide div copy karo
+       aur apni images ke naam daal do. Bas.
+  ══════════════════════════════════════════════════════════════ -->
   <div class="hero-slides" id="heroSlides">
-    <div class="hero-slide active">
-      <picture>
-        <source media="(max-width:768px)" srcset="images/bg2.png">
-        <img class="product-hero-img" src="images/bg1.png"
-             alt="Shenova Collection 2026" fetchpriority="high">
-      </picture>
+
+    <!-- SLIDE 1 -->
+    <div class="hero-slide active"
+         data-desktop="images/bg1.png"
+         data-mobile="images/bg2.png">
+      <img class="product-hero-img" src="images/bg1.png"
+           alt="Shenova Collection 2026" fetchpriority="high">
     </div>
-    <div class="hero-slide">
-      <picture>
-        <source media="(max-width:768px)" srcset="images/bg2.png">
-        <img class="product-hero-img" src="images/hero1.png"
-             alt="Shenova Collection 2026">
-      </picture>
+
+    <!-- SLIDE 2 -->
+    <div class="hero-slide"
+         data-desktop="images/hero1.png"
+         data-mobile="images/hero1a.png">
+      <img class="product-hero-img" src="images/hero1.png"
+           alt="Shenova Collection 2026">
     </div>
-    <div class="hero-slide">
-      <picture>
-        <source media="(max-width:768px)" srcset="images/bg2.png">
-        <img class="product-hero-img" src="images/hero2.png"
-             alt="Shenova Collection 2026">
-      </picture>
+
+    <!-- SLIDE 3 -->
+    <div class="hero-slide"
+         data-desktop="images/hero2.png"
+         data-mobile="images/hero2a.png">
+      <img class="product-hero-img" src="images/hero2.png"
+           alt="Shenova Collection 2026">
     </div>
+
+    <!-- SLIDE 4 — Naya slide chahiye toh yahan copy-paste karo:
+    <div class="hero-slide"
+         data-desktop="images/YOUR-DESKTOP-IMAGE.jpg"
+         data-mobile="images/YOUR-MOBILE-IMAGE.jpg">
+      <img class="product-hero-img" src="images/YOUR-DESKTOP-IMAGE.jpg"
+           alt="Shenova Collection 2026">
+    </div>
+    -->
+
   </div>
 
   <div class="product-hero-overlay"></div>
@@ -552,15 +574,35 @@ window.addEventListener('scroll', () => {
     dots.push(d);
   });
 
+  /* ── Mobile/Desktop image swap ── */
+  function isMobile() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function applyCorrectImage(slide) {
+    const img = slide.querySelector('.product-hero-img');
+    if (!img) return;
+    const src = isMobile()
+      ? (slide.dataset.mobile || slide.dataset.desktop)
+      : slide.dataset.desktop;
+    if (src && img.src !== src && !img.src.endsWith(src)) {
+      img.src = src;
+    }
+  }
+
+  // Apply correct images on load and resize
+  slides.forEach(applyCorrectImage);
+  window.addEventListener('resize', () => slides.forEach(applyCorrectImage), { passive: true });
+
   /* ── Go to slide ── */
   function goTo(idx) {
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
-    // Reset dot fill animation
     dots[current].style.transition = 'none';
 
     current = (idx + slides.length) % slides.length;
 
+    applyCorrectImage(slides[current]);
     slides[current].classList.add('active');
     dots[current].classList.add('active');
 
