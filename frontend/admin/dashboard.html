@@ -2711,9 +2711,13 @@ window.openDrawer = function(o){
       <div class="info-card-body">
         <div class="status-select-wrap">
           <label>Update Status</label>
-          <select onchange="updOrder('${o._id}',this.value)" style="max-width:220px">
-            ${['pending','processing','shipped','out for delivery','delivered','cancelled'].map(s=>
-              `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+          <select
+            data-current-value="${o.status}"
+            data-prev-value="${o.status}"
+            onchange="updOrder('${o._id}',this.value,${JSON.stringify(o).replace(/'/g,"&#39;").replace(/"/g,'&quot;')},this)"
+            style="max-width:220px">
+            ${['pending','processing','shipped','out_for_delivery','delivered','cancelled'].map(s=>
+              `<option value="${s}" ${o.status===s?'selected':''}>${s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</option>`
             ).join('')}
           </select>
         </div>
@@ -2897,13 +2901,17 @@ window.saveEditProduct = async function(e){
 /* ─────────────────────────────────────────
    UPDATE ORDER STATUS
 ───────────────────────────────────────── */
-window.updOrder = async function(id, status){
+window.updOrder = async function(id, status, orderData, selectEl){
+  // NOTE: admin.shipping.js overrides this function at runtime.
+  // This base version runs only if admin.shipping.js is not loaded.
+  if(selectEl) selectEl.dataset.prevValue = selectEl.dataset.currentValue || status;
   await api('/orders/'+id,{
     method:'PUT',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({status})
   });
   toast('Order status updated to: '+status,'success');
+  if(selectEl) selectEl.dataset.currentValue = status;
   await loadDash();
   renderAllOrders();
 };

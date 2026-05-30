@@ -662,24 +662,30 @@
       const drawerBody = document.querySelector('#drawer-body');
       if (!drawerBody) return;
 
+      // Find the status card (dashboard.html uses "Order Status" as the title)
       const cards = drawerBody.querySelectorAll('.info-card');
       let controlCard = null;
       cards.forEach(c => {
-        if (c.querySelector('h4')?.textContent.includes('Order Controls')) controlCard = c;
+        const h4text = c.querySelector('h4')?.textContent || '';
+        if (h4text.includes('Order Status') || h4text.includes('Order Controls')) controlCard = c;
       });
 
       if (controlCard) {
-        controlCard.innerHTML = `
-          <h4>Order Controls</h4>
-          <div class="status-select-wrap">
-            <select id="drawer-status-select"
-              data-current-value="${o.status}" data-prev-value="${o.status}"
-              onchange="window.updOrder('${o._id}',this.value,${JSON.stringify(o).replace(/"/g,'&quot;')},this)">
-              ${['pending','processing','shipped','out_for_delivery','delivered','cancelled'].map(s =>
-                `<option value="${s}" ${o.status===s?'selected':''}>${s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</option>`
-              ).join('')}
-            </select>
-          </div>`;
+        const cardBody = controlCard.querySelector('.info-card-body') || controlCard;
+        const existingSelect = cardBody.querySelector('select');
+        if (existingSelect) {
+          // Patch the existing select in-place with the full 4-arg handler
+          existingSelect.setAttribute('data-current-value', o.status);
+          existingSelect.setAttribute('data-prev-value', o.status);
+          // Fix option values: replace spaces with underscores (out for delivery → out_for_delivery)
+          existingSelect.querySelectorAll('option').forEach(opt => {
+            if (opt.value.includes(' ')) opt.value = opt.value.replace(/ /g, '_');
+          });
+          // Wire up the correct onchange with all 4 args
+          existingSelect.onchange = function() {
+            window.updOrder(o._id, this.value, o, this);
+          };
+        }
       }
 
       if (o.shippingInfo && (o.shippingInfo.courierName || o.shippingInfo.trackingId)) {
