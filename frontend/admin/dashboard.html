@@ -1043,6 +1043,122 @@ select{
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes slideup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
+/* ══════════════════════════════
+   SHIP MODAL
+══════════════════════════════ */
+.ship-modal-wrap{
+  position:fixed;inset:0;z-index:650;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+  background:rgba(12,11,9,.52);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.ship-modal-wrap.show{display:flex;animation:fadein .25s}
+
+.ship-modal-box{
+  position:relative;
+  background:var(--cream);
+  border-radius:20px;
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  border:1px solid var(--border);
+  animation:slideup .35s var(--ease);
+  display:flex;flex-direction:column;
+}
+
+.ship-modal-head{
+  padding:22px 26px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  position:sticky;top:0;background:var(--cream);
+  border-radius:20px 20px 0 0;z-index:1;
+}
+.ship-modal-eyebrow{
+  font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;
+}
+.ship-modal-title{
+  font-family:var(--serif);font-size:24px;font-weight:400;
+}
+.ship-close-btn{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--parchment);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);cursor:pointer;flex-shrink:0;
+  transition:all .2s;
+}
+.ship-close-btn:hover{border-color:var(--border-md);color:var(--ink)}
+
+.ship-modal-body{
+  padding:20px 26px 26px;
+  display:flex;flex-direction:column;gap:16px;
+}
+
+.ship-info-row{
+  background:var(--parchment);border-radius:12px;
+  padding:12px 16px;font-size:13px;line-height:1.6;
+  border:1px solid var(--border);
+}
+.ship-info-row strong{font-weight:500}
+
+.ship-field-group{display:flex;flex-direction:column;gap:6px}
+.ship-field-label{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+.ship-input{
+  width:100%;padding:11px 14px;
+  border:1px solid var(--border-md);border-radius:10px;
+  font:inherit;font-size:13px;background:var(--cream);color:var(--ink);
+  outline:none;transition:border-color .25s,box-shadow .25s;
+  -webkit-appearance:none;appearance:none;
+}
+.ship-input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(154,124,78,.1);
+}
+textarea.ship-input{resize:vertical;min-height:70px}
+
+select.ship-input{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238a8279'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;cursor:pointer;
+}
+
+.ship-actions{
+  display:flex;gap:10px;justify-content:flex-end;padding-top:4px;
+}
+
+/* Mobile: bottom sheet style */
+@media(max-width:600px){
+  .ship-modal-wrap{
+    align-items:flex-end;
+    padding:0;
+  }
+  .ship-modal-box{
+    width:100%;
+    border-radius:20px 20px 0 0;
+    max-height:88vh;
+    animation:shipSheetUp .35s var(--ease);
+  }
+  @keyframes shipSheetUp{
+    from{transform:translateY(100%)}
+    to{transform:translateY(0)}
+  }
+  .ship-modal-head{
+    border-radius:20px 20px 0 0;
+  }
+  .ship-actions{
+    flex-direction:column-reverse;
+  }
+  .ship-actions .btn{
+    width:100%;justify-content:center;
+    padding:14px;
+  }
+}
+
 .modal-head{
   padding:24px 28px;
   border-bottom:1px solid var(--border);
@@ -1353,6 +1469,207 @@ select{
   background:rgba(12,11,9,.5);
   z-index:199;
 }
+
+/* ══════════════════════════════
+   MOBILE — ADMIN BOTTOM NAV
+══════════════════════════════ */
+.admin-bottom-nav{
+  display:none;
+}
+
+@media(max-width:768px){
+
+  /* Show menu button */
+  #menuBtn{
+    display:flex !important;
+  }
+
+  /* Show overlay when sidebar open */
+  .side.open ~ .side-overlay,
+  body.sidebar-open .side-overlay{
+    display:block;
+  }
+
+  /* Bottom nav */
+  .admin-bottom-nav{
+    display:flex;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    z-index:180;
+    height:60px;
+    background:var(--ink);
+    border-top:1px solid rgba(255,255,255,.07);
+    align-items:stretch;
+    justify-content:space-around;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    box-shadow:0 -6px 30px rgba(0,0,0,.35);
+  }
+
+  .abn-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:rgba(255,255,255,.35);
+    font-size:8.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-family:var(--sans);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:color .2s;
+    padding:8px 4px;
+    position:relative;
+    border:none;
+    background:none;
+  }
+
+  .abn-item svg{
+    width:18px;height:18px;
+    stroke:currentColor;fill:none;
+    stroke-width:1.5;
+    stroke-linecap:round;stroke-linejoin:round;
+    transition:stroke .2s;
+  }
+
+  .abn-item.abn-active{
+    color:var(--gold-lt);
+  }
+
+  .abn-item:active{
+    color:rgba(255,255,255,.7);
+  }
+
+  .abn-badge{
+    position:absolute;
+    top:8px;
+    right:calc(50% - 16px);
+    background:var(--gold);
+    color:#fff;
+    font-size:7px;
+    font-weight:600;
+    min-width:14px;
+    height:14px;
+    border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 3px;
+    font-family:var(--sans);
+  }
+
+  /* Add bottom padding so content doesn't hide behind nav */
+  .content{
+    padding-bottom: calc(80px + env(safe-area-inset-bottom,0px)) !important;
+  }
+
+  /* Topbar tightening */
+  .topbar{
+    padding:0 14px;
+    height:54px;
+  }
+
+  .page-title{
+    font-size:18px;
+  }
+
+  .admin-pill span{
+    display:none;
+  }
+  .admin-pill{
+    padding:5px 8px 5px 5px;
+    gap:6px;
+  }
+
+  /* KPI grid — 2 col on mobile */
+  .kpi-grid{
+    gap:10px;
+  }
+  .kpi{
+    padding:16px 18px;
+  }
+  .kpi-value{
+    font-size:30px;
+  }
+
+  /* Panel head wrap nicely */
+  .panel-head{
+    padding:16px 18px;
+    gap:10px;
+  }
+
+  .panel-body{
+    padding:16px 18px;
+  }
+
+  /* Tables scroll properly */
+  .table-wrap{
+    -webkit-overflow-scrolling:touch;
+  }
+
+  td, th{
+    padding:11px 12px;
+  }
+
+  /* Order cards */
+  .order-card{
+    padding:16px 18px;
+  }
+
+  /* Drawer full screen on mobile */
+  .drawer-panel{
+    width:100vw;
+    border-left:none;
+  }
+  .drawer-head, .drawer-body{
+    padding:20px 20px;
+  }
+
+  /* Modal full width */
+  .modal-box{
+    border-radius:14px;
+    width:100%;
+  }
+  .modal-head, .modal-body{
+    padding:20px;
+  }
+
+  /* Form grid single col */
+  .form-grid.three{
+    grid-template-columns:1fr 1fr;
+  }
+
+  /* Toast left on mobile */
+  #toast-wrap{
+    bottom:80px;
+    right:12px;
+    left:12px;
+  }
+  .toast{
+    max-width:100%;
+  }
+
+  /* Filter bar stacks */
+  .filter-bar{
+    width:100%;
+  }
+  .search-field{
+    max-width:100%;
+  }
+}
+
+@media(max-width:480px){
+  .kpi-grid{
+    grid-template-columns:1fr 1fr;
+  }
+  .form-grid.three{
+    grid-template-columns:1fr;
+  }
+  .abn-item span{
+    font-size:7.5px;
+    letter-spacing:.1em;
+  }
+}
 @keyframes progress-pulse {
   0%,100% { opacity:1 }
   50%      { opacity:0.4 }
@@ -1585,7 +1902,7 @@ select{
   <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-left">
-      <button class="tb-btn" id="menuBtn" onclick="toggleSidebar()" style="display:none">
+      <button class="tb-btn" id="menuBtn" onclick="toggleSidebar()">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <h1 class="page-title" id="page-title">Dashboard</h1>
@@ -2234,6 +2551,58 @@ select{
     </div>
   </div>
 </div>
+
+<!-- ★ SHIP MODAL -->
+<div class="ship-modal-wrap" id="ship-modal" onclick="if(event.target===this)closeShipModal()">
+  <div class="ship-modal-box">
+    <div class="ship-modal-head">
+      <div>
+        <div class="ship-modal-eyebrow">Order Update</div>
+        <h2 class="ship-modal-title">Mark as Shipped</h2>
+      </div>
+      <button class="ship-close-btn" onclick="closeShipModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="ship-modal-body">
+      <div class="ship-info-row" id="ship-customer-info"><!-- filled by JS --></div>
+      <div class="ship-field-group">
+        <label class="ship-field-label">Courier / Carrier</label>
+        <select id="ship-courier" class="ship-input">
+          <option value="">Select courier…</option>
+          <option value="Delhivery">Delhivery</option>
+          <option value="Blue Dart">Blue Dart</option>
+          <option value="Ekart">Ekart</option>
+          <option value="DTDC">DTDC</option>
+          <option value="India Post">India Post</option>
+          <option value="Xpressbees">Xpressbees</option>
+          <option value="Shadowfax">Shadowfax</option>
+          <option value="Shiprocket">Shiprocket</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="ship-field-group">
+        <label class="ship-field-label">Tracking Number</label>
+        <input type="text" id="ship-tracking" class="ship-input" placeholder="e.g. DL2840192840">
+      </div>
+      <div class="ship-field-group">
+        <label class="ship-field-label">Tracking URL <span style="opacity:.5;font-size:10px">(optional)</span></label>
+        <input type="url" id="ship-trackurl" class="ship-input" placeholder="https://track.delhivery.com/…">
+      </div>
+      <div class="ship-field-group">
+        <label class="ship-field-label">Note to Customer <span style="opacity:.5;font-size:10px">(optional)</span></label>
+        <textarea id="ship-note" class="ship-input" rows="2" placeholder="Your order is on its way! Expected delivery in 3–5 days."></textarea>
+      </div>
+      <div class="ship-actions">
+        <button class="btn btn-ghost" onclick="closeShipModal()">Cancel</button>
+        <button class="btn btn-primary" id="ship-submit-btn" onclick="submitShipped()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Ship &amp; Notify
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- ★ NEW — Story Edit Modal -->
 <div class="story-edit-modal" id="storyEditModal" onclick="if(event.target===this)adminCloseEditStory()">
   <div class="story-edit-box">
@@ -2340,20 +2709,21 @@ function showSection(id){
    SIDEBAR MOBILE
 ───────────────────────────────────────── */
 function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sideOverlay').style.display =
-    document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
+  const s = document.getElementById('sidebar');
+  const ov = document.getElementById('sideOverlay');
+  s.classList.toggle('open');
+  ov.style.display = s.classList.contains('open') ? 'block' : 'none';
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sideOverlay').style.display = 'none';
 }
 
-if(window.innerWidth <= 768){
-  document.getElementById('menuBtn').style.display = 'flex';
-}
-window.addEventListener('resize', ()=>{
-  document.getElementById('menuBtn').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+// Close sidebar on mobile after nav tap
+document.querySelectorAll('.side-nav a').forEach(function(a){
+  a.addEventListener('click', function(){
+    if(window.innerWidth <= 768) closeSidebar();
+  });
 });
 
 /* ─────────────────────────────────────────
@@ -2380,6 +2750,7 @@ async function loadDash(){
 
   allProducts = Array.isArray(products) ? products : [];
   allOrders   = Array.isArray(orders)   ? orders   : [];
+  window._allOrders = allOrders; // ship modal reference
 
   // KPIs
   document.getElementById('kpi-products').textContent = allProducts.length;
@@ -2727,7 +3098,7 @@ window.openDrawer = function(o){
       <div class="info-card-body">
         <div class="status-select-wrap">
           <label>Update Status</label>
-          <select onchange="updOrder('${o._id}',this.value)" style="max-width:220px">
+          <select onchange="updOrder('${o._id}',this.value,this)" data-prev="${o.status}" style="max-width:220px">
             ${['pending','processing','shipped','delivered','cancelled'].map(s=>
               `<option value="${s}" ${o.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
             ).join('')}
@@ -2913,7 +3284,24 @@ window.saveEditProduct = async function(e){
 /* ─────────────────────────────────────────
    UPDATE ORDER STATUS
 ───────────────────────────────────────── */
-window.updOrder = async function(id, status){
+/* ─────────────────────────────────────────
+   ORDER STATUS UPDATE + SHIP MODAL
+───────────────────────────────────────── */
+let _shipOrderId = null;
+let _shipSelectEl = null;
+let _shipPrevStatus = null;
+
+window.updOrder = async function(id, status, selectEl){
+  if(status === 'shipped'){
+    // Open ship modal instead of directly updating
+    _shipOrderId = id;
+    _shipSelectEl = selectEl || null;
+    _shipPrevStatus = selectEl ? selectEl.dataset.prev || 'processing' : 'processing';
+    openShipModal(id);
+    return;
+  }
+  // For all other statuses, update directly
+  if(selectEl) selectEl.dataset.prev = status;
   await api('/orders/'+id,{
     method:'PUT',
     headers:{'Content-Type':'application/json'},
@@ -2922,6 +3310,86 @@ window.updOrder = async function(id, status){
   toast('Order status updated to: '+status,'success');
   await loadDash();
   renderAllOrders();
+};
+
+function openShipModal(orderId){
+  // Find order data from already-loaded orders
+  const order = (window._allOrders||[]).find(o=>o._id===orderId);
+  const infoEl = document.getElementById('ship-customer-info');
+  if(order && infoEl){
+    infoEl.innerHTML = `
+      <strong>${order.shipping?.fullName||'Customer'}</strong><br>
+      <span style="color:var(--muted);font-size:12px">${order.shipping?.email||''}</span>
+      ${order.shipping?.phone ? `<span style="color:var(--muted);font-size:12px"> · ${order.shipping.phone}</span>` : ''}
+      <br><span style="color:var(--muted);font-size:12px;margin-top:2px;display:block">${order.shipping?.address||''}, ${order.shipping?.city||''}</span>
+    `;
+  }
+  // Clear fields
+  document.getElementById('ship-courier').value = '';
+  document.getElementById('ship-tracking').value = '';
+  document.getElementById('ship-trackurl').value = '';
+  document.getElementById('ship-note').value = '';
+  document.getElementById('ship-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  // Focus tracking field after animation
+  setTimeout(()=>document.getElementById('ship-tracking').focus(), 350);
+}
+
+window.closeShipModal = function(){
+  document.getElementById('ship-modal').classList.remove('show');
+  document.body.style.overflow = '';
+  // Revert select back to previous value if user cancelled
+  if(_shipSelectEl){
+    _shipSelectEl.value = _shipPrevStatus||'processing';
+  }
+  _shipOrderId = null;
+  _shipSelectEl = null;
+};
+
+window.submitShipped = async function(){
+  const courier   = document.getElementById('ship-courier').value.trim();
+  const tracking  = document.getElementById('ship-tracking').value.trim();
+  const trackUrl  = document.getElementById('ship-trackurl').value.trim();
+  const note      = document.getElementById('ship-note').value.trim();
+
+  if(!courier){ toast('Please select a courier','error'); return; }
+  if(!tracking){ toast('Tracking number required','error'); return; }
+
+  const btn = document.getElementById('ship-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Updating…';
+
+  try{
+    // 1. Update order status to shipped + save tracking info
+    await api('/orders/'+_shipOrderId,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        status:'shipped',
+        tracking:{ courier, number:tracking, url:trackUrl||null }
+      })
+    });
+
+    // 2. Send shipping email via backend
+    await api('/orders/'+_shipOrderId+'/ship-notify',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ courier, tracking, trackUrl:trackUrl||null, note:note||null })
+    });
+
+    toast('Order marked shipped & customer notified 📦','success');
+    document.getElementById('ship-modal').classList.remove('show');
+    document.body.style.overflow = '';
+    _shipOrderId = null;
+    _shipSelectEl = null;
+    await loadDash();
+    renderAllOrders();
+  }catch(err){
+    toast('Error: '+err.message,'error');
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Ship & Notify';
+  }
 };
 
 /* ─────────────────────────────────────────
@@ -3212,6 +3680,43 @@ document.addEventListener('DOMContentLoaded', ()=>{
   loadDash();
 });
 </script>
-<script src="js/adminStories.js"></script>
-</body>
-</html>
+<!-- ADMIN MOBILE BOTTOM NAV -->
+<nav class="admin-bottom-nav" id="adminBottomNav">
+  <button class="abn-item abn-active" id="abn-dashboard" onclick="showSection('dashboard');abnActive('dashboard')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="abn-item" id="abn-products" onclick="showSection('products');abnActive('products')">
+    <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
+    <span>Products</span>
+  </button>
+  <button class="abn-item" id="abn-orders" onclick="showSection('orders');abnActive('orders')">
+    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span>Orders</span>
+    <span class="abn-badge" id="abn-order-badge" style="display:none"></span>
+  </button>
+  <button class="abn-item" id="abn-messages" onclick="showSection('messages');abnActive('messages')">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    <span>Messages</span>
+  </button>
+  <button class="abn-item" id="abn-more" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <span>More</span>
+  </button>
+</nav>
+
+<script>
+// Bottom nav active state
+function abnActive(section){
+  document.querySelectorAll('.abn-item').forEach(el=>el.classList.remove('abn-active'));
+  const el = document.getElementById('abn-'+section);
+  if(el) el.classList.add('abn-active');
+}
+
+// Sync bottom nav when sidebar nav clicked
+const _origShow = window.showSection;
+window.showSection = function(sec){
+  if(_origShow) _origShow(sec);
+  abnActive(sec);
+};
+</script>
