@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/shop-seo",
+      "destination": "https://shenova-backend.onrender.com/shop-seo"
+    },
+    {
+      "source": "/product/:id",
+      "destination": "https://shenova-backend.onrender.com/product-seo/:id"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://shenova-backend.onrender.com/sitemap.xml"
+    }
+  ]
+}

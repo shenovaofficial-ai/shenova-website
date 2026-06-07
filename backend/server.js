@@ -905,6 +905,108 @@ app.get('/api/track-order/:id', async (req, res) => {
   const paymentRoutes = require('./routes/paymentRoutes');
   app.use('/api/payment', paymentRoutes);
 app.use('/api/stock', require('./routes/stockRoutes'));
+// ================= SEO HTML PAGES =================
+
+// Shop page — Google can index all products
+app.get('/shop-seo', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+
+    const cards = products.map(p => `
+      <div class="product-card">
+        <a href="/product-seo/${p._id}">
+          <img src="${p.images?.[0] || ''}" alt="${p.name}" loading="lazy"/>
+          <h2>${p.name}</h2>
+          <p>₹${p.price}</p>
+          <p>${p.category || ''}</p>
+        </a>
+      </div>
+    `).join('');
+
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Shop Women's Fashion — Shenova | Quiet Luxury India</title>
+  <meta name="description" content="Shop Shenova's limited edition women's clothing. Premium tops, co-ord sets, kurtis and dresses crafted in India. Free delivery above ₹2000."/>
+  <meta property="og:title" content="Shop — Shenova Quiet Luxury"/>
+  <meta property="og:description" content="Limited edition premium women's fashion. Crafted in India."/>
+  <meta property="og:image" content="${products[0]?.images?.[0] || ''}"/>
+  <meta property="og:url" content="https://www.shenovaofficial.com/shop"/>
+</head>
+<body>
+  <h1>Shenova Collection</h1>
+  ${cards}
+</body>
+</html>`);
+  } catch (err) {
+    res.status(500).send('Error loading products');
+  }
+});
+
+// Individual product page — each product gets its own Google-indexed URL
+app.get('/product-seo/:id', async (req, res) => {
+  try {
+    const p = await Product.findById(req.params.id);
+    if (!p) return res.status(404).send('Product not found');
+
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>${p.name} — Shenova</title>
+  <meta name="description" content="Buy ${p.name} at ₹${p.price}. ${p.description || 'Premium women\'s fashion. Limited edition. Crafted in India.'}"/>
+  <meta property="og:title" content="${p.name} — Shenova"/>
+  <meta property="og:description" content="₹${p.price} · ${p.description || 'Limited edition. Crafted in India.'}"/>
+  <meta property="og:image" content="${p.images?.[0] || ''}"/>
+  <meta property="og:url" content="https://www.shenovaofficial.com/product/${p._id}"/>
+  <meta property="og:type" content="product"/>
+</head>
+<body>
+  <h1>${p.name}</h1>
+  <img src="${p.images?.[0] || ''}" alt="${p.name}"/>
+  <p>Price: ₹${p.price}</p>
+  <p>Category: ${p.category || ''}</p>
+  <p>${p.description || ''}</p>
+  <p>Sizes: ${(p.sizes || []).join(', ')}</p>
+  <a href="https://www.shenovaofficial.com/shop.html">← Back to Shop</a>
+</body>
+</html>`);
+  } catch (err) {
+    res.status(500).send('Error loading product');
+  }
+});
+
+// Sitemap — tells Google all your product URLs
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const products = await Product.find().select('_id updatedAt').lean();
+
+    const productUrls = products.map(p => `
+  <url>
+    <loc>https://www.shenovaofficial.com/product/${p._id}</loc>
+    <lastmod>${new Date(p.updatedAt).toISOString().split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('');
+
+    res.header('Content-Type', 'application/xml');
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/0.9">
+  <url>
+    <loc>https://www.shenovaofficial.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.shenovaofficial.com/shop</loc>
+    <priority>0.9</priority>
+  </url>
+  ${productUrls}
+</urlset>`);
+  } catch (err) {
+    res.status(500).send('Error generating sitemap');
+  }
+});
   // ================= 404 CATCH-ALL (API) =================
   app.use('/api/*', (req, res) => {
     res.status(404).json({ success: false, message: `API route not found: ${req.method} ${req.originalUrl}` });
