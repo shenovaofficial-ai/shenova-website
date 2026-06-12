@@ -12,7 +12,7 @@
   --ab-gold:   #b5914a;
   --ab-cream:  #ede8df;
   --ab-line:   rgba(14,12,10,.07);
-  --ab-serif:  "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --ab-serif:  "Playfair Display", "Playfair Display", Georgia, serif;
   --ab-sans:   "DM Sans", "Helvetica Neue", Arial, sans-serif;
   --ab-ease:   cubic-bezier(.22,1,.36,1);
   background: var(--ab-bg);
@@ -124,7 +124,7 @@
 .ab-hero-content {
   position: relative;
   z-index: 3;
-  color: #fff;
+  color: #FFFFFF;
   padding: 0 clamp(24px, 5vw, 100px) clamp(90px, 12vh, 150px);
   width: 100%;
   max-width: 1400px;
@@ -512,7 +512,7 @@
   font-weight: 300;
   line-height: .9;
   letter-spacing: -.03em;
-  color: #fff;
+  color: #FFFFFF;
   margin-bottom: 36px;
 }
 .ab-cine-quote em {
@@ -565,7 +565,7 @@
   transform: none !important;
 }
 .ab-value-item:hover {
-  background: #fff;
+  background: #FFFFFF;
 }
 .ab-value-num {
   font-family: var(--ab-serif);
@@ -783,7 +783,7 @@
   font-family: var(--ab-serif);
   font-size: clamp(40px, 5vw, 70px);
   font-weight: 300;
-  color: #ffffff;
+  color: #FFFFFFfff;
   line-height: 1;
   letter-spacing: -.02em;
   display: inline;
@@ -886,7 +886,7 @@
   transform: translateX(-101%);
   transition: transform .45s var(--ab-ease);
 }
-.ab-cta-btn:hover { color: #fff; }
+.ab-cta-btn:hover { color: #FFFFFF; }
 .ab-cta-btn:hover::before { transform: translateX(0); }
 .ab-cta-btn span, .ab-cta-btn svg {
   position: relative;
@@ -911,7 +911,7 @@
   font-family: var(--ab-serif);
   font-size: 20px;
   letter-spacing: .4em;
-  color: #fff;
+  color: #FFFFFF;
 }
 .about-page .footer-copy {
   font-family: var(--ab-sans);
@@ -931,7 +931,7 @@
   color: rgba(255,255,255,.4);
   transition: color .3s;
 }
-.about-page .footer-links a:hover { color: #fff; }
+.about-page .footer-links a:hover { color: #FFFFFF; }
 
 /* ═══════════════════════════════════════
    KEYFRAMES

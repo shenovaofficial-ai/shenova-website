@@ -7,18 +7,18 @@
 
 /* ── CSS Variables (inherits from checkout-luxury.css palette) ── */
 :root {
-  --co-cream:      #faf8f5;
-  --co-ink:        #0a0a0a;
-  --co-muted:      #7a7672;
+  --co-cream:      #FAF6EF;
+  --co-ink:        #1A1208;
+  --co-muted:      #7A6E62;
   --co-light:      #f0ece6;
-  --co-gold:       #b8956a;
+  --co-gold:       #C9952E;
   --co-gold-lt:    #e8ddd0;
   --co-border:     rgba(10,10,10,.09);
   --co-border-md:  rgba(10,10,10,.16);
-  --co-white:      #ffffff;
+  --co-white:      #FFFFFFfff;
   --co-success:    #2d7a50;
-  --co-serif:      'Cormorant Garamond', Georgia, serif;
-  --co-sans:       'DM Sans', 'Inter', sans-serif;
+  --co-serif:      'Playfair Display', Georgia, serif;
+  --co-sans:       'DM Sans', 'DM Sans', sans-serif;
   --co-radius:     16px;
   --co-easing:     cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -71,7 +71,7 @@ body.success-page {
 .sc-hero {
   position: relative;
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   padding: 80px 48px 90px;
   display: flex;
   flex-direction: column;
@@ -208,7 +208,7 @@ body.success-page {
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.05;
-  color: #fff;
+  color: #FFFFFF;
   margin-bottom: 16px;
 }
 
@@ -253,7 +253,7 @@ body.success-page {
   font-family: var(--co-serif);
   font-size: 20px;
   font-weight: 400;
-  color: #fff;
+  color: #FFFFFF;
   letter-spacing: 0.04em;
 }
 
@@ -366,13 +366,13 @@ body.success-page {
 .sc-timeline-step.done .sc-tl-icon {
   background: var(--co-ink);
   border-color: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .sc-timeline-step.active .sc-tl-icon {
   background: var(--co-gold);
   border-color: var(--co-gold);
-  color: #fff;
+  color: #FFFFFF;
   box-shadow: 0 0 0 6px rgba(184,149,106,0.12);
   animation: sc-pulse-icon 2s ease-in-out infinite;
 }
@@ -565,7 +565,7 @@ body.success-page {
   height: 22px;
   border-radius: 50%;
   background: var(--co-success);
-  color: #fff;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -681,7 +681,7 @@ body.success-page {
 
 .sc-btn-primary {
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   border: 1.5px solid var(--co-ink);
 }
 

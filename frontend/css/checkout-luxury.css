@@ -7,19 +7,19 @@
 
 /* ── Fonts re-declared for checkout page ── */
 :root {
-  --co-cream:     #faf8f5;
-  --co-ink:       #0a0a0a;
-  --co-muted:     #7a7672;
+  --co-cream:     #FAF6EF;
+  --co-ink:       #1A1208;
+  --co-muted:     #7A6E62;
   --co-light:     #f0ece6;
-  --co-gold:      #b8956a;
+  --co-gold:      #C9952E;
   --co-gold-lt:   #e8ddd0;
   --co-border:    rgba(10,10,10,.09);
   --co-border-md: rgba(10,10,10,.16);
-  --co-white:     #ffffff;
+  --co-white:     #FFFFFFfff;
   --co-success:   #2d7a50;
   --co-error:     #b0331e;
-  --co-serif:     'Cormorant Garamond', Georgia, serif;
-  --co-sans:      'DM Sans', 'Inter', sans-serif;
+  --co-serif:     'Playfair Display', Georgia, serif;
+  --co-sans:      'DM Sans', 'DM Sans', sans-serif;
   --co-radius:    12px;
   --co-radius-sm: 8px;
   --co-easing:    cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -39,7 +39,7 @@ body.checkout-page {
 .co-hero {
   margin-top: 72px; /* nav height */
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   padding: 60px 0 50px;
   position: relative;
   overflow: hidden;
@@ -88,7 +88,7 @@ body.checkout-page {
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;
-  color: #fff;
+  color: #FFFFFF;
   margin: 0;
 }
 
@@ -158,7 +158,7 @@ body.checkout-page {
 
 .co-step.done .co-step-num {
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .co-step.done {
@@ -184,7 +184,7 @@ body.checkout-page {
 
 .co-step.active .co-step-num {
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   border-color: var(--co-ink);
 }
 
@@ -530,7 +530,7 @@ body.checkout-page {
   gap: 14px;
   padding: 20px 48px;
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   border: none;
   border-radius: 60px;
   font-family: var(--co-sans);
@@ -591,7 +591,7 @@ body.checkout-page {
   width: 16px;
   height: 16px;
   border: 1.5px solid rgba(255,255,255,.3);
-  border-top-color: #fff;
+  border-top-color: #FFFFFF;
   border-radius: 50%;
   animation: co-spin 0.7s linear infinite;
   position: absolute;
@@ -981,7 +981,7 @@ body.checkout-page {
   justify-content: center;
   padding: 16px 40px;
   background: var(--co-ink);
-  color: #fff;
+  color: #FFFFFF;
   border: none;
   border-radius: 60px;
   font-family: var(--co-sans);
@@ -1014,7 +1014,7 @@ body.checkout-page {
   font-family: var(--co-serif);
   font-size: 36px;
   letter-spacing: 0.5em;
-  color: #fff;
+  color: #FFFFFF;
   opacity: 0;
   animation: co-fade-up 0.9s var(--co-easing) 0.2s forwards;
 }

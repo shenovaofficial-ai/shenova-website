@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap");
+
 /* ================================================================
    SHENOVA — luxury.css  (UPGRADED v3)
    Ultra-premium editorial homepage styling
@@ -8,20 +10,20 @@
    DESIGN TOKENS
 ────────────────────────────────────────────── */
 :root {
-  --lux-bg:        #f6f3ee;
-  --lux-ink:       #0d0c0b;
-  --lux-muted:     #7a756e;
-  --lux-beige:     #ece6dc;
-  --lux-beige-mid: #d9d0c4;
-  --lux-gold:      #b8956a;
-  --lux-gold-lt:   #d4b896;
-  --lux-cream:     #faf7f2;
-  --lux-dark:      #131210;
-  --lux-line:      rgba(13,12,11,.08);
+  --lux-bg:        #FAF6EF;
+  --lux-ink:       #1A1208;
+  --lux-muted:     #7A6E62;
+  --lux-beige:     #EDE4D6;
+  --lux-beige-mid: #DDD4C4;
+  --lux-gold:      #C9952E;
+  --lux-gold-lt:   #E8D098;
+  --lux-cream:     #FAF6EF;
+  --lux-dark:      #1A1208;
+  --lux-line:      rgba(26,18,8,0.08);
   --lux-line-lt:   rgba(13,12,11,.05);
 
   /* Upgraded font stack — DM Sans replaces Inter for more editorial feel */
-  --serif:   "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --serif:   "Playfair Display", "Playfair Display", Georgia, serif;
   --sans:    "DM Sans", "Helvetica Neue", Arial, sans-serif;
 
   --ease-lux:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -189,7 +191,7 @@
 
 .lux-nav.scrolled {
   padding: 14px 0;
-  background: rgba(246,243,238,0.94);
+  background: rgba(250,246,239,0.94);
   backdrop-filter: blur(32px) saturate(180%);
   -webkit-backdrop-filter: blur(32px) saturate(180%);
   border-bottom-color: var(--lux-line);
@@ -265,7 +267,7 @@
   position: absolute;
   top: -2px; right: -2px;
   background: var(--lux-gold);
-  color: #fff;
+  color: #FFFFFF;
   font-size: 9px;
   width: 15px; height: 15px;
   border-radius: 50%;
@@ -621,7 +623,7 @@
 
 .lux-cta-primary:hover {
   background: var(--lux-gold);
-  color: #fff;
+  color: #FFFFFF;
   gap: 20px;
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(184,149,106,0.28);
@@ -635,7 +637,7 @@
 
 .lux-cta-dark:hover {
   background: var(--lux-gold);
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .lux-cta-arrow {
@@ -1014,7 +1016,7 @@
 
 .lux-product-grid .quick-btn:hover {
   background: var(--lux-ink);
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .lux-product-grid .product-info,
@@ -1560,7 +1562,7 @@
 
 .lux-cta-manifesto:hover {
   background: var(--lux-gold);
-  color: #fff;
+  color: #FFFFFF;
   border-color: var(--lux-gold);
   transform: translateY(-2px);
 }
@@ -1797,7 +1799,7 @@
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #fff;
+  color: #FFFFFF;
   background: rgba(13,12,11,0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

@@ -8,8 +8,8 @@
 :root {
   --bn-bg:         rgba(6, 6, 5, 0.97);
   --bn-border:     rgba(255,255,255,0.10);
-  --bn-gold:       #c9a96e;
-  --bn-gold-glow:  rgba(201, 169, 110, 0.28);
+  --bn-gold:       #C9952E;
+  --bn-gold-glow:  rgba(201, 149, 46, 0.28);
   --bn-muted:      rgba(255,255,255,0.72);
   --bn-active:     #f5f0e8;
   --bn-height:     66px;
