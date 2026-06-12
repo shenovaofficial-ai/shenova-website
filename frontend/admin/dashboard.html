@@ -1883,6 +1883,11 @@ select.ship-input{
         Spin Leads
         <span class="badge-count" id="side-spin-count">—</span>
       </a>
+      <a onclick="showSection('coupons')" id="nav-coupons">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+        Coupons
+        <span class="badge-count" id="side-coupon-count">—</span>
+      </a>
     </div>
   </nav>
 
@@ -2403,6 +2408,62 @@ select.ship-input{
   </div>
  
 </div><!-- /section-stories -->
+    <!-- ══════════════ COUPONS ══════════════ -->
+    <div class="section" id="section-coupons">
+
+      <!-- Create Coupon Panel -->
+      <div class="panel" style="margin-bottom:24px">
+        <div class="panel-head">
+          <div>
+            <span class="panel-sub">Marketing</span>
+            <div class="panel-title">Create New Coupon</div>
+          </div>
+        </div>
+        <div class="panel-body" style="padding:24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end">
+            <div class="form-group" style="margin:0">
+              <label class="field-label" style="display:block;margin-bottom:6px">Coupon Code</label>
+              <input type="text" id="coupon-code-input" placeholder="e.g. SUMMER20" maxlength="30"
+                style="width:100%;padding:10px 14px;border:1px solid var(--border-md);border-radius:10px;background:var(--cream);font:inherit;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;text-transform:uppercase"
+                oninput="this.value=this.value.toUpperCase()"
+                onfocus="this.style.borderColor='var(--gold)';this.style.boxShadow='0 0 0 3px rgba(154,124,78,.1)'"
+                onblur="this.style.borderColor='';this.style.boxShadow=''">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="field-label" style="display:block;margin-bottom:6px">Discount %</label>
+              <input type="number" id="coupon-discount-input" placeholder="e.g. 15" min="1" max="100"
+                style="width:100%;padding:10px 14px;border:1px solid var(--border-md);border-radius:10px;background:var(--cream);font:inherit;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s"
+                onfocus="this.style.borderColor='var(--gold)';this.style.boxShadow='0 0 0 3px rgba(154,124,78,.1)'"
+                onblur="this.style.borderColor='';this.style.boxShadow=''">
+            </div>
+            <button class="btn btn-primary" id="coupon-create-btn" onclick="createCoupon()" style="white-space:nowrap;height:42px;padding:0 24px">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create Coupon
+            </button>
+          </div>
+          <p style="margin-top:10px;font-size:11.5px;color:var(--muted)">Coupon code will be available immediately at checkout. Leave usage limit blank for unlimited use.</p>
+        </div>
+      </div>
+
+      <!-- All Coupons Panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="panel-sub">All Codes</span>
+            <div class="panel-title">Active Coupons</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="renderCoupons()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Refresh
+          </button>
+        </div>
+        <div id="coupons-list-wrap">
+          <div style="padding:40px;text-align:center;color:var(--muted)">Loading coupons…</div>
+        </div>
+      </div>
+
+    </div><!-- /section-coupons -->
+
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /admin -->
@@ -2688,7 +2749,8 @@ const sectionTitles = {
   orders:'Orders',
   messages:'Messages',
   stories:'Stories',
-  'spin-leads':'Spin Leads'
+  'spin-leads':'Spin Leads',
+  'coupons':'Coupons'
 };
 
 function showSection(id){
@@ -2703,6 +2765,7 @@ function showSection(id){
   if(id==='messages')    loadMessages();
   if(id==='stories')     typeof loadAdminStories==='function' && loadAdminStories();
   if(id==='spin-leads')  typeof renderSpinLeads==='function' && renderSpinLeads();
+  if(id==='coupons')     typeof renderCoupons==='function' && renderCoupons();
 }
 
 /* ─────────────────────────────────────────
@@ -3650,6 +3713,159 @@ function renderPreviews(files, previewEl, type){
   // Kick off auto-refresh on page load
   document.addEventListener('DOMContentLoaded',startSlAutoRefresh);
 })();
+
+/* ─────────────────────────────────────────
+   COUPONS
+───────────────────────────────────────── */
+window.renderCoupons = async function(){
+  const wrap = document.getElementById('coupons-list-wrap');
+  if(!wrap) return;
+  wrap.innerHTML = '<div style="padding:32px;text-align:center;color:var(--muted)">Loading…</div>';
+
+  try{
+    const r = await fetch(API+'/coupon/admin/list', {
+      headers:{ Authorization: 'Bearer '+localStorage.getItem('admin_token') }
+    });
+    const data = await r.json();
+    const coupons = Array.isArray(data) ? data : (data.coupons || []);
+
+    // Update sidebar badge
+    const badge = document.getElementById('side-coupon-count');
+    if(badge) badge.textContent = coupons.filter(c=>c.active).length || '—';
+
+    if(!coupons.length){
+      wrap.innerHTML = `
+        <div style="padding:48px;text-align:center;color:var(--muted)">
+          <div style="font-size:32px;margin-bottom:12px">🏷️</div>
+          <p>No coupons yet. Create your first one above.</p>
+        </div>`;
+      return;
+    }
+
+    wrap.innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Discount</th>
+              <th>Used</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${coupons.map(c=>`
+              <tr>
+                <td>
+                  <span style="font-family:monospace;font-size:13px;font-weight:600;letter-spacing:.06em;background:var(--parchment);padding:3px 10px;border-radius:6px;border:1px solid var(--border-md)">${c.code}</span>
+                  <button onclick="copyCouponCode('${c.code}',this)" title="Copy" style="margin-left:8px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px">⧉</button>
+                </td>
+                <td><strong style="color:var(--gold)">${c.discountPercent||c.discount||0}% OFF</strong></td>
+                <td style="color:var(--muted)">${c.usageCount||0}${c.usageLimit?'/'+c.usageLimit:' (unlimited)'}</td>
+                <td>
+                  <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;
+                    background:${c.active?'var(--success-bg)':'var(--error-bg)'};
+                    color:${c.active?'var(--success)':'var(--error)'}">
+                    ${c.active?'Active':'Inactive'}
+                  </span>
+                </td>
+                <td style="color:var(--muted);font-size:12px">${fmtDate(c.createdAt)}</td>
+                <td>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn btn-ghost btn-sm" onclick="toggleCouponActive('${c._id}',${c.active})">
+                      ${c.active?'Disable':'Enable'}
+                    </button>
+                    <button class="btn btn-sm" style="background:var(--error-bg);color:var(--error);border:none" onclick="deleteCoupon('${c._id}')">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  }catch(e){
+    wrap.innerHTML = `<div style="padding:32px;text-align:center;color:var(--error)">Failed to load coupons. Check console.</div>`;
+    console.error('[Coupons]',e);
+  }
+};
+
+window.createCoupon = async function(){
+  const codeEl = document.getElementById('coupon-code-input');
+  const discEl = document.getElementById('coupon-discount-input');
+  const btn    = document.getElementById('coupon-create-btn');
+
+  const code     = codeEl.value.trim().toUpperCase();
+  const discount = parseInt(discEl.value);
+
+  if(!code)               return toast('Please enter a coupon code','error');
+  if(!discount||discount<1||discount>100) return toast('Discount must be between 1 and 100','error');
+
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+
+  try{
+    const r = await fetch(API+'/coupon/admin/create', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        Authorization:'Bearer '+localStorage.getItem('admin_token')
+      },
+      body: JSON.stringify({ code, discountPercent: discount, discount })
+    });
+    const data = await r.json();
+    if(!r.ok) throw new Error(data.message || 'Failed');
+
+    toast(`Coupon "${code}" created!`, 'success');
+    codeEl.value = '';
+    discEl.value = '';
+    renderCoupons();
+  }catch(e){
+    toast(e.message||'Error creating coupon','error');
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:6px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Coupon';
+  }
+};
+
+window.deleteCoupon = async function(id){
+  if(!confirm('Delete this coupon? Customers using this code will no longer get a discount.')) return;
+  try{
+    const r = await fetch(API+'/coupon/admin/'+id, {
+      method:'DELETE',
+      headers:{ Authorization:'Bearer '+localStorage.getItem('admin_token') }
+    });
+    if(!r.ok) throw new Error('Delete failed');
+    toast('Coupon deleted','success');
+    renderCoupons();
+  }catch(e){ toast('Failed to delete','error'); }
+};
+
+window.toggleCouponActive = async function(id, currentActive){
+  try{
+    const r = await fetch(API+'/coupon/admin/'+id, {
+      method:'PATCH',
+      headers:{
+        'Content-Type':'application/json',
+        Authorization:'Bearer '+localStorage.getItem('admin_token')
+      },
+      body: JSON.stringify({ active: !currentActive })
+    });
+    if(!r.ok) throw new Error('Update failed');
+    toast(currentActive?'Coupon disabled':'Coupon enabled','success');
+    renderCoupons();
+  }catch(e){ toast('Failed to update','error'); }
+};
+
+window.copyCouponCode = function(code, btn){
+  navigator.clipboard.writeText(code).then(()=>{
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.style.color = 'var(--success)';
+    setTimeout(()=>{ btn.textContent=orig; btn.style.color=''; },1500);
+  }).catch(()=> toast('Copy: '+code,'info'));
+};
 
 /* ─────────────────────────────────────────
    LOGOUT

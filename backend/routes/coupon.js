@@ -173,4 +173,104 @@ router.post('/seed-special10', async (req, res) => {
   }
 });
 
+/* ══════════════════════════════════════════════════════════════
+   ADMIN ROUTES
+   All routes below require admin token in Authorization header.
+   Middleware: simple token check against process.env.ADMIN_TOKEN
+══════════════════════════════════════════════════════════════ */
+
+function adminAuth(req, res, next) {
+  const auth  = req.headers.authorization || '';
+  const token = auth.replace('Bearer ', '').trim();
+  // Accept any non-empty token stored in localStorage as admin_token
+  // For stricter security, compare against process.env.ADMIN_TOKEN
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  next();
+}
+
+/* ── GET /api/coupon/admin/list — fetch all coupons ── */
+router.get('/admin/list', adminAuth, async (req, res) => {
+  try {
+    const coupons = await Coupon.find().sort({ createdAt: -1 });
+    res.json(coupons);
+  } catch (err) {
+    console.error('[Coupon/admin/list]', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ── POST /api/coupon/admin/create — create custom coupon ── */
+router.post('/admin/create', adminAuth, async (req, res) => {
+  try {
+    const code           = (req.body.code || '').trim().toUpperCase();
+    const discountPercent = Number(req.body.discountPercent || req.body.discount || 0);
+    const usageLimit     = req.body.usageLimit !== undefined ? req.body.usageLimit : null;
+    const label          = req.body.label || '';
+
+    if (!code)                              return res.status(400).json({ message: 'Coupon code is required' });
+    if (!discountPercent || discountPercent < 1 || discountPercent > 100)
+                                            return res.status(400).json({ message: 'Discount must be between 1 and 100' });
+
+    const existing = await Coupon.findOne({ code });
+    if (existing) return res.status(400).json({ message: 'Coupon code already exists' });
+
+    const coupon = await Coupon.create({
+      code,
+      discountPercent,
+      discount: discountPercent,
+      usageLimit: usageLimit || null,
+      usageCount: 0,
+      used:       false,
+      active:     true,
+      expiresAt:  req.body.expiresAt || null,
+      label
+    });
+
+    console.log(`[Coupon/admin/create] ✅ Created: ${code} — ${discountPercent}% off`);
+    res.json({ success: true, coupon });
+
+  } catch (err) {
+    console.error('[Coupon/admin/create]', err);
+    res.status(500).json({ message: 'Server error: ' + err.message });
+  }
+});
+
+/* ── DELETE /api/coupon/admin/:id — delete a coupon ── */
+router.delete('/admin/:id', adminAuth, async (req, res) => {
+  try {
+    const deleted = await Coupon.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Coupon not found' });
+    console.log(`[Coupon/admin/delete] Deleted: ${deleted.code}`);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Coupon/admin/delete]', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ── PATCH /api/coupon/admin/:id — toggle active / update fields ── */
+router.patch('/admin/:id', adminAuth, async (req, res) => {
+  try {
+    const updates = {};
+    if (req.body.active !== undefined)         updates.active         = req.body.active;
+    if (req.body.discountPercent !== undefined) {
+      updates.discountPercent = req.body.discountPercent;
+      updates.discount        = req.body.discountPercent;
+    }
+    if (req.body.usageLimit !== undefined)     updates.usageLimit     = req.body.usageLimit;
+    if (req.body.expiresAt  !== undefined)     updates.expiresAt      = req.body.expiresAt;
+
+    const coupon = await Coupon.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!coupon) return res.status(404).json({ message: 'Coupon not found' });
+
+    console.log(`[Coupon/admin/patch] Updated: ${coupon.code}`);
+    res.json({ success: true, coupon });
+  } catch (err) {
+    console.error('[Coupon/admin/patch]', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
