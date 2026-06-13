@@ -357,6 +357,57 @@ window.addToCart = async function() {
   }
 };
 
+/* ──── Buy Now — skip cart, go direct to checkout with only this item ──── */
+window.buyNow = async function() {
+  if (!selectedSize && !_customMeasurements) {
+    showModal('Select your size', 'Please choose a size before continuing.');
+    const sizesEl = document.querySelector('#pdp-sizes');
+    if (sizesEl) {
+      sizesEl.style.animation = 'none';
+      sizesEl.offsetHeight;
+      sizesEl.style.animation = 'pdpShake 0.4s ease';
+    }
+    return;
+  }
+
+  /* Live stock check */
+  const productId = product._id || product.id;
+  if (window.fetchLiveStock) {
+    const liveStock = await fetchLiveStock(productId);
+    if (liveStock !== null && liveStock === 0) {
+      showModal('Out of Stock', 'This product is currently out of stock. Please check back later.');
+      applyStockState(0);
+      return;
+    }
+  }
+
+  const cartImage = product.images?.[0] ? imgUrl(product.images[0]) : '';
+
+  /* Overwrite buyNowItem — checkout.html reads this to show only this product */
+  const buyNowItem = [{
+    id:    productId,
+    name:  product.name,
+    price: product.price,
+    image: cartImage,
+    size:  selectedSize || (_customMeasurements ? 'Custom' : null),
+    color: selectedColor,
+    qty:   1
+  }];
+  localStorage.setItem('buyNowCart', JSON.stringify(buyNowItem));
+
+  /* Visual feedback then redirect */
+  const btn = document.getElementById('pdp-buy-btn');
+  if (btn) {
+    btn.innerHTML = '<span>Going to checkout…</span>';
+    btn.style.background = '#2d7a50';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#2d7a50';
+  }
+  setTimeout(() => {
+    window.location.href = 'checkout.html?mode=buynow';
+  }, 400);
+};
+
 /* ──── Wishlist toggle ──── */
 window.toggleWish = function() {
   const w   = JSON.parse(localStorage.getItem('wishlist') || '[]');
