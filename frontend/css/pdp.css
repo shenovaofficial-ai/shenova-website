@@ -6,13 +6,13 @@
 
 /* ──────────── DESIGN TOKENS (PDP-specific) ──────────── */
 :root {
-  --pdp-bg: #FAF6EF;
+  --pdp-bg: #FDFAF6;
   --pdp-surface: #FFFFFFfff;
-  --pdp-ink: #1A1208;
+  --pdp-ink: #FFFFFF;
   --pdp-muted: #7A6E62;
-  --pdp-warm: #EDE4D6;
-  --pdp-gold: #C9952E;
-  --pdp-accent: #DDB85A;
+  --pdp-warm: #EDE8DF;
+  --pdp-gold: #B8912A;
+  --pdp-accent: #C4A050;
   --pdp-line: rgba(26,18,8,0.08);
   --pdp-radius: 20px;
   --pdp-radius-sm: 10px;

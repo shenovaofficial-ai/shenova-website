@@ -9,9 +9,9 @@
    DESIGN TOKENS (inherits from luxury.css :root)
 ────────────────────────────────────────────── */
 :root {
-  --ann-bg:    #1A1208;
+  --ann-bg:    #FFFFFF;
   --ann-text:  rgba(250,247,242,0.92);
-  --ann-gold:  #C9952E;
+  --ann-gold:  #B8912A;
 }
 
 /* ──────────────────────────────────────────────
@@ -125,7 +125,7 @@ body.bar-dismissed .lux-nav {
 .lux-hero-mobile-scroll {
   width: 26px;
   height: 42px;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(26,18,8,0.25);
   border-radius: 13px;
   display: flex;
   justify-content: center;
@@ -135,7 +135,7 @@ body.bar-dismissed .lux-nav {
 .lux-hero-mobile-scroll-dot {
   width: 4px;
   height: 8px;
-  background: rgba(255,255,255,0.5);
+  background: rgba(26,18,8,0.5);
   border-radius: 2px;
   animation: mobileScrollDot 2s ease infinite;
 }
@@ -150,7 +150,7 @@ body.bar-dismissed .lux-nav {
    SIGNATURE STRIP (NEW SECTION)
 ────────────────────────────────────────────── */
 .lux-signature-strip {
-  background: var(--lux-ink, #1A1208);
+  background: var(--lux-ink, #FFFFFF);
   padding: 72px 0;
   overflow: hidden;
   position: relative;
@@ -237,7 +237,7 @@ body.bar-dismissed .lux-nav {
   font-size: 9px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--lux-gold, #C9952E);
+  color: var(--lux-gold, #B8912A);
   font-weight: 300;
   font-family: var(--sans, "DM Sans", sans-serif);
   opacity: 0.7;
@@ -272,7 +272,7 @@ body.bar-dismissed .lux-nav {
 }
 
 #quick-modal .quick-modal-card {
-  background: var(--lux-cream, #FAF6EF);
+  background: var(--lux-cream, #FDFAF6);
   border-radius: 4px;
   max-width: min(900px, 95vw);
   width: 100%;
@@ -293,7 +293,7 @@ body.bar-dismissed .lux-nav {
 }
 
 #quick-modal .quick-img-wrap {
-  background: var(--lux-beige, #EDE4D6);
+  background: var(--lux-beige, #EDE8DF);
   overflow: hidden;
   position: relative;
   min-height: 500px;
@@ -320,7 +320,7 @@ body.bar-dismissed .lux-nav {
   font-size: clamp(28px, 4vw, 42px);
   font-weight: 300;
   line-height: 1.08;
-  color: var(--lux-ink, #1A1208);
+  color: var(--lux-ink, #FFFFFF);
   margin-bottom: 12px;
   letter-spacing: -0.01em;
 }
@@ -372,19 +372,19 @@ body.bar-dismissed .lux-nav {
 }
 
 #quick-modal .size-pill.active {
-  background: var(--lux-ink, #1A1208);
-  color: var(--lux-cream, #FAF6EF);
-  border-color: var(--lux-ink, #1A1208);
+  background: var(--lux-ink, #FFFFFF);
+  color: var(--lux-cream, #FDFAF6);
+  border-color: var(--lux-ink, #FFFFFF);
 }
 
 #quick-modal .size-pill:hover:not(.active) {
-  border-color: var(--lux-ink, #1A1208);
+  border-color: var(--lux-ink, #FFFFFF);
 }
 
 #quick-modal .btn {
   margin-top: auto;
-  background: var(--lux-ink, #1A1208);
-  color: var(--lux-cream, #FAF6EF);
+  background: var(--lux-ink, #FFFFFF);
+  color: var(--lux-cream, #FDFAF6);
   border-radius: 50px;
   padding: 16px 32px;
   font-size: 10px;
@@ -400,7 +400,7 @@ body.bar-dismissed .lux-nav {
 }
 
 #quick-modal .btn:hover {
-  background: var(--lux-gold, #C9952E);
+  background: var(--lux-gold, #B8912A);
   transform: translateY(-2px);
 }
 
@@ -430,7 +430,7 @@ body.bar-dismissed .lux-nav {
    CART DRAWER — LUXURY UPGRADE
 ────────────────────────────────────────────── */
 .drawer {
-  background: var(--lux-cream, #FAF6EF) !important;
+  background: var(--lux-cream, #FDFAF6) !important;
   font-family: var(--sans, "DM Sans", sans-serif) !important;
   border-left: 1px solid rgba(13,12,11,0.06) !important;
 }
@@ -449,7 +449,7 @@ body.bar-dismissed .lux-nav {
 
 .cart-item img {
   border-radius: 2px !important;
-  background: var(--lux-beige, #EDE4D6) !important;
+  background: var(--lux-beige, #EDE8DF) !important;
 }
 
 .cart-item h4 {
@@ -627,7 +627,7 @@ body.bar-dismissed .lux-nav {
    NEWSLETTER FORM — FOCUS ENHANCEMENT
 ────────────────────────────────────────────── */
 .lux-newsletter-form:focus-within {
-  border-color: var(--lux-gold, #C9952E);
+  border-color: var(--lux-gold, #B8912A);
 }
 
 .lux-email-input:focus { outline: none; }

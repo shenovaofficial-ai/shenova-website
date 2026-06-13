@@ -51,7 +51,7 @@
   overflow: hidden;
   display: flex;
   align-items: flex-end;
-  background: var(--ab-ink);
+  background: #EDE8DF;
 }
 
 /* Image wrap */
@@ -233,7 +233,7 @@
   background: rgba(14,12,10,.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255,255,255,.08);
+  border-top: 1px solid rgba(26,18,8,.08);
   overflow: hidden;
   height: 42px;
   display: flex;
@@ -384,7 +384,7 @@
   backdrop-filter: blur(8px);
   padding: 6px 14px;
   border-radius: 50px;
-  border: 1px solid rgba(255,255,255,.12);
+  border: 1px solid rgba(26,18,8,.10);
 }
 
 .ab-split-content {
@@ -425,7 +425,7 @@
    §04 · MARQUEE STRIP
 ═══════════════════════════════════════ */
 .ab-marq-section {
-  background: var(--ab-ink);
+  background: #EDE8DF;
   overflow: hidden;
   height: 70px;
   display: flex;
@@ -609,7 +609,7 @@
 .ab-photoband {
   overflow: hidden;
   height: clamp(280px, 38vw, 520px);
-  background: var(--ab-ink);
+  background: #EDE8DF;
   cursor: grab;
 }
 .ab-photoband:active { cursor: grabbing; }
@@ -729,7 +729,7 @@
   width: clamp(68px, 8vw, 90px);
   height: clamp(68px, 8vw, 90px);
   border-radius: 50%;
-  background: var(--ab-ink);
+  background: #EDE8DF;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -757,7 +757,7 @@
    §10 · STAT ROW
 ═══════════════════════════════════════ */
 .ab-stats {
-  background: #0e0c0a;
+  background: #EDE8DF;
   padding: clamp(60px, 9vw, 100px) 0;
 }
 .ab-stats-inner {
@@ -808,7 +808,7 @@
 .ab-stat-divider {
   width: 1px;
   height: 50px;
-  background: rgba(255,255,255,.1);
+  background: rgba(26,18,8,.08);
   flex-shrink: 0;
 }
 
@@ -882,7 +882,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--ab-ink);
+  background: #EDE8DF;
   transform: translateX(-101%);
   transition: transform .45s var(--ab-ease);
 }
@@ -897,7 +897,7 @@
    FOOTER (about-page minimal override)
 ═══════════════════════════════════════ */
 .about-page .site-footer {
-  background: var(--ab-ink);
+  background: #EDE8DF;
   padding: 36px 0;
 }
 .about-page .footer-inner {

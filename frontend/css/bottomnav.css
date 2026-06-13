@@ -6,12 +6,12 @@
 
 /* ── Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --bn-bg:         rgba(6, 6, 5, 0.97);
-  --bn-border:     rgba(255,255,255,0.10);
-  --bn-gold:       #C9952E;
+  --bn-bg:         rgba(253,250,246, 0.97);
+  --bn-border:     rgba(26,18,8, 0.08);
+  --bn-gold:       #B8912A;
   --bn-gold-glow:  rgba(201, 149, 46, 0.28);
-  --bn-muted:      rgba(255,255,255,0.72);
-  --bn-active:     #f5f0e8;
+  --bn-muted:      rgba(26,18,8, 0.45);
+  --bn-active:     #1A1208;
   --bn-height:     66px;
   --bn-radius:     20px 20px 0 0;
   --bn-font:       'DM Sans', sans-serif;
@@ -71,9 +71,9 @@
     border-radius: var(--bn-radius);
 
     box-shadow:
-      0 -8px 40px rgba(0,0,0,0.45),
-      0 -1px 0   rgba(255,255,255,0.04),
-      inset 0 1px 0 rgba(255,255,255,0.06);
+      0 -8px 40px rgba(26,18,8,0.08),
+      0 -1px 0   rgba(26,18,8,0.03),
+      inset 0 1px 0 rgba(26,18,8,0.04);
 
     /* Prevent horizontal overflow */
     overflow: hidden;
@@ -95,7 +95,7 @@
     var(--bn-gold) 70%,
     transparent
   );
-  opacity: 0.35;
+  opacity: 0.25;
   border-radius: 1px;
 }
 
@@ -212,7 +212,7 @@
 }
 
 .shn-nav-item.shn-active .shn-nav-icon svg {
-  stroke: var(--bn-active);
+  stroke: #1A1208;
   filter: drop-shadow(0 0 6px rgba(245, 240, 232, 0.3));
 }
 

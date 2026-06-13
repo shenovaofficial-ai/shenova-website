@@ -104,7 +104,7 @@ body.loader-done #shn-progress {
 #shn-transition {
   position: fixed;
   inset: 0;
-  background: #0c0b0a;
+  background: #FDFAF6;
   z-index: 99998;
   pointer-events: none;
   opacity: 0;

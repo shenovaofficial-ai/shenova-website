@@ -9,15 +9,15 @@
 
 /* ── Extended design tokens ────────────────────────────────────── */
 :root {
-  --s-cream:     #FAF6EF;
-  --s-parchment: #EDE4D6;
-  --s-canvas:    #DDD4C4;
-  --s-ink:       #1A1208;
+  --s-cream:     #FDFAF6;
+  --s-parchment: #EDE8DF;
+  --s-canvas:    #E5DED4;
+  --s-ink:       #FFFFFF;
   --s-ink2:      #2C1E10;
   --s-dust:      #7A6E62;
   --s-lighter:   #C0B8AE;
-  --s-gold:      #C9952E;
-  --s-gold-lt:   #E8D098;
+  --s-gold:      #B8912A;
+  --s-gold-lt:   #D4B87A;
   --s-line:      rgba(26,18,8,0.07);
   --s-line-med:  rgba(26,18,8,0.12);
   --s-ease:      cubic-bezier(.19,1,.22,1);
@@ -46,7 +46,7 @@ body {
 }
 
 .nav.scrolled {
-  background: rgba(250,246,239,.94);
+  background: rgba(253,250,246,0.96);
   backdrop-filter: blur(24px) saturate(160%);
   border-bottom: 1px solid var(--s-line);
 }
@@ -143,7 +143,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: #1A1208;
+  background: #FFFFFF;
 }
 
 /* Background image — cinematic Ken Burns */
@@ -193,7 +193,7 @@ body {
   z-index: 3;
   padding: 0 80px 86px;
   width: 100%;
-  color: #FAF6EF;
+  color: #FDFAF6;
 }
 
 /* Eyebrow with line */
@@ -228,7 +228,7 @@ body {
   font-style: italic;
   line-height: .86;
   letter-spacing: -.025em;
-  color: #FAF6EF;
+  color: #FDFAF6;
   margin-bottom: 28px;
   animation: heroRise 1.3s var(--s-ease) .45s both;
 }

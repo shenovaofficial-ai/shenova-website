@@ -7,11 +7,11 @@
 
 /* ── Fonts re-declared for checkout page ── */
 :root {
-  --co-cream:     #FAF6EF;
-  --co-ink:       #1A1208;
+  --co-cream:     #FDFAF6;
+  --co-ink:       #FFFFFF;
   --co-muted:     #7A6E62;
   --co-light:     #f0ece6;
-  --co-gold:      #C9952E;
+  --co-gold:      #B8912A;
   --co-gold-lt:   #e8ddd0;
   --co-border:    rgba(10,10,10,.09);
   --co-border-md: rgba(10,10,10,.16);
@@ -63,7 +63,7 @@ body.checkout-page {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(255,255,255,.06);
+  background: rgba(26,18,8,.06);
 }
 
 .co-hero-inner {
@@ -108,7 +108,7 @@ body.checkout-page {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.6);
+  color: rgba(26,18,8,.6);
   font-weight: 400;
 }
 
@@ -551,7 +551,7 @@ body.checkout-page {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0);
+  background: rgba(26,18,8,0);
   transition: background 0.35s;
 }
 
@@ -590,7 +590,7 @@ body.checkout-page {
   display: none;
   width: 16px;
   height: 16px;
-  border: 1.5px solid rgba(255,255,255,.3);
+  border: 1.5px solid rgba(26,18,8,.3);
   border-top-color: #FFFFFF;
   border-radius: 50%;
   animation: co-spin 0.7s linear infinite;

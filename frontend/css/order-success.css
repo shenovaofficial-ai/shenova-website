@@ -7,11 +7,11 @@
 
 /* ── CSS Variables (inherits from checkout-luxury.css palette) ── */
 :root {
-  --co-cream:      #FAF6EF;
-  --co-ink:        #1A1208;
+  --co-cream:      #FDFAF6;
+  --co-ink:        #FFFFFF;
   --co-muted:      #7A6E62;
   --co-light:      #f0ece6;
-  --co-gold:       #C9952E;
+  --co-gold:       #B8912A;
   --co-gold-lt:    #e8ddd0;
   --co-border:     rgba(10,10,10,.09);
   --co-border-md:  rgba(10,10,10,.16);
