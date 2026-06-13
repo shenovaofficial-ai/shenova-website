@@ -8,18 +8,18 @@
 /* ── Fonts re-declared for checkout page ── */
 :root {
   --co-cream:     #FDFAF6;
-  --co-ink:       #FFFFFF;
+  --co-ink:       #1A1208;
   --co-muted:     #7A6E62;
   --co-light:     #f0ece6;
   --co-gold:      #B8912A;
   --co-gold-lt:   #e8ddd0;
   --co-border:    rgba(10,10,10,.09);
   --co-border-md: rgba(10,10,10,.16);
-  --co-white:     #FFFFFFfff;
+  --co-white:     #FFFFFF;
   --co-success:   #2d7a50;
   --co-error:     #b0331e;
-  --co-serif:     'Playfair Display', Georgia, serif;
-  --co-sans:      'DM Sans', 'DM Sans', sans-serif;
+  --co-serif:     'Cormorant Garamond', Georgia, serif;
+  --co-sans:      'DM Sans', sans-serif;
   --co-radius:    12px;
   --co-radius-sm: 8px;
   --co-easing:    cubic-bezier(0.22, 0.61, 0.36, 1);
