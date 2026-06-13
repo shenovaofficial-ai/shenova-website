@@ -60,3 +60,24 @@ function renderSummary() {
 
 /* ── INITIAL RENDER ── */
 renderSummary();
+
+/* ── BUY NOW MODE: Agar Buy Now se aaye hain toh cart icon count sahi dikhao ── */
+/* Checkout complete hone ke baad (pageshow / order placed) cart restore hoga   */
+window.addEventListener('pageshow', function(e) {
+  /* Wapas product page pe gaye (back button) toh cart restore karo */
+  if (localStorage.getItem('buyNowMode') === '1' && e.persisted) {
+    const backup = localStorage.getItem('_cartBackup');
+    if (backup !== null) localStorage.setItem('cart', backup);
+    localStorage.removeItem('_cartBackup');
+    localStorage.removeItem('buyNowMode');
+  }
+});
+
+/* Order place hone ke baad call karo: restoreCartAfterBuyNow() */
+window.restoreCartAfterBuyNow = function() {
+  if (localStorage.getItem('buyNowMode') !== '1') return;
+  const backup = localStorage.getItem('_cartBackup');
+  if (backup !== null) localStorage.setItem('cart', backup);
+  localStorage.removeItem('_cartBackup');
+  localStorage.removeItem('buyNowMode');
+};

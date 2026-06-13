@@ -357,7 +357,7 @@ window.addToCart = async function() {
   }
 };
 
-/* ──── Buy Now — skip cart, go direct to checkout with only this item ──── */
+/* ──── Buy Now — sirf yeh ek product checkout pe bhejo ──── */
 window.buyNow = async function() {
   if (!selectedSize && !_customMeasurements) {
     showModal('Select your size', 'Please choose a size before continuing.');
@@ -383,8 +383,19 @@ window.buyNow = async function() {
 
   const cartImage = product.images?.[0] ? imgUrl(product.images[0]) : '';
 
-  /* Overwrite buyNowItem — checkout.html reads this to show only this product */
-  const buyNowItem = [{
+  /*
+   * FIX: checkout.js sirf localStorage 'cart' padhta hai.
+   * Isliye:
+   *   1. Pehle ka cart backup karo (_cartBackup mein)
+   *   2. 'cart' ko sirf is ek product se overwrite karo
+   *   3. buyNowMode flag set karo taaki checkout ke baad
+   *      cart restore ho sake (optional — aap checkout.html mein
+   *      window.addEventListener('pageshow') se restore kar sakte ho)
+   */
+  const prevCart = localStorage.getItem('cart') || '[]';
+  localStorage.setItem('_cartBackup', prevCart);
+  localStorage.setItem('buyNowMode', '1');
+  localStorage.setItem('cart', JSON.stringify([{
     id:    productId,
     name:  product.name,
     price: product.price,
@@ -392,8 +403,7 @@ window.buyNow = async function() {
     size:  selectedSize || (_customMeasurements ? 'Custom' : null),
     color: selectedColor,
     qty:   1
-  }];
-  localStorage.setItem('buyNowCart', JSON.stringify(buyNowItem));
+  }]));
 
   /* Visual feedback then redirect */
   const btn = document.getElementById('pdp-buy-btn');
@@ -404,8 +414,8 @@ window.buyNow = async function() {
     btn.style.borderColor = '#2d7a50';
   }
   setTimeout(() => {
-    window.location.href = 'checkout.html?mode=buynow';
-  }, 400);
+    window.location.href = 'checkout.html';
+  }, 380);
 };
 
 /* ──── Wishlist toggle ──── */
