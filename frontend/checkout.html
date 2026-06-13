@@ -848,7 +848,7 @@
       const cart     = JSON.parse(localStorage.getItem('cart') || '[]');
       const sub      = cart.reduce((s, i) => s + i.price * i.qty, 0);
       const cod      = isCOD();
-      const ship     = cod ? COD_SHIPPING : (sub > 2000 ? 0 :0);
+      const ship     = cod ? COD_SHIPPING : (sub > 2000 ? 0 : 69);
       const discount = window.appliedDiscount || 0;
       const total    = Math.max(0, sub + ship - discount);
 
