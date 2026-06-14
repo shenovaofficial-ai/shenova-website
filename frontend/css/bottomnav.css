@@ -7,7 +7,7 @@
 /* ── Tokens ─────────────────────────────────────────────────────── */
 :root {
   --bn-bg:         #FDFAF6;
-  --bn-border:     rgba(26,18,8, 0.14);
+  --bn-border:     rgba(26,18,8, 0.12);
   --bn-gold:       #B8912A;
   --bn-gold-glow:  rgba(201, 149, 46, 0.28);
   --bn-muted:      rgba(26,18,8, 0.45);
@@ -58,24 +58,23 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 99998; /* below drawer (99999) but above everything else */
+    z-index: 99998;
 
     height: calc(var(--bn-height) + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
 
-    background: var(--bn-bg);
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    /* SOLID WHITE — same on every page, no bleed-through */
+    background: #FDFAF6 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 
-    border-top: 1px solid var(--bn-border);
-    border-radius: var(--bn-radius);
+    border-top: 1px solid rgba(26,18,8, 0.12);
+    border-radius: 20px 20px 0 0;
 
     box-shadow:
-      0 -12px 48px rgba(0,0,0,0.28),
-      0 -2px  0    rgba(0,0,0,0.10),
-      inset 0 1px 0 rgba(255,255,255,0.60);
+      0 -4px 24px rgba(0,0,0,0.15),
+      0 -1px 0    rgba(26,18,8,0.06);
 
-    /* Prevent horizontal overflow */
     overflow: hidden;
   }
 }
@@ -122,7 +121,6 @@
   position: relative;
   cursor: pointer;
 
-  /* Tap highlight */
   -webkit-tap-highlight-color: transparent;
 
   transition:
@@ -249,7 +247,6 @@
 }
 
 /* ── Drawer/Modal z-index guard ──────────────────────────────────── */
-/* Ensure drawers sit above bottom nav */
 .drawer,
 .drawer-overlay,
 .quick-modal,
@@ -261,7 +258,6 @@
 /* ── Prevent nav showing inside cart drawer on mobile ────────────── */
 @media (max-width: 768px) {
   body.drawer-open .shn-bottom-nav {
-    /* Still show — just let drawer overlay cover it */
     pointer-events: none;
   }
 }
