@@ -322,15 +322,21 @@ a.btn,
 .nav-menu a:hover::after,
 .nav-link-sm:hover::after { width: 100%; }
 
-/* ── FLOATING BOTTOM NAV — glass premium ────────────────────────── */
+
+/* ── BOTTOM NAV — solid white on all pages ── */
 .shn-bottom-nav {
-  backdrop-filter: blur(32px) saturate(1.5) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(1.5) !important;
-  background: rgba(12,11,10,0.78) !important;
-  border: 1px solid rgba(181,137,90,0.12) !important;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(181,137,90,0.06) inset !important;
+  background-color: #FDFAF6 !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: 1.5px solid rgba(26,18,8,0.10) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.10) !important;
   transition: transform 0.5s cubic-bezier(0.16,1,0.3,1) !important;
   will-change: transform;
+  isolation: isolate;
 }
 .shn-bottom-nav.hidden {
   transform: translateY(calc(100% + 20px)) !important;
