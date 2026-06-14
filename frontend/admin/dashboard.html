@@ -3975,6 +3975,17 @@ function renderPreviews(files, previewEl, type){
 })();
 
 /* ─────────────────────────────────────────
+   SHARED UTILITIES (global scope)
+───────────────────────────────────────── */
+window.fmtDate = function(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-IN',{
+    day:'2-digit',month:'short',year:'numeric',
+    hour:'2-digit',minute:'2-digit',hour12:true
+  });
+};
+
+/* ─────────────────────────────────────────
    COUPONS
 ───────────────────────────────────────── */
 window.renderCoupons = async function(){
@@ -4031,7 +4042,7 @@ window.renderCoupons = async function(){
                     ${c.active?'Active':'Inactive'}
                   </span>
                 </td>
-                <td style="color:var(--muted);font-size:12px">${fmtDate(c.createdAt)}</td>
+                <td style="color:var(--muted);font-size:12px">${window.fmtDate(c.createdAt)}</td>
                 <td>
                   <div style="display:flex;gap:8px">
                     <button class="btn btn-ghost btn-sm" onclick="toggleCouponActive('${c._id}',${c.active})">
