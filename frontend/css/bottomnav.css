@@ -6,14 +6,11 @@
 
 /* ── Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --bn-bg:         #FDFAF6;
-  --bn-border:     rgba(26,18,8, 0.12);
   --bn-gold:       #B8912A;
   --bn-gold-glow:  rgba(201, 149, 46, 0.28);
   --bn-muted:      rgba(26,18,8, 0.45);
   --bn-active:     #1A1208;
   --bn-height:     66px;
-  --bn-radius:     20px 20px 0 0;
   --bn-font:       'DM Sans', sans-serif;
   --bn-ease:       cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -37,7 +34,6 @@
     opacity: 0 !important;
   }
 
-  /* Push page content above the nav bar */
   body {
     padding-bottom: calc(var(--bn-height) + env(safe-area-inset-bottom, 0px));
   }
@@ -45,7 +41,7 @@
 
 /* ── Bottom Nav Shell ────────────────────────────────────────────── */
 .shn-bottom-nav {
-  display: none; /* desktop hidden */
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -63,23 +59,27 @@
     height: calc(var(--bn-height) + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
 
-    /* SOLID WHITE — same on every page, no bleed-through */
-    background: #FDFAF6 !important;
+    /* ── SOLID WHITE — guaranteed, no bleed, no transparency ── */
+    background-color: #FDFAF6 !important;
+    background-image: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 
-    border-top: 1px solid rgba(26,18,8, 0.12);
+    /* Isolate completely from page paint */
+    isolation: isolate;
+
+    border-top: 1.5px solid rgba(26,18,8, 0.10);
     border-radius: 20px 20px 0 0;
 
     box-shadow:
-      0 -4px 24px rgba(0,0,0,0.15),
+      0 -2px 20px rgba(0,0,0,0.10),
       0 -1px 0    rgba(26,18,8,0.06);
 
     overflow: hidden;
   }
 }
 
-/* ── Top glow accent line ────────────────────────────────────────── */
+/* ── Top gold accent line ────────────────────────────────────────── */
 .shn-bottom-nav::before {
   content: '';
   position: absolute;
@@ -94,8 +94,9 @@
     var(--bn-gold) 70%,
     transparent
   );
-  opacity: 0.55;
+  opacity: 0.5;
   border-radius: 1px;
+  pointer-events: none;
 }
 
 /* ── Nav Item ────────────────────────────────────────────────────── */
@@ -123,12 +124,15 @@
 
   -webkit-tap-highlight-color: transparent;
 
+  /* Ensure item background is also white — no inherit from page */
+  background: transparent;
+
   transition:
     color 0.25s ease,
     background 0.25s ease;
 }
 
-/* Tap ripple feedback */
+/* Tap ripple */
 .shn-nav-item::after {
   content: '';
   position: absolute;
@@ -211,7 +215,6 @@
 
 .shn-nav-item.shn-active .shn-nav-icon svg {
   stroke: #1A1208;
-  filter: drop-shadow(0 0 6px rgba(245, 240, 232, 0.3));
 }
 
 /* ── Tap animation (non-active items) ───────────────────────────── */
@@ -219,7 +222,7 @@
   transform: scale(0.9);
 }
 
-/* Cart badge on bottom nav ──────────────────────────────────────── */
+/* ── Cart badge ──────────────────────────────────────────────────── */
 .shn-nav-cart-badge {
   position: absolute;
   top: -4px;
@@ -255,14 +258,12 @@
   z-index: 99999 !important;
 }
 
-/* ── Prevent nav showing inside cart drawer on mobile ────────────── */
 @media (max-width: 768px) {
   body.drawer-open .shn-bottom-nav {
     pointer-events: none;
   }
 }
 
-/* ── Smooth page transition compatibility ────────────────────────── */
 body.page-out .shn-bottom-nav {
   opacity: 0;
   transform: translateY(4px);
