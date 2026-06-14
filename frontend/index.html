@@ -113,17 +113,7 @@ ul{list-style:none}
 .sh-ld-monogram {
   position: relative; margin-bottom: 48px;
 }
-.sh-ld-ring {
-  width: 80px; height: 80px; border-radius: 50%;
-  border: 1px solid rgba(181,137,90,0.35);
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation: ldRingExpand 2s var(--ease-out) forwards;
-}
-@keyframes ldRingExpand {
-  from { width: 0; height: 0; opacity: 0; border-color: rgba(181,137,90,0.75); }
-  to { width: 80px; height: 80px; opacity: 1; border-color: rgba(181,137,90,0.35); }
-}
+
 .sh-ld-w {
   font: 300 clamp(28px, 5vw, 46px)/1 var(--display);
   letter-spacing: .8em; color: var(--ivory);
@@ -1758,7 +1748,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 <div id="sh-ld">
   <div class="sh-ld-bar"></div>
   <div class="sh-ld-monogram">
-    <div class="sh-ld-ring"></div>
     <div class="sh-ld-w">
       <span>S</span><span>H</span><span>E</span><span>N</span><span>O</span><span>V</span><span>A</span>
     </div>
