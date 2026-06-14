@@ -570,24 +570,32 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
       const target = parseInt(el.dataset.target, 10);
       const duration = 1800;
       const start = performance.now();
+      let done = false;
 
       const tick = (now) => {
+        if (done) return;
         const progress = Math.min((now - start) / duration, 1);
         el.textContent = Math.round(ease(progress) * target);
-        if (progress < 1) requestAnimationFrame(tick);
-        else el.textContent = target;
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          done = true;
+          el.textContent = target;
+          // Lock the value permanently
+          el.dataset.animated = 'true';
+        }
       };
       requestAnimationFrame(tick);
     };
 
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
+        if (e.isIntersecting && !e.target.dataset.animated) {
           animateStat(e.target);
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: .5 });
+    }, { threshold: 0.2 });
 
     statEls.forEach(el => obs.observe(el));
   })();

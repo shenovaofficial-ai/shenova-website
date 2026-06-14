@@ -783,7 +783,7 @@
   font-family: var(--ab-serif);
   font-size: clamp(40px, 5vw, 70px);
   font-weight: 300;
-  color: #FFFFFFfff;
+  color: #1A1208;
   line-height: 1;
   letter-spacing: -.02em;
   display: inline;
@@ -801,7 +801,7 @@
   font-size: 11px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.38);
+  color: #7A6E62;
   margin-top: 12px;
   display: block;
 }
