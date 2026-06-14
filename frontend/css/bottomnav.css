@@ -6,8 +6,8 @@
 
 /* ── Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --bn-bg:         rgba(253,250,246, 0.97);
-  --bn-border:     rgba(26,18,8, 0.08);
+  --bn-bg:         #FDFAF6;
+  --bn-border:     rgba(26,18,8, 0.14);
   --bn-gold:       #B8912A;
   --bn-gold-glow:  rgba(201, 149, 46, 0.28);
   --bn-muted:      rgba(26,18,8, 0.45);
@@ -71,9 +71,9 @@
     border-radius: var(--bn-radius);
 
     box-shadow:
-      0 -8px 40px rgba(26,18,8,0.08),
-      0 -1px 0   rgba(26,18,8,0.03),
-      inset 0 1px 0 rgba(26,18,8,0.04);
+      0 -12px 48px rgba(0,0,0,0.28),
+      0 -2px  0    rgba(0,0,0,0.10),
+      inset 0 1px 0 rgba(255,255,255,0.60);
 
     /* Prevent horizontal overflow */
     overflow: hidden;
@@ -95,7 +95,7 @@
     var(--bn-gold) 70%,
     transparent
   );
-  opacity: 0.25;
+  opacity: 0.55;
   border-radius: 1px;
 }
 
