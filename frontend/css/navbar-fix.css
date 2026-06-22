@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════════════════════
+   SHENOVA — Navbar Visibility Fix
+   css/navbar-fix.css
+   Link LAST in ALL pages (after all other CSS files)
+   ═══════════════════════════════════════════════════════════
+   Problem: Nav links & logo were too faint (opacity 0.68,
+   font-weight 300) — invisible on dark bg & in sunlight.
+   Fix: Boost opacity + weight + text-shadow for contrast.
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ── NAV LINKS — crisp, bold, readable in sunlight ──────── */
+.nav-link-sm {
+  color: rgba(245, 240, 232, 0.92) !important;   /* was 0.68 → now 0.92 */
+  font-weight: 500 !important;                    /* was 300 → now 500   */
+  letter-spacing: 0.32em !important;
+  text-shadow:
+    0 1px 6px  rgba(0,0,0,0.55),
+    0 0px 12px rgba(0,0,0,0.30) !important;       /* depth for sunlight  */
+}
+
+.nav-link-sm:hover {
+  color: #F5EDD8 !important;
+}
+
+/* Gold underline on hover — keep existing but ensure visible */
+.nav-link-sm::after {
+  background: #B8912A !important;
+  height: 1px !important;
+}
+
+
+/* ── LOGO — heavier weight, always white ─────────────────── */
+.nav-logo.lux-logo,
+.lux-logo {
+  color: #F5EDD8 !important;
+  font-weight: 500 !important;                    /* was 300 → now 500  */
+  text-shadow:
+    0 1px 8px  rgba(0,0,0,0.55),
+    0 0px 16px rgba(0,0,0,0.25) !important;
+}
+
+.nav-logo.lux-logo:hover,
+.lux-logo:hover {
+  opacity: 0.82 !important;
+}
+
+
+/* ── ICON BUTTONS (search, bag, wishlist) ────────────────── */
+.lux-icon-btn {
+  color: rgba(245, 240, 232, 0.92) !important;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.45)) !important;
+}
+
+.lux-icon-btn:hover {
+  color: #F5EDD8 !important;
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* Cart count badge — keep dark bg, stay readable */
+.cart-count,
+.shn-nav-cart-badge {
+  background: #B8912A !important;
+  color: #0a0a09 !important;
+  font-weight: 700 !important;
+}
+
+
+/* ── SCROLLED STATE — dark bg, still readable ────────────── */
+.nav.lux-nav.scrolled .nav-link-sm {
+  color: rgba(245, 240, 232, 0.88) !important;
+  text-shadow:
+    0 1px 4px rgba(0,0,0,0.45) !important;
+}
+
+.nav.lux-nav.scrolled .nav-logo.lux-logo,
+.nav.lux-nav.scrolled .lux-logo {
+  color: #F5EDD8 !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4) !important;
+}
+
+.nav.lux-nav.scrolled .lux-icon-btn {
+  color: rgba(245, 240, 232, 0.88) !important;
+}
+
+
+/* ── MOBILE — hamburger lines stay white/visible ─────────── */
+@media (max-width: 768px) {
+  .lux-hamburger span {
+    background: rgba(245, 240, 232, 0.92) !important;
+  }
+}
