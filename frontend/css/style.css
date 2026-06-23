@@ -24,16 +24,17 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
 /* Navbar */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 0;transition:all .4s ease;background:transparent}
-.nav.scrolled{background:rgba(253,250,246,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:12px 0}
+.nav.scrolled{background:rgba(12,11,10,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(181,137,90,0.23);padding:12px 0}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.nav-logo{font-family:var(--serif);font-size:26px;letter-spacing:.35em;font-weight:500}
+.nav-logo{font-family:var(--serif);font-size:26px;letter-spacing:.35em;font-weight:500;color:#FFFFFF;text-shadow:0 1px 10px rgba(0,0,0,0.6)}
 .nav-menu{display:flex;gap:36px;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
-.nav-menu a{position:relative;padding:6px 0}
-.nav-menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--ink);transition:width .35s ease}
+.nav-menu a{position:relative;padding:6px 0;color:rgba(255,255,255,0.95);font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,0.55)}
+.nav-menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:#B8912A;transition:width .35s ease}
+.nav-menu a:hover{color:#B8912A}
 .nav-menu a:hover::after{width:100%}
 .nav-icons{display:flex;gap:18px;align-items:center}
-.nav-icons button{font-size:20px;transition:transform .25s}
-.nav-icons button:hover{transform:translateY(-2px)}
+.nav-icons button{font-size:20px;transition:transform .25s;color:rgba(255,255,255,0.97);filter:drop-shadow(0 1px 6px rgba(0,0,0,0.55))}
+.nav-icons button:hover{transform:translateY(-2px) scale(1.1);color:#B8912A}
 .cart-count{position:absolute;top:-6px;right:-8px;background:var(--ink);color:#FFFFFF;font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .cart-btn{position:relative}
 .hamburger{display:none;font-size:22px}
