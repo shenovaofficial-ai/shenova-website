@@ -197,16 +197,30 @@
   border-bottom-color: var(--lux-line);
 }
 
-/* Nav over hero — white text */
-/* .lux-nav:not(.scrolled) .nav-link-sm,
-.lux-nav:not(.scrolled) .lux-logo, */
+/* Nav over hero — bright white icons + logo */
 .lux-nav:not(.scrolled) .lux-icon-btn {
-  color: rgba(26,18,8,0.88);
+  color: rgba(255,255,255,0.97);
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,0.55));
+}
+.lux-nav:not(.scrolled) .lux-icon-btn:hover {
+  color: #B8912A;
+  transform: scale(1.1);
+  filter: drop-shadow(0 1px 8px rgba(184,145,42,0.5));
 }
 
-.lux-nav:not(.scrolled) .lux-hamburger span {
-  background: rgba(255,255,255,0.85);
+.lux-nav:not(.scrolled) .nav-logo,
+.lux-nav:not(.scrolled) .lux-logo {
+  color: #FFFFFF;
+  font-weight: 500;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.6), 0 0 20px rgba(0,0,0,0.3);
 }
+
+.lux-nav:not(.scrolled) .nav-link-sm {
+  color: rgba(255,255,255,0.95);
+  font-weight: 600;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+}
+
 
 .nav-inner {
   display: flex;
