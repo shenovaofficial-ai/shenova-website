@@ -1,56 +1,51 @@
-const multer   = require('multer');
-const cloudinary = require('cloudinary').v2;
-const path     = require('path');
-const streamifier = require('streamifier');
+const multer = require("multer");
+const imagekit = require("../config/imagekit");
+const path = require("path");
 
-cloudinary.config({
-  cloud_name : process.env.CLOUDINARY_CLOUD_NAME,
-  api_key    : process.env.CLOUDINARY_API_KEY,
-  api_secret : process.env.CLOUDINARY_API_SECRET,
-});
-
-const IMAGE_EXTS = ['jpg','jpeg','png','webp','gif','avif'];
-const VIDEO_EXTS = ['mp4','webm','mov','avi','ogg'];
-const ALL_EXTS   = [...IMAGE_EXTS, ...VIDEO_EXTS];
+const IMAGE_EXTS = ["jpg", "jpeg", "png", "webp", "gif", "avif"];
+const VIDEO_EXTS = ["mp4", "webm", "mov", "avi", "ogg"];
+const ALL_EXTS = [...IMAGE_EXTS, ...VIDEO_EXTS];
 
 function fileFilter(req, file, cb) {
-  const ext = path.extname(file.originalname).replace('.','').toLowerCase();
-  if (ALL_EXTS.includes(ext)) cb(null, true);
-  else cb(new Error('Unsupported file type: ' + ext), false);
+  const ext = path.extname(file.originalname).replace(".", "").toLowerCase();
+
+  if (ALL_EXTS.includes(ext)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Unsupported file type: " + ext), false);
+  }
 }
 
-// Store in memory, then upload to Cloudinary in the route
 const multerUpload = multer({
   storage: multer.memoryStorage(),
   fileFilter,
-  limits: { fileSize: 150 * 1024 * 1024 },
+  limits: {
+    fileSize: 150 * 1024 * 1024,
+  },
 });
 
-// Upload a single buffer to Cloudinary, returns the secure URL
-function uploadToCloudinary(buffer, originalname) {
-  return new Promise((resolve, reject) => {
-    const ext     = path.extname(originalname).replace('.','').toLowerCase();
-    const isVideo = VIDEO_EXTS.includes(ext);
-    const folder  = isVideo ? 'shenova/videos' : 'shenova/images';
+async function uploadToCloudinary(buffer, originalname) {
+  const ext = path.extname(originalname).replace(".", "").toLowerCase();
+  const isVideo = VIDEO_EXTS.includes(ext);
 
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        folder,
-        resource_type : isVideo ? 'video' : 'image',
-        access_mode   : 'public',
-        public_id     : Date.now() + '-' + originalname
-                          .replace(/\s+/g,'_')
-                          .replace(/[^a-zA-Z0-9._-]/g,'')
-                          .replace(/\.[^/.]+$/,''),
-      },
-      (err, result) => {
-        if (err) reject(err);
-        else resolve(result.secure_url);
-      }
-    );
+  const folder = isVideo ? "shenova/videos" : "shenova/images";
 
-    streamifier.createReadStream(buffer).pipe(stream);
+  const result = await imagekit.upload({
+    file: buffer.toString("base64"),
+    fileName:
+      Date.now() +
+      "-" +
+      originalname
+        .replace(/\s+/g, "_")
+        .replace(/[^a-zA-Z0-9._-]/g, ""),
+    folder,
+    useUniqueFileName: true,
   });
+
+  return result.url;
 }
 
-module.exports = { multerUpload, uploadToCloudinary };
+module.exports = {
+  multerUpload,
+  uploadToCloudinary,
+};
