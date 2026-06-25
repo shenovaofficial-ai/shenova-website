@@ -9,5 +9,51 @@
   <input name="password" type="password" placeholder="Password" required>
   <button style="width:100%">Sign In</button>
 </form>
-<script src="../js/config.js"></script><script src="../js/admin.js"></script>
+<script src="../js/config.js"></script>
+<script>
+async function adminLogin(e) {
+  e.preventDefault();
+
+  const form    = e.target;
+  const btn     = form.querySelector('button');
+  const email   = form.email.value.trim();
+  const password = form.password.value;
+
+  // Button ko loading state mein dalo
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(window.API_BASE + '/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || 'Invalid credentials');
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+      return;
+    }
+
+    // Token aur role save karo
+    localStorage.setItem('admin_token', data.token);
+    localStorage.setItem('admin_role',  data.role);
+    localStorage.setItem('admin_name',  data.name);
+
+    // Dashboard pe bhejo
+    window.location.href = 'dashboard.html';
+
+  } catch (err) {
+    console.error(err);
+    alert('Server error. Please try again.');
+    btn.textContent = 'Sign In';
+    btn.disabled = false;
+  }
+}
+</script>
+<script src="../js/admin.js"></script>
 </body></html>
