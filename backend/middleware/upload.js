@@ -37,6 +37,7 @@ function uploadToCloudinary(buffer, originalname) {
       {
         folder,
         resource_type : isVideo ? 'video' : 'image',
+        access_mode   : 'public',
         public_id     : Date.now() + '-' + originalname
                           .replace(/\s+/g,'_')
                           .replace(/[^a-zA-Z0-9._-]/g,'')
