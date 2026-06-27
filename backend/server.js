@@ -19,7 +19,7 @@ const {
 
   const User = mongoose.model('User', new mongoose.Schema({
     name:     String,
-    email:    { type: String, unique: true },
+    email:    { type: String, unique: true, trim: true, lowercase: true },
     password: String,
     role:     { type: String, default: 'user' }
   }, { timestamps: true }));
@@ -93,13 +93,15 @@ const {
   app.post('/api/auth/register', async (req, res) => {
     try {
       const hash = await bcrypt.hash(req.body.password, 10);
-      const user = await User.create({ name: req.body.name, email: req.body.email, password: hash });
+      const normalEmail = String(req.body.email || '').trim().toLowerCase();
+      const user = await User.create({ name: req.body.name, email: normalEmail, password: hash });
       res.json({ id: user._id, email: user.email });
     } catch (e) { res.status(400).json({ error: e.message }); }
   });
 
   app.post('/api/auth/login', async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
+    const normalEmail = String(req.body.email || '').trim().toLowerCase();
+    const user = await User.findOne({ email: normalEmail });
     if (!user || !(await bcrypt.compare(req.body.password, user.password)))
       return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'shenova_secret');
