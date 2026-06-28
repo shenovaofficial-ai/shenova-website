@@ -198,9 +198,35 @@ const {
       if (body.featured !== undefined) body.featured = body.featured === 'true';
       if (body.trending !== undefined) body.trending = body.trending === 'true';
       delete body.id;
-      const { images, videos } = await processUploads(req.files);
-      if (images.length > 0) body.images = images;
-      if (videos.length > 0) body.videos = videos;
+
+      const { images: newImages, videos: newVideos } = await processUploads(req.files);
+
+      // ── Media merge logic ──────────────────────────────────────
+      // Admin dashboard sends `existingImages` / `existingVideos` as a
+      // JSON array of the URLs the admin chose to KEEP (anything removed
+      // via the × button on a thumbnail is simply left out of this array).
+      // Final saved array = kept old media + freshly uploaded new media.
+      // This lets the admin delete a single photo/video and/or add new
+      // ones in the same save, without wiping out everything else.
+      if (body.existingImages !== undefined) {
+        let kept = [];
+        try { kept = JSON.parse(body.existingImages); } catch { kept = []; }
+        body.images = [...kept, ...newImages];
+      } else if (newImages.length > 0) {
+        body.images = newImages; // backward compatible fallback
+      }
+
+      if (body.existingVideos !== undefined) {
+        let kept = [];
+        try { kept = JSON.parse(body.existingVideos); } catch { kept = []; }
+        body.videos = [...kept, ...newVideos];
+      } else if (newVideos.length > 0) {
+        body.videos = newVideos; // backward compatible fallback
+      }
+
+      delete body.existingImages;
+      delete body.existingVideos;
+
       const updated = await Product.findByIdAndUpdate(req.params.id, body, { new: true });
       if (!updated) return res.status(404).json({ error: 'Product not found' });
       res.json(updated);
