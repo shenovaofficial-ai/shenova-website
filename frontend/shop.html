@@ -46,6 +46,8 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
   <link rel="stylesheet" href="css/style.css">
   <!-- Luxury shop overrides (new file) -->
   <link rel="stylesheet" href="css/shop.css">
+  <!-- Premium shop redesign layer: search, sidebar filters, badges, wishlist, pagination -->
+  <link rel="stylesheet" href="css/shop-premium.css">
   <link rel="stylesheet" href="css/bottomnav.css">
   <link rel="stylesheet" href="css/luxury-motion.css">
   <!-- SABSE LAST link hona chahiye, baaki CSS ke baad -->
@@ -227,35 +229,136 @@ src="https://www.facebook.com/tr?id=26862489086743105&ev=PageView&noscript=1"
         <p class="shop-piece-count" id="shop-count"></p>
       </div>
 
-      <!-- Right: sort -->
-      <div class="shop-sort-wrap">
-        <label class="sort-label" for="sort">Sort by</label>
-        <select id="sort" aria-label="Sort products">
-          <option value="new">Newest</option>
-          <option value="price-asc">Price: Low → High</option>
-          <option value="price-desc">Price: High → Low</option>
-        </select>
+      <!-- Right: search, filter toggle, sort -->
+      <div class="shop-controls-right">
+
+        <div class="shop-search-wrap">
+          <input type="text" id="shop-search" class="shop-search-input"
+                 placeholder="Search the collection…" autocomplete="off"
+                 aria-label="Search products">
+          <svg class="shop-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+
+        <button class="shop-filter-toggle" id="filterToggle" aria-expanded="false" aria-controls="shop-sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round">
+            <line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/>
+            <line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/>
+            <line x1="4" y1="18" x2="20" y2="18"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Filters</span>
+          <span class="filter-count" id="filterCount" style="display:none">0</span>
+        </button>
+
+        <div class="shop-sort-wrap">
+          <label class="sort-label" for="sort">Sort by</label>
+          <select id="sort" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="new">Newest</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+
       </div>
-
     </div>
 
-    <!-- ── Filter tabs ── -->
-    <div class="filters" role="group" aria-label="Filter by category">
-      <button class="chip active" data-cat="all">All</button>
-      <button class="chip" data-cat="dress">Dresses</button>
-      <button class="chip" data-cat="tops">Tops</button>
-      <button class="chip" data-cat="kurti">Kurti</button>
-      <button class="chip" data-cat="co-ord set">Co-ord Sets</button>
-    </div>
+    <!-- ── Sidebar + Grid ── -->
+    <div class="shop-body">
 
-    <!-- ── Product grid (filled by shop.js + main.js) ── -->
-    <div class="products-grid" id="shop-grid">
-      <!-- productCard() output injected here -->
-    </div>
+      <!-- Sticky filter sidebar (desktop) / slide-in drawer (mobile) -->
+      <aside class="shop-sidebar" id="shop-sidebar">
 
-    <!-- Empty state -->
-    <div class="shop-empty" id="shop-empty" style="display:none">
-      <p>No pieces found in this category.</p>
+        <div class="sidebar-head">
+          <span>Filters</span>
+          <button class="sidebar-close" id="sidebarClose" aria-label="Close filters">×</button>
+        </div>
+
+        <!-- Category -->
+        <div class="sidebar-section" data-section="category">
+          <button class="sidebar-section-head" type="button">
+            Category
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-section-body">
+            <div class="filters" role="group" aria-label="Filter by category">
+              <button class="chip active" data-cat="all">All</button>
+              <button class="chip" data-cat="dress">Dresses</button>
+              <button class="chip" data-cat="tops">Tops</button>
+              <button class="chip" data-cat="kurti">Kurti</button>
+              <button class="chip" data-cat="co-ord set">Co-ord Sets</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="sidebar-section" data-section="price">
+          <button class="sidebar-section-head" type="button">
+            Price
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-section-body">
+            <div class="price-slider-wrap">
+              <div class="price-slider-track"><div class="price-slider-fill" id="priceFill"></div></div>
+              <input type="range" id="priceRange" class="price-range-input" min="0" max="50000" step="500" value="50000" aria-label="Maximum price">
+              <div class="price-range-labels"><span>₹0</span><span id="priceMaxLabel">₹50,000+</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Availability (auto-hidden if product data has no stock field) -->
+        <div class="sidebar-section" data-section="availability" id="availabilitySection" style="display:none">
+          <button class="sidebar-section-head" type="button">
+            Availability
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-section-body">
+            <label class="sidebar-check">
+              <input type="checkbox" id="inStockOnly">
+              <span>In stock only</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Rating (auto-hidden if product data has no rating field) -->
+        <div class="sidebar-section" data-section="rating" id="ratingSection" style="display:none">
+          <button class="sidebar-section-head" type="button">
+            Rating
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sidebar-section-body">
+            <div class="rating-filter" id="ratingFilter">
+              <button data-min="4">★★★★ &amp; up</button>
+              <button data-min="3">★★★ &amp; up</button>
+              <button data-min="0" class="active">Any rating</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="sidebar-reset" id="sidebarReset" type="button">Reset all filters</button>
+      </aside>
+
+      <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+      <!-- Grid column -->
+      <div class="shop-main">
+
+        <!-- ── Product grid (filled by shop.js) ── -->
+        <div class="products-grid" id="shop-grid">
+          <!-- premiumCard()/essCard() output injected here -->
+        </div>
+
+        <!-- Empty / error state -->
+        <div class="shop-empty" id="shop-empty" style="display:none">
+          <p>No pieces found in this category.</p>
+        </div>
+
+        <!-- Pagination -->
+        <div class="shop-pagination" id="shop-pagination"></div>
+
+      </div>
     </div>
 
   </div>
@@ -416,18 +519,10 @@ window.closeModal = function() {
   document.querySelector('.modal')?.classList.remove('open');
 };
 
-/* ── Live piece count ────────────────────────────────────────── */
-(function() {
-  const grid    = document.getElementById('shop-grid');
-  const countEl = document.getElementById('shop-count');
-  if (!grid || !countEl) return;
-  const obs = new MutationObserver(() => {
-    const n = grid.querySelectorAll('.product-card').length;
-    countEl.textContent = n > 0 ? n + (n === 1 ? ' Piece' : ' Pieces') : '';
-    countEl.style.opacity = n > 0 ? '1' : '0';
-  });
-  obs.observe(grid, { childList: true });
-})();
+/* ── Live piece count is now set directly by shop.js (updateShopCount),
+       since pagination means the grid only ever holds one page's worth
+       of cards — a childList observer would show the page size, not
+       the true filtered total. ── */
 
 /* ── Hamburger icon morph ───────────────────────────────────── */
 document.querySelector('.hamburger')?.addEventListener('click', function() {
