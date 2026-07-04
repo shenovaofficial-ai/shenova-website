@@ -8,7 +8,7 @@
 <meta name="description" content="Shenova — premium ready-to-wear. Timeless silhouettes. Refined fabrics. Limited editions.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/luxury.css">
 <link rel="stylesheet" href="admin/css/stories.css">
@@ -49,10 +49,12 @@ src="https://www.facebook.com/tr?id=887264573782998&ev=PageView&noscript=1"
 <link rel="stylesheet" href="css/bottomnav.css">
 <style>
 /* ====================================================================
-   SHENOVA · PREMIUM REDESIGN v6
-   Typography: Playfair Display (display) + Cormorant (editorial) + Jost (sans)
-   Palette: Obsidian / Ivory / Warm Gold / Blush / Deep Umber
-   Philosophy: Editorial restraint meets cinematic boldness
+   SHENOVA · PREMIUM REDESIGN v7 — "Ivoire Élégant" (unified with shop.css)
+   Typography: Playfair Display (display/editorial) + DM Sans (body)
+   Palette: Ivory / Parchment / Ink / Champagne Gold
+   Philosophy: Quiet-luxury editorial calm, with a handful of deliberate
+   dark "bookend" moments (loader, footer, mobile menu, hero/cinematic
+   photo overlays) for cinematic contrast rather than a fully dark page
    ==================================================================== */
 
 /* ── RESET & BASE ── */
@@ -63,29 +65,33 @@ a{text-decoration:none;color:inherit}
 button{border:none;background:none;cursor:pointer;font:inherit}
 ul{list-style:none}
 
-/* ── DESIGN TOKENS ── */
+/* ── DESIGN TOKENS ──
+   Unified with shop.css so the whole site (home + shop) shares one
+   cream / ink / champagne-gold identity instead of two palettes. */
 :root {
-  /* Core palette */
-  --obsidian: #0c0b0a;
-  --deep: #141210;
-  --ink: #1a1816;
-  --ivory: #fbf8f2;
-  --cream: #fdfbf6;
-  --parchment: #ede7d8;
-  --sand: #d9d0bf;
-  --warm-mid: #a89880;
-  --muted: #7a7060;
+  /* Core palette — light editorial base, ink reserved for text + a
+     handful of deliberate dark "bookend" sections (footer, loader,
+     mobile menu, popups) rather than the whole page. */
+  --obsidian: #1a1208;
+  --deep: #221a10;
+  --ink: #1a1208;
+  --ivory: #fdfaf6;
+  --cream: #fdfaf6;
+  --parchment: #ede8df;
+  --sand: #e5ded4;
+  --warm-mid: #c0b8ae;
+  --muted: #7a6e62;
 
   /* Accent */
-  --gold: #d4af37;
-  --gold-light: #f0c75e;
-  --gold-pale: #ffe9b0;
+  --gold: #b8912a;
+  --gold-light: #d4b87a;
+  --gold-pale: #f0e2c0;
   --blush: #c4a08a;
 
-  /* Typography */
+  /* Typography — same family system as the shop page */
   --display: 'Playfair Display', Georgia, serif;
-  --editorial: 'Cormorant Garamond', Georgia, serif;
-  --body: 'Jost', 'Helvetica Neue', sans-serif;
+  --editorial: 'Playfair Display', Georgia, serif;
+  --body: 'DM Sans', 'Helvetica Neue', sans-serif;
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -176,7 +182,7 @@ ul{list-style:none}
   position: fixed; top: 0; left: 0; right: 0; height: 36px;
   background: var(--obsidian); z-index: 700;
   display: flex; align-items: center; overflow: hidden;
-  border-bottom: 1px solid rgba(181,137,90,0.23);
+  border-bottom: 1px solid rgba(184,145,42,0.23);
 }
 #sh-bar.gone { display: none; }
 .sh-bar-inner {
@@ -204,7 +210,7 @@ body.bar-off .sh-nav { top: 0 !important; }
 /* ── CUSTOM CURSOR ── */
 #lx-c {
   position: fixed; width: 28px; height: 28px;
-  border: 1px solid rgba(181,137,90,0.55); border-radius: 50%;
+  border: 1px solid rgba(184,145,42,0.55); border-radius: 50%;
   pointer-events: none; z-index: 10000;
   transform: translate(-50%, -50%);
   transition: width .5s var(--ease-out), height .5s var(--ease-out),
@@ -214,8 +220,8 @@ body.bar-off .sh-nav { top: 0 !important; }
 #lx-c.on { opacity: 1; }
 #lx-c.big {
   width: 56px; height: 56px;
-  background: rgba(181,137,90,0.21);
-  border-color: rgba(181,137,90,0.5);
+  background: rgba(184,145,42,0.21);
+  border-color: rgba(184,145,42,0.5);
 }
 #lx-d {
   position: fixed; width: 4px; height: 4px;
@@ -239,10 +245,10 @@ body.bar-off .sh-nav { top: 0 !important; }
   padding: 0;
 }
 .sh-nav.scrolled {
-  background: rgba(12, 11, 10, .88);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(181,137,90,0.23);
+  background: rgba(253, 250, 246, .96);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid rgba(26,18,8,0.08);
 }
 
 /* Keep existing .nav .lux-nav classes working */
@@ -252,11 +258,22 @@ body.bar-off .sh-nav { top: 0 !important; }
               border-color .5s, backdrop-filter .5s, padding .4s;
 }
 .nav.lux-nav.scrolled {
-  background: rgba(12, 11, 10, .9);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(181,137,90,0.23);
+  background: rgba(253, 250, 246, .96);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid rgba(26,18,8,0.08);
 }
+
+/* Scrolled state sits on a light bar now, so nav text/icons switch
+   to ink instead of the light-on-photo colors used at the top of
+   the page (where the nav is transparent over the dark hero). */
+.nav.lux-nav.scrolled .nav-link-sm { color: rgba(26,18,8,0.68) !important; text-shadow: none !important; }
+.nav.lux-nav.scrolled .nav-link-sm:hover { color: var(--ink) !important; }
+.nav.lux-nav.scrolled .nav-logo.lux-logo { color: var(--ink) !important; text-shadow: none !important; }
+.nav.lux-nav.scrolled .lux-icon-btn { color: rgba(26,18,8,0.68); }
+.nav.lux-nav.scrolled .lux-icon-btn:hover { color: var(--ink); }
+.nav.lux-nav.scrolled .lux-hamburger { color: rgba(26,18,8,0.68); }
+.nav.lux-nav.scrolled .lux-hamburger.active { color: var(--ink); }
 
 /* Override luxury.css nav styles to match new design */
 .container.nav-inner {
@@ -453,8 +470,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-htape {
   position: absolute; bottom: 130px; left: 0; right: 0; z-index: 4;
   overflow: hidden; pointer-events: none;
-  border-top: 1px solid rgba(181,137,90,0.37);
-  border-bottom: 1px solid rgba(181,137,90,0.37);
+  border-top: 1px solid rgba(184,145,42,0.37);
+  border-bottom: 1px solid rgba(184,145,42,0.37);
   padding: 11px 0;
   background: rgba(6,5,4,.38);
   backdrop-filter: blur(4px);
@@ -504,7 +521,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   -webkit-text-stroke: 1.8px rgba(255,255,255,.82);
   font-weight: 300;
   text-shadow: none;
-  filter: drop-shadow(0 0 22px rgba(181,137,90,0.45));
+  filter: drop-shadow(0 0 22px rgba(184,145,42,0.45));
 }
 
 .sh-hsub {
@@ -638,16 +655,16 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── MARQUEE STRIP ── */
 .sh-marq {
-    background: #000000 !important;
- overflow: hidden; padding: 14px 0;
-  user-select: none; border-top: 1px solid rgba(181,137,90,0.21);
-  border-bottom: 1px solid rgba(181,137,90,0.21);
+  background: var(--parchment) !important;
+  overflow: hidden; padding: 14px 0;
+  user-select: none; border-top: 1px solid rgba(184,145,42,0.25);
+  border-bottom: 1px solid rgba(184,145,42,0.25);
 }
 .sh-marq-t {
   display: flex; gap: 56px; white-space: nowrap;
   animation: marqScroll 38s linear infinite;
   font: 400 7.5px/1 var(--body); letter-spacing: .38em;
-  text-transform: uppercase;   color: rgba(255,255,255,0.45) !important;
+  text-transform: uppercase; color: rgba(26,18,8,0.62) !important;
 
 }
 @keyframes marqScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
@@ -929,43 +946,45 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── MANIFESTO ── */
 .sh-mani {
-  background: var(--obsidian); padding: clamp(96px, 14vw, 180px) 24px;
+  background: var(--ivory); padding: clamp(96px, 14vw, 180px) 24px;
   text-align: center; position: relative; overflow: hidden;
+  border-top: 1px solid rgba(26,18,8,.06);
+  border-bottom: 1px solid rgba(26,18,8,.06);
 }
 .sh-mani::before {
   content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(181,137,90,0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(184,145,42,0.45), transparent);
 }
 .sh-mani::after {
   content: ''; position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: 900px; height: 450px;
-  background: radial-gradient(ellipse, rgba(181,137,90,0.19) 0%, transparent 68%);
+  background: radial-gradient(ellipse, rgba(184,145,42,0.10) 0%, transparent 68%);
   pointer-events: none;
 }
 .sh-mani-in { max-width: 920px; margin: 0 auto; position: relative; z-index: 1; }
 .sh-mani-orn {
   font: 300 clamp(88px, 16vw, 172px)/.6 var(--display);
-  color: var(--gold); opacity: .12; margin-bottom: -20px;
+  color: var(--gold); opacity: .16; margin-bottom: -20px;
   display: block; user-select: none;
 }
 .sh-mani-q {
   font: 300 italic clamp(22px, 3.6vw, 52px)/1.36 var(--editorial);
-  color: var(--ivory); letter-spacing: -.008em; margin-bottom: 38px;
+  color: var(--ink); letter-spacing: -.008em; margin-bottom: 38px;
 }
 .sh-mani-rule { width: 38px; height: 1px; background: var(--gold); margin: 0 auto 22px; }
 .sh-mani-by {
   font: 400 8.5px/1 var(--body); letter-spacing: .38em;
-  text-transform: uppercase; color: rgba(245,240,232,0.38); margin-bottom: 54px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 54px;
 }
 
 /* ── SIGNATURE STRIP ── */
 .sh-sig {
-  background: #0f0e0d; padding: 72px 0; position: relative; overflow: hidden;
+  background: var(--parchment); padding: 72px 0; position: relative; overflow: hidden;
 }
 .sh-sig::before, .sh-sig::after {
   content: ''; position: absolute; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(181,137,90,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(184,145,42,0.4), transparent);
 }
 .sh-sig::before { top: 0; } .sh-sig::after { bottom: 0; }
 .sh-sig-in {
@@ -976,12 +995,12 @@ span.lux-cart-count.cart-count { display: flex !important; }
   display: flex; flex-direction: column; align-items: center;
   gap: 7px; padding: 0 44px; text-align: center;
 }
-.sh-sig-v { font: 300 clamp(18px, 2.6vw, 30px)/1 var(--editorial); color: rgba(245,240,232,0.68); letter-spacing: .05em; }
-.sh-sig-l { font: 400 7.5px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: rgba(245,240,232,0.36); }
-.sh-sig-d { width: 1px; height: 52px; background: rgba(245,240,232,0.24); flex-shrink: 0; }
+.sh-sig-v { font: 300 clamp(18px, 2.6vw, 30px)/1 var(--editorial); color: var(--ink); letter-spacing: .05em; }
+.sh-sig-l { font: 400 7.5px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--muted); }
+.sh-sig-d { width: 1px; height: 52px; background: rgba(26,18,8,0.14); flex-shrink: 0; }
 .sh-sig-c { padding: 0 56px; text-align: center; flex-shrink: 0; }
-.sh-sig-logo { font: 300 clamp(22px, 3vw, 38px)/1 var(--display); letter-spacing: .56em; color: rgba(245,240,232,0.62); margin-bottom: 10px; }
-.sh-sig-tag { font: 400 7.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); opacity: .55; }
+.sh-sig-logo { font: 300 clamp(22px, 3vw, 38px)/1 var(--display); letter-spacing: .56em; color: var(--ink); margin-bottom: 10px; }
+.sh-sig-tag { font: 400 7.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); opacity: .85; }
 
 /* ── CATEGORY GRID ── */
 .sh-cat { padding: 120px 0; background: var(--cream); }
@@ -1078,8 +1097,9 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── NEWSLETTER ── */
 .sh-nl {
-  background: var(--obsidian); padding: clamp(96px, 13vw, 160px) 24px;
+  background: var(--parchment); padding: clamp(96px, 13vw, 160px) 24px;
   position: relative; overflow: hidden;
+  border-top: 1px solid rgba(26,18,8,.06);
 }
 .sh-nl::before {
   content: ''; position: absolute; top: 0; left: 50%;
@@ -1089,35 +1109,35 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-nl::after {
   content: ''; position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%); width: 900px; height: 450px;
-  background: radial-gradient(ellipse, rgba(181,137,90,0.19) 0%, transparent 64%);
+  background: radial-gradient(ellipse, rgba(184,145,42,0.12) 0%, transparent 64%);
   pointer-events: none;
 }
 .sh-nl-in { max-width: 640px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
-.sh-nl-h { font: 300 clamp(38px, 5.5vw, 70px)/1.04 var(--display); color: var(--ivory); margin: 16px 0 18px; }
-.sh-nl-h em { font-style: italic; color: var(--gold-light); }
-.sh-nl-in > p { font: 400 13px/1.88 var(--body); color: rgba(245,240,232,0.48); margin-bottom: 48px; }
+.sh-nl-h { font: 300 clamp(38px, 5.5vw, 70px)/1.04 var(--display); color: var(--ink); margin: 16px 0 18px; }
+.sh-nl-h em { font-style: italic; color: var(--gold); }
+.sh-nl-in > p { font: 400 13px/1.88 var(--body); color: var(--muted); margin-bottom: 48px; }
 .sh-nl-form {
-  display: flex; border-bottom: 1px solid rgba(245,240,232,0.32);
+  display: flex; border-bottom: 1px solid rgba(26,18,8,0.22);
   max-width: 480px; margin: 0 auto 16px;
   transition: border-color .35s;
 }
-.sh-nl-form:focus-within { border-color: rgba(181,137,90,0.75); }
+.sh-nl-form:focus-within { border-color: var(--gold); }
 .sh-nl-inp {
-  flex: 1; background: none; border: none; color: var(--ivory);
+  flex: 1; background: none; border: none; color: var(--ink);
   padding: 16px 0; font: 400 13.5px/1 var(--body); outline: none;
 }
-.sh-nl-inp::placeholder { color: rgba(245,240,232,0.38); }
+.sh-nl-inp::placeholder { color: var(--muted); }
 .sh-nl-btn {
   padding: 16px 22px; font: 400 8px/1 var(--body); letter-spacing: .36em;
-  text-transform: uppercase; color: rgba(245,240,232,0.58); background: none;
+  text-transform: uppercase; color: var(--muted); background: none;
   border: none; transition: color .3s; cursor: pointer;
 }
-.sh-nl-btn:hover { color: var(--gold-light); }
-.sh-nl-note { font: 400 8.5px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: rgba(245,240,232,0.3); }
+.sh-nl-btn:hover { color: var(--gold); }
+.sh-nl-note { font: 400 8.5px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--warm-mid); }
 
 /* ── FOOTER ── */
 .sh-foot {
-  background: #090908; color: rgba(245,240,232,0.56);
+  background: var(--ink); color: rgba(253,250,246,0.56);
   padding: 88px 0 0;
 }
 .sh-foot-top {
@@ -1158,6 +1178,144 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-foot-legal { display: flex; gap: 24px; }
 .sh-foot-legal a { color: rgba(245,240,232,0.38); font-size: 10px; transition: color .28s; }
 .sh-foot-legal a:hover { color: rgba(245,240,232,0.78); }
+
+/* ══════════════════════════════════════════════════════════
+   NEW EDITORIAL COMPONENTS — v7 structural redesign
+   Replaces: marquee+pillars, split+cinematic, three-panel+manifesto,
+   review cards, and adds a footer trust strip (was atelier promises)
+   ══════════════════════════════════════════════════════════ */
+
+/* ── EDITORIAL INDEX (replaces marquee + pillars) ── */
+.ed-index {
+  background: var(--parchment);
+  border-top: 1px solid rgba(184,145,42,0.25);
+  border-bottom: 1px solid rgba(184,145,42,0.25);
+}
+.ed-index-in {
+  max-width: var(--max); margin: 0 auto; padding: 26px var(--gutter);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px; flex-wrap: wrap;
+}
+.ed-tag {
+  font: 400 8.5px/1 var(--body); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--muted); flex-shrink: 0; white-space: nowrap;
+}
+.ed-tag b { color: var(--gold); font-weight: 500; }
+.ed-list {
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+}
+.ed-item {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 0 22px; border-left: 1px solid rgba(26,18,8,0.12);
+  font: 400 9.5px/1 var(--body); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink);
+}
+.ed-item:first-child { border-left: none; padding-left: 0; }
+.ed-num { font: 300 italic 13px/1 var(--editorial); color: var(--gold); }
+
+/* ── COVER STORY (replaces editorial split + cinematic break) ── */
+.cover-story { background: var(--ivory); padding: 130px 0; overflow: hidden; }
+.cover-grid {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
+  display: grid; grid-template-columns: .92fr 1.08fr; gap: 0; align-items: center;
+  position: relative;
+}
+.cover-img-main {
+  position: relative; aspect-ratio: 4/5; overflow: hidden; background: var(--parchment);
+  z-index: 1;
+}
+.cover-img-main img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 12s var(--silk);
+}
+.cover-img-main:hover img { transform: scale(1.045); }
+.cover-badge {
+  position: absolute; top: 24px; left: 24px; z-index: 2;
+  font: 400 8px/1 var(--body); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ivory); background: rgba(26,18,8,.42);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  padding: 10px 20px; border: 1px solid rgba(253,250,246,0.28);
+}
+.cover-img-inset {
+  position: relative; width: 58%; aspect-ratio: 4/5; overflow: hidden;
+  margin-left: -18%; margin-top: 14%; z-index: 2;
+  border: 8px solid var(--ivory); box-shadow: 0 30px 70px rgba(26,18,8,.16);
+}
+.cover-img-inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-text {
+  padding: 0 0 0 clamp(40px, 6vw, 96px); position: relative; z-index: 1;
+}
+.cover-drop {
+  font: 300 italic clamp(70px, 9vw, 128px)/.7 var(--display);
+  color: var(--gold); opacity: .9; display: block; margin-bottom: 4px;
+}
+.cover-quote {
+  font: 300 italic clamp(26px, 3.2vw, 42px)/1.32 var(--editorial);
+  color: var(--ink); letter-spacing: -.01em; margin-bottom: 30px; max-width: 480px;
+}
+.cover-body { font: 400 14px/2.0 var(--body); color: var(--muted); max-width: 420px; margin-bottom: 34px; }
+.cover-byline { font: 400 8.5px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 30px; }
+
+/* ── FIELD NOTES (replaces three-panel + manifesto) ── */
+.field-notes { background: var(--parchment); padding: 130px 0; }
+.fn-grid {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
+  display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 40px; align-items: center;
+}
+.fn-img { overflow: hidden; background: var(--sand); }
+.fn-img img {
+  width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
+  transition: transform 1.8s cubic-bezier(0.19,1,0.22,1);
+}
+.fn-col:hover .fn-img img { transform: scale(1.05); }
+.fn-plate {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 16px 2px 0;
+  font: 400 8.5px/1 var(--body); letter-spacing: .24em; text-transform: uppercase; color: var(--muted);
+}
+.fn-center { text-align: center; padding: 0 12px; }
+.fn-quote-mark {
+  font: 300 clamp(64px, 8vw, 100px)/.6 var(--display); color: var(--gold);
+  opacity: .85; display: block; margin-bottom: 6px;
+}
+.fn-quote {
+  font: 300 italic clamp(22px, 2.6vw, 32px)/1.42 var(--editorial);
+  color: var(--ink); margin-bottom: 20px;
+}
+.fn-cite { font: 400 8.5px/1 var(--body); letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+
+/* ── READER MAIL (replaces review card grid) ── */
+.reader-mail { background: var(--ivory); padding: 130px 0; }
+.rm-list { max-width: 880px; margin: 60px auto 0; display: flex; flex-direction: column; gap: 0; }
+.rm-item {
+  display: grid; grid-template-columns: 90px 1fr; gap: 28px;
+  padding: 40px 0; border-bottom: 1px solid rgba(26,18,8,.08);
+}
+.rm-item:first-child { padding-top: 0; }
+.rm-item:last-child { border-bottom: none; }
+.rm-item.right { grid-template-columns: 1fr 90px; }
+.rm-item.right .rm-mark { order: 2; text-align: right; }
+.rm-mark { font: 300 italic 56px/.6 var(--display); color: var(--gold); opacity: .8; }
+.rm-stars { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 14px; }
+.rm-text { font: 300 italic 19px/1.6 var(--editorial); color: var(--ink); margin-bottom: 14px; max-width: 560px; }
+.rm-item.right .rm-text { margin-left: auto; text-align: right; }
+.rm-who { font: 400 8.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
+.rm-item.right .rm-who { text-align: right; }
+
+/* ── FOOTER TRUST STRIP (replaces standalone atelier promises) ── */
+.foot-trust {
+  background: var(--ivory); border-bottom: 1px solid rgba(26,18,8,.06);
+  padding: 46px var(--gutter);
+}
+.foot-trust-in {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.ft-item { display: flex; align-items: center; gap: 12px; }
+.ft-item svg { color: var(--gold); flex-shrink: 0; opacity: .85; }
+.ft-item-txt { display: flex; flex-direction: column; gap: 2px; }
+.ft-lbl { font: 400 9px/1 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+.ft-sub { font: 400 11px/1.3 var(--body); color: var(--muted); }
 
 /* ── QUICK VIEW MODAL ── */
 #quick-modal {
@@ -1228,7 +1386,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   background: var(--obsidian); color: var(--ivory);
   font: 400 9px/1 var(--body); letter-spacing: .28em;
   text-transform: uppercase; padding: 14px 28px;
-  border: 1px solid rgba(181,137,90,0.35); z-index: 8500;
+  border: 1px solid rgba(184,145,42,0.35); z-index: 8500;
   opacity: 0; transition: transform .4s var(--spring), opacity .4s; white-space: nowrap;
 }
 #sh-toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -1335,14 +1493,14 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── Box container ── */
 .sp-box {
-  background: var(--deep);
+  background: var(--cream);
   width: 100%;
   max-width: min(880px, 96vw);
   /* Use dvh so mobile browser chrome doesn't cause overflow */
   max-height: calc(100dvh - clamp(20px, 6vw, 48px));
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(181,137,90,0.27);
+  border: 1px solid rgba(184,145,42,0.3);
   position: relative;
   animation: qmSlide .55s var(--ease-out);
   /* Contain ALL children — no overflow escapes */
@@ -1353,13 +1511,13 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sp-x {
   position: absolute; top: 14px; right: 14px;
   font-size: 22px; line-height: 1;
-  color: rgba(245,240,232,0.44);
+  color: rgba(26,18,8,0.4);
   transition: color .3s;
   z-index: 20;
   width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
 }
-.sp-x:hover { color: rgba(245,240,232,0.88); }
+.sp-x:hover { color: var(--ink); }
 
 /* ── Left panel (wheel side) ── */
 .sp-left {
@@ -1370,8 +1528,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
   /* clamp() padding scales with viewport */
   padding: clamp(28px, 4.5vw, 56px) clamp(18px, 3.5vw, 36px) clamp(20px, 3vw, 36px);
   gap: clamp(10px, 1.8vw, 20px);
-  background: #0f0e0d;
-  border-right: 1px solid rgba(181,137,90,0.23);
+  background: var(--ink);
+  border-right: 1px solid rgba(184,145,42,0.28);
   /* Critical: prevent grid column blowout */
   min-width: 0;
   overflow: hidden;
@@ -1406,7 +1564,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   height: 100% !important;
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid rgba(181,137,90,0.3);
+  border: 2px solid rgba(184,145,42,0.3);
 }
 
 /* ── Pointer arrow — sits above the wheel ── */
@@ -1442,7 +1600,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
 }
 .sp-wcenter:hover {
   transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 0 20px rgba(181,137,90,0.55);
+  box-shadow: 0 0 20px rgba(184,145,42,0.55);
 }
 
 .sp-lsub {
@@ -1470,44 +1628,44 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 .sp-right h2 {
   font: 300 clamp(18px, 2.4vw, 36px)/1.1 var(--display);
-  color: var(--ivory); margin-top: 4px;
+  color: var(--ink); margin-top: 4px;
 }
-.sp-right h2 em { font-style: italic; color: var(--gold-light); }
+.sp-right h2 em { font-style: italic; color: var(--gold); }
 .sp-right > p {
   font: 400 clamp(11px, 1.2vw, 13px)/1.8 var(--body);
-  color: rgba(245,240,232,0.53);
+  color: var(--muted);
 }
 
 .sp-inp {
   width: 100%;
-  background: rgba(245,240,232,0.22);
-  border: 1px solid rgba(245,240,232,0.26);
-  color: var(--ivory);
+  background: var(--parchment);
+  border: 1px solid rgba(26,18,8,0.14);
+  color: var(--ink);
   padding: clamp(10px, 1.3vw, 14px) clamp(12px, 1.5vw, 18px);
   font: 400 13px/1 var(--body);
   outline: none;
   transition: border-color .3s;
 }
-.sp-inp::placeholder { color: rgba(245,240,232,0.38); }
-.sp-inp:focus { border-color: rgba(181,137,90,0.55); }
+.sp-inp::placeholder { color: var(--muted); }
+.sp-inp:focus { border-color: var(--gold); }
 
 .sp-error {
   font: 400 9px/1 var(--body); letter-spacing: .2em;
-  color: #e07070; display: none;
+  color: #c0392b; display: none;
 }
 .sp-error.show { display: block; }
 
 .sp-submit {
   width: 100%;
   padding: clamp(12px, 1.5vw, 15px) 28px;
-  background: var(--gold); color: var(--ivory);
+  background: var(--ink); color: var(--ivory);
   font: 300 8.5px/1 var(--body); letter-spacing: .36em;
   text-transform: uppercase; transition: background .4s;
 }
-.sp-submit:hover { background: var(--gold-light); }
+.sp-submit:hover { background: var(--gold); }
 
-#spin-result { font: 400 12px/1.6 var(--body); color: rgba(245,240,232,0.58); }
-.sp-note { font: 400 9px/1.6 var(--body); color: rgba(245,240,232,0.34); }
+#spin-result { font: 400 12px/1.6 var(--body); color: var(--muted); }
+.sp-note { font: 400 9px/1.6 var(--body); color: var(--warm-mid); }
 
 /* ── RESPONSIVE: Tablet ≤ 900px — stack vertically ── */
 @media (max-width: 900px) {
@@ -1523,7 +1681,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sp-left {
     padding: clamp(28px, 5vw, 44px) clamp(20px, 5vw, 36px) clamp(16px, 3vw, 24px);
     border-right: none;
-    border-bottom: 1px solid rgba(181,137,90,0.23);
+    border-bottom: 1px solid rgba(184,145,42,0.23);
   }
 
   /* On single-column, wheel can use more width */
@@ -1566,32 +1724,32 @@ span.lux-cart-count.cart-count { display: flex !important; }
 }
 #coupon-popup.show { display: flex; animation: qmFade .5s var(--ease-out); }
 .cp-box {
-  background: var(--deep); padding: 56px 52px; max-width: 480px; width: 100%;
-  text-align: center; border: 1px solid rgba(181,137,90,0.29);
+  background: var(--cream); padding: 56px 52px; max-width: 480px; width: 100%;
+  text-align: center; border: 1px solid rgba(184,145,42,0.32);
   position: relative; animation: qmSlide .52s var(--ease-out);
 }
 .cp-x {
   position: absolute; top: 16px; right: 16px;
-  font-size: 20px; color: rgba(245,240,232,0.42); transition: color .3s;
+  font-size: 20px; color: rgba(26,18,8,0.38); transition: color .3s;
 }
-.cp-x:hover { color: rgba(245,240,232,0.88); }
-.cp-box .sh-ey { color: rgba(245,240,232,0.42) !important; }
-.cp-box h2 { font: 300 clamp(26px, 3.8vw, 42px)/1.1 var(--display); color: var(--ivory); margin: 14px 0 10px; }
-.cp-box > p { font: 400 12px/1.68 var(--body); color: rgba(245,240,232,0.5); margin-bottom: 22px; }
+.cp-x:hover { color: var(--ink); }
+.cp-box .sh-ey { color: var(--muted) !important; }
+.cp-box h2 { font: 300 clamp(26px, 3.8vw, 42px)/1.1 var(--display); color: var(--ink); margin: 14px 0 10px; }
+.cp-box > p { font: 400 12px/1.68 var(--body); color: var(--muted); margin-bottom: 22px; }
 #coupon-discount { font: 300 italic 52px/1 var(--editorial); color: var(--gold); margin-bottom: 22px; }
 .cp-code {
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(245,240,232,0.23); border: 1px solid rgba(245,240,232,0.26);
+  background: var(--parchment); border: 1px solid rgba(26,18,8,0.1);
   padding: 14px 20px 14px 26px; margin-bottom: 18px;
 }
-.cp-code span { font: 300 12px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--ivory); }
+.cp-code span { font: 300 12px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--ink); }
 .cp-copy {
   background: var(--gold); color: var(--ivory); padding: 9px 18px;
   font: 400 8.5px/1 var(--body); letter-spacing: .26em;
   text-transform: uppercase; transition: background .28s;
 }
-.cp-copy:hover { background: var(--gold-light); }
-.cp-note { font: 400 9px/1.6 var(--body); color: rgba(245,240,232,0.36); }
+.cp-copy:hover { background: var(--ink); }
+.cp-note { font: 400 9px/1.6 var(--body); color: var(--warm-mid); }
 
 /* ── STORY BUBBLE ── */
 .story-bubble-wrap { margin-left: 10px; }
@@ -1629,6 +1787,13 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-igrid { grid-template-columns: repeat(3, 1fr); }
   .sh-ii.tall { grid-row: auto; aspect-ratio: 1; }
   /* sp-box responsive overrides moved into dedicated spin popup block above */
+
+  .cover-grid { grid-template-columns: 1fr; gap: 60px; }
+  .cover-img-inset { width: 62%; margin-left: 0; margin-top: -14%; left: 24px; position: relative; }
+  .cover-text { padding: 0 var(--gutter); }
+  .fn-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .fn-center { grid-column: 1 / -1; order: -1; padding: 0 0 12px; }
+  .foot-trust-in { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
   :root { --gutter: 22px; }
@@ -1675,7 +1840,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-atel-in { grid-template-columns: 1fr; padding: 0 22px; }
   .sh-ai { flex-direction: row; text-align: left; align-items: flex-start; }
   .sh-sig-in { flex-wrap: wrap; padding: 0 22px; }
-  .sh-sig-c { order: -1; width: 100%; padding: 0 0 26px; margin-bottom: 22px; border-bottom: 1px solid rgba(245,240,232,0.24); }
+  .sh-sig-c { order: -1; width: 100%; padding: 0 0 26px; margin-bottom: 22px; border-bottom: 1px solid rgba(26,18,8,0.12); }
   .sh-sig-item { padding: 10px 18px; }
   .sh-sig-d { height: 1px; width: 40px; align-self: center; }
   .sh-igrid { grid-template-columns: repeat(2, 1fr); }
@@ -1693,6 +1858,20 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .container.nav-inner { height: 62px; }
   .nav-link-sm { display: none; }
   .nav-icons .nav-link-sm { display: none; }
+
+  .ed-index-in { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 22px; }
+  .ed-list { gap: 0; }
+  .ed-item { padding: 0 14px; font-size: 8.5px; }
+  .cover-story, .field-notes, .reader-mail { padding: 72px 0; }
+  .cover-img-inset { width: 55%; }
+  .fn-grid { grid-template-columns: 1fr; gap: 24px; padding: 0 22px; }
+  .fn-center { padding: 0 0 8px; }
+  .rm-item, .rm-item.right { grid-template-columns: 56px 1fr; gap: 16px; padding: 28px 0; }
+  .rm-item.right .rm-mark { text-align: left; order: 0; }
+  .rm-item.right .rm-text, .rm-item.right .rm-who { text-align: left; margin-left: 0; }
+  .rm-mark { font-size: 40px; }
+  .foot-trust { padding: 32px 22px; }
+  .foot-trust-in { grid-template-columns: 1fr 1fr; gap: 24px; }
 }
 @media (max-width: 480px) {
   .sh-htitle { font-size: clamp(46px, 13vw, 64px); }
@@ -1701,7 +1880,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-stitle { font-size: 28px !important; }
   .sh-nl-h { font-size: 34px !important; }
   .sh-nl-form { flex-direction: column; border: none; }
-  .sh-nl-inp { border-bottom: 1px solid rgba(245,240,232,0.32); text-align: center; padding: 13px 0; }
+  .sh-nl-inp { border-bottom: 1px solid rgba(26,18,8,0.18); text-align: center; padding: 13px 0; }
   .sh-nl-btn { padding: 13px; }
   .sh-pgrid { gap: 12px 8px; }
   .sh-cgrid { grid-template-columns: 1fr; }
@@ -1956,48 +2135,42 @@ span.lux-cart-count.cart-count { display: flex !important; }
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="sh-marq" aria-hidden="true">
-  <div class="sh-marq-t">
-    <span>Ready To Wear</span><span class="sh-dot">◆</span>
-    <span>Limited Editions</span><span class="sh-dot">◆</span>
-    <span>Atelier Crafted</span><span class="sh-dot">◆</span>
-    <span>Premium Fabrics</span><span class="sh-dot">◆</span>
-    <span>Autumn 2026</span><span class="sh-dot">◆</span>
-    <span>Free Delivery ₹2000+</span><span class="sh-dot">◆</span>
-    <span>Ready To Wear</span><span class="sh-dot">◆</span>
-    <span>Limited Editions</span><span class="sh-dot">◆</span>
-    <span>Atelier Crafted</span><span class="sh-dot">◆</span>
-    <span>Premium Fabrics</span><span class="sh-dot">◆</span>
-    <span>Autumn 2026</span><span class="sh-dot">◆</span>
-    <span>Free Delivery ₹2000+</span><span class="sh-dot">◆</span>
+<!-- ══════════════════════════════════
+     EDITORIAL INDEX — replaces marquee + pillars
+══════════════════════════════════ -->
+<div class="ed-index" aria-hidden="false">
+  <div class="ed-index-in">
+    <span class="ed-tag">Issue N<b>o</b> 06 — Autumn 2026</span>
+    <div class="ed-list">
+      <span class="ed-item"><span class="ed-num">01</span> Refined Silhouettes</span>
+      <span class="ed-item"><span class="ed-num">02</span> Premium Fabrics</span>
+      <span class="ed-item"><span class="ed-num">03</span> Limited Editions</span>
+      <span class="ed-item"><span class="ed-num">04</span> Crafted in India</span>
+    </div>
   </div>
 </div>
 
-<!-- PILLARS -->
-<div class="sh-pillars">
-  <div class="sh-pillars-in">
-    <div class="sh-pillar sr">
-      <span class="sh-pillar-n">01</span>
-      <span class="sh-pillar-t">Refined Silhouettes</span>
+<!-- ══════════════════════════════════
+     COVER STORY — replaces editorial split + cinematic break
+══════════════════════════════════ -->
+<section class="cover-story">
+  <div class="cover-grid">
+    <div class="cover-img-main sr">
+      <img src="images/design.png" alt="Shenova Lookbook" loading="lazy">
+      <div class="cover-badge">Autumn · 2026</div>
+      <div class="cover-img-inset">
+        <img src="images/front14.jpg" alt="Shenova Editorial" loading="lazy">
+      </div>
     </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-pillar sr" data-d="1">
-      <span class="sh-pillar-n">02</span>
-      <span class="sh-pillar-t">Premium Fabrics</span>
-    </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-pillar sr" data-d="2">
-      <span class="sh-pillar-n">03</span>
-      <span class="sh-pillar-t">Limited Editions</span>
-    </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-pillar sr" data-d="3">
-      <span class="sh-pillar-n">04</span>
-      <span class="sh-pillar-t">Crafted in India</span>
+    <div class="cover-text sr" data-d="1">
+      <span class="cover-drop" aria-hidden="true">"</span>
+      <p class="cover-quote">Every piece is an argument for restraint — designed for silence, not spectacle.</p>
+      <p class="cover-body">We believe luxury is not worn loudly. It is felt — in the weight of fabric, the architecture of a hem, the stillness of a silhouette that needs no introduction.</p>
+      <span class="cover-byline">The Atelier Journal · Vol. 01</span>
+      <a href="about.html" class="sh-ul">Discover Our Story →</a>
     </div>
   </div>
-</div>
+</section>
 
 <!-- ══════════════════════════════════
      PRODUCTS — main.js loadFeatured() hook preserved
@@ -2006,7 +2179,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   <div class="sh-wrap">
     <div class="sh-head sr">
       <div>
-        <span class="sh-ey">Most Loved</span>
+        <span class="sh-ey">The Edit · Vol. 01</span>
         <h2 class="sh-stitle">Trending <em>Now</em></h2>
       </div>
       <a href="shop.html" class="sh-slink">View All →</a>
@@ -2016,133 +2189,36 @@ span.lux-cart-count.cart-count { display: flex !important; }
 </section>
 
 <!-- ══════════════════════════════════
-     EDITORIAL SPLIT
+     FIELD NOTES — replaces three-panel + manifesto
 ══════════════════════════════════ -->
-<section class="sh-split">
-  <div class="sh-split-img sr">
-    <img src="images/design.png" alt="Shenova Lookbook" loading="lazy">
-    <div class="sh-split-badge">Autumn · 2026</div>
-  </div>
-  <div class="sh-split-txt sr" data-d="1">
-    <span class="sh-ey">The Philosophy</span>
-    <h2 class="sh-split-h">Designed for <em>silence.</em></h2>
-    <p class="sh-split-p">We believe luxury is not worn loudly. It is felt — in the weight of fabric, the architecture of a hem, the stillness of a silhouette that needs no introduction.</p>
-    <a href="about.html" class="sh-ul">Discover Our Story →</a>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     CINEMATIC BREAK
-══════════════════════════════════ -->
-<section class="sh-cin sr" id="sh-cin">
-  <img src="images/front14.jpg" alt="Shenova Editorial" loading="lazy">
-  <div class="sh-cin-ov"></div>
-  <div class="sh-cin-cap">
-    <span class="sh-ey" style="color: rgba(245,240,232,0.52)">Shenova Atelier · 2026</span>
-    <p>"Every piece is an argument<br>for restraint."</p>
-  </div>
-  <div class="sh-cin-num" aria-hidden="true">
-    <span>01</span><i></i><span>06</span>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     THREE PANEL
-══════════════════════════════════ -->
-<section class="sh-three">
-  <div class="sh-3in">
-    <div class="sh-3col sr">
-      <div class="sh-3img">
-        <img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy">
-      </div>
-      <div class="sh-3cap">
-        <span class="sh-3num">001</span>
-        <p>The Quiet Edit</p>
-      </div>
+<section class="field-notes">
+  <div class="fn-grid">
+    <div class="fn-col sr">
+      <div class="fn-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div>
+      <div class="fn-plate"><span>Plate 01</span><span>The Quiet Edit</span></div>
     </div>
-    <div class="sh-3mid sr" data-d="2">
-      <span class="sh-3rule"></span>
-      <span class="sh-ey">Autumn / Winter 2026</span>
-      <h2 class="sh-3h">Worn by <em>Instinct</em></h2>
-      <p class="sh-3p">Pieces born from restraint. Worn by feel. Made for the woman whose presence precedes her.</p>
-      <a href="shop.html" class="btn-pill dk">
-        <span>Explore the Edit</span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
+    <div class="fn-center sr" data-d="1">
+      <span class="fn-quote-mark" aria-hidden="true">"</span>
+      <blockquote class="fn-quote">We do not follow trends. We make pieces that belong to no season.</blockquote>
+      <div class="fn-cite">— Shenova Atelier</div>
+      <a href="about.html" class="btn-ol">Read Our Story</a>
     </div>
-    <div class="sh-3col sr" data-d="1">
-      <div class="sh-3img sh-3off">
-        <img src="images/front6.jpg" alt="Evening Edit" loading="lazy">
-      </div>
-      <div class="sh-3cap sh-3cap-r">
-        <p>Evening Edit</p>
-        <span class="sh-3num">002</span>
-      </div>
+    <div class="fn-col sr" data-d="2">
+      <div class="fn-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div>
+      <div class="fn-plate"><span>Plate 02</span><span>Evening Edit</span></div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════
-     H-SCROLL GALLERY
-══════════════════════════════════ -->
-<section class="sh-gal">
-  <div class="sh-gal-head">
-    <div class="sh-head sr">
-      <div>
-        <span class="sh-ey">The Edit</span>
-        <h2 class="sh-stitle">Campaign <em>Stories</em></h2>
-      </div>
-    </div>
-  </div>
-  <div class="sh-gal-wrap" id="sh-gw">
-    <div class="sh-gal-track">
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div><div class="sh-gc-m"><span>01</span><span>The Quiet Edit</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front13.jpg" alt="Autumn Forms" loading="lazy"></div><div class="sh-gc-m"><span>02</span><span>Autumn Forms</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front14.jpg" alt="Modern Minimal" loading="lazy"></div><div class="sh-gc-m"><span>03</span><span>Modern Minimal</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div><div class="sh-gc-m"><span>04</span><span>After Dusk</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front5.jpg" alt="Pure Form" loading="lazy"></div><div class="sh-gc-m"><span>05</span><span>Pure Form</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div><div class="sh-gc-m"><span>06</span><span>Evening Edit</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     MANIFESTO
-══════════════════════════════════ -->
-<section class="sh-mani">
-  <div class="sh-mani-in sr">
-    <span class="sh-mani-orn" aria-hidden="true">"</span>
-    <blockquote class="sh-mani-q">We do not follow trends.<br>We make pieces that belong<br>to no season.</blockquote>
-    <div class="sh-mani-rule"></div>
-    <div class="sh-mani-by">— Shenova Atelier</div>
-    <a href="about.html" class="btn-ol">Read Our Story</a>
-  </div>
-</section>
-
-<!-- SIGNATURE STRIP -->
-<section class="sh-sig">
-  <div class="sh-sig-in sr">
-    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">Founded</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">India</span><span class="sh-sig-l">Crafted Here</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-c"><div class="sh-sig-logo">SHENOVA</div><div class="sh-sig-tag">Quiet Luxury for the Modern Woman</div></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">Limited</span><span class="sh-sig-l">Every Drop</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">New Season</span></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     CATEGORY GRID
+     THE DIRECTORY — category grid
 ══════════════════════════════════ -->
 <section class="sh-cat">
   <div class="sh-wrap">
     <div class="sh-head sr">
       <div>
         <span class="sh-ey">Browse By</span>
-        <h2 class="sh-stitle">Shop the <em>Edit</em></h2>
+        <h2 class="sh-stitle">The <em>Directory</em></h2>
       </div>
     </div>
     <div class="sh-cgrid">
@@ -2172,48 +2248,33 @@ span.lux-cart-count.cart-count { display: flex !important; }
 </section>
 
 <!-- ══════════════════════════════════
-     ATELIER PROMISES
+     PHOTO ESSAY — h-scroll gallery, sh-gw id preserved for drag JS
 ══════════════════════════════════ -->
-<div class="sh-atel">
-  <div class="sh-atel-in">
-    <div class="sh-ai sr">
-      <div class="sh-ai-ic">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+<section class="sh-gal">
+  <div class="sh-gal-head">
+    <div class="sh-head sr">
+      <div>
+        <span class="sh-ey">The Essay</span>
+        <h2 class="sh-stitle">Campaign <em>Stories</em></h2>
       </div>
-      <span class="sh-ai-lbl">Artisan Quality</span>
-      <p>Every seam inspected by hand.</p>
-    </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-ai sr" data-d="1">
-      <div class="sh-ai-ic">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-      </div>
-      <span class="sh-ai-lbl">Limited Runs</span>
-      <p>Never mass-produced.</p>
-    </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-ai sr" data-d="2">
-      <div class="sh-ai-ic">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <span class="sh-ai-lbl">Free Delivery</span>
-      <p>On orders above ₹2,000.</p>
-    </div>
-    <div class="sh-vrule" aria-hidden="true"></div>
-    <div class="sh-ai sr" data-d="3">
-      <div class="sh-ai-ic">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      </div>
-      <span class="sh-ai-lbl">Crafted in India</span>
-      <p>Elevated for the world.</p>
     </div>
   </div>
-</div>
+  <div class="sh-gal-wrap" id="sh-gw">
+    <div class="sh-gal-track">
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front13.jpg" alt="Autumn Forms" loading="lazy"></div><div class="sh-gc-m"><span>01</span><span>Autumn Forms</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div><div class="sh-gc-m"><span>02</span><span>After Dusk</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front5.jpg" alt="Pure Form" loading="lazy"></div><div class="sh-gc-m"><span>03</span><span>Pure Form</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div><div class="sh-gc-m"><span>04</span><span>The Quiet Edit</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front14.jpg" alt="Modern Minimal" loading="lazy"></div><div class="sh-gc-m"><span>05</span><span>Modern Minimal</span></div></div>
+      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div><div class="sh-gc-m"><span>06</span><span>Evening Edit</span></div></div>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════
-     REVIEWS
+     READER MAIL — replaces review card grid
 ══════════════════════════════════ -->
-<section class="sh-s" style="background: var(--parchment);">
+<section class="reader-mail">
   <div class="sh-wrap">
     <div class="sh-head sr">
       <div>
@@ -2221,62 +2282,88 @@ span.lux-cart-count.cart-count { display: flex !important; }
         <h2 class="sh-stitle">Our <em>Community</em></h2>
       </div>
     </div>
-    <div class="sh-rv-grid">
-      <div class="sh-rv sr">
-        <div class="sh-rv-stars">★★★★★</div>
-        <p>"The fit, the fabric, the finish — every detail considered. My favourite piece this year."</p>
-        <div class="sh-rv-who">— Aisha R.</div>
+    <div class="rm-list">
+      <div class="rm-item sr">
+        <span class="rm-mark" aria-hidden="true">"</span>
+        <div>
+          <div class="rm-stars">★★★★★</div>
+          <p class="rm-text">The fit, the fabric, the finish — every detail considered. My favourite piece this year.</p>
+          <div class="rm-who">— Aisha R.</div>
+        </div>
       </div>
-      <div class="sh-rv feat sr" data-d="1">
-        <div class="sh-rv-stars">★★★★★</div>
-        <p>"Quietly stunning. I get compliments every time I wear it."</p>
-        <div class="sh-rv-who">— Maya S.</div>
+      <div class="rm-item right sr" data-d="1">
+        <div>
+          <div class="rm-stars">★★★★★</div>
+          <p class="rm-text">Quietly stunning. I get compliments every time I wear it.</p>
+          <div class="rm-who">— Maya S.</div>
+        </div>
+        <span class="rm-mark" aria-hidden="true">"</span>
       </div>
-      <div class="sh-rv sr" data-d="2">
-        <div class="sh-rv-stars">★★★★★</div>
-        <p>"You can feel the craftsmanship. This is what luxury truly feels like."</p>
-        <div class="sh-rv-who">— Priya K.</div>
+      <div class="rm-item sr" data-d="2">
+        <span class="rm-mark" aria-hidden="true">"</span>
+        <div>
+          <div class="rm-stars">★★★★★</div>
+          <p class="rm-text">You can feel the craftsmanship. This is what luxury truly feels like.</p>
+          <div class="rm-who">— Priya K.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════
-     INSTAGRAM GRID
+     SOCIETY PAGES — instagram grid
 ══════════════════════════════════ -->
 <section class="sh-insta sh-s" style="padding-top: 120px; padding-bottom: 0;">
   <div class="sh-wrap">
     <div class="sh-head sr">
       <div>
         <span class="sh-ey">@shenova.official</span>
-        <h2 class="sh-stitle">Follow the <em>Mood</em></h2>
+        <h2 class="sh-stitle">Society <em>Pages</em></h2>
       </div>
-      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="sh-slink">Instagram ↗</a>
+      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="sh-slink">Follow →</a>
     </div>
   </div>
-  <div class="sh-igrid">
-    <div class="sh-ii sr"><img src="images/front1.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    <div class="sh-ii tall sr" data-d="1"><img src="images/front13.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    <div class="sh-ii sr" data-d="2"><img src="images/front14.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    <div class="sh-ii sr" data-d="3"><img src="images/front21.jpeg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    <div class="sh-ii sr"><img src="images/front5.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    <div class="sh-ii sr" data-d="1"><img src="images/front6.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+  <div class="sh-wrap">
+    <div class="sh-igrid">
+      <div class="sh-ii sr tall"><img src="images/front1.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+      <div class="sh-ii sr" data-d="1"><img src="images/front13.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+      <div class="sh-ii sr" data-d="2"><img src="images/front14.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+      <div class="sh-ii sr" data-d="3"><img src="images/front21.jpeg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+      <div class="sh-ii sr"><img src="images/front5.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+      <div class="sh-ii sr" data-d="1"><img src="images/front6.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE STRIP -->
+<section class="sh-sig">
+  <div class="sh-sig-in sr">
+    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">Founded</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">India</span><span class="sh-sig-l">Crafted Here</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-c"><div class="sh-sig-logo">SHENOVA</div><div class="sh-sig-tag">Quiet Luxury for the Modern Woman</div></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">Limited</span><span class="sh-sig-l">Every Drop</span></div>
+    <div class="sh-sig-d" aria-hidden="true"></div>
+    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">New Season</span></div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════
-     NEWSLETTER — newsletter-form class preserved for main.js
+     SUBSCRIBE — newsletter-form class preserved for main.js
 ══════════════════════════════════ -->
 <section class="sh-nl">
   <div class="sh-nl-in sr">
-    <span class="sh-ey" style="color: rgba(245,240,232,0.42)">The Inner Circle</span>
-    <h2 class="sh-nl-h">Join the <em>World</em> of Shenova</h2>
+    <span class="sh-ey" style="color: var(--muted)">The Inner Circle</span>
+    <h2 class="sh-nl-h">Subscribe to <em>the Edit</em></h2>
     <p>Exclusive drops and curated edits — delivered quietly to your inbox.</p>
     <form class="newsletter-form sh-nl-form" onsubmit="return false">
       <input type="email" id="newsletter-email" class="sh-nl-inp" placeholder="Your email address" autocomplete="email">
       <button type="button" class="sh-nl-btn" onclick="handleNL()">Join</button>
     </form>
-    <div class="sh-nl-note">No spam. Unsubscribe anytime.</div>
+    <p class="sh-nl-note">No spam. Unsubscribe anytime.</p>
   </div>
 </section>
 
@@ -2284,6 +2371,26 @@ span.lux-cart-count.cart-count { display: flex !important; }
      FOOTER
 ══════════════════════════════════ -->
 <footer class="sh-foot">
+  <div class="foot-trust">
+    <div class="foot-trust-in">
+      <div class="ft-item">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="ft-item-txt"><span class="ft-lbl">Artisan Quality</span><span class="ft-sub">Every seam inspected by hand</span></div>
+      </div>
+      <div class="ft-item">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <div class="ft-item-txt"><span class="ft-lbl">Limited Runs</span><span class="ft-sub">Never mass-produced</span></div>
+      </div>
+      <div class="ft-item">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div class="ft-item-txt"><span class="ft-lbl">Free Delivery</span><span class="ft-sub">On orders above ₹2,000</span></div>
+      </div>
+      <div class="ft-item">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <div class="ft-item-txt"><span class="ft-lbl">Crafted in India</span><span class="ft-sub">Elevated for the world</span></div>
+      </div>
+    </div>
+  </div>
   <div class="sh-foot-top">
     <div class="sh-foot-brand">
       <div class="sh-foot-logo">SHENOVA</div>
@@ -2381,7 +2488,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <div class="sp-lsub">Enter details &amp; spin to win</div>
     </div>
     <div class="sp-right">
-      <span class="sh-ey" style="color:rgba(245,240,232,0.42)">SHENOVA EXCLUSIVE</span>
+      <span class="sh-ey" style="color:var(--muted)">SHENOVA EXCLUSIVE</span>
       <h2><em>Unlock</em> Your Exclusive Offer</h2>
       <p>Enter your details and spin the wheel to reveal a special discount on your next order.</p>
       <input id="spin-name" type="text" class="sp-inp" placeholder="Your full name" autocomplete="name">
@@ -2399,7 +2506,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
 <div id="coupon-popup">
   <div class="cp-box">
     <button class="cp-x" onclick="closeCouponPopup()">×</button>
-    <span class="sh-ey" style="color:rgba(245,240,232,0.42)">YOU WON</span>
+    <span class="sh-ey" style="color:var(--muted)">YOU WON</span>
     <h2>🎉 Congratulations!</h2>
     <p>Your exclusive Shenova discount code:</p>
     <div id="coupon-discount">20% OFF</div>
@@ -2645,7 +2752,7 @@ if(sp) {
       ctx.textAlign = 'right';
       ctx.fillStyle = SEGMENTS[i].dark ? GOLD_LT : GOLD;
       const fs = Math.max(8, r * .095);
-      ctx.font = `300 ${fs}px "Jost", sans-serif`;
+      ctx.font = `300 ${fs}px "DM Sans", sans-serif`;
       ctx.letterSpacing = '2px';
       ctx.fillText(SEGMENTS[i].label, r - 10, fs / 3);
       ctx.restore();
@@ -2653,7 +2760,7 @@ if(sp) {
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, r, startA, endA);
       ctx.closePath();
-      ctx.strokeStyle = 'rgba(181,137,90,0.27)';
+      ctx.strokeStyle = 'rgba(184,145,42,0.27)';
       ctx.lineWidth = 1;
       ctx.stroke();
     }
