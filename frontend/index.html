@@ -1141,14 +1141,15 @@ span.lux-cart-count.cart-count { display: flex !important; }
 /* ── FOOTER ── */
 .sh-foot {
   background: var(--ink); color: rgba(253,250,246,0.56);
-  padding: 88px 0 0;
+  padding: 0;
 }
 .sh-foot-top {
-  display: grid; grid-template-columns: 1.9fr minmax(0, 1fr); gap: 60px;
+  display: flex; flex-wrap: wrap; gap: 48px;
   max-width: var(--max); margin: 0 auto;
-  padding: 0 var(--gutter) 64px;
+  padding: 64px var(--gutter) 64px;
   border-bottom: 1px solid rgba(245,240,232,0.22);
 }
+.sh-foot-brand { flex: 1 1 260px; min-width: 0; }
 .sh-foot-logo {
   font: 300 24px/1 var(--display); letter-spacing: .52em;
   color: var(--ivory); margin-bottom: 18px;
@@ -1162,7 +1163,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
   transition: border-color .35s, color .35s;
 }
 .sh-social:hover { border-color: var(--gold); color: var(--gold); }
-.sh-foot-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.sh-foot-nav { display: flex; flex-wrap: wrap; gap: 24px; flex: 2 1 320px; min-width: 0; }
+.sh-foot-col { flex: 1 1 120px; min-width: 0; }
 .sh-foot-col h4 {
   font: 300 8.5px/1 var(--body); letter-spacing: .36em;
   text-transform: uppercase; color: rgba(245,240,232,0.38); margin-bottom: 20px;
@@ -1178,7 +1180,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   letter-spacing: .14em; flex-wrap: wrap; gap: 10px;
   max-width: var(--max); margin: 0 auto;
 }
-.sh-foot-legal { display: flex; gap: 24px; }
+.sh-foot-legal { display: flex; gap: 24px; flex-wrap: wrap; }
 .sh-foot-legal a { color: rgba(245,240,232,0.38); font-size: 10px; transition: color .28s; }
 .sh-foot-legal a:hover { color: rgba(245,240,232,0.78); }
 
@@ -1289,21 +1291,14 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── READER MAIL (replaces review card grid) ── */
 .reader-mail { background: var(--ivory); padding: 130px 0; }
-.rm-list { max-width: 880px; margin: 60px auto 0; display: flex; flex-direction: column; gap: 0; }
-.rm-item {
-  display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 28px;
-  padding: 40px 0; border-bottom: 1px solid rgba(26,18,8,.08);
-}
+.rm-list { max-width: 640px; margin: 60px auto 0; display: flex; flex-direction: column; }
+.rm-item { text-align: center; padding: 44px 20px; border-bottom: 1px solid rgba(26,18,8,.08); }
 .rm-item:first-child { padding-top: 0; }
 .rm-item:last-child { border-bottom: none; }
-.rm-item.right { grid-template-columns: minmax(0, 1fr) 90px; }
-.rm-item.right .rm-mark { order: 2; text-align: right; }
-.rm-mark { font: 300 italic 56px/.6 var(--display); color: var(--gold); opacity: .8; }
+.rm-mark { display: block; font: 300 italic 46px/1 var(--display); color: var(--gold); opacity: .8; margin-bottom: 6px; }
 .rm-stars { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 14px; }
-.rm-text { font: 300 italic 19px/1.6 var(--editorial); color: var(--ink); margin-bottom: 14px; max-width: 560px; min-width: 0; }
-.rm-item.right .rm-text { margin-left: auto; text-align: right; }
+.rm-text { font: 300 italic 18px/1.62 var(--editorial); color: var(--ink); margin: 0 auto 14px; max-width: 480px; }
 .rm-who { font: 400 8.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
-.rm-item.right .rm-who { text-align: right; }
 
 /* ── FOOTER TRUST STRIP (replaces standalone atelier promises) ── */
 .foot-trust {
@@ -1853,9 +1848,11 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-sig-d { display: none; }
   .sh-igrid { grid-template-columns: repeat(2, 1fr); }
   .sh-nl { padding: 72px 22px; }
-  .sh-foot-top { grid-template-columns: 1fr; gap: 38px; padding: 0 22px 50px; }
+  .sh-foot-top { gap: 38px; padding: 0 22px 50px; }
+  .sh-foot-brand { flex: 1 1 100%; }
+  .sh-foot-nav { flex: 1 1 100%; gap: 24px; }
   .sh-foot-bot { padding: 20px 22px; }
-  .sh-foot-nav { grid-template-columns: repeat(2, 1fr); }
+  .sh-foot-col { flex: 1 1 45%; }
   .qm-card { grid-template-columns: 1fr; max-height: 90vh; }
   .qm-img { min-height: 280px; max-height: 46vw; }
   .qm-info { padding: 28px 22px 36px; }
@@ -1874,10 +1871,7 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .cover-img-inset { width: 55%; }
   .fn-grid { grid-template-columns: 1fr; gap: 24px; padding: 0 22px; }
   .fn-center { padding: 0 0 8px; }
-  .rm-item, .rm-item.right { grid-template-columns: 56px minmax(0, 1fr); gap: 16px; padding: 28px 0; }
-  .rm-item.right .rm-mark { text-align: left; order: 0; }
-  .rm-item.right .rm-text, .rm-item.right .rm-who { text-align: left; margin-left: 0; }
-  .rm-mark { font-size: 40px; }
+  .rm-text { max-width: 100%; font-size: 16px; }
   .foot-trust { padding: 32px 22px; }
   .foot-trust-in { grid-template-columns: 1fr 1fr; gap: 24px; }
 }
@@ -2291,27 +2285,21 @@ span.lux-cart-count.cart-count { display: flex !important; }
     <div class="rm-list">
       <div class="rm-item sr">
         <span class="rm-mark" aria-hidden="true">"</span>
-        <div>
-          <div class="rm-stars">★★★★★</div>
-          <p class="rm-text">The fit, the fabric, the finish — every detail considered. My favourite piece this year.</p>
-          <div class="rm-who">— Aisha R.</div>
-        </div>
+        <div class="rm-stars">★★★★★</div>
+        <p class="rm-text">The fit, the fabric, the finish — every detail considered. My favourite piece this year.</p>
+        <div class="rm-who">— Aisha R.</div>
       </div>
-      <div class="rm-item right sr" data-d="1">
-        <div>
-          <div class="rm-stars">★★★★★</div>
-          <p class="rm-text">Quietly stunning. I get compliments every time I wear it.</p>
-          <div class="rm-who">— Maya S.</div>
-        </div>
+      <div class="rm-item sr" data-d="1">
         <span class="rm-mark" aria-hidden="true">"</span>
+        <div class="rm-stars">★★★★★</div>
+        <p class="rm-text">Quietly stunning. I get compliments every time I wear it.</p>
+        <div class="rm-who">— Maya S.</div>
       </div>
       <div class="rm-item sr" data-d="2">
         <span class="rm-mark" aria-hidden="true">"</span>
-        <div>
-          <div class="rm-stars">★★★★★</div>
-          <p class="rm-text">You can feel the craftsmanship. This is what luxury truly feels like.</p>
-          <div class="rm-who">— Priya K.</div>
-        </div>
+        <div class="rm-stars">★★★★★</div>
+        <p class="rm-text">You can feel the craftsmanship. This is what luxury truly feels like.</p>
+        <div class="rm-who">— Priya K.</div>
       </div>
     </div>
   </div>
