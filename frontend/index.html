@@ -947,6 +947,36 @@ span.lux-cart-count.cart-count { display: flex !important; }
 
 /* ── SIGNATURE STRIP ── */
 
+/* ── SHOP THE EDIT — large shoppable banners ── */
+.sh-banners {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  max-width: var(--max); margin: 0 auto; padding: 20px var(--gutter) 0;
+}
+.sh-bnr {
+  position: relative; display: block; aspect-ratio: 3/4; overflow: hidden;
+  background: var(--sand);
+}
+.sh-bnr img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .7s var(--ease-out, ease);
+}
+.sh-bnr:hover img { transform: scale(1.045); }
+.sh-bnr-ov {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.55) 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 28px;
+}
+.sh-bnr-t {
+  font: 300 clamp(24px, 3vw, 32px)/1 var(--display); color: var(--ivory);
+  letter-spacing: .01em; margin-bottom: 12px;
+}
+.sh-bnr-cta {
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+  font: 400 10px/1 var(--body); letter-spacing: .24em; text-transform: uppercase;
+  color: var(--ivory); border-bottom: 1px solid rgba(245,240,232,.5); padding-bottom: 6px;
+}
+
 /* ── CATEGORY GRID ── */
 .sh-cat { padding: 120px 0; background: var(--cream); }
 .sh-cat .sh-wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
@@ -1682,6 +1712,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-nl-inp { border-bottom: 1px solid rgba(26,18,8,0.18); text-align: center; padding: 13px 0; }
   .sh-nl-btn { padding: 13px; }
   .sh-pgrid { gap: 12px 8px; }
+  .sh-banners { grid-template-columns: 1fr; gap: 14px; padding: 14px 18px 0; }
+  .sh-bnr { aspect-ratio: 4/5; }
   .sh-cgrid { grid-template-columns: 1fr; }
   .sh-cc--tall { grid-column: auto; }
   .sh-cc--tall .sh-cc-img { aspect-ratio: 3/4; }
@@ -1928,6 +1960,46 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <a href="shop.html" class="sh-slink">View All →</a>
     </div>
     <div class="sh-pgrid" id="featured-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SHOP THE EDIT — large shoppable banners (visual, no copy)
+══════════════════════════════════ -->
+<section class="sh-banners">
+  <a href="shop.html?cat=dresses" class="sh-bnr sr">
+    <img src="images/front13.jpg" alt="Dresses" loading="lazy">
+    <div class="sh-bnr-ov">
+      <span class="sh-bnr-t">Dresses</span>
+      <span class="sh-bnr-cta">Shop Now
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </div>
+  </a>
+  <a href="shop.html?cat=new" class="sh-bnr sr" data-d="1">
+    <img src="images/front21.jpeg" alt="New In" loading="lazy">
+    <div class="sh-bnr-ov">
+      <span class="sh-bnr-t">New In</span>
+      <span class="sh-bnr-cta">Shop Now
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </div>
+  </a>
+</section>
+
+<!-- ══════════════════════════════════
+     NEW ARRIVALS — second product grid, own fetch, offset from Trending Now
+══════════════════════════════════ -->
+<section class="sh-s" style="background: var(--parchment);">
+  <div class="sh-wrap">
+    <div class="sh-head sr">
+      <div>
+        <span class="sh-ey">Just Landed</span>
+        <h2 class="sh-stitle">New <em>Arrivals</em></h2>
+      </div>
+      <a href="shop.html" class="sh-slink">View All →</a>
+    </div>
+    <div class="sh-pgrid" id="new-arrivals-grid"></div>
   </div>
 </section>
 
@@ -2679,6 +2751,60 @@ function unlockBody() {
 <script src="js/main.js?v=3"></script>
 <script src="js/stories.js"></script>
 <script src="js/essentials.js"></script>
+
+<!-- NEW ARRIVALS — second product grid, own fetch (offset from Trending Now) -->
+<script>
+(function () {
+  async function loadNewArrivals(retries) {
+    if (retries === undefined) retries = 3;
+    const wrap = document.getElementById('new-arrivals-grid');
+    if (!wrap) return;
+
+    wrap.innerHTML = `
+      <div class="skeleton-grid">
+        ${Array(4).fill().map(() => `
+          <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        `).join('')}
+      </div>`;
+
+    try {
+      const res = await fetch(window.API + '/products');
+      if (!res.ok) throw new Error('Failed');
+      const products = await res.json();
+
+      const BLOCK_KEYWORDS = [
+        'essentials', 'jewellery', 'jewelry', 'accessories', 'accessory',
+        'earring', 'necklace', 'ring', 'bracelet', 'anklet', 'pendant',
+        'hair', 'scrunchie', 'clip', 'pin'
+      ];
+      const clothingOnly = products.filter(p => {
+        const cat = (p.category || '').toLowerCase().trim();
+        return !BLOCK_KEYWORDS.some(kw => cat.includes(kw));
+      });
+
+      // Different slice than Trending Now (4-8) so it shows different pieces;
+      // falls back to newest-first if fewer than 8 products exist.
+      let picks = clothingOnly.slice(4, 8);
+      if (picks.length < 4) picks = clothingOnly.slice().reverse().slice(0, 4);
+
+      wrap.innerHTML = picks.map(p => productCard(p)).join('');
+    } catch (err) {
+      console.log('Retrying new-arrivals fetch...');
+      if (retries > 0) {
+        setTimeout(() => loadNewArrivals(retries - 1), 2000);
+      } else {
+        wrap.innerHTML = `<div class="luxury-loading">Our collection is loading...</div>`;
+      }
+    }
+  }
+
+  window.addEventListener('load', () => loadNewArrivals());
+})();
+</script>
 
 </body>
 </html>
