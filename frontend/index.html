@@ -603,15 +603,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-ul:hover { letter-spacing: .44em; }
 .sh-ul:hover::after { transform-origin: left; }
 
-/* Hero stats */
-.sh-hright {
-  display: flex; align-items: flex-end; gap: 24px; padding-bottom: 8px;
-}
-.sh-stat { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.sh-stat-n { font: 300 26px/1 var(--editorial); color: var(--ivory); }
-.sh-stat-l { font: 400 7.5px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: rgba(245,240,232,0.42); }
-.sh-stat-r { width: 1px; height: 28px; background: rgba(245,240,232,0.27); margin-bottom: 2px; }
-
 /* Scroll cue */
 .sh-scue {
   position: absolute; left: var(--gutter); bottom: 36px; z-index: 5;
@@ -919,31 +910,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 }
 
 /* ── H-SCROLL GALLERY ── */
-.sh-gal { padding: 120px 0 0; background: var(--ivory); }
-.sh-gal-head { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
-.sh-gal-wrap {
-  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; padding: 56px var(--gutter) 80px;
-  cursor: grab;
-}
-.sh-gal-wrap::-webkit-scrollbar { display: none; }
-.sh-gal-wrap.drag { cursor: grabbing; }
-.sh-gal-track { display: flex; gap: 24px; width: max-content; }
-.sh-gc { width: clamp(220px, 26vw, 340px); flex-shrink: 0; }
-.sh-gc-img {
-  aspect-ratio: 3/4; overflow: hidden; background: var(--parchment);
-  margin-bottom: 16px;
-}
-.sh-gc-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1.5s cubic-bezier(0.19,1,0.22,1);
-}
-.sh-gc:hover .sh-gc-img img { transform: scale(1.06); }
-.sh-gc-m {
-  display: flex; justify-content: space-between; align-items: center; padding: 0 2px;
-}
-.sh-gc-m span:first-child { font: 300 34px/1 var(--editorial); color: var(--sand); }
-.sh-gc-m span:last-child { font: 400 8.5px/1 var(--body); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
 
 /* ── MANIFESTO ── */
 .sh-mani {
@@ -980,30 +946,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 }
 
 /* ── SIGNATURE STRIP ── */
-.sh-sig {
-  background: var(--parchment); padding: 72px 0; position: relative; overflow: hidden;
-}
-.sh-sig::before, .sh-sig::after {
-  content: ''; position: absolute; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(184,145,42,0.4), transparent);
-}
-.sh-sig::before { top: 0; } .sh-sig::after { bottom: 0; }
-.sh-sig-in {
-  max-width: var(--max); margin: 0 auto; padding: 24px var(--gutter);
-  display: flex; align-items: center; justify-content: center;
-  flex-wrap: wrap; row-gap: 20px; width: 100%; box-sizing: border-box;
-  min-height: 0;
-}
-.sh-sig-item {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 7px; padding: 0 44px; text-align: center;
-}
-.sh-sig-v { font: 300 clamp(18px, 2.6vw, 30px)/1 var(--editorial); color: var(--ink); letter-spacing: .05em; }
-.sh-sig-l { font: 400 7.5px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--muted); }
-.sh-sig-d { width: 1px; height: 52px; background: rgba(26,18,8,0.14); flex-shrink: 0; }
-.sh-sig-c { padding: 0 56px; text-align: center; flex-shrink: 0; }
-.sh-sig-logo { font: 300 clamp(22px, 3vw, 38px)/1 var(--display); letter-spacing: .56em; color: var(--ink); margin-bottom: 10px; }
-.sh-sig-tag { font: 400 7.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); opacity: .85; }
 
 /* ── CATEGORY GRID ── */
 .sh-cat { padding: 120px 0; background: var(--cream); }
@@ -1068,34 +1010,9 @@ span.lux-cart-count.cart-count { display: flex !important; }
 .sh-rv.feat .sh-rv-who { color: rgba(245,240,232,0.42); }
 
 /* ── INSTAGRAM GRID ── */
-.sh-insta { overflow: hidden; }
-.sh-insta .sh-wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .sh-igrid {
   display: grid; grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto auto; gap: 4px; margin-top: 56px;
-}
-.sh-ii {
-  position: relative; overflow: hidden; aspect-ratio: 1;
-  background: var(--parchment); cursor: pointer;
-}
-.sh-ii.tall { grid-row: span 2; aspect-ratio: unset; }
-.sh-ii img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1.2s var(--ease-out), filter .5s;
-}
-.sh-ii:hover img { transform: scale(1.07); filter: brightness(.78); }
-.sh-ii-hov {
-  position: absolute; inset: 0; display: flex;
-  align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .4s;
-}
-.sh-ii:hover .sh-ii-hov { opacity: 1; }
-.sh-ii-hov span {
-  font: 400 8.5px/1 var(--body); letter-spacing: .32em;
-  text-transform: uppercase; color: var(--ivory);
-  background: rgba(12,11,10,.38); backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); padding: 10px 24px;
-  border: 1px solid rgba(245,240,232,0.3);
 }
 
 /* ── NEWSLETTER ── */
@@ -1191,114 +1108,13 @@ span.lux-cart-count.cart-count { display: flex !important; }
    ══════════════════════════════════════════════════════════ */
 
 /* ── EDITORIAL INDEX (replaces marquee + pillars) ── */
-.ed-index {
-  background: var(--parchment);
-  border-top: 1px solid rgba(184,145,42,0.25);
-  border-bottom: 1px solid rgba(184,145,42,0.25);
-}
-.ed-index-in {
-  max-width: var(--max); margin: 0 auto; padding: 26px var(--gutter);
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 32px; flex-wrap: wrap;
-}
-.ed-tag {
-  font: 400 8.5px/1 var(--body); letter-spacing: .3em; text-transform: uppercase;
-  color: var(--muted); flex-shrink: 0; white-space: nowrap;
-}
-.ed-tag b { color: var(--gold); font-weight: 500; }
-.ed-list {
-  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
-}
-.ed-item {
-  display: flex; align-items: baseline; gap: 10px;
-  padding: 0 22px; border-left: 1px solid rgba(26,18,8,0.12);
-  font: 400 9.5px/1 var(--body); letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink);
-}
-.ed-item:first-child { border-left: none; padding-left: 0; }
-.ed-num { font: 300 italic 13px/1 var(--editorial); color: var(--gold); }
 
 /* ── COVER STORY (replaces editorial split + cinematic break) ── */
-.cover-story { background: var(--ivory); padding: 130px 0; overflow: hidden; }
-.cover-grid {
-  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
-  display: grid; grid-template-columns: .92fr minmax(0, 1.08fr); gap: 0; align-items: center;
-  position: relative;
-}
-.cover-img-main {
-  position: relative; aspect-ratio: 4/5; overflow: hidden; background: var(--parchment);
-  z-index: 1;
-}
-.cover-img-main img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 12s var(--silk);
-}
-.cover-img-main:hover img { transform: scale(1.045); }
-.cover-badge {
-  position: absolute; top: 24px; left: 24px; z-index: 2;
-  font: 400 8px/1 var(--body); letter-spacing: .3em; text-transform: uppercase;
-  color: var(--ivory); background: rgba(26,18,8,.42);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  padding: 10px 20px; border: 1px solid rgba(253,250,246,0.28);
-}
-.cover-img-inset {
-  position: relative; width: 58%; aspect-ratio: 4/5; overflow: hidden;
-  margin-left: -18%; margin-top: 14%; z-index: 2;
-  border: 8px solid var(--ivory); box-shadow: 0 30px 70px rgba(26,18,8,.16);
-}
-.cover-img-inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.cover-text {
-  padding: 0 0 0 clamp(40px, 6vw, 96px); position: relative; z-index: 1;
-}
-.cover-drop {
-  font: 300 italic clamp(70px, 9vw, 128px)/.7 var(--display);
-  color: var(--gold); opacity: .9; display: block; margin-bottom: 4px;
-}
-.cover-quote {
-  font: 300 italic clamp(26px, 3.2vw, 42px)/1.32 var(--editorial);
-  color: var(--ink); letter-spacing: -.01em; margin-bottom: 30px; max-width: 480px;
-}
-.cover-body { font: 400 14px/2.0 var(--body); color: var(--muted); max-width: 420px; margin-bottom: 34px; }
-.cover-byline { font: 400 8.5px/1 var(--body); letter-spacing: .32em; text-transform: uppercase; color: var(--warm-mid); margin-bottom: 30px; }
 
 /* ── FIELD NOTES (replaces three-panel + manifesto) ── */
 .field-notes { background: var(--parchment); padding: 130px 0; }
-.fn-grid {
-  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
-  display: grid; grid-template-columns: 1fr minmax(0, 1.15fr) 1fr; gap: 40px; align-items: center;
-}
-.fn-img { overflow: hidden; background: var(--sand); }
-.fn-img img {
-  width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
-  transition: transform 1.8s cubic-bezier(0.19,1,0.22,1);
-}
-.fn-col:hover .fn-img img { transform: scale(1.05); }
-.fn-plate {
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 16px 2px 0;
-  font: 400 8.5px/1 var(--body); letter-spacing: .24em; text-transform: uppercase; color: var(--muted);
-}
-.fn-center { text-align: center; padding: 0 12px; }
-.fn-quote-mark {
-  font: 300 clamp(64px, 8vw, 100px)/.6 var(--display); color: var(--gold);
-  opacity: .85; display: block; margin-bottom: 6px;
-}
-.fn-quote {
-  font: 300 italic clamp(22px, 2.6vw, 32px)/1.42 var(--editorial);
-  color: var(--ink); margin-bottom: 20px;
-}
-.fn-cite { font: 400 8.5px/1 var(--body); letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
 
 /* ── READER MAIL (replaces review card grid) ── */
-.reader-mail { background: var(--ivory); padding: 130px 0; }
-.rm-list { max-width: 640px; margin: 60px auto 0; display: flex; flex-direction: column; }
-.rm-item { text-align: center; padding: 44px 20px; border-bottom: 1px solid rgba(26,18,8,.08); }
-.rm-item:first-child { padding-top: 0; }
-.rm-item:last-child { border-bottom: none; }
-.rm-mark { display: block; font: 300 italic 46px/1 var(--display); color: var(--gold); opacity: .8; margin-bottom: 6px; }
-.rm-stars { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 14px; }
-.rm-text { font: 300 italic 18px/1.62 var(--editorial); color: var(--ink); margin: 0 auto 14px; max-width: 480px; }
-.rm-who { font: 400 8.5px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
 
 /* ── FOOTER TRUST STRIP (replaces standalone atelier promises) ── */
 .foot-trust {
@@ -1787,14 +1603,8 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-rv.feat { transform: none; }
   .sh-rv.feat:hover { transform: translateY(-6px); }
   .sh-igrid { grid-template-columns: repeat(3, 1fr); }
-  .sh-ii.tall { grid-row: auto; aspect-ratio: 1; }
   /* sp-box responsive overrides moved into dedicated spin popup block above */
 
-  .cover-grid { grid-template-columns: 1fr; gap: 60px; }
-  .cover-img-inset { width: 62%; margin-left: 0; margin-top: -14%; left: 24px; position: relative; }
-  .cover-text { padding: 0 var(--gutter); }
-  .fn-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .fn-center { grid-column: 1 / -1; order: -1; padding: 0 0 12px; }
   .foot-trust-in { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 768px) {
@@ -1841,11 +1651,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .sh-3off { margin-top: 0; }
   .sh-atel-in { grid-template-columns: 1fr; padding: 0 22px; }
   .sh-ai { flex-direction: row; text-align: left; align-items: flex-start; }
-  .sh-sig { padding: 40px 0; }
-  .sh-sig-in { flex-direction: column; align-items: center; gap: 18px; padding: 0 22px; }
-  .sh-sig-c { order: -1; width: 100%; padding: 0 0 18px; margin-bottom: 4px; border-bottom: 1px solid rgba(245,240,232,0.15); }
-  .sh-sig-item { width: 100%; padding: 0; }
-  .sh-sig-d { display: none; }
   .sh-igrid { grid-template-columns: repeat(2, 1fr); }
   .sh-nl { padding: 72px 22px; }
   .sh-foot-top { gap: 38px; padding: 0 22px 50px; }
@@ -1864,14 +1669,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
   .nav-link-sm { display: none; }
   .nav-icons .nav-link-sm { display: none; }
 
-  .ed-index-in { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px 22px; }
-  .ed-list { gap: 0; }
-  .ed-item { padding: 0 14px; font-size: 8.5px; }
-  .cover-story, .field-notes, .reader-mail { padding: 72px 0; }
-  .cover-img-inset { width: 55%; }
-  .fn-grid { grid-template-columns: 1fr; gap: 24px; padding: 0 22px; }
-  .fn-center { padding: 0 0 8px; }
-  .rm-text { max-width: 100%; font-size: 16px; }
   .foot-trust { padding: 32px 22px; }
   .foot-trust-in { grid-template-columns: 1fr 1fr; gap: 24px; }
 }
@@ -2099,26 +1896,9 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <p class="sh-hsub sr" data-d="2">For the woman who moves in silence.</p>
       <div class="sh-hctas sr" data-d="3">
         <a class="btn-pill" href="shop.html">
-          <span>Discover Collection</span>
+          <span>Shop Now</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a class="btn-ghost" href="about.html">Our Story</a>
-      </div>
-    </div>
-    <div class="sh-hright sr" data-d="4">
-      <div class="sh-stat">
-        <span class="sh-stat-n">100+</span>
-        <span class="sh-stat-l">Limited Pieces</span>
-      </div>
-      <div class="sh-stat-r"></div>
-      <div class="sh-stat">
-        <span class="sh-stat-n">5★</span>
-        <span class="sh-stat-l">Community Rated</span>
-      </div>
-      <div class="sh-stat-r"></div>
-      <div class="sh-stat">
-        <span class="sh-stat-n">2026</span>
-        <span class="sh-stat-l">New Season</span>
       </div>
     </div>
   </div>
@@ -2136,43 +1916,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
 </section>
 
 <!-- ══════════════════════════════════
-     EDITORIAL INDEX — replaces marquee + pillars
-══════════════════════════════════ -->
-<div class="ed-index" aria-hidden="false">
-  <div class="ed-index-in">
-    <span class="ed-tag">Issue N<b>o</b> 06 — Autumn 2026</span>
-    <div class="ed-list">
-      <span class="ed-item"><span class="ed-num">01</span> Refined Silhouettes</span>
-      <span class="ed-item"><span class="ed-num">02</span> Premium Fabrics</span>
-      <span class="ed-item"><span class="ed-num">03</span> Limited Editions</span>
-      <span class="ed-item"><span class="ed-num">04</span> Crafted in India</span>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════
-     COVER STORY — replaces editorial split + cinematic break
-══════════════════════════════════ -->
-<section class="cover-story">
-  <div class="cover-grid">
-    <div class="cover-img-main sr">
-      <img src="images/design.png" alt="Shenova Lookbook" loading="lazy">
-      <div class="cover-badge">Autumn · 2026</div>
-      <div class="cover-img-inset">
-        <img src="images/front14.jpg" alt="Shenova Editorial" loading="lazy">
-      </div>
-    </div>
-    <div class="cover-text sr" data-d="1">
-      <span class="cover-drop" aria-hidden="true">"</span>
-      <p class="cover-quote">Every piece is an argument for restraint — designed for silence, not spectacle.</p>
-      <p class="cover-body">We believe luxury is not worn loudly. It is felt — in the weight of fabric, the architecture of a hem, the stillness of a silhouette that needs no introduction.</p>
-      <span class="cover-byline">The Atelier Journal · Vol. 01</span>
-      <a href="about.html" class="sh-ul">Discover Our Story →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
      PRODUCTS — main.js loadFeatured() hook preserved
 ══════════════════════════════════ -->
 <section class="sh-s" style="background: var(--ivory);">
@@ -2185,28 +1928,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
       <a href="shop.html" class="sh-slink">View All →</a>
     </div>
     <div class="sh-pgrid" id="featured-grid"></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     FIELD NOTES — replaces three-panel + manifesto
-══════════════════════════════════ -->
-<section class="field-notes">
-  <div class="fn-grid">
-    <div class="fn-col sr">
-      <div class="fn-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div>
-      <div class="fn-plate"><span>Plate 01</span><span>The Quiet Edit</span></div>
-    </div>
-    <div class="fn-center sr" data-d="1">
-      <span class="fn-quote-mark" aria-hidden="true">"</span>
-      <blockquote class="fn-quote">We do not follow trends. We make pieces that belong to no season.</blockquote>
-      <div class="fn-cite">— Shenova Atelier</div>
-      <a href="about.html" class="btn-ol">Read Our Story</a>
-    </div>
-    <div class="fn-col sr" data-d="2">
-      <div class="fn-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div>
-      <div class="fn-plate"><span>Plate 02</span><span>Evening Edit</span></div>
-    </div>
   </div>
 </section>
 
@@ -2244,104 +1965,6 @@ span.lux-cart-count.cart-count { display: flex !important; }
         </div>
       </a>
     </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     PHOTO ESSAY — h-scroll gallery, sh-gw id preserved for drag JS
-══════════════════════════════════ -->
-<section class="sh-gal">
-  <div class="sh-gal-head">
-    <div class="sh-head sr">
-      <div>
-        <span class="sh-ey">The Essay</span>
-        <h2 class="sh-stitle">Campaign <em>Stories</em></h2>
-      </div>
-    </div>
-  </div>
-  <div class="sh-gal-wrap" id="sh-gw">
-    <div class="sh-gal-track">
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front13.jpg" alt="Autumn Forms" loading="lazy"></div><div class="sh-gc-m"><span>01</span><span>Autumn Forms</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front21.jpeg" alt="After Dusk" loading="lazy"></div><div class="sh-gc-m"><span>02</span><span>After Dusk</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front5.jpg" alt="Pure Form" loading="lazy"></div><div class="sh-gc-m"><span>03</span><span>Pure Form</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front1.jpg" alt="The Quiet Edit" loading="lazy"></div><div class="sh-gc-m"><span>04</span><span>The Quiet Edit</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front14.jpg" alt="Modern Minimal" loading="lazy"></div><div class="sh-gc-m"><span>05</span><span>Modern Minimal</span></div></div>
-      <div class="sh-gc"><div class="sh-gc-img"><img src="images/front6.jpg" alt="Evening Edit" loading="lazy"></div><div class="sh-gc-m"><span>06</span><span>Evening Edit</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     READER MAIL — replaces review card grid
-══════════════════════════════════ -->
-<section class="reader-mail">
-  <div class="sh-wrap">
-    <div class="sh-head sr">
-      <div>
-        <span class="sh-ey">Words From</span>
-        <h2 class="sh-stitle">Our <em>Community</em></h2>
-      </div>
-    </div>
-    <div class="rm-list">
-      <div class="rm-item sr">
-        <span class="rm-mark" aria-hidden="true">"</span>
-        <div class="rm-stars">★★★★★</div>
-        <p class="rm-text">The fit, the fabric, the finish — every detail considered. My favourite piece this year.</p>
-        <div class="rm-who">— Aisha R.</div>
-      </div>
-      <div class="rm-item sr" data-d="1">
-        <span class="rm-mark" aria-hidden="true">"</span>
-        <div class="rm-stars">★★★★★</div>
-        <p class="rm-text">Quietly stunning. I get compliments every time I wear it.</p>
-        <div class="rm-who">— Maya S.</div>
-      </div>
-      <div class="rm-item sr" data-d="2">
-        <span class="rm-mark" aria-hidden="true">"</span>
-        <div class="rm-stars">★★★★★</div>
-        <p class="rm-text">You can feel the craftsmanship. This is what luxury truly feels like.</p>
-        <div class="rm-who">— Priya K.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════
-     SOCIETY PAGES — instagram grid
-══════════════════════════════════ -->
-<section class="sh-insta sh-s" style="padding-top: 120px; padding-bottom: 0;">
-  <div class="sh-wrap">
-    <div class="sh-head sr">
-      <div>
-        <span class="sh-ey">@shenova.official</span>
-        <h2 class="sh-stitle">Society <em>Pages</em></h2>
-      </div>
-      <a href="https://www.instagram.com/shenova.official/" target="_blank" rel="noopener" class="sh-slink">Follow →</a>
-    </div>
-  </div>
-  <div class="sh-wrap">
-    <div class="sh-igrid">
-      <div class="sh-ii sr tall"><img src="images/front1.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-      <div class="sh-ii sr" data-d="1"><img src="images/front13.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-      <div class="sh-ii sr" data-d="2"><img src="images/front14.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-      <div class="sh-ii sr" data-d="3"><img src="images/front21.jpeg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-      <div class="sh-ii sr"><img src="images/front5.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-      <div class="sh-ii sr" data-d="1"><img src="images/front6.jpg" alt="" loading="lazy"><div class="sh-ii-hov"><span>View</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- SIGNATURE STRIP -->
-<section class="sh-sig">
-  <div class="sh-sig-in sr">
-    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">Founded</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">India</span><span class="sh-sig-l">Crafted Here</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-c"><div class="sh-sig-logo">SHENOVA</div><div class="sh-sig-tag">Quiet Luxury for the Modern Woman</div></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">Limited</span><span class="sh-sig-l">Every Drop</span></div>
-    <div class="sh-sig-d" aria-hidden="true"></div>
-    <div class="sh-sig-item"><span class="sh-sig-v">2026</span><span class="sh-sig-l">New Season</span></div>
   </div>
 </section>
 
@@ -2987,7 +2610,7 @@ window.handleNL = async function() {
 
 /* ─ MOBILE TAP FEEDBACK ─ */
 if(window.matchMedia('(hover:none)').matches) {
-  document.querySelectorAll('.sh-cc, .sh-gc, .sh-rv').forEach(el => {
+  document.querySelectorAll('.sh-cc').forEach(el => {
     el.addEventListener('touchstart', function() { this.style.transform = 'scale(0.985)'; }, { passive: true });
     el.addEventListener('touchend', function() { this.style.transform = ''; }, { passive: true });
     el.addEventListener('touchcancel', function() { this.style.transform = ''; }, { passive: true });
