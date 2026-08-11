@@ -490,16 +490,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 /* Keep old .pdp-add-btn alias so JS feedback still works */
 /* .pdp-add-btn is kept as a legacy hook for JS; no extra styles required. */
 
-/* Wish button */
+/* Wish button — floating circle, top-right of main image */
 #pdp-wish {
-  order: 3;
-  width: 46px; height: 46px; border-radius: 6px;
-  border: 1px solid var(--line); flex-shrink: 0;
+  position: absolute; top: 18px; right: 18px; z-index: 5;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: none; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; font-size: 17px;
-  transition: all .32s var(--ease); background: transparent; cursor: pointer;
+  transition: all .32s var(--ease); background: rgba(253,250,246,.92);
+  backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: 0 2px 10px rgba(23,20,15,.14);
+  cursor: pointer; color: var(--ink);
 }
-#pdp-wish:hover { border-color: #b0242b; color: #b0242b; transform: scale(1.06); }
-#pdp-wish.active { background: #fdf0ef; border-color: #b0242b; color: #b0242b; }
+#pdp-wish:hover { color: #b0242b; transform: scale(1.06); }
+#pdp-wish.active { background: #fdf0ef; color: #b0242b; }
 
 /* Trust badges — 4-column centered row, matches reference trust-row */
 .pdp-trust {
@@ -1426,6 +1429,7 @@ body.csm-open{
       <div class="pdp-main-frame" id="pdp-main-frame">
         <img id="pdp-main-img" src="" alt="Product">
         <div class="pdp-badge">New Arrival</div>
+        <button id="pdp-wish" onclick="toggleWish()" aria-label="Add to wishlist">♡</button>
         <div class="pdp-arrows">
           <button class="pdp-arrow" onclick="prevImg()" aria-label="Previous image">&#8592;</button>
           <button class="pdp-arrow" onclick="nextImg()" aria-label="Next image">&#8594;</button>
@@ -1588,14 +1592,6 @@ body.csm-open{
         <span>Add to Bag</span>
         <span class="cap-price" id="cap-price"></span>
       </button>
-      <button class="pdp-buy-capsule" id="pdp-buy-btn" onclick="buyNow()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-  
-      </button>
-      <button id="pdp-wish" onclick="toggleWish()" aria-label="Add to wishlist">♡</button>
     </div>
 
     <!-- Trust badges -->
