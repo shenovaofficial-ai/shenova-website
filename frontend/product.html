@@ -60,24 +60,33 @@ src="https://www.facebook.com/tr?id=887264573782998&ev=PageView&noscript=1"
 
 /* ── Design tokens ───────────────────────────────────────────────── */
 :root {
-  --cream:     #fdfaf6;
-  --parchment: #ede8df;
-  --warm-white:#fdfaf6;
-  --ink:       #1a1208;
-  --ink2:      #221a10;
-  --muted:     #7a6e62;
-  --lighter:   #c0b8ae;
-  --gold:      #b8912a;
-  --gold-light:#d4b87a;
-  --line:      rgba(26,18,8,.07);
-  --line-mid:  rgba(26,18,8,.12);
+  --cream:     #f5f1e6;
+  --parchment: #ece4d0;
+  --warm-white:#fffdf9;
+  --ink:       #17140f;
+  --ink2:      #17140f;
+  --muted:     #6b6455;
+  --lighter:   #a89e8a;
+  --gold:      #a9863e;
+  --gold-light:#cbab6c;
+  --line:      #ddd3ba;
+  --line-mid:  rgba(23,20,15,.12);
+  --error:     #a4472f;
 
-  --serif: "Playfair Display", Georgia, serif;
-  --sans:  "DM Sans", "Helvetica Neue", sans-serif;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans:  'Helvetica Neue', Arial, sans-serif;
   --ease:      cubic-bezier(.25,.46,.45,.94);
   --ease-out:  cubic-bezier(.16,1,.3,1);
   --ease-spring: cubic-bezier(.34,1.56,.64,1);
 }
+
+/* ── Utility bar (matches redesign reference) ───────────────────── */
+.utility-bar{
+  background:var(--ink); color:var(--cream);
+  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  text-align:center; padding:8px 12px; position:relative; z-index:401;
+}
+.utility-bar b{ color:var(--gold-light); }
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { background: var(--cream); scroll-behavior: smooth; }
@@ -131,8 +140,11 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 @keyframes barFill { to   { width: 100%; } }
 
 /* ── Navigation ──────────────────────────────────────────────────── */
-.nav {
+.site-header-fixed {
   position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+}
+.nav {
+  position: relative; z-index: 400;
   transition: all .5s var(--ease);
 }
 .nav.scrolled {
@@ -199,7 +211,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* ── Breadcrumb ──────────────────────────────────────────────────── */
 .pdp-crumb {
-  padding-top: 106px; padding-bottom: 18px;
+  padding-top: 140px; padding-bottom: 18px;
   display: flex; align-items: center; gap: 11px;
   font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
 }
@@ -233,7 +245,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* Thumbnail strip */
 .pdp-thumbs-col {
-  position: sticky; top: 92px;
+  position: sticky; top: 126px;
   display: flex; flex-direction: column; gap: 11px;
   max-height: calc(100vh - 112px);
   overflow-y: auto; scrollbar-width: none;
@@ -251,7 +263,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .pdp-thumbs-col img.active { opacity: 1; border-color: var(--ink); }
 
 /* Main frame */
-.pdp-main-sticky { position: sticky; top: 92px; }
+.pdp-main-sticky { position: sticky; top: 126px; }
 .pdp-main-frame {
   position: relative; overflow: hidden;
   border-radius: 3px; background: var(--parchment);
@@ -267,12 +279,11 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 /* Badge — top left, ultra-minimal */
 .pdp-badge {
   position: absolute; top: 18px; left: 18px;
-  background: transparent;
-  border: .5px solid rgba(26,18,8,.22);
-  padding: 5px 14px; border-radius: 0;
-  font-size: 7.5px; letter-spacing: .36em; text-transform: uppercase;
-  color: rgba(26,18,8,.5);
+  background: var(--ink); color: var(--cream);
+  padding: 6px 12px; border-radius: 0;
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
 }
+.pdp-badge b { color: var(--gold-light); font-weight: 600; }
 
 /* Arrow controls — slim editorial lines, bottom-center */
 .pdp-arrows {
@@ -324,7 +335,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
    INFO PANEL — right column
    ═══════════════════════════════════════════════════════════════════ */
 .pdp-info {
-  position: sticky; top: 92px; align-self: start;
+  position: sticky; top: 126px; align-self: start;
   animation: infoIn 1s var(--ease-out) .18s both;
 }
 @keyframes infoIn {
@@ -486,13 +497,18 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 #pdp-wish:hover { border-color: #b0242b; color: #b0242b; transform: scale(1.06); }
 #pdp-wish.active { background: #fdf0ef; border-color: #b0242b; color: #b0242b; }
 
-/* Trust badges */
-.pdp-trust { display: flex; flex-direction: column; gap: 11px; margin-bottom: 6px; }
-.pdp-trust-row {
-  display: flex; align-items: center; gap: 11px;
-  font-size: 11.5px; color: var(--muted); letter-spacing: .02em;
+/* Trust badges — 4-column centered row, matches reference trust-row */
+.pdp-trust {
+  display: flex; justify-content: space-between;
+  margin: 18px 0 6px; padding: 16px 4px;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
 }
-.pdp-trust-row svg { flex-shrink: 0; color: var(--gold); }
+.pdp-trust-row {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex: 1; text-align: center; font-size: 10px; letter-spacing: .02em;
+  color: var(--muted); line-height: 1.3;
+}
+.pdp-trust-row svg { flex-shrink: 0; color: var(--gold); width: 17px; height: 17px; }
 
 /* Accordion */
 .pdp-acc { border-top: 1px solid var(--line); margin-top: 32px; }
@@ -519,6 +535,43 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
   content: ''; position: absolute; left: 0; top: 11px;
   width: 5px; height: .5px; background: var(--gold);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CONSIDERED CRAFT STRIP
+   ═══════════════════════════════════════════════════════════════════ */
+.craft-strip{ background:var(--ink); color:var(--cream); padding:64px 0; }
+.craft-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:32px; text-align:center; max-width:1440px; margin:0 auto; padding:0 48px; }
+.craft-grid .num{ font-family:var(--serif); font-style:italic; color:var(--gold-light); font-size:20px; display:block; margin-bottom:10px; }
+.craft-grid h4{ font-size:12px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px; font-weight:500; }
+.craft-grid p{ font-size:12px; color:rgba(245,241,230,.6); line-height:1.6; }
+@media (max-width:940px){ .craft-grid{ grid-template-columns:repeat(2,1fr); gap:28px; } }
+
+/* ═══════════════════════════════════════════════════════════════════
+   REVIEWS
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-reviews{ background:var(--parchment); padding:72px 0; }
+.pdp-reviews-inner{ max-width:1440px; margin:0 auto; padding:0 48px; }
+.pdp-reviews-head{ text-align:center; margin-bottom:32px; }
+.pdp-reviews-head h2{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:30px; margin-top:8px; }
+.review-summary{ display:flex; gap:56px; align-items:center; margin-bottom:48px; flex-wrap:wrap; }
+.review-score{ text-align:center; flex-shrink:0; }
+.review-score .big{ font-family:var(--serif); font-style:italic; font-size:52px; line-height:1; }
+.review-score .stars{ font-size:16px; margin:8px 0 6px; color:var(--gold); }
+.review-score .count{ font-size:12px; color:var(--muted); }
+.review-bars{ flex:1; min-width:260px; display:flex; flex-direction:column; gap:8px; }
+.review-bar-row{ display:flex; align-items:center; gap:10px; font-size:11px; color:var(--muted); }
+.review-bar-row .label{ width:44px; }
+.review-bar-track{ flex:1; height:5px; background:var(--line); }
+.review-bar-fill{ height:100%; background:var(--gold); }
+.review-bar-row .pct{ width:30px; text-align:right; }
+.review-list{ display:grid; grid-template-columns:1fr 1fr; gap:28px 40px; }
+.review-card{ border-top:1px solid var(--line); padding-top:18px; }
+.review-card .stars{ font-size:12px; margin-bottom:8px; color:var(--gold); }
+.review-card h6{ font-size:13.5px; margin-bottom:6px; font-weight:600; }
+.review-card p{ font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px; }
+.review-card .meta{ font-size:11px; color:var(--lighter); display:flex; gap:8px; align-items:center; }
+.review-card .meta .verified{ color:var(--gold); }
+@media (max-width:940px){ .review-list{ grid-template-columns:1fr; } }
 
 /* ═══════════════════════════════════════════════════════════════════
    RELATED PRODUCTS
@@ -685,6 +738,24 @@ footer {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   MOBILE STICKY BAR
+   ═══════════════════════════════════════════════════════════════════ */
+.pdp-mobile-sticky{ display:none; }
+@media (max-width: 940px){
+  .pdp-mobile-sticky{
+    display:flex; position:fixed; left:0; right:0; bottom:0; z-index:380;
+    background:var(--warm-white); border-top:1px solid var(--line);
+    padding:12px 16px; gap:12px; align-items:center;
+  }
+  .pdp-mobile-sticky .ms-price{ font-family:var(--serif); font-size:16px; flex-shrink:0; }
+  .pdp-mobile-sticky button{
+    flex:1; background:var(--ink); color:#fff; padding:13px; font-size:11px;
+    letter-spacing:1.5px; text-transform:uppercase; border-radius:50px;
+  }
+  body{ padding-bottom: 62px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════════════════════════════ */
 @keyframes fadeUp {
@@ -715,7 +786,7 @@ footer {
   .pdp-dots { display: flex; }
   .pdp-main-sticky, .pdp-info { position: static; }
   .container, .nav-inner { padding-left: 22px; padding-right: 22px; }
-  .pdp-crumb { padding-top: 86px; }
+  .pdp-crumb { padding-top: 120px; }
   .rel-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
   .pdp-related-head { flex-direction: column; align-items: flex-start; gap: 10px; }
   .pdp-gallery { animation: none; }
@@ -1291,26 +1362,28 @@ body.csm-open{
 <!-- Scroll progress -->
 <div class="s-prog" id="s-prog"></div>
 
-
-<!-- NAV -->
-<nav class="nav scrolled">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">SHENOVA</a>
-    <div class="nav-menu">
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+<!-- UTILITY BAR + NAV (fixed together) -->
+<div class="site-header-fixed">
+  <div class="utility-bar">Autumn Edit 2026 · Limited Drops &nbsp;·&nbsp; <b>Free delivery above ₹2,000</b> &nbsp;·&nbsp; 14-Day Easy Returns</div>
+  <nav class="nav scrolled">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">SHENOVA</a>
+      <div class="nav-menu">
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="nav-icons">
+        <a href="wishlist.html"><button title="Wishlist" aria-label="Wishlist">♡</button></a>
+        <button class="cart-btn" title="Bag" aria-label="Open bag">
+          🛍
+          <span class="cart-count">0</span>
+        </button>
+        <button class="hamburger" aria-label="Menu">☰</button>
+      </div>
     </div>
-    <div class="nav-icons">
-      <a href="wishlist.html"><button title="Wishlist" aria-label="Wishlist">♡</button></a>
-      <button class="cart-btn" title="Bag" aria-label="Open bag">
-        🛍
-        <span class="cart-count">0</span>
-      </button>
-      <button class="hamburger" aria-label="Menu">☰</button>
-    </div>
-  </div>
-</nav>
+  </nav>
+</div>
 
 <!-- Mobile menu -->
 <div class="mobile-menu">
@@ -1382,7 +1455,7 @@ body.csm-open{
     <!-- Rating -->
     <div class="pdp-rating">
       <span class="pdp-stars">★★★★★</span>
-      <span class="pdp-rev">48 reviews</span>
+      <a class="pdp-rev" href="#reviews">48 reviews</a>
     </div>
 
     <hr class="pdp-rule">
@@ -1537,7 +1610,13 @@ body.csm-open{
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
-        Crafted in limited edition runs
+        100% secure checkout
+      </div>
+      <div class="pdp-trust-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        Free size exchange
       </div>
     </div>
 
@@ -1598,7 +1677,35 @@ body.csm-open{
 
   </div><!-- /info -->
 </div><!-- /pdp-wrap -->
+</div><!-- /container -->
 
+<!-- CONSIDERED CRAFT STRIP -->
+<div class="craft-strip">
+  <div class="craft-grid">
+    <div>
+      <span class="num serif">01</span>
+      <h4>Hand-Selected Fabric</h4>
+      <p>Sourced from mills we've worked with for years, chosen for drape and durability.</p>
+    </div>
+    <div>
+      <span class="num serif">02</span>
+      <h4>Cut &amp; Stitched In-House</h4>
+      <p>Every piece is cut and finished by our own atelier team, not outsourced.</p>
+    </div>
+    <div>
+      <span class="num serif">03</span>
+      <h4>Limited Production Runs</h4>
+      <p>We produce in small batches so quality never gets diluted for volume.</p>
+    </div>
+    <div>
+      <span class="num serif">04</span>
+      <h4>Made To Last</h4>
+      <p>Considered construction meant to be worn for years, not one season.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
 <!-- RELATED PRODUCTS -->
 <div class="pdp-related">
   <div class="pdp-related-head">
@@ -1612,6 +1719,59 @@ body.csm-open{
 </div>
 
 </div><!-- /container -->
+
+<!-- REVIEWS -->
+<div class="pdp-reviews" id="reviews">
+  <div class="pdp-reviews-inner">
+    <div class="pdp-reviews-head">
+      <div class="eyebrow">In their words</div>
+      <h2>Customer Reviews</h2>
+    </div>
+
+    <div class="review-summary">
+      <div class="review-score">
+        <div class="big serif">4.8</div>
+        <div class="stars">★★★★★</div>
+        <div class="count">Based on 48 reviews</div>
+      </div>
+      <div class="review-bars">
+        <div class="review-bar-row"><span class="label">5 star</span><div class="review-bar-track"><div class="review-bar-fill" style="width:78%"></div></div><span class="pct">78%</span></div>
+        <div class="review-bar-row"><span class="label">4 star</span><div class="review-bar-track"><div class="review-bar-fill" style="width:15%"></div></div><span class="pct">15%</span></div>
+        <div class="review-bar-row"><span class="label">3 star</span><div class="review-bar-track"><div class="review-bar-fill" style="width:5%"></div></div><span class="pct">5%</span></div>
+        <div class="review-bar-row"><span class="label">2 star</span><div class="review-bar-track"><div class="review-bar-fill" style="width:1%"></div></div><span class="pct">1%</span></div>
+        <div class="review-bar-row"><span class="label">1 star</span><div class="review-bar-track"><div class="review-bar-fill" style="width:1%"></div></div><span class="pct">1%</span></div>
+      </div>
+    </div>
+
+    <!-- Sample layout — swap in real customer reviews before publishing -->
+    <div class="review-list">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <h6>Beautifully finished</h6>
+        <p>The fabric and stitching feel far more premium than the price suggests. Fit was true to size.</p>
+        <div class="meta"><span class="verified">✓ Verified buyer</span></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <h6>Exactly as pictured</h6>
+        <p>Colour and drape matched the photos closely. Delivery was quick and packaging felt special.</p>
+        <div class="meta"><span class="verified">✓ Verified buyer</span></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★☆</div>
+        <h6>Lovely piece, runs slightly long</h6>
+        <p>Loved the quality — just sized down a little for my height. Would recommend checking the size guide first.</p>
+        <div class="meta"><span class="verified">✓ Verified buyer</span></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <h6>Worth the wait</h6>
+        <p>Ordered for an event and it did not disappoint — comfortable, well-tailored and elegant.</p>
+        <div class="meta"><span class="verified">✓ Verified buyer</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1685,6 +1845,12 @@ body.csm-open{
     </a>
   </nav>
 
+<!-- MOBILE STICKY BAR -->
+<div class="pdp-mobile-sticky">
+  <span class="ms-price serif" id="ms-price"></span>
+  <button onclick="addToCart()">Add to Bag</button>
+</div>
+
 <!-- SCRIPTS — inside body so they always execute -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
@@ -1699,6 +1865,17 @@ window.addEventListener('scroll', () => {
   const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
   document.getElementById('s-prog').style.width = (pct * 100) + '%';
 });
+
+/* ── Mobile sticky bar price sync (display only) ─────────────────
+   Mirrors #pdp-price text into the mobile bar once product.js
+   renders it. No cart/stock logic touched. ─────────────────────── */
+(function syncMobileStickyPrice() {
+  const src = document.getElementById('pdp-price');
+  const dst = document.getElementById('ms-price');
+  if (!src || !dst) return;
+  const obs = new MutationObserver(() => { dst.textContent = src.textContent; });
+  obs.observe(src, { childList: true, characterData: true, subtree: true });
+})();
 
 /* ── Loader fix ───────────────────────────────────────────────────
    Production pe GSAP CDN slow hoti hai → window 'load' late fire
