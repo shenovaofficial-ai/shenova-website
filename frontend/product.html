@@ -447,22 +447,18 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 }
 
 /* CTA row */
-.pdp-cta { display: flex; gap: 10px; margin-bottom: 32px; align-items: center; }
+.pdp-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; align-items: center; }
 
-/* Shared capsule sizing */
-.pdp-add-capsule,
-.pdp-buy-capsule {
-  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  height: 52px; border-radius: 50px; padding: 0 20px;
-  font-family: var(--sans); font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+/* Add to Bag — full-width rectangular bar with price, matches redesign spec */
+.pdp-add-capsule {
+  flex: 1 1 100%; order: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 54px; border-radius: 6px; padding: 0 20px;
+  font-family: var(--sans); font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase;
   font-weight: 500; cursor: pointer; white-space: nowrap;
   position: relative; overflow: hidden;
-  transition: transform .28s var(--ease), background .32s, box-shadow .28s;
-}
-
-/* Add to Bag — dark filled */
-.pdp-add-capsule {
   background: var(--ink); color: #fff; border: none;
+  transition: transform .28s var(--ease), background .32s, box-shadow .28s;
 }
 .pdp-add-capsule::after {
   content: ''; position: absolute; inset: 0;
@@ -472,11 +468,18 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .pdp-add-capsule:hover::after { transform: translateX(100%); }
 .pdp-add-capsule:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(26,18,8,.18); }
 .pdp-add-capsule:active { transform: translateY(0); }
+.pdp-add-capsule .cap-price { opacity: .85; }
+.pdp-add-capsule .cap-price::before { content: '— '; }
 
-/* Buy Now — outlined */
+/* Buy Now + Wishlist — secondary compact row beneath the primary CTA */
 .pdp-buy-capsule {
-  background: transparent; color: var(--ink);
-  border: 1.5px solid var(--ink);
+  order: 2; flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; border-radius: 6px; padding: 0 20px;
+  font-family: var(--sans); font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  font-weight: 500; cursor: pointer; white-space: nowrap;
+  background: transparent; color: var(--ink); border: 1.5px solid var(--ink);
+  transition: transform .28s var(--ease), background .32s, color .32s, box-shadow .28s;
 }
 .pdp-buy-capsule:hover {
   background: var(--ink); color: #fff;
@@ -489,9 +492,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* Wish button */
 #pdp-wish {
-  width: 52px; height: 52px; border-radius: 50%;
+  order: 3;
+  width: 46px; height: 46px; border-radius: 6px;
   border: 1px solid var(--line); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 19px;
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
   transition: all .32s var(--ease); background: transparent; cursor: pointer;
 }
 #pdp-wish:hover { border-color: #b0242b; color: #b0242b; transform: scale(1.06); }
@@ -499,14 +503,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* Trust badges — 4-column centered row, matches reference trust-row */
 .pdp-trust {
-  display: flex; justify-content: space-between;
+  display: flex; gap: 8px;
   margin: 18px 0 6px; padding: 16px 4px;
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
 }
 .pdp-trust-row {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  flex: 1; text-align: center; font-size: 10px; letter-spacing: .02em;
+  flex: 1; text-align: center; font-size: 9.5px; letter-spacing: .01em;
   color: var(--muted); line-height: 1.3;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 6px; min-width: 0;
 }
 .pdp-trust-row svg { flex-shrink: 0; color: var(--gold); width: 17px; height: 17px; }
 
@@ -534,6 +540,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 .pdp-acc-inner li::before {
   content: ''; position: absolute; left: 0; top: 11px;
   width: 5px; height: .5px; background: var(--gold);
+}
+.pdp-acc-text {
+  font-size: 13px; line-height: 1.9; color: var(--muted);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1468,7 +1477,7 @@ body.csm-open{
       <div class="pdp-opt-head">
         <span class="pdp-opt-label">Size</span>
         <a class="pdp-opt-aux" href="javascript:void(0)" onclick="openSizeGuide()">
-  Size guide
+  Find your size ↗
 </a>
       </div>
       <div class="pdp-sizes" id="pdp-sizes"></div>
@@ -1577,6 +1586,7 @@ body.csm-open{
           <path d="M16 10a4 4 0 01-8 0"/>
         </svg>
         <span>Add to Bag</span>
+        <span class="cap-price" id="cap-price"></span>
       </button>
       <button class="pdp-buy-capsule" id="pdp-buy-btn" onclick="buyNow()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -1622,27 +1632,21 @@ body.csm-open{
 
     <!-- Accordion -->
     <div class="pdp-acc">
-      <div class="pdp-acc-item" id="acc-details">
+      <div class="pdp-acc-item open" id="acc-details">
         <button class="pdp-acc-btn" data-acc="acc-details">
-          <span>Product Details</span>
+          <span>Details &amp; Fit</span>
           <span class="pdp-acc-icon">+</span>
         </button>
         <div class="pdp-acc-body">
           <div class="pdp-acc-inner">
-            <ul>
-              <li>Premium quality fabric, ethically sourced</li>
-              <li>Relaxed silhouette with structured finish</li>
-              <li>Crafted in a limited run of 200 pieces</li>
-              <li>Model is 5′9″ wearing size S</li>
-              <li>Country of origin: India</li>
-            </ul>
+            <p class="pdp-acc-text" id="acc-details-desc"></p>
           </div>
         </div>
       </div>
 
       <div class="pdp-acc-item" id="acc-care">
         <button class="pdp-acc-btn" data-acc="acc-care">
-          <span>Care Instructions</span>
+          <span>Fabric &amp; Care</span>
           <span class="pdp-acc-icon">+</span>
         </button>
         <div class="pdp-acc-body">
@@ -1874,6 +1878,28 @@ window.addEventListener('scroll', () => {
   const dst = document.getElementById('ms-price');
   if (!src || !dst) return;
   const obs = new MutationObserver(() => { dst.textContent = src.textContent; });
+  obs.observe(src, { childList: true, characterData: true, subtree: true });
+})();
+
+/* ── Add to Bag button price sync (display only, mirrors pdp-price) ── */
+(function syncCapPrice() {
+  const src = document.getElementById('pdp-price');
+  const dst = document.getElementById('cap-price');
+  if (!src || !dst) return;
+  const sync = () => { dst.textContent = src.textContent; };
+  sync();
+  const obs = new MutationObserver(sync);
+  obs.observe(src, { childList: true, characterData: true, subtree: true });
+})();
+
+/* ── Details & Fit accordion text sync (display only, mirrors pdp-desc) ── */
+(function syncAccDetailsText() {
+  const src = document.getElementById('pdp-desc');
+  const dst = document.getElementById('acc-details-desc');
+  if (!src || !dst) return;
+  const sync = () => { dst.textContent = src.textContent; };
+  sync();
+  const obs = new MutationObserver(sync);
   obs.observe(src, { childList: true, characterData: true, subtree: true });
 })();
 
