@@ -94,7 +94,7 @@ function applyStockState(stock) {
     badge.className = 'stock-badge stock-low';
     badge.innerHTML = `
       <span class="stock-dot stock-dot-low"></span>
-      Only ${stock} piece${stock === 1 ? '' : 's'} left — order soon!
+      Only ${stock} piece${stock === 1 ? '' : 's'} left — this run won.t be restocked
     `;
 
     /* Re-enable buttons (guard against previous OOS state) */
