@@ -1051,7 +1051,7 @@ app.get('/sitemap.xml', async (req, res) => {
       if (!exists) {
         await User.create({
           name: 'Admin', email: 'admin@shenova.com',
-          password: await bcrypt.hash('admin123', 10), role: 'admin'
+          password: await bcrypt.hash('admin@1234', 10), role: 'admin'
         });
         console.log('👤 Admin seeded');
       }
