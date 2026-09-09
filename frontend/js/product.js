@@ -41,6 +41,41 @@ async function loadProduct() {
   render();
 }
 
+/* ──── Compare Price (MRP) / discount ────
+   Renders "₹1,599  ~~₹1,999~~  -20% from MRP" next to the selling price.
+   - Hidden entirely if comparePrice is missing/empty.
+   - Hidden entirely if comparePrice <= selling price (would be an invalid/
+     negative discount).
+   - Discount % is calculated live: ((MRP - price) / MRP) * 100, rounded
+     to the nearest whole number. Never stored or trusted from the server. */
+function renderComparePrice(p) {
+  const compareEl  = document.getElementById('pdp-compare-price');
+  const discountEl = document.getElementById('pdp-discount-badge');
+  if (!compareEl || !discountEl) return;
+
+  const price   = Number(p.price);
+  const compare = Number(p.comparePrice);
+
+  const isValid = p.comparePrice != null && p.comparePrice !== '' &&
+                  !isNaN(compare) && compare > price;
+
+  if (!isValid) {
+    compareEl.style.display  = 'none';
+    discountEl.style.display = 'none';
+    compareEl.textContent  = '';
+    discountEl.textContent = '';
+    return;
+  }
+
+  const discountPct = Math.round(((compare - price) / compare) * 100);
+
+  compareEl.textContent  = '₹' + compare.toLocaleString();
+  discountEl.textContent = '-' + discountPct + '% from MRP';
+
+  compareEl.style.display  = '';
+  discountEl.style.display = '';
+}
+
 /* ──── Full render ──── */
 function render() {
   if (!product) return;
@@ -57,6 +92,12 @@ function render() {
   document.querySelector('#pdp-price').textContent = '₹' + product.price.toLocaleString();
   document.querySelector('#pdp-desc').textContent  =
     product.description || 'Crafted with the finest fabrics for an effortless silhouette.';
+
+  /* ── Compare Price (MRP) / discount ──
+     Only shown when a valid comparePrice exists and is greater than the
+     selling price. Discount % is always derived live from the two prices —
+     never stored or read from the backend. */
+  renderComparePrice(product);
 
   const media = getMedia();
   renderMainMedia(0);

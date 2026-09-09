@@ -365,10 +365,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; color: 
 
 /* Price */
 .pdp-price-row {
-  display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px;
+  display: flex; align-items: baseline; gap: 10px 14px; margin-bottom: 10px; flex-wrap: wrap;
 }
 .pdp-price {
   font-family: var(--serif); font-size: 28px; font-weight: 300; color: var(--ink);
+}
+.pdp-compare-price {
+  font-family: var(--serif); font-size: 16px; font-weight: 300;
+  color: var(--muted); text-decoration: line-through;
+  text-decoration-color: var(--muted); text-decoration-thickness: 1px;
+}
+.pdp-discount-badge {
+  font-size: 10.5px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--gold);
 }
 .pdp-tax {
   font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
@@ -818,6 +827,8 @@ footer {
   .nav-menu { display: none; }
   .pdp-title { font-size: 36px; }
   .pdp-price { font-size: 26px; }
+  .pdp-compare-price { font-size: 14px; }
+  .pdp-discount-badge { font-size: 10px; }
   .pdp-cta { gap: 8px; }
   .pdp-add-btn { height: 54px; font-size: 8.5px; }
   #pdp-wish { width: 54px; height: 54px; font-size: 17px; }
@@ -1462,6 +1473,8 @@ body.csm-open{
     <!-- Price -->
     <div class="pdp-price-row">
       <span class="pdp-price" id="pdp-price"></span>
+      <span class="pdp-compare-price" id="pdp-compare-price" style="display:none"></span>
+      <span class="pdp-discount-badge" id="pdp-discount-badge" style="display:none"></span>
       <span class="pdp-tax">Incl. of all taxes</span>
     </div>
 
